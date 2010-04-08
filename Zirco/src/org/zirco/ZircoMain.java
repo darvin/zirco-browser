@@ -172,7 +172,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     		mTopBar.startAnimation(animTop);
     		mBottomBar.startAnimation(animBottom);
     		
-    		new Thread(new HideToolbarsRunnable(this)).start();
+    		startToolbarsHideRunnable();
     		
     		mUrlBarVisible = true;    		    		
     		
@@ -232,23 +232,44 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     	}
     }
     
-    private void hideKeyboard() {
-    	InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+    private void hideKeyboard(boolean delayedHideToolbars) {
+    	InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     	imm.hideSoftInputFromWindow(mUrlEditText.getWindowToken(), 0);
+    	
+    	if (mUrlBarVisible) {
+    		if (delayedHideToolbars) {
+    			startToolbarsHideRunnable();
+    		} else {
+    			setToolbarsVisibility(false);
+    		}
+    	}
+    }
+    
+    private void startToolbarsHideRunnable() {
+    	new Thread(new HideToolbarsRunnable(this)).start();
     }
     
     private void navigateToUrl() {
-    	hideKeyboard();
+    	// Needed to hide toolbars properly.
+    	mUrlEditText.clearFocus();
+    	
+    	hideKeyboard(true);
     	mWebViewTab[mCurrentTabIndex].loadUrl(mUrlEditText.getText().toString());
     }
     
     private void navigatePrevious() {
-    	hideKeyboard();
+    	// Needed to hide toolbars properly.
+    	mUrlEditText.clearFocus();
+    	
+    	hideKeyboard(true);
     	mWebViewTab[mCurrentTabIndex].goBack();
     }
     
     private void navigateNext() {
-    	hideKeyboard();
+    	// Needed to hide toolbars properly.
+    	mUrlEditText.clearFocus();
+    	
+    	hideKeyboard(true);
     	mWebViewTab[mCurrentTabIndex].goForward();
     }
 
@@ -290,7 +311,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 			
 			updateUI();
 			
-			setToolbarsVisibility(false);
+			//setToolbarsVisibility(false);
 			
 		} else if (event.equals(EventConstants.EVT_WEB_ON_PAGE_STARTED)) {
 			
@@ -307,7 +328,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		
-		hideKeyboard();
+		hideKeyboard(false);
 		
 		// Get the action that was done on this touch event
 		switch (event.getAction())
@@ -360,6 +381,13 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 
 	@Override
 	public void hideToolbars() {
-		setToolbarsVisibility(false);		
+		if (mUrlBarVisible) {
+			
+			if (!mUrlEditText.hasFocus()) {
+				setToolbarsVisibility(false);
+			} else {
+				startToolbarsHideRunnable();
+			}
+		}
 	}
 }
