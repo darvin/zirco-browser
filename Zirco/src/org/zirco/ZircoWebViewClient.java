@@ -27,7 +27,11 @@ public class ZircoWebViewClient extends WebViewClient {
 
 	@Override
 	public boolean shouldOverrideUrlLoading(WebView view, String url) {
+		
+		EventController.getInstance().fireWebEvent(EventConstants.EVT_WEB_ON_URL_LOADING, url);
+		
 		view.loadUrl(url);
+		
 		return true;
 	}
 

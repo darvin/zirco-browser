@@ -63,6 +63,8 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 	
 	private boolean mUrlBarVisible;
 	
+	private HideToolbarsRunnable mHideToolbarsRunnable;
+	
 	private ViewFlipper mViewFlipper;
 	
     /** Called when the activity is first created. */
@@ -75,6 +77,8 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
         
         setContentView(R.layout.main);
         
+        mHideToolbarsRunnable = null;
+        
         mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         
         buildComponents();
@@ -84,6 +88,8 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
         mViewFlipper.removeAllViews();
         
         addTab();
+        
+        startToolbarsHideRunnable();
     }
     
     private void buildComponents() {
@@ -166,9 +172,12 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 		
     	synchronized (mViewFlipper) {
     		mViewFlipper.addView(view);
-    		mViewFlipper.setDisplayedChild(mViewFlipper.indexOfChild(view));
-    		updateUI();
+    		mViewFlipper.setDisplayedChild(mViewFlipper.indexOfChild(view));    		
     	}
+    	
+    	updateUI();
+    	
+    	mUrlEditText.clearFocus();
     }
     
     private void removeTab() {
@@ -183,6 +192,8 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     	mCurrentWebView = mWebViews.get(mViewFlipper.getDisplayedChild());
     	
     	updateUI();
+    	
+    	mUrlEditText.clearFocus();
     }
     
     private void setToolbarsVisibility(boolean visible) {
@@ -254,6 +265,8 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 				public void onAnimationEnd(Animation animation) {
 					mBottomBar.setVisibility(View.GONE);
 					mBubleView.setVisibility(View.VISIBLE);
+					
+					mUrlBarVisible = false;
 				}
 
 				@Override
@@ -271,9 +284,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     		animBottom.setInterpolator(new AccelerateInterpolator(1.0f));
     		
     		mTopBar.startAnimation(animTop);
-    		mBottomBar.startAnimation(animBottom);
-    		    		
-    		mUrlBarVisible = false;
+    		mBottomBar.startAnimation(animBottom);    		    		    		
     	}
     }
     
@@ -291,7 +302,13 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     }
     
     private void startToolbarsHideRunnable() {
-    	new Thread(new HideToolbarsRunnable(this)).start();
+    	    	    	
+    	if (mHideToolbarsRunnable != null) {
+    		mHideToolbarsRunnable.setDisabled();
+    	}
+    	
+    	mHideToolbarsRunnable = new HideToolbarsRunnable(this);    	
+    	new Thread(mHideToolbarsRunnable).start();
     }
     
     private void navigateToUrl() {
@@ -380,6 +397,8 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 			mPreviousButton.setEnabled(false);
 			mNextButton.setEnabled(false);
 			
+			//setToolbarsVisibility(true);
+		} else if (event.equals(EventConstants.EVT_WEB_ON_URL_LOADING)) {
 			setToolbarsVisibility(true);
 		}
 		
@@ -443,9 +462,9 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 			
 			if (!mUrlEditText.hasFocus()) {
 				setToolbarsVisibility(false);
-			} else {
-				startToolbarsHideRunnable();
 			}
 		}
+		
+		mHideToolbarsRunnable = null;
 	}
 }

@@ -11,18 +11,26 @@ public class HideToolbarsRunnable implements Runnable {
 	private static final int DELAY = 3000;
 	
 	private IToolbarsContainer mParent;
+	private boolean mDisabled;
 	
 	public HideToolbarsRunnable(IToolbarsContainer parent) {
 		mParent = parent;
+		mDisabled = false;
 	}
 	
-	private Handler mHandler = new Handler() {
+	private Handler mHandler = new Handler() {				
+		
 		public void handleMessage(Message msg) {
-			if (mParent != null) {
+			if ((mParent != null) &&
+					(!mDisabled)) {
 				mParent.hideToolbars();
 			}
 		}
 	};
+	
+	public void setDisabled() {
+		mDisabled = true;
+	}
 	
 	public void run() {
 		try {
