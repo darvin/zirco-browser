@@ -1,85 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/MainLayout" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/MainLayout" android:orientation="vertical"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+	<RelativeLayout android:id="@+id/MainContainer"
+		android:layout_width="fill_parent" android:layout_height="fill_parent">
 
 
-<ViewFlipper android:id="@+id/ViewFlipper" android:layout_width="fill_parent" android:layout_height="fill_parent" >
 
-<RelativeLayout 
-  
-  android:id="@+id/webviewlayout0"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent" >
-  
-  <WebView
-    android:id="@+id/webview0"      
-    android:layout_width="fill_parent" 
-    android:layout_height="fill_parent"
-  />
-  
-  <LinearLayout android:id="@+id/BarLayout0"
- 		android:layout_toRightOf="@+id/GoBtn0"
- 		android:layout_width="fill_parent"
- 		android:layout_height="wrap_content"
- 		android:scaleType="fitXY"
-    	android:layout_alignTop="@+id/webview0" android:background="@drawable/tb_background" android:weightSum="0.75">
+
+		<ViewFlipper android:id="@+id/ViewFlipper"
+			android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+			<RelativeLayout android:id="@+id/webviewlayout0"
+				android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+				<WebView android:id="@+id/webview0" android:layout_width="fill_parent"
+					android:layout_height="fill_parent" />
+
 			
-		<EditText android:layout_height="wrap_content" android:id="@+id/UrlText0" android:singleLine="true" android:text="" android:layout_width="fill_parent" android:layout_weight="0.75" android:inputType="textUri"></EditText>
-		
-		<ImageButton android:layout_height="wrap_content" android:id="@+id/GoBtn0" android:layout_width="wrap_content" android:src="@drawable/go32"></ImageButton>
-</LinearLayout>
-
-  <LinearLayout android:id="@+id/BottomBarLayout0"
- 		android:layout_width="fill_parent"
- 		android:layout_height="wrap_content"
- 		android:scaleType="fitXY"
-    	android:layout_alignBottom="@+id/webview0" android:background="@drawable/tb_background" android:weightSum="0.75">
-
-	<ImageButton android:layout_height="wrap_content" android:id="@+id/PreviousBtn0" android:layout_width="wrap_content" android:src="@drawable/previous32"></ImageButton>
-	<ImageButton android:layout_height="wrap_content" android:id="@+id/NextBtn0" android:layout_width="wrap_content" android:src="@drawable/next32"></ImageButton>
-
-</LinearLayout>
-
 </RelativeLayout>
 
-<RelativeLayout 
-  
-  android:id="@+id/webviewlayout1"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent" >
-  
-  <WebView
-    android:id="@+id/webview1"      
-    android:layout_width="fill_parent" 
-    android:layout_height="fill_parent"
-  />
-  
-  <LinearLayout android:id="@+id/BarLayout1"
-	android:layout_toRightOf="@+id/GoBtn1" android:layout_width="fill_parent"
-	android:layout_height="wrap_content" android:scaleType="fitXY"
-	android:layout_alignTop="@+id/webview1" android:background="@drawable/tb_background">
+			<RelativeLayout android:id="@+id/webviewlayout1"
+				android:layout_width="fill_parent" android:layout_height="fill_parent">
 
-	<EditText android:layout_height="wrap_content" android:id="@+id/UrlText1"
-		android:singleLine="true" android:text="" android:layout_width="fill_parent"
-		android:layout_weight="0.75" android:inputType="textUri"></EditText>
-	<ImageButton android:layout_height="wrap_content"
-		android:id="@+id/GoBtn1" android:layout_width="wrap_content"
-		android:src="@drawable/go32"></ImageButton>
-</LinearLayout>
-  
- <LinearLayout android:id="@+id/BottomBarLayout1"
- 		android:layout_width="fill_parent"
- 		android:layout_height="wrap_content"
- 		android:scaleType="fitXY"
-    	android:layout_alignBottom="@+id/webview1" android:background="@drawable/tb_background" android:weightSum="0.75">
+				<WebView android:id="@+id/webview1" android:layout_width="fill_parent"
+					android:layout_height="fill_parent" />
 
-	<ImageButton android:layout_height="wrap_content" android:id="@+id/PreviousBtn1" android:layout_width="wrap_content" android:src="@drawable/previous32"></ImageButton>
-	<ImageButton android:layout_height="wrap_content" android:id="@+id/NextBtn1" android:layout_width="wrap_content" android:src="@drawable/next32"></ImageButton>
+			</RelativeLayout>
 
-</LinearLayout>
+		</ViewFlipper>
 
-</RelativeLayout>
+		<LinearLayout android:id="@+id/BarLayout"
+			android:layout_toRightOf="@+id/GoBtn" android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:scaleType="fitXY"
+			android:background="@drawable/tb_background" android:weightSum="0.75"
+			android:layout_alignParentTop="true">
 
-</ViewFlipper>
+			<EditText android:layout_height="wrap_content" android:id="@+id/UrlText"
+				android:singleLine="true" android:text="" android:layout_width="fill_parent"
+				android:layout_weight="0.75" android:inputType="textUri"></EditText>
+
+			<ImageButton android:layout_height="wrap_content"
+				android:id="@+id/GoBtn" android:layout_width="wrap_content"
+				android:src="@drawable/go32"></ImageButton>
+		</LinearLayout>
+
+		<ImageView android:layout_height="wrap_content" android:layout_width="wrap_content" android:src="@drawable/buble32" android:layout_alignParentBottom="true" android:layout_alignParentRight="true" android:id="@+id/BubleView"></ImageView>
+
+		<LinearLayout android:id="@+id/BottomBarLayout"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:scaleType="fitXY" android:background="@drawable/tb_background"
+			android:weightSum="0.75" android:layout_alignParentBottom="true">
+
+			<ImageButton android:layout_height="wrap_content"
+				android:id="@+id/PreviousBtn" android:layout_width="wrap_content"
+				android:src="@drawable/previous32"></ImageButton>
+			<ImageButton android:layout_height="wrap_content"
+				android:id="@+id/NextBtn" android:layout_width="wrap_content"
+				android:src="@drawable/next32"></ImageButton>
+
+		</LinearLayout>				
+
+	</RelativeLayout>
 
 </LinearLayout>

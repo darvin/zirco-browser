@@ -3,6 +3,8 @@ package org.zirco;
 import org.zirco.events.EventConstants;
 import org.zirco.events.EventController;
 import org.zirco.events.IWebListener;
+import org.zirco.ui.HideToolbarsRunnable;
+import org.zirco.ui.IToolbarsContainer;
 import org.zirco.utils.AnimationManager;
 
 import android.app.Activity;
@@ -22,10 +24,11 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ViewFlipper;
 
-public class ZircoMain extends Activity implements IWebListener, OnTouchListener {
+public class ZircoMain extends Activity implements IWebListener, IToolbarsContainer, OnTouchListener {
 	
 	private static final int ANIMATION_DURATION = 100;
 	
@@ -36,17 +39,20 @@ public class ZircoMain extends Activity implements IWebListener, OnTouchListener
 		
 	private float mDownXValue;
 	
-	private LinearLayout[] mTopBarTab;
-	private LinearLayout[] mBottomBarTab;
+	private LinearLayout mTopBar;
+	private LinearLayout mBottomBar;
 	
-	private EditText[] mUrlEditTextTab;
-	private ImageButton[] mGoButtonTab;
+	private EditText mUrlEditText;
+	private ImageButton mGoButton;
+	
+	private ImageView mBubleView;
+	
 	private WebView[] mWebViewTab;
 	
-	private ImageButton[] mPreviousButtonTab;
-	private ImageButton[] mNextButtonTab;
+	private ImageButton mPreviousButton;
+	private ImageButton mNextButton;
 	
-	private boolean mUrlBarVisibleTab[];
+	private boolean mUrlBarVisible;
 	
 	private ViewFlipper mViewFlipper;
 	
@@ -73,41 +79,49 @@ public class ZircoMain extends Activity implements IWebListener, OnTouchListener
     
     private void buildComponents() {
     	
-    	mUrlBarVisibleTab = new boolean[NB_TAB];
+    	mUrlBarVisible = true;
+    	
+    	mBubleView = (ImageView) findViewById(R.id.BubleView);
+    	mBubleView.setOnClickListener(new View.OnClickListener() {		
+			public void onClick(View v) {
+				setToolbarsVisibility(true);				
+			}
+		});
     	
     	mViewFlipper = (ViewFlipper) findViewById(R.id.ViewFlipper);
     	
-    	mTopBarTab = new LinearLayout[NB_TAB];
-    	mTopBarTab[0] = (LinearLayout) findViewById(R.id.BarLayout0);
-    	mTopBarTab[1] = (LinearLayout) findViewById(R.id.BarLayout1);
+    	mTopBar = (LinearLayout) findViewById(R.id.BarLayout);    	
+    	mBottomBar = (LinearLayout) findViewById(R.id.BottomBarLayout);
+    	    	
+    	mUrlEditText = (EditText) findViewById(R.id.UrlText);
+    	mGoButton = (ImageButton) findViewById(R.id.GoBtn);
     	
-    	mBottomBarTab = new LinearLayout[NB_TAB];
-    	mBottomBarTab[0] = (LinearLayout) findViewById(R.id.BottomBarLayout0);
-    	mBottomBarTab[1] = (LinearLayout) findViewById(R.id.BottomBarLayout1);
+    	mGoButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+            	navigateToUrl();
+            }          
+        });
     	
-    	mUrlEditTextTab = new EditText[NB_TAB];    	
-    	mUrlEditTextTab[0] = (EditText) findViewById(R.id.UrlText0);
-    	mUrlEditTextTab[1] = (EditText) findViewById(R.id.UrlText1);
+    	mPreviousButton = (ImageButton) findViewById(R.id.PreviousBtn);
+    	mNextButton = (ImageButton) findViewById(R.id.NextBtn);
     	
-    	mGoButtonTab = new ImageButton[NB_TAB];
-    	mGoButtonTab[0] = (ImageButton) findViewById(R.id.GoBtn0);
-    	mGoButtonTab[1] = (ImageButton) findViewById(R.id.GoBtn1);
-    	
-    	mPreviousButtonTab = new ImageButton[NB_TAB];
-    	mPreviousButtonTab[0] = (ImageButton) findViewById(R.id.PreviousBtn0);
-    	mPreviousButtonTab[1] = (ImageButton) findViewById(R.id.PreviousBtn1);
-    	
-    	mNextButtonTab = new ImageButton[NB_TAB];
-    	mNextButtonTab[0] = (ImageButton) findViewById(R.id.NextBtn0);
-    	mNextButtonTab[1] = (ImageButton) findViewById(R.id.NextBtn1);
+    	mPreviousButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+            	navigatePrevious();
+            }          
+        });
+		
+		mNextButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+            	navigateNext();
+            }          
+        });
     	
     	mWebViewTab = new WebView[NB_TAB];
     	mWebViewTab[0] = (WebView) findViewById(R.id.webview0);
     	mWebViewTab[1] = (WebView) findViewById(R.id.webview1);
     	
     	for (int i = 0; i < NB_TAB; i++) {
-    		
-    		mUrlBarVisibleTab[i] = true;
     		
     		mWebViewTab[i].setWebViewClient(new ZircoWebViewClient());
     		mWebViewTab[i].getSettings().setJavaScriptEnabled(true);
@@ -121,45 +135,22 @@ public class ZircoMain extends Activity implements IWebListener, OnTouchListener
     				activity.setProgress(progress * 100);
     			}
     		});
-
-    		
-    		mGoButtonTab[i].setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                	navigateToUrl();
-                }          
-            });
-    		
-    		mPreviousButtonTab[i].setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                	navigatePrevious();
-                }          
-            });
-    		
-    		mNextButtonTab[i].setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                	navigateNext();
-                }          
-            });
+    		    		    		    		
     	}
     	
     }
     
-    private void setUrlBarVisibility(boolean visible) {
+    private void setToolbarsVisibility(boolean visible) {
     	
     	TranslateAnimation animTop = null;
     	TranslateAnimation animBottom = null;
     	
     	if (visible) {
-    		/*
-    		mUrlEditTextTab[mCurrentTabIndex].setVisibility(View.VISIBLE);
-    		mGoButtonTab[mCurrentTabIndex].setVisibility(View.VISIBLE);
     		
-    		mPreviousButtonTab[mCurrentTabIndex].setVisibility(View.VISIBLE);
-    		mNextButtonTab[mCurrentTabIndex].setVisibility(View.VISIBLE);
-    		*/
+    		mTopBar.setVisibility(View.VISIBLE);
+    		mBottomBar.setVisibility(View.VISIBLE);
     		
-    		mTopBarTab[mCurrentTabIndex].setVisibility(View.VISIBLE);
-    		mBottomBarTab[mCurrentTabIndex].setVisibility(View.VISIBLE);
+    		mBubleView.setVisibility(View.GONE);
     		    		    		    		
     		animTop = new TranslateAnimation(
     	            Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
@@ -178,22 +169,14 @@ public class ZircoMain extends Activity implements IWebListener, OnTouchListener
     		animBottom.setDuration(ANIMATION_DURATION);
     		animBottom.setInterpolator(new AccelerateInterpolator(1.0f));
     		
-    		mTopBarTab[mCurrentTabIndex].startAnimation(animTop);
-    		mBottomBarTab[mCurrentTabIndex].startAnimation(animBottom);
+    		mTopBar.startAnimation(animTop);
+    		mBottomBar.startAnimation(animBottom);
     		
-    		mUrlBarVisibleTab[mCurrentTabIndex] = true;
+    		new Thread(new HideToolbarsRunnable(this)).start();
     		
-    	} else {
-    		/*
-    		mUrlEditTextTab[mCurrentTabIndex].setVisibility(View.GONE);
-    		mGoButtonTab[mCurrentTabIndex].setVisibility(View.GONE);
+    		mUrlBarVisible = true;    		    		
     		
-    		mPreviousButtonTab[mCurrentTabIndex].setVisibility(View.GONE);
-    		mNextButtonTab[mCurrentTabIndex].setVisibility(View.GONE);
-    		*/
-    		
-    		//mTopBarTab[mCurrentTabIndex].setVisibility(View.GONE);
-    		//mBottomBarTab[mCurrentTabIndex].setVisibility(View.GONE);
+    	} else {  	
     		
     		animTop = new TranslateAnimation(
     	            Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
@@ -209,7 +192,7 @@ public class ZircoMain extends Activity implements IWebListener, OnTouchListener
 
 				@Override
 				public void onAnimationEnd(Animation animation) {
-					mTopBarTab[mCurrentTabIndex].setVisibility(View.GONE);					
+					mTopBar.setVisibility(View.GONE);					
 				}
 
 				@Override
@@ -224,7 +207,8 @@ public class ZircoMain extends Activity implements IWebListener, OnTouchListener
 
 				@Override
 				public void onAnimationEnd(Animation animation) {
-					mBottomBarTab[mCurrentTabIndex].setVisibility(View.GONE);					
+					mBottomBar.setVisibility(View.GONE);
+					mBubleView.setVisibility(View.VISIBLE);
 				}
 
 				@Override
@@ -241,33 +225,21 @@ public class ZircoMain extends Activity implements IWebListener, OnTouchListener
     		animBottom.setDuration(ANIMATION_DURATION);
     		animBottom.setInterpolator(new AccelerateInterpolator(1.0f));
     		
-    		mTopBarTab[mCurrentTabIndex].startAnimation(animTop);
-    		mBottomBarTab[mCurrentTabIndex].startAnimation(animBottom);
+    		mTopBar.startAnimation(animTop);
+    		mBottomBar.startAnimation(animBottom);
     		    		
-    		mUrlBarVisibleTab[mCurrentTabIndex] = false;
+    		mUrlBarVisible = false;
     	}
     }
     
     private void hideKeyboard() {
     	InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-    	imm.hideSoftInputFromWindow(mUrlEditTextTab[mCurrentTabIndex].getWindowToken(), 0);
-    }
-    
-    public void updateTitle() {
-    	
-    	String value = mWebViewTab[mCurrentTabIndex].getTitle();
-    	
-    	if ((value != null) &&
-    			(value.length() > 0)) {    	
-    		this.setTitle(String.format(getResources().getString(R.string.app_name_url), value));    		
-    	} else {
-    		this.setTitle(getResources().getString(R.string.app_name));
-    	}
+    	imm.hideSoftInputFromWindow(mUrlEditText.getWindowToken(), 0);
     }
     
     private void navigateToUrl() {
     	hideKeyboard();
-    	mWebViewTab[mCurrentTabIndex].loadUrl(mUrlEditTextTab[mCurrentTabIndex].getText().toString());
+    	mWebViewTab[mCurrentTabIndex].loadUrl(mUrlEditText.getText().toString());
     }
     
     private void navigatePrevious() {
@@ -284,33 +256,50 @@ public class ZircoMain extends Activity implements IWebListener, OnTouchListener
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		
 		if (keyCode == KeyEvent.KEYCODE_MENU) {
-			setUrlBarVisibility(!mUrlBarVisibleTab[mCurrentTabIndex]);
+			setToolbarsVisibility(!mUrlBarVisible);
 		}
 		
 		return super.onKeyDown(keyCode, event);
 	}
 
+	public void updateTitle() {
+    	
+    	String value = mWebViewTab[mCurrentTabIndex].getTitle();
+    	
+    	if ((value != null) &&
+    			(value.length() > 0)) {    	
+    		this.setTitle(String.format(getResources().getString(R.string.app_name_url), value));    		
+    	} else {
+    		this.setTitle(getResources().getString(R.string.app_name));
+    	}
+    }
+	
+	public void updateUI() {
+		mUrlEditText.setText(mWebViewTab[mCurrentTabIndex].getUrl());
+		
+		mPreviousButton.setEnabled(mWebViewTab[mCurrentTabIndex].canGoBack());
+		mNextButton.setEnabled(mWebViewTab[mCurrentTabIndex].canGoForward());
+		
+		updateTitle();
+	}
+	
 	@Override
 	public void onWebEvent(String event, Object data) {
 		
 		if (event.equals(EventConstants.EVT_WEB_ON_PAGE_FINISHED)) {
 			
-			mUrlEditTextTab[mCurrentTabIndex].setText((CharSequence) data);
-						
-			mPreviousButtonTab[mCurrentTabIndex].setEnabled(mWebViewTab[mCurrentTabIndex].canGoBack());
-			mNextButtonTab[mCurrentTabIndex].setEnabled(mWebViewTab[mCurrentTabIndex].canGoForward());
+			updateUI();
 			
-			updateTitle();
+			setToolbarsVisibility(false);
 			
-			setUrlBarVisibility(false);
 		} else if (event.equals(EventConstants.EVT_WEB_ON_PAGE_STARTED)) {
 			
-			mUrlEditTextTab[mCurrentTabIndex].setText((CharSequence) data);
+			mUrlEditText.setText((CharSequence) data);
 			
-			mPreviousButtonTab[mCurrentTabIndex].setEnabled(false);
-			mNextButtonTab[mCurrentTabIndex].setEnabled(false);
+			mPreviousButton.setEnabled(false);
+			mNextButton.setEnabled(false);
 			
-			setUrlBarVisibility(true);
+			setToolbarsVisibility(true);
 		}
 		
 	}
@@ -344,7 +333,7 @@ public class ZircoMain extends Activity implements IWebListener, OnTouchListener
 
 				mCurrentTabIndex--;
 				
-				updateTitle();
+				updateUI();
 			}
 
 			// going forwards: pushing stuff to the left
@@ -358,7 +347,7 @@ public class ZircoMain extends Activity implements IWebListener, OnTouchListener
 
 				mCurrentTabIndex++;
 				
-				updateTitle();
+				updateUI();
 			}
 			break;
 		}
@@ -367,5 +356,10 @@ public class ZircoMain extends Activity implements IWebListener, OnTouchListener
         // if you return false, these actions will not be recorded
         return false;
 
+	}
+
+	@Override
+	public void hideToolbars() {
+		setToolbarsVisibility(false);		
 	}
 }
