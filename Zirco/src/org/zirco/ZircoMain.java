@@ -3,6 +3,7 @@ package org.zirco;
 import org.zirco.events.EventConstants;
 import org.zirco.events.EventController;
 import org.zirco.events.IWebListener;
+import org.zirco.utils.AnimationManager;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,7 +15,6 @@ import android.view.Window;
 import android.view.View.OnTouchListener;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.inputmethod.InputMethodManager;
@@ -337,7 +337,9 @@ public class ZircoMain extends Activity implements IWebListener, OnTouchListener
 			if ((currentX > (mDownXValue + FLIP_THRESHOLD)) &&
 					(mCurrentTabIndex > 0)) {
 
-				mViewFlipper.setAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_right));
+				mViewFlipper.setInAnimation(AnimationManager.getInstance().getInFromLeftAnimation());
+				mViewFlipper.setOutAnimation(AnimationManager.getInstance().getOutToRightAnimation());
+				
 				mViewFlipper.showPrevious();
 
 				mCurrentTabIndex--;
@@ -349,7 +351,9 @@ public class ZircoMain extends Activity implements IWebListener, OnTouchListener
 			if ((currentX < (mDownXValue - FLIP_THRESHOLD)) &&
 					(mCurrentTabIndex < NB_TAB - 1)) {
 				
-				mViewFlipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_left));
+				mViewFlipper.setInAnimation(AnimationManager.getInstance().getInFromRightAnimation());
+				mViewFlipper.setOutAnimation(AnimationManager.getInstance().getOutToLeftAnimation());
+				
 				mViewFlipper.showNext();
 
 				mCurrentTabIndex++;
