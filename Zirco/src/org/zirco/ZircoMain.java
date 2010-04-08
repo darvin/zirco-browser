@@ -1,5 +1,8 @@
 package org.zirco;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.zirco.events.EventConstants;
 import org.zirco.events.EventController;
 import org.zirco.events.IWebListener;
@@ -11,6 +14,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -26,18 +30,19 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ViewFlipper;
 
 public class ZircoMain extends Activity implements IWebListener, IToolbarsContainer, OnTouchListener {
 	
 	private static final int ANIMATION_DURATION = 100;
 	
-	private static final int FLIP_THRESHOLD = 75;
-	
-	private static final int NB_TAB = 2;
+	private static final int FLIP_THRESHOLD = 75;		
 	
 		
 	private float mDownXValue;
+	
+	protected LayoutInflater mInflater = null;
 	
 	private LinearLayout mTopBar;
 	private LinearLayout mBottomBar;
@@ -47,16 +52,18 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 	
 	private ImageView mBubleView;
 	
-	private WebView[] mWebViewTab;
+	private WebView mCurrentWebView;
+	private List<WebView> mWebViews;
 	
 	private ImageButton mPreviousButton;
 	private ImageButton mNextButton;
 	
+	private ImageButton mNewTabButton;
+	private ImageButton mRemoveTabButton;
+	
 	private boolean mUrlBarVisible;
 	
 	private ViewFlipper mViewFlipper;
-	
-	private int mCurrentTabIndex;
 	
     /** Called when the activity is first created. */
     @Override
@@ -68,18 +75,22 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
         
         setContentView(R.layout.main);
         
-        buildComponents();
+        mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         
-        mCurrentTabIndex = 0;
+        buildComponents();
         
         EventController.getInstance().addWebListener(this);
         
-        mWebViewTab[0].loadUrl("http://fr.m.wikipedia.org");
+        mViewFlipper.removeAllViews();
+        
+        addTab();
     }
     
     private void buildComponents() {
     	
     	mUrlBarVisible = true;
+    	
+    	mWebViews = new ArrayList<WebView>();
     	
     	mBubleView = (ImageView) findViewById(R.id.BubleView);
     	mBubleView.setOnClickListener(new View.OnClickListener() {		
@@ -117,27 +128,61 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
             }          
         });
     	
-    	mWebViewTab = new WebView[NB_TAB];
-    	mWebViewTab[0] = (WebView) findViewById(R.id.webview0);
-    	mWebViewTab[1] = (WebView) findViewById(R.id.webview1);
+		mNewTabButton = (ImageButton) findViewById(R.id.NewTabBtn);
+		mNewTabButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+            	addTab();
+            }          
+        });
+		
+		mRemoveTabButton = (ImageButton) findViewById(R.id.RemoveTabBtn);
+		mRemoveTabButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+            	removeTab();
+            }          
+        });
     	
-    	for (int i = 0; i < NB_TAB; i++) {
-    		
-    		mWebViewTab[i].setWebViewClient(new ZircoWebViewClient());
-    		mWebViewTab[i].getSettings().setJavaScriptEnabled(true);
-    		mWebViewTab[i].setOnTouchListener((OnTouchListener) this);
-    		
-    		final Activity activity = this;
-    		mWebViewTab[i].setWebChromeClient(new WebChromeClient() {
-    			public void onProgressChanged(WebView view, int progress) {
-    				// Activities and WebViews measure progress with different scales.
-    				// The progress meter will automatically disappear when we reach 100%
-    				activity.setProgress(progress * 100);
-    			}
-    		});
-    		    		    		    		
+    }
+    
+    private void addTab() {
+    	RelativeLayout view = (RelativeLayout) mInflater.inflate(R.layout.webview, mViewFlipper, false);
+
+    	mCurrentWebView = (WebView) view.findViewById(R.id.webview);
+    	
+    	mCurrentWebView.setWebViewClient(new ZircoWebViewClient());
+    	mCurrentWebView.getSettings().setJavaScriptEnabled(true);
+    	mCurrentWebView.setOnTouchListener((OnTouchListener) this);
+		
+		final Activity activity = this;
+		mCurrentWebView.setWebChromeClient(new WebChromeClient() {
+			public void onProgressChanged(WebView view, int progress) {
+				// Activities and WebViews measure progress with different scales.
+				// The progress meter will automatically disappear when we reach 100%
+				activity.setProgress(progress * 100);
+			}
+		});    			
+		
+		mWebViews.add(mCurrentWebView);
+		
+    	synchronized (mViewFlipper) {
+    		mViewFlipper.addView(view);
+    		mViewFlipper.setDisplayedChild(mViewFlipper.indexOfChild(view));
+    		updateUI();
+    	}
+    }
+    
+    private void removeTab() {
+    	
+    	int removeIndex = mViewFlipper.getDisplayedChild();
+    	
+    	synchronized (mViewFlipper) {
+    		mViewFlipper.removeViewAt(removeIndex);
+    		mWebViews.remove(removeIndex);    		
     	}
     	
+    	mCurrentWebView = mWebViews.get(mViewFlipper.getDisplayedChild());
+    	
+    	updateUI();
     }
     
     private void setToolbarsVisibility(boolean visible) {
@@ -253,8 +298,21 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     	// Needed to hide toolbars properly.
     	mUrlEditText.clearFocus();
     	
-    	hideKeyboard(true);
-    	mWebViewTab[mCurrentTabIndex].loadUrl(mUrlEditText.getText().toString());
+    	String url = mUrlEditText.getText().toString();
+    	
+    	if ((url != null) &&
+    			(url.length() > 0)) {
+    	
+    		if ((!url.startsWith("http://")) &&
+    				(!url.startsWith("https://"))) {
+    			
+    			url = "http://" + url;
+    			
+    		}
+    		
+    		hideKeyboard(true);
+    		mCurrentWebView.loadUrl(url);
+    	}
     }
     
     private void navigatePrevious() {
@@ -262,7 +320,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     	mUrlEditText.clearFocus();
     	
     	hideKeyboard(true);
-    	mWebViewTab[mCurrentTabIndex].goBack();
+    	mCurrentWebView.goBack();
     }
     
     private void navigateNext() {
@@ -270,7 +328,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     	mUrlEditText.clearFocus();
     	
     	hideKeyboard(true);
-    	mWebViewTab[mCurrentTabIndex].goForward();
+    	mCurrentWebView.goForward();
     }
 
 	@Override
@@ -285,7 +343,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 
 	public void updateTitle() {
     	
-    	String value = mWebViewTab[mCurrentTabIndex].getTitle();
+		String value = mCurrentWebView.getTitle();
     	
     	if ((value != null) &&
     			(value.length() > 0)) {    	
@@ -296,10 +354,12 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     }
 	
 	public void updateUI() {
-		mUrlEditText.setText(mWebViewTab[mCurrentTabIndex].getUrl());
+		mUrlEditText.setText(mCurrentWebView.getUrl());
 		
-		mPreviousButton.setEnabled(mWebViewTab[mCurrentTabIndex].canGoBack());
-		mNextButton.setEnabled(mWebViewTab[mCurrentTabIndex].canGoForward());
+		mPreviousButton.setEnabled(mCurrentWebView.canGoBack());
+		mNextButton.setEnabled(mCurrentWebView.canGoForward());
+		
+		mRemoveTabButton.setEnabled(mViewFlipper.getChildCount() > 1);
 		
 		updateTitle();
 	}
@@ -343,32 +403,30 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 			// Get the X value when the user released his/her finger
 			float currentX = event.getX();            
 
-			// going backwards: pushing stuff to the right
-			if ((currentX > (mDownXValue + FLIP_THRESHOLD)) &&
-					(mCurrentTabIndex > 0)) {
+			if (mViewFlipper.getChildCount() > 1) {
+				// going backwards: pushing stuff to the right
+				if (currentX > (mDownXValue + FLIP_THRESHOLD)) {						
 
-				mViewFlipper.setInAnimation(AnimationManager.getInstance().getInFromLeftAnimation());
-				mViewFlipper.setOutAnimation(AnimationManager.getInstance().getOutToRightAnimation());
-				
-				mViewFlipper.showPrevious();
+					mViewFlipper.setInAnimation(AnimationManager.getInstance().getInFromLeftAnimation());
+					mViewFlipper.setOutAnimation(AnimationManager.getInstance().getOutToRightAnimation());
 
-				mCurrentTabIndex--;
-				
-				updateUI();
-			}
+					mViewFlipper.showPrevious();
 
-			// going forwards: pushing stuff to the left
-			if ((currentX < (mDownXValue - FLIP_THRESHOLD)) &&
-					(mCurrentTabIndex < NB_TAB - 1)) {
-				
-				mViewFlipper.setInAnimation(AnimationManager.getInstance().getInFromRightAnimation());
-				mViewFlipper.setOutAnimation(AnimationManager.getInstance().getOutToLeftAnimation());
-				
-				mViewFlipper.showNext();
+					mCurrentWebView = mWebViews.get(mViewFlipper.getDisplayedChild());
+					updateUI();
+				}
 
-				mCurrentTabIndex++;
-				
-				updateUI();
+				// going forwards: pushing stuff to the left
+				if (currentX < (mDownXValue - FLIP_THRESHOLD)) {					
+													
+					mViewFlipper.setInAnimation(AnimationManager.getInstance().getInFromRightAnimation());
+					mViewFlipper.setOutAnimation(AnimationManager.getInstance().getOutToLeftAnimation());
+
+					mViewFlipper.showNext();
+
+					mCurrentWebView = mWebViews.get(mViewFlipper.getDisplayedChild());
+					updateUI();					
+				}
 			}
 			break;
 		}

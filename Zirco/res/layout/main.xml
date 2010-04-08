@@ -19,8 +19,8 @@
 				<WebView android:id="@+id/webview0" android:layout_width="fill_parent"
 					android:layout_height="fill_parent" />
 
-			
-</RelativeLayout>
+
+			</RelativeLayout>
 
 			<RelativeLayout android:id="@+id/webviewlayout1"
 				android:layout_width="fill_parent" android:layout_height="fill_parent">
@@ -47,7 +47,10 @@
 				android:src="@drawable/go32"></ImageButton>
 		</LinearLayout>
 
-		<ImageView android:layout_height="wrap_content" android:layout_width="wrap_content" android:src="@drawable/buble32" android:layout_alignParentBottom="true" android:layout_alignParentRight="true" android:id="@+id/BubleView"></ImageView>
+		<ImageView android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:src="@drawable/buble32"
+			android:layout_alignParentBottom="true"
+			android:layout_alignParentRight="true" android:id="@+id/BubleView"></ImageView>
 
 		<LinearLayout android:id="@+id/BottomBarLayout"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
@@ -60,8 +63,14 @@
 			<ImageButton android:layout_height="wrap_content"
 				android:id="@+id/NextBtn" android:layout_width="wrap_content"
 				android:src="@drawable/next32"></ImageButton>
+			<ImageButton android:layout_height="wrap_content"
+				android:id="@+id/NewTabBtn" android:layout_width="wrap_content"
+				android:src="@drawable/newtab32"></ImageButton>
+			<ImageButton android:layout_height="wrap_content"
+				android:id="@+id/RemoveTabBtn" android:layout_width="wrap_content"
+				android:src="@drawable/removetab32"></ImageButton>
 
-		</LinearLayout>				
+		</LinearLayout>
 
 	</RelativeLayout>
 
