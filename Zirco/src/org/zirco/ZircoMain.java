@@ -12,6 +12,7 @@ import org.zirco.utils.AnimationManager;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -37,7 +38,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 	
 	private static final int ANIMATION_DURATION = 100;
 	
-	private static final int FLIP_THRESHOLD = 75;		
+	private static final int FLIP_THRESHOLD = 125;		
 	
 		
 	private float mDownXValue;
@@ -454,6 +455,10 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
         // if you return false, these actions will not be recorded
         return false;
 
+	}
+	
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
 	}
 
 	@Override
