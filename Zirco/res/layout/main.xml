@@ -39,12 +39,12 @@
 			android:layout_alignParentTop="true">
 
 			<EditText android:layout_height="wrap_content" android:id="@+id/UrlText"
-				android:singleLine="true" android:text="" android:layout_width="fill_parent"
-				android:layout_weight="0.75" android:inputType="textUri"></EditText>
+				android:layout_width="fill_parent"
+				android:layout_weight="0.75" android:inputType="textUri" android:layout_marginTop="4dip"></EditText>
 
 			<ImageButton android:layout_height="wrap_content"
 				android:id="@+id/GoBtn" android:layout_width="wrap_content"
-				android:src="@drawable/go32"></ImageButton>
+				android:src="@drawable/go32" android:layout_marginTop="3dip"></ImageButton>
 		</LinearLayout>
 
 		<ImageView android:layout_height="wrap_content"
@@ -59,16 +59,16 @@
 
 			<ImageButton android:layout_height="wrap_content"
 				android:id="@+id/PreviousBtn" android:layout_width="wrap_content"
-				android:src="@drawable/previous32"></ImageButton>
+				android:src="@drawable/previous32" android:layout_marginTop="3dip"></ImageButton>
 			<ImageButton android:layout_height="wrap_content"
 				android:id="@+id/NextBtn" android:layout_width="wrap_content"
-				android:src="@drawable/next32"></ImageButton>
+				android:src="@drawable/next32" android:layout_marginTop="3dip"></ImageButton>
 			<ImageButton android:layout_height="wrap_content"
 				android:id="@+id/NewTabBtn" android:layout_width="wrap_content"
-				android:src="@drawable/newtab32"></ImageButton>
+				android:src="@drawable/newtab32" android:layout_marginTop="3dip"></ImageButton>
 			<ImageButton android:layout_height="wrap_content"
 				android:id="@+id/RemoveTabBtn" android:layout_width="wrap_content"
-				android:src="@drawable/removetab32"></ImageButton>
+				android:src="@drawable/removetab32" android:layout_marginTop="3dip"></ImageButton>
 
 		</LinearLayout>
 

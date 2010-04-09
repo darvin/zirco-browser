@@ -33,9 +33,8 @@ import android.widget.ViewFlipper;
 
 public class ZircoMain extends Activity implements IWebListener, IToolbarsContainer, OnTouchListener {
 	
-	private static final int FLIP_THRESHOLD = 300;		
-	
-		
+	private static final int FLIP_THRESHOLD = 200;		
+			
 	private float mDownXValue;
 	
 	protected LayoutInflater mInflater = null;
@@ -86,8 +85,6 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
         addTab();
         
         startToolbarsHideRunnable();
-        
-        mUrlEditText.setText("http://www.numerama.com/magazine/15465-steve-jobs-ne-veut-pas-de-porn-store-comme-sur-android.html");
     }
     
     private void buildComponents() {
@@ -103,12 +100,28 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 			}
 		});
     	
+    	mBubleView.setVisibility(View.GONE);
+    	
     	mViewFlipper = (ViewFlipper) findViewById(R.id.ViewFlipper);
     	
     	mTopBar = (LinearLayout) findViewById(R.id.BarLayout);    	
     	mBottomBar = (LinearLayout) findViewById(R.id.BottomBarLayout);
     	    	
     	mUrlEditText = (EditText) findViewById(R.id.UrlText);
+    	mUrlEditText.setOnKeyListener(new View.OnKeyListener() {
+
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				if (keyCode == KeyEvent.KEYCODE_ENTER) {
+					navigateToUrl();
+					return true;
+				}
+				return false;
+			}
+    		
+    	});
+    	
+    	
     	mGoButton = (ImageButton) findViewById(R.id.GoBtn);
     	
     	mGoButton.setOnClickListener(new View.OnClickListener() {
