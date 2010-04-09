@@ -9,6 +9,7 @@ import org.zirco.events.IWebListener;
 import org.zirco.ui.HideToolbarsRunnable;
 import org.zirco.ui.IToolbarsContainer;
 import org.zirco.utils.AnimationManager;
+import org.zirco.views.ZircoWebView;
 
 import android.app.Activity;
 import android.content.Context;
@@ -47,8 +48,8 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 	
 	private ImageView mBubleView;
 	
-	private WebView mCurrentWebView;
-	private List<WebView> mWebViews;
+	private ZircoWebView mCurrentWebView;
+	private List<ZircoWebView> mWebViews;
 	
 	private ImageButton mPreviousButton;
 	private ImageButton mNextButton;
@@ -91,7 +92,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     	
     	mUrlBarVisible = true;
     	
-    	mWebViews = new ArrayList<WebView>();
+    	mWebViews = new ArrayList<ZircoWebView>();
     	
     	mBubleView = (ImageView) findViewById(R.id.BubleView);
     	mBubleView.setOnClickListener(new View.OnClickListener() {		
@@ -163,8 +164,8 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     
     private void addTab() {
     	RelativeLayout view = (RelativeLayout) mInflater.inflate(R.layout.webview, mViewFlipper, false);
-
-    	mCurrentWebView = (WebView) view.findViewById(R.id.webview);
+    	
+    	mCurrentWebView = (ZircoWebView) view.findViewById(R.id.webview);
     	
     	mCurrentWebView.setWebViewClient(new ZircoWebViewClient());
     	mCurrentWebView.getSettings().setJavaScriptEnabled(true);
@@ -174,8 +175,10 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 		final Activity activity = this;
 		mCurrentWebView.setWebChromeClient(new WebChromeClient() {
 			@Override
-			public void onProgressChanged(WebView view, int newProgress) {				
-				activity.setProgress(newProgress * 100);
+			public void onProgressChanged(WebView view, int newProgress) {
+				((ZircoWebView) view).setProgress(newProgress);
+				
+				activity.setProgress(mCurrentWebView.getProgress() * 100);
 			}
 			@Override
 			public boolean onCreateWindow(WebView view, final boolean dialog, final boolean userGesture, final Message resultMsg) {
@@ -312,8 +315,10 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		
-		if (keyCode == KeyEvent.KEYCODE_MENU) {
-			setToolbarsVisibility(!mUrlBarVisible);
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			if (mCurrentWebView.canGoBack()) {
+				mCurrentWebView.goBack();
+			}
 		}
 		
 		return super.onKeyDown(keyCode, event);
@@ -341,6 +346,8 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 		mNextButton.setEnabled(mCurrentWebView.canGoForward());
 		
 		mRemoveTabButton.setEnabled(mViewFlipper.getChildCount() > 1);
+		
+		setProgress(mCurrentWebView.getProgress() * 100);
 		
 		updateTitle();
 	}

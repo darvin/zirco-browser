@@ -2,6 +2,7 @@ package org.zirco;
 
 import org.zirco.events.EventConstants;
 import org.zirco.events.EventController;
+import org.zirco.views.ZircoWebView;
 
 import android.graphics.Bitmap;
 import android.webkit.WebView;
@@ -13,6 +14,8 @@ public class ZircoWebViewClient extends WebViewClient {
 	public void onPageFinished(WebView view, String url) {
 		
 		EventController.getInstance().fireWebEvent(EventConstants.EVT_WEB_ON_PAGE_FINISHED, url);
+		
+		((ZircoWebView) view).notifyPageFinished();
 		
 		super.onPageFinished(view, url);
 	}
