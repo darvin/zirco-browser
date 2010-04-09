@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -32,7 +33,7 @@ import android.widget.ViewFlipper;
 
 public class ZircoMain extends Activity implements IWebListener, IToolbarsContainer, OnTouchListener {
 	
-	private static final int FLIP_THRESHOLD = 125;		
+	private static final int FLIP_THRESHOLD = 300;		
 	
 		
 	private float mDownXValue;
@@ -85,6 +86,8 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
         addTab();
         
         startToolbarsHideRunnable();
+        
+        mUrlEditText.setText("http://www.numerama.com/magazine/15465-steve-jobs-ne-veut-pas-de-porn-store-comme-sur-android.html");
     }
     
     private void buildComponents() {
@@ -152,14 +155,32 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     	
     	mCurrentWebView.setWebViewClient(new ZircoWebViewClient());
     	mCurrentWebView.getSettings().setJavaScriptEnabled(true);
+    	mCurrentWebView.getSettings().setSupportMultipleWindows(true);
     	mCurrentWebView.setOnTouchListener((OnTouchListener) this);
 		
 		final Activity activity = this;
 		mCurrentWebView.setWebChromeClient(new WebChromeClient() {
-			public void onProgressChanged(WebView view, int progress) {
-				// Activities and WebViews measure progress with different scales.
-				// The progress meter will automatically disappear when we reach 100%
-				activity.setProgress(progress * 100);
+			@Override
+			public void onProgressChanged(WebView view, int newProgress) {				
+				activity.setProgress(newProgress * 100);
+			}
+			@Override
+			public boolean onCreateWindow(WebView view, final boolean dialog, final boolean userGesture, final Message resultMsg) {
+				
+				WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
+
+				addTab();
+				
+				transport.setWebView(mCurrentWebView);
+				resultMsg.sendToTarget();
+				
+				return false;
+			}
+			
+			@Override
+			public void onReceivedTitle(WebView view, String title) {
+				setTitle(String.format(getResources().getString(R.string.app_name_url), title)); 
+				super.onReceivedTitle(view, title);
 			}
 		});    			
 		
@@ -285,17 +306,20 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 		return super.onKeyDown(keyCode, event);
 	}
 
+	public void clearTitle() {
+		this.setTitle(getResources().getString(R.string.app_name));
+    }
+	
 	public void updateTitle() {
-    	
 		String value = mCurrentWebView.getTitle();
     	
     	if ((value != null) &&
     			(value.length() > 0)) {    	
     		this.setTitle(String.format(getResources().getString(R.string.app_name_url), value));    		
     	} else {
-    		this.setTitle(getResources().getString(R.string.app_name));
+    		clearTitle();
     	}
-    }
+	}
 	
 	public void updateUI() {
 		mUrlEditText.setText(mCurrentWebView.getUrl());
@@ -313,9 +337,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 		
 		if (event.equals(EventConstants.EVT_WEB_ON_PAGE_FINISHED)) {
 			
-			updateUI();
-			
-			//setToolbarsVisibility(false);
+			updateUI();			
 			
 		} else if (event.equals(EventConstants.EVT_WEB_ON_PAGE_STARTED)) {
 			
@@ -324,7 +346,6 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 			mPreviousButton.setEnabled(false);
 			mNextButton.setEnabled(false);
 			
-			//setToolbarsVisibility(true);
 		} else if (event.equals(EventConstants.EVT_WEB_ON_URL_LOADING)) {
 			setToolbarsVisibility(true);
 		}
