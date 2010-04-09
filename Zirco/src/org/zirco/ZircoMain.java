@@ -20,10 +20,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnTouchListener;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
-import android.view.animation.Animation.AnimationListener;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -35,8 +31,6 @@ import android.widget.RelativeLayout;
 import android.widget.ViewFlipper;
 
 public class ZircoMain extends Activity implements IWebListener, IToolbarsContainer, OnTouchListener {
-	
-	private static final int ANIMATION_DURATION = 100;
 	
 	private static final int FLIP_THRESHOLD = 125;		
 	
@@ -198,36 +192,13 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     }
     
     private void setToolbarsVisibility(boolean visible) {
-    	
-    	TranslateAnimation animTop = null;
-    	TranslateAnimation animBottom = null;
-    	
+    	    	
     	if (visible) {
     		
     		mTopBar.setVisibility(View.VISIBLE);
     		mBottomBar.setVisibility(View.VISIBLE);
     		
-    		mBubleView.setVisibility(View.GONE);
-    		    		    		    		
-    		animTop = new TranslateAnimation(
-    	            Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
-    	            Animation.RELATIVE_TO_SELF, -1.0f, Animation.RELATIVE_TO_SELF, 0.0f
-    	        );
-    		
-    		animBottom = new TranslateAnimation(
-    	            Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
-    	            Animation.RELATIVE_TO_SELF, 1.0f, Animation.RELATIVE_TO_SELF, 0.0f
-    	        );
-
-
-    		animTop.setDuration(ANIMATION_DURATION);
-    		animTop.setInterpolator(new AccelerateInterpolator(1.0f));
-    		
-    		animBottom.setDuration(ANIMATION_DURATION);
-    		animBottom.setInterpolator(new AccelerateInterpolator(1.0f));
-    		
-    		mTopBar.startAnimation(animTop);
-    		mBottomBar.startAnimation(animBottom);
+    		mBubleView.setVisibility(View.GONE);    		    		    		 
     		
     		startToolbarsHideRunnable();
     		
@@ -235,57 +206,12 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     		
     	} else {  	
     		
-    		animTop = new TranslateAnimation(
-    	            Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
-    	            Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, -1.0f
-    	        );
+    		mTopBar.setVisibility(View.GONE);
+    		mBottomBar.setVisibility(View.GONE);
     		
-    		animBottom = new TranslateAnimation(
-    	            Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
-    	            Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 1.0f
-    	        );
-
-    		animTop.setAnimationListener(new AnimationListener() {
-
-				@Override
-				public void onAnimationEnd(Animation animation) {
-					mTopBar.setVisibility(View.GONE);					
-				}
-
-				@Override
-				public void onAnimationRepeat(Animation animation) { }
-
-				@Override
-				public void onAnimationStart(Animation animation) {	}
-    			
-    		});
-    		
-    		animBottom.setAnimationListener(new AnimationListener() {
-
-				@Override
-				public void onAnimationEnd(Animation animation) {
-					mBottomBar.setVisibility(View.GONE);
-					mBubleView.setVisibility(View.VISIBLE);
-					
-					mUrlBarVisible = false;
-				}
-
-				@Override
-				public void onAnimationRepeat(Animation animation) { }
-
-				@Override
-				public void onAnimationStart(Animation animation) {	}
-    			
-    		});
-
-    		animTop.setDuration(ANIMATION_DURATION);
-    		animTop.setInterpolator(new AccelerateInterpolator(1.0f));
-    		
-    		animBottom.setDuration(ANIMATION_DURATION);
-    		animBottom.setInterpolator(new AccelerateInterpolator(1.0f));
-    		
-    		mTopBar.startAnimation(animTop);
-    		mBottomBar.startAnimation(animBottom);    		    		    		
+			mBubleView.setVisibility(View.VISIBLE);
+			
+			mUrlBarVisible = false;
     	}
     }
     
