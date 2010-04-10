@@ -183,10 +183,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     	
     }
     
-    private void addTab() {
-    	RelativeLayout view = (RelativeLayout) mInflater.inflate(R.layout.webview, mViewFlipper, false);
-    	
-    	mCurrentWebView = (ZircoWebView) view.findViewById(R.id.webview);
+    private void initializeCurrentWebView() {
     	
     	mCurrentWebView.setWebViewClient(new ZircoWebViewClient());
     	mCurrentWebView.getSettings().setJavaScriptEnabled(true);
@@ -219,7 +216,15 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 				setTitle(String.format(getResources().getString(R.string.ApplicationNameUrl), title)); 
 				super.onReceivedTitle(view, title);
 			}
-		});    			
+		});
+    }
+    
+    private void addTab() {
+    	RelativeLayout view = (RelativeLayout) mInflater.inflate(R.layout.webview, mViewFlipper, false);
+    	
+    	mCurrentWebView = (ZircoWebView) view.findViewById(R.id.webview);
+    	
+    	initializeCurrentWebView();    			
 		
 		mWebViews.add(mCurrentWebView);
 		
