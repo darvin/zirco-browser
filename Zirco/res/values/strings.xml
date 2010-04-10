@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">Zirco</string>   
-    <string name="app_name_url">Zirco - %s</string>
+<resources>        
+    <string name="ApplicationName">Zirco</string>
+    <string name="ApplicationNameUrl">Zirco - %s</string>
+    <string name="ApplicationDescription">Zirco is an alternative browser for Android.</string>
+    
+    <string name="AboutActivity.Title">About</string>
+	<string name="AboutActivity.CloseBtn">Close</string>
+	<string name="AboutActivity.VersionText">Version:</string>
+	<string name="AboutActivity.UrlTextValue">http://TODO/</string>
+	<string name="AboutActivity.LicenseText">License:</string>
+	<string name="AboutActivity.LicenseTextValue">GPL v3</string>
     
     <string name="Main.MenuAddBookmark">Add bookmark</string>
+    <string name="Main.MenuAbout">About</string>
     
     <string name="BookmarksList.Empty">No bookmarks</string>
     

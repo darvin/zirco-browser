@@ -44,6 +44,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 	private static final int FLIP_THRESHOLD = 200;
 	
 	private static final int MENU_ADD_BOOKMARK = Menu.FIRST;
+	private static final int MENU_ABOUT = Menu.FIRST + 1;
 	
 	private static final int BOOKMARKS_ACTIVITY = 0;
 	
@@ -215,7 +216,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 			
 			@Override
 			public void onReceivedTitle(WebView view, String title) {
-				setTitle(String.format(getResources().getString(R.string.app_name_url), title)); 
+				setTitle(String.format(getResources().getString(R.string.ApplicationNameUrl), title)); 
 				super.onReceivedTitle(view, title);
 			}
 		});    			
@@ -353,7 +354,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 	}
 
 	public void clearTitle() {
-		this.setTitle(getResources().getString(R.string.app_name));
+		this.setTitle(getResources().getString(R.string.ApplicationName));
     }
 	
 	public void updateTitle() {
@@ -361,7 +362,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     	
     	if ((value != null) &&
     			(value.length() > 0)) {    	
-    		this.setTitle(String.format(getResources().getString(R.string.app_name_url), value));    		
+    		this.setTitle(String.format(getResources().getString(R.string.ApplicationNameUrl), value));    		
     	} else {
     		clearTitle();
     	}
@@ -378,7 +379,57 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 		setProgress(mCurrentWebView.getProgress() * 100);
 		
 		updateTitle();
-	}		
+	}
+	
+	private void openAboutDialog() {
+		Intent i = new Intent(this, AboutActivity.class);
+		startActivity(i);
+	}
+	
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+    	super.onCreateOptionsMenu(menu);
+    	
+    	MenuItem item;
+    	
+    	item = menu.add(0, MENU_ADD_BOOKMARK, 0, R.string.Main_MenuAddBookmark);
+        item.setIcon(R.drawable.addbookmark32);
+        
+        item = menu.add(0, MENU_ABOUT, 0, R.string.Main_MenuAbout);
+        item.setIcon(R.drawable.about32);
+    	
+    	return true;
+	}
+	
+	@Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    	switch(item.getItemId()) {
+    	case MENU_ADD_BOOKMARK:
+    		BookmarksUtils.saveBookmark(this, mCurrentWebView.getTitle(), mCurrentWebView.getUrl());
+            return true;
+    	case MENU_ABOUT:
+    		openAboutDialog();
+            return true;
+    	}
+    	
+    	return super.onMenuItemSelected(featureId, item);
+    }
+	
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+	}
+	
+	@Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        
+        if (intent != null) {
+        	Bundle b = intent.getExtras();
+        	if (b != null) {
+        		navigateToUrl(b.getString(Constants.EXTRA_ID_URL));
+        	}
+        }
+	}
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
@@ -432,45 +483,6 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 
 	}
 	
-	@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-    	super.onCreateOptionsMenu(menu);
-    	
-    	MenuItem item;
-    	
-    	item = menu.add(0, MENU_ADD_BOOKMARK, 0, R.string.Main_MenuAddBookmark);
-        item.setIcon(R.drawable.addbookmark32);
-    	
-    	return true;
-	}
-	
-	@Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-    	switch(item.getItemId()) {
-    	case MENU_ADD_BOOKMARK:
-    		BookmarksUtils.saveBookmark(this, mCurrentWebView.getTitle(), mCurrentWebView.getUrl());
-            return true;
-    	}
-    	
-    	return super.onMenuItemSelected(featureId, item);
-    }
-	
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-	}
-	
-	@Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        
-        if (intent != null) {
-        	Bundle b = intent.getExtras();
-        	if (b != null) {
-        		navigateToUrl(b.getString(Constants.EXTRA_ID_URL));
-        	}
-        }
-	}
-
 	@Override
 	public void onWebEvent(String event, Object data) {
 		

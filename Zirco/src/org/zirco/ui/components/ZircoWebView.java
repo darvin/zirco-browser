@@ -6,7 +6,7 @@ import android.webkit.WebView;
 
 public class ZircoWebView extends WebView {
 	
-	private int mProgress = -1;
+	private int mProgress = 100;
 	
 	public ZircoWebView(Context context) {
 		super(context);	
@@ -14,11 +14,7 @@ public class ZircoWebView extends WebView {
 	
 	public ZircoWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
-	}
-	
-	private void initializeProgress() {
-		mProgress = 0;
-	}
+	}		
 	
 	public void setProgress(int progress) {
 		mProgress = progress;
@@ -29,8 +25,14 @@ public class ZircoWebView extends WebView {
 	}
 	
 	public void notifyPageFinished() {
-		mProgress = -1;
+		mProgress = 100;
 	}
+	
+	/*
+	
+	private void initializeProgress() {
+		mProgress = 0;
+	} 
 	
 	@Override
 	public void loadUrl(String url) {
@@ -50,5 +52,6 @@ public class ZircoWebView extends WebView {
 		initializeProgress();
 		super.loadDataWithBaseURL(baseUrl, data, mimeType, encoding, failUrl);
 	}
+	*/
 
 }
