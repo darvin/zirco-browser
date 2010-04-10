@@ -10,10 +10,14 @@
 	<string name="AboutActivity.UrlTextValue">http://TODO/</string>
 	<string name="AboutActivity.LicenseText">License:</string>
 	<string name="AboutActivity.LicenseTextValue">GPL v3</string>
-    
-    <string name="Main.MenuAddBookmark">Add bookmark</string>
+        
     <string name="Main.MenuAbout">About</string>
+    <string name="Main.MenuAddBookmark">Add bookmark</string>
+    <string name="Main.MenuOpen">Open</string>
+    <string name="Main.MenuOpenNewTab">Open in new tab</string>
     
+    <string name="BookmarksListActivity.Title">Zirco - Bookmarks</string>
+    <string name="BookmarksListActivity.MenuAddBookmark">Add bookmark</string>
     <string name="BookmarksListActivity.Empty">No bookmarks</string>
     <string name="BookmarksListActivity.MenuOpenInTab">Open in new tab</string>
     <string name="BookmarksListActivity.MenuEditBookmark">Edit bookmark</string>

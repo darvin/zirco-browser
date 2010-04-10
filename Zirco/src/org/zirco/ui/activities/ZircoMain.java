@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Message;
+import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,10 +29,12 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnTouchListener;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebView.HitTestResult;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -47,7 +50,10 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 	private static final int MENU_ADD_BOOKMARK = Menu.FIRST;
 	private static final int MENU_ABOUT = Menu.FIRST + 1;
 	
-	private static final int BOOKMARKS_ACTIVITY = 0;
+	private static final int CONTEXT_MENU_OPEN = Menu.FIRST + 10;
+	private static final int CONTEXT_MENU_OPEN_IN_NEW_TAB = Menu.FIRST + 11;
+	
+	private static final int ADD_BOOKMARKS_ACTIVITY = 0;
 	
 	private long mDownDateValue;
 	private float mDownXValue;
@@ -191,6 +197,33 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     	mCurrentWebView.getSettings().setJavaScriptEnabled(true);
     	mCurrentWebView.getSettings().setSupportMultipleWindows(true);
     	mCurrentWebView.setOnTouchListener((OnTouchListener) this);
+    	mCurrentWebView.setLongClickable(true);
+    	
+    	mCurrentWebView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+
+			@Override
+			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+				HitTestResult result = ((WebView) v).getHitTestResult();
+				
+				int resultType = result.getType();
+				if ((resultType == HitTestResult.ANCHOR_TYPE) ||
+						(resultType == HitTestResult.SRC_ANCHOR_TYPE) ||
+						(resultType == HitTestResult.SRC_IMAGE_ANCHOR_TYPE)) {
+					
+					Intent i = new Intent();
+					i.putExtra(Constants.EXTRA_ID_URL, result.getExtra());
+					
+					MenuItem item = menu.add(0, CONTEXT_MENU_OPEN, 0, R.string.Main_MenuOpen);
+					item.setIntent(i);
+	
+					item = menu.add(0, CONTEXT_MENU_OPEN_IN_NEW_TAB, 0, R.string.Main_MenuOpenNewTab);					
+					item.setIntent(i);
+				
+					menu.setHeaderTitle(result.getExtra());
+				}
+			}
+    		
+    	});  	
 		
 		final Activity activity = this;
 		mCurrentWebView.setWebChromeClient(new WebChromeClient() {
@@ -258,7 +291,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     
     private void openBookmarksList() {
     	Intent i = new Intent(this, BookmarksListActivity.class);
-    	startActivityForResult(i, BOOKMARKS_ACTIVITY);
+    	startActivityForResult(i, ADD_BOOKMARKS_ACTIVITY);
     }
     
     private void setToolbarsVisibility(boolean visible) {
@@ -421,8 +454,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 	@Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
     	switch(item.getItemId()) {
-    	case MENU_ADD_BOOKMARK:
-    		//BookmarksUtils.saveBookmark(this, mCurrentWebView.getTitle(), mCurrentWebView.getUrl());
+    	case MENU_ADD_BOOKMARK:    		
     		openAddBookmarkDialog();
             return true;
     	case MENU_ABOUT:
@@ -526,6 +558,29 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 			setToolbarsVisibility(true);
 		}
 		
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		
+		Bundle b = item.getIntent().getExtras();;
+		
+		switch(item.getItemId()) {
+		case CONTEXT_MENU_OPEN:
+			if (b != null) {
+				navigateToUrl(b.getString(Constants.EXTRA_ID_URL));
+			}			
+			return true;
+			
+		case CONTEXT_MENU_OPEN_IN_NEW_TAB:
+			if (b != null) {
+				addTab();
+				navigateToUrl(b.getString(Constants.EXTRA_ID_URL));
+			}			
+			return true;
+		}
+		
+		return super.onContextItemSelected(item);		
 	}
 	
 	@Override

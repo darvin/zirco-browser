@@ -29,15 +29,17 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class BookmarksListActivity extends ListActivity {
-	
-	private static final int MENU_IMPORT_BOOKMARKS = Menu.FIRST;
-	private static final int MENU_CLEAR_BOOKMARKS = Menu.FIRST + 1;
+			
+	private static final int MENU_ADD_BOOKMARK = Menu.FIRST;
+	private static final int MENU_IMPORT_BOOKMARKS = Menu.FIRST + 1;
+	private static final int MENU_CLEAR_BOOKMARKS = Menu.FIRST + 2;
 	
 	private static final int MENU_OPEN_IN_TAB = Menu.FIRST + 10;
     private static final int MENU_EDIT_BOOKMARK = Menu.FIRST + 11;
     private static final int MENU_DELETE_BOOKMARK = Menu.FIRST + 12;
     
-    private static final int ACTIVITY_EDIT_BOOKMARK = 0;
+    private static final int ACTIVITY_ADD_BOOKMARK = 0;
+    private static final int ACTIVITY_EDIT_BOOKMARK = 1;    
 	
 	private BookmarksDbAdapter mDbAdapter;
 	
@@ -51,6 +53,8 @@ public class BookmarksListActivity extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bookmarkslist);
+        
+        setTitle(R.string.BookmarksListActivity_Title);
         
         mDbAdapter = new BookmarksDbAdapter(this);
         mDbAdapter.open();
@@ -95,6 +99,16 @@ public class BookmarksListActivity extends ListActivity {
         listView.setLayoutAnimation(controller);
     }
     
+    private void openAddBookmarkDialog() {
+		Intent i = new Intent(this, EditBookmarkActivity.class);
+		
+		i.putExtra(Constants.EXTRA_ID_BOOKMARK_ID, (long) -1);
+		i.putExtra(Constants.EXTRA_ID_BOOKMARK_TITLE, "");
+		i.putExtra(Constants.EXTRA_ID_BOOKMARK_URL, "");
+		
+		startActivityForResult(i, ACTIVITY_ADD_BOOKMARK);
+	}
+    
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);            
@@ -112,10 +126,14 @@ public class BookmarksListActivity extends ListActivity {
     	super.onCreateOptionsMenu(menu);
     	
     	MenuItem item;
+    	item = menu.add(0, MENU_ADD_BOOKMARK, 0, R.string.BookmarksListActivity_MenuAddBookmark);
+        item.setIcon(R.drawable.addbookmark32);
+        
         item = menu.add(0, MENU_IMPORT_BOOKMARKS, 0, R.string.BookmarksListActivity_ImportBookmarks);
-        //item.setIcon(R.drawable.newnote32);
+        item.setIcon(R.drawable.import32);
         
         item = menu.add(0, MENU_CLEAR_BOOKMARKS, 0, R.string.BookmarksListActivity_ClearBookmarks);
+        item.setIcon(R.drawable.clear32);
     	
     	return true;
     }
@@ -124,6 +142,10 @@ public class BookmarksListActivity extends ListActivity {
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
     	
     	switch(item.getItemId()) {
+    	case MENU_ADD_BOOKMARK:    		
+    		openAddBookmarkDialog();
+            return true;
+            
         case MENU_IMPORT_BOOKMARKS:
             importAndroidBookmarks();
             return true;
@@ -278,7 +300,12 @@ public class BookmarksListActivity extends ListActivity {
 				fillData();
 			}
 			break;
-
+		case ACTIVITY_ADD_BOOKMARK:
+			if (resultCode == RESULT_OK) {
+				fillData();
+			}
+			break;
+			
 		default:
 			break;
 		}
