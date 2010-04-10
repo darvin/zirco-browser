@@ -4,7 +4,7 @@
 	android:id="@+id/webviewlayout" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">	
 
-	<org.zirco.views.ZircoWebView android:id="@+id/webview" android:layout_width="fill_parent"
+	<org.zirco.ui.components.ZircoWebView android:id="@+id/webview" android:layout_width="fill_parent"
 		android:layout_height="fill_parent" />
 		
 </RelativeLayout>

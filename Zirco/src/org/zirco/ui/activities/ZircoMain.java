@@ -344,8 +344,9 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 		
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			if (mCurrentWebView.canGoBack()) {
-				mCurrentWebView.goBack();
+				mCurrentWebView.goBack();				
 			}
+			return true;
 		}
 		
 		return super.onKeyDown(keyCode, event);
