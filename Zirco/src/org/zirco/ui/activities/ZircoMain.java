@@ -463,9 +463,11 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         
-        Bundle b = intent.getExtras();
-        if (b != null) {
-        	navigateToUrl(b.getString(Constants.EXTRA_ID_URL));
+        if (intent != null) {
+        	Bundle b = intent.getExtras();
+        	if (b != null) {
+        		navigateToUrl(b.getString(Constants.EXTRA_ID_URL));
+        	}
         }
 	}
 

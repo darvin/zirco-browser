@@ -5,7 +5,8 @@
 
 	<TextView android:layout_gravity="center_vertical"
 		android:layout_height="wrap_content" android:layout_width="fill_parent"
-		android:id="@+id/BookmarkRow.Title" android:text="@+id/BookmarkRow.Title" />
+		android:id="@+id/BookmarkRow.Title" android:text="@+id/BookmarkRow.Title"
+		style="@style/Bookmarks.Title" />
 
 	<TextView android:layout_height="wrap_content" android:id="@+id/BookmarkRow.Url"
 		android:text="@+id/BookmarkRow.Url" android:layout_width="fill_parent" />
