@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:padding="15dip" android:background="@color/dialog_title_background">
+	
+	<LinearLayout android:layout_height="wrap_content"
+		android:layout_width="fill_parent" android:orientation="vertical">
+		
+		<TextView android:id="@+id/EditBookmarkActivity.TitleLabel"
+			android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/EditBookmarkActivity.TitleLabel"></TextView>
+		<EditText android:id="@+id/EditBookmarkActivity.TitleValue"
+			android:layout_height="wrap_content" android:layout_width="fill_parent"></EditText>
+			
+	</LinearLayout>
+	
+	<LinearLayout android:layout_height="wrap_content"
+		android:layout_width="fill_parent" android:orientation="vertical">
+		
+		<TextView android:id="@+id/EditBookmarkActivity.UrlLabel"
+			android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/EditBookmarkActivity.UrlLabel"></TextView>
+		<EditText android:id="@+id/EditBookmarkActivity.UrlValue"
+			android:layout_height="wrap_content" android:layout_width="fill_parent"></EditText>
+			
+	</LinearLayout>
+	
+	<LinearLayout android:layout_height="wrap_content"
+	android:layout_width="fill_parent" android:gravity="center" android:layout_marginTop="10dip">
+
+		<Button android:text="@string/Commons.Ok" android:id="@+id/EditBookmarkActivity.BtnOk"
+			android:layout_height="wrap_content" android:layout_weight="0.5" android:layout_width="fill_parent"></Button>
+		<Button android:text="@string/Commons.Cancel" android:id="@+id/EditBookmarkActivity.BtnCancel"
+			android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="0.5"></Button>
+	</LinearLayout>
+
+</LinearLayout>

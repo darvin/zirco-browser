@@ -16,6 +16,13 @@ public class BookmarksUtils {
 		i.putExtra("url", url);
 		c.startActivity(i);
 	}
+	
+	public static void editBookmark(Context c, String title, String url) {
+		Intent i = new Intent(Intent.ACTION_INSERT, BOOKMARKS_URI);
+		i.putExtra("title", title);
+		i.putExtra("url", url);
+		c.startActivity(i);
+	}
 
 	public static final Cursor getAllBookmarks(Context context) throws IllegalStateException {
 		return context.getContentResolver().query(BOOKMARKS_URI,

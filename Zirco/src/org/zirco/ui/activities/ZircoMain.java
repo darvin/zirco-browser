@@ -1,6 +1,7 @@
 package org.zirco.ui.activities;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.zirco.R;
@@ -12,7 +13,6 @@ import org.zirco.ui.components.ZircoWebView;
 import org.zirco.ui.components.ZircoWebViewClient;
 import org.zirco.ui.runnables.HideToolbarsRunnable;
 import org.zirco.utils.AnimationManager;
-import org.zirco.utils.BookmarksUtils;
 import org.zirco.utils.Constants;
 
 import android.app.Activity;
@@ -41,13 +41,15 @@ import android.widget.ViewFlipper;
 
 public class ZircoMain extends Activity implements IWebListener, IToolbarsContainer, OnTouchListener {
 	
-	private static final int FLIP_THRESHOLD = 200;
+	private static final int FLIP_PIXEL_THRESHOLD = 200;
+	private static final int FLIP_TIME_THRESHOLD = 400;
 	
 	private static final int MENU_ADD_BOOKMARK = Menu.FIRST;
 	private static final int MENU_ABOUT = Menu.FIRST + 1;
 	
 	private static final int BOOKMARKS_ACTIVITY = 0;
 	
+	private long mDownDateValue;
 	private float mDownXValue;
 	
 	protected LayoutInflater mInflater = null;
@@ -391,6 +393,15 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 		startActivity(i);
 	}
 	
+	private void openAddBookmarkDialog() {
+		Intent i = new Intent(this, EditBookmarkActivity.class);
+		
+		i.putExtra(Constants.EXTRA_ID_BOOKMARK_TITLE, mCurrentWebView.getTitle());
+		i.putExtra(Constants.EXTRA_ID_BOOKMARK_URL, mCurrentWebView.getUrl());
+		
+		startActivity(i);
+	}
+	
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	super.onCreateOptionsMenu(menu);
@@ -410,7 +421,8 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
     	switch(item.getItemId()) {
     	case MENU_ADD_BOOKMARK:
-    		BookmarksUtils.saveBookmark(this, mCurrentWebView.getTitle(), mCurrentWebView.getUrl());
+    		//BookmarksUtils.saveBookmark(this, mCurrentWebView.getTitle(), mCurrentWebView.getUrl());
+    		openAddBookmarkDialog();
             return true;
     	case MENU_ABOUT:
     		openAboutDialog();
@@ -431,6 +443,9 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
         if (intent != null) {
         	Bundle b = intent.getExtras();
         	if (b != null) {
+        		if (b.getBoolean(Constants.EXTRA_ID_NEW_TAB)) {
+        			addTab();
+        		}
         		navigateToUrl(b.getString(Constants.EXTRA_ID_URL));
         	}
         }
@@ -447,36 +462,40 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 		case MotionEvent.ACTION_DOWN: {
 			// store the X value when the user's finger was pressed down
 			mDownXValue = event.getX();
+			mDownDateValue = new Date().getTime();
 			break;
 		}
 
 		case MotionEvent.ACTION_UP: {
 			// Get the X value when the user released his/her finger
-			float currentX = event.getX();            
+			float currentX = event.getX();
+			long timeDelta = new Date().getTime() - mDownDateValue;
+			
+			if (timeDelta <= FLIP_TIME_THRESHOLD) {
+				if (mViewFlipper.getChildCount() > 1) {
+					// going backwards: pushing stuff to the right
+					if (currentX > (mDownXValue + FLIP_PIXEL_THRESHOLD)) {						
 
-			if (mViewFlipper.getChildCount() > 1) {
-				// going backwards: pushing stuff to the right
-				if (currentX > (mDownXValue + FLIP_THRESHOLD)) {						
+						mViewFlipper.setInAnimation(AnimationManager.getInstance().getInFromLeftAnimation());
+						mViewFlipper.setOutAnimation(AnimationManager.getInstance().getOutToRightAnimation());
 
-					mViewFlipper.setInAnimation(AnimationManager.getInstance().getInFromLeftAnimation());
-					mViewFlipper.setOutAnimation(AnimationManager.getInstance().getOutToRightAnimation());
+						mViewFlipper.showPrevious();
 
-					mViewFlipper.showPrevious();
+						mCurrentWebView = mWebViews.get(mViewFlipper.getDisplayedChild());
+						updateUI();
+					}
 
-					mCurrentWebView = mWebViews.get(mViewFlipper.getDisplayedChild());
-					updateUI();
-				}
+					// going forwards: pushing stuff to the left
+					if (currentX < (mDownXValue - FLIP_PIXEL_THRESHOLD)) {					
 
-				// going forwards: pushing stuff to the left
-				if (currentX < (mDownXValue - FLIP_THRESHOLD)) {					
-													
-					mViewFlipper.setInAnimation(AnimationManager.getInstance().getInFromRightAnimation());
-					mViewFlipper.setOutAnimation(AnimationManager.getInstance().getOutToLeftAnimation());
+						mViewFlipper.setInAnimation(AnimationManager.getInstance().getInFromRightAnimation());
+						mViewFlipper.setOutAnimation(AnimationManager.getInstance().getOutToLeftAnimation());
 
-					mViewFlipper.showNext();
+						mViewFlipper.showNext();
 
-					mCurrentWebView = mWebViews.get(mViewFlipper.getDisplayedChild());
-					updateUI();					
+						mCurrentWebView = mWebViews.get(mViewFlipper.getDisplayedChild());
+						updateUI();					
+					}
 				}
 			}
 			break;

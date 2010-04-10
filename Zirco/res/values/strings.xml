@@ -15,5 +15,17 @@
     <string name="Main.MenuAbout">About</string>
     
     <string name="BookmarksList.Empty">No bookmarks</string>
+    <string name="BookmarksList.MenuOpenInTab">Open in new tab</string>
+    <string name="BookmarksList.MenuEditBookmark">Edit bookmark</string>
+    <string name="BookmarksList.MenuDeleteBookmark">Delete bookmark</string>
+    
+    <string name="EditBookmarkActivity.Title">Edit bookmark</string>
+    <string name="EditBookmarkActivity.TitleLabel">Name:</string>
+    <string name="EditBookmarkActivity.UrlLabel">Location:</string>
+    
+    <string name="Commons.Ok">Ok</string>
+    <string name="Commons.Cancel">Cancel</string>
+    
+    <string name="DATE_FORMAT_ISO8601">yyyy-MM-dd\'T\'HH:mm:ss.SSS</string>
     
 </resources>
