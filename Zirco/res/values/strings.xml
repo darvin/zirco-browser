@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>        
-    <string name="ApplicationName">Zirco</string>
+    <string name="ApplicationName">Zirco Browser</string>
     <string name="ApplicationNameUrl">Zirco - %s</string>
     <string name="ApplicationDescription">Zirco is an alternative browser for Android.</string>
     
