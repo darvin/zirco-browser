@@ -257,7 +257,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     }
     
     private void openBookmarksList() {
-    	Intent i = new Intent(this, BookmarksList.class);
+    	Intent i = new Intent(this, BookmarksListActivity.class);
     	startActivityForResult(i, BOOKMARKS_ACTIVITY);
     }
     
@@ -396,6 +396,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 	private void openAddBookmarkDialog() {
 		Intent i = new Intent(this, EditBookmarkActivity.class);
 		
+		i.putExtra(Constants.EXTRA_ID_BOOKMARK_ID, (long) -1);
 		i.putExtra(Constants.EXTRA_ID_BOOKMARK_TITLE, mCurrentWebView.getTitle());
 		i.putExtra(Constants.EXTRA_ID_BOOKMARK_URL, mCurrentWebView.getUrl());
 		

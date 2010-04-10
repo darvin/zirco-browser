@@ -12,6 +12,6 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:layout_gravity="center_vertical"
-        android:text="@string/BookmarksList.Empty"/>
+        android:text="@string/BookmarksListActivity.Empty"/>
 
 </LinearLayout>

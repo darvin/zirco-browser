@@ -70,8 +70,12 @@ public class BookmarksDbAdapter {
         return mDb.update(BOOKMARKS_DATABASE_TABLE, args, BOOKMARKS_ROWID + "=" + rowId, null) > 0;
     }
     
-    public boolean deleteBookmark(long rowId) {       	
+    public boolean deleteBookmark(long rowId) { 
         return mDb.delete(BOOKMARKS_DATABASE_TABLE, BOOKMARKS_ROWID + "=" + rowId, null) > 0;
+    }
+    
+    public void clearBookmarks() {
+    	mDb.execSQL("DELETE FROM " + BOOKMARKS_DATABASE_TABLE + ";");
     }
     
     public String[] getBookmarkById(long rowId) {

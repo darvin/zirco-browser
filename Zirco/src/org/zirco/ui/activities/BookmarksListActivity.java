@@ -6,9 +6,13 @@ import org.zirco.utils.BookmarksUtils;
 import org.zirco.utils.Constants;
 
 import android.app.ListActivity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.Browser.BookmarkColumns;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -24,7 +28,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
-public class BookmarksList extends ListActivity {
+public class BookmarksListActivity extends ListActivity {
 	
 	private static final int MENU_IMPORT_BOOKMARKS = Menu.FIRST;
 	private static final int MENU_CLEAR_BOOKMARKS = Menu.FIRST + 1;
@@ -35,10 +39,12 @@ public class BookmarksList extends ListActivity {
     
     private static final int ACTIVITY_EDIT_BOOKMARK = 0;
 	
+	private BookmarksDbAdapter mDbAdapter;
+	
 	private Cursor mCursor;
 	private SimpleCursorAdapter mCursorAdapter;
 	
-	private BookmarksDbAdapter mDbAdapter;
+	private ProgressDialog mProgressDialog;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -55,7 +61,7 @@ public class BookmarksList extends ListActivity {
     }
     
     private void fillData() {
-    	mCursor = mDbAdapter.fetchBookmarks();//BookmarksUtils.getAllBookmarks(this);
+    	mCursor = mDbAdapter.fetchBookmarks();
     	startManagingCursor(mCursor);
     	
     	String[] from = new String[] { BookmarkColumns.TITLE, BookmarkColumns.URL };
@@ -65,6 +71,8 @@ public class BookmarksList extends ListActivity {
         setListAdapter(mCursorAdapter);
         
         setAnimation();
+        
+        //mCursor.close();
     }
     
     private void setAnimation() {
@@ -104,10 +112,10 @@ public class BookmarksList extends ListActivity {
     	super.onCreateOptionsMenu(menu);
     	
     	MenuItem item;
-        item = menu.add(0, MENU_IMPORT_BOOKMARKS, 0, "Import bookmarks");
+        item = menu.add(0, MENU_IMPORT_BOOKMARKS, 0, R.string.BookmarksListActivity_ImportBookmarks);
         //item.setIcon(R.drawable.newnote32);
         
-        item = menu.add(0, MENU_CLEAR_BOOKMARKS, 0, "Clear bookmarks");
+        item = menu.add(0, MENU_CLEAR_BOOKMARKS, 0, R.string.BookmarksListActivity_ClearBookmarks);
     	
     	return true;
     }
@@ -119,6 +127,10 @@ public class BookmarksList extends ListActivity {
         case MENU_IMPORT_BOOKMARKS:
             importAndroidBookmarks();
             return true;
+            
+        case MENU_CLEAR_BOOKMARKS:
+        	clearBookmarks();
+        	return true;
     	}
     	
     	return super.onMenuItemSelected(featureId, item);
@@ -133,9 +145,9 @@ public class BookmarksList extends ListActivity {
 			menu.setHeaderTitle(mDbAdapter.getBookmarkById(id)[0]);
 		}
 		
-		menu.add(0, MENU_OPEN_IN_TAB, 0, R.string.BookmarksList_MenuOpenInTab);
-        menu.add(0, MENU_EDIT_BOOKMARK, 0, R.string.BookmarksList_MenuEditBookmark);
-        menu.add(0, MENU_DELETE_BOOKMARK, 0, R.string.BookmarksList_MenuDeleteBookmark);
+		menu.add(0, MENU_OPEN_IN_TAB, 0, R.string.BookmarksListActivity_MenuOpenInTab);
+        menu.add(0, MENU_EDIT_BOOKMARK, 0, R.string.BookmarksListActivity_MenuEditBookmark);
+        menu.add(0, MENU_DELETE_BOOKMARK, 0, R.string.BookmarksListActivity_MenuDeleteBookmark);
     }
     
     @Override
@@ -171,28 +183,89 @@ public class BookmarksList extends ListActivity {
     	return super.onContextItemSelected(item);
     }
     
-    private void importAndroidBookmarks() {
-    	Cursor cursor = BookmarksUtils.getAllBookmarks(this);
-    	startManagingCursor(cursor);
+    private void importAndroidBookmarks() {    	
+    	mProgressDialog = ProgressDialog.show(this,
+    			this.getResources().getString(R.string.Commons_PleaseWait),
+    			this.getResources().getString(R.string.BookmarksListActivity_ImportingBookmarks));
     	
-    	if (cursor != null) {
-    		if (cursor.moveToFirst()) {
-    			
-    			String title;
-    			String url;
-    			
-    			do {
-    				
-    				title = cursor.getString(cursor.getColumnIndex(BookmarkColumns.TITLE));
-    				url = cursor.getString(cursor.getColumnIndex(BookmarkColumns.URL));
-    				
-    				mDbAdapter.addBookmark(title, url);
-    				
-    			} while (cursor.moveToNext());
-    			
-    			fillData();
-    		}
-    	}    	
+    	new AndroidImporter(this);
+    	
+    }
+    
+    private void clearBookmarks() {
+    	mDbAdapter.clearBookmarks();
+    	
+    	fillData();
+    	
+    	mProgressDialog = ProgressDialog.show(this,
+    			this.getResources().getString(R.string.Commons_PleaseWait),
+    			this.getResources().getString(R.string.BookmarksListActivity_ClearingBookmarks));
+    	
+    	new BookmarksCleaner();    	
+    }
+    
+    private class AndroidImporter implements Runnable {
+    	
+    	private Context mContext;
+
+    	public AndroidImporter(Context context) {
+    		mContext = context;
+    		
+    		new Thread(this).start();
+    	}
+    	
+		@Override
+		public void run() {
+			Cursor cursor = BookmarksUtils.getAllBookmarks(mContext);
+	    	startManagingCursor(cursor);
+	    	
+	    	if (cursor != null) {
+	    		if (cursor.moveToFirst()) {
+	    			
+	    			String title;
+	    			String url;
+	    			
+	    			do {
+	    				
+	    				title = cursor.getString(cursor.getColumnIndex(BookmarkColumns.TITLE));
+	    				url = cursor.getString(cursor.getColumnIndex(BookmarkColumns.URL));
+	    				
+	    				mDbAdapter.addBookmark(title, url);
+	    				
+	    			} while (cursor.moveToNext());	    				    			
+	    		}
+	    	}
+	    	
+	    	cursor.close();
+	    	
+	    	handler.sendEmptyMessage(0);
+		}
+		private Handler handler = new Handler() {
+			public void handleMessage(Message msg) {
+				mProgressDialog.dismiss();
+				fillData();
+			}
+		};
+    }
+    
+    private class BookmarksCleaner implements Runnable {
+    	
+    	public BookmarksCleaner() {	
+    		new Thread(this).start();
+    	}
+    	
+		@Override
+		public void run() {
+			mDbAdapter.clearBookmarks();
+	    	handler.sendEmptyMessage(0);
+		}
+		
+		private Handler handler = new Handler() {
+			public void handleMessage(Message msg) {
+				mProgressDialog.dismiss();
+				fillData();
+			}
+		};
     }
     
     @Override
