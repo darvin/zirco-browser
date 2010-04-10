@@ -377,27 +377,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 		setProgress(mCurrentWebView.getProgress() * 100);
 		
 		updateTitle();
-	}
-	
-	@Override
-	public void onWebEvent(String event, Object data) {
-		
-		if (event.equals(EventConstants.EVT_WEB_ON_PAGE_FINISHED)) {
-			
-			updateUI();			
-			
-		} else if (event.equals(EventConstants.EVT_WEB_ON_PAGE_STARTED)) {
-			
-			mUrlEditText.setText((CharSequence) data);
-			
-			mPreviousButton.setEnabled(false);
-			mNextButton.setEnabled(false);
-			
-		} else if (event.equals(EventConstants.EVT_WEB_ON_URL_LOADING)) {
-			setToolbarsVisibility(true);
-		}
-		
-	}
+	}		
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
@@ -488,6 +468,26 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
         }
 	}
 
+	@Override
+	public void onWebEvent(String event, Object data) {
+		
+		if (event.equals(EventConstants.EVT_WEB_ON_PAGE_FINISHED)) {
+			
+			updateUI();			
+			
+		} else if (event.equals(EventConstants.EVT_WEB_ON_PAGE_STARTED)) {
+			
+			mUrlEditText.setText((CharSequence) data);
+			
+			mPreviousButton.setEnabled(false);
+			mNextButton.setEnabled(false);
+			
+		} else if (event.equals(EventConstants.EVT_WEB_ON_URL_LOADING)) {
+			setToolbarsVisibility(true);
+		}
+		
+	}
+	
 	@Override
 	public void hideToolbars() {
 		if (mUrlBarVisible) {
