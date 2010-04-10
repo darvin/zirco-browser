@@ -1,4 +1,4 @@
-package org.zirco.views;
+package org.zirco.ui.components;
 
 import android.content.Context;
 import android.util.AttributeSet;

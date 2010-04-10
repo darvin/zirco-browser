@@ -48,7 +48,7 @@
 		</LinearLayout>
 
 		<ImageView android:layout_height="wrap_content"
-			android:layout_width="wrap_content" android:src="@drawable/buble32"
+			android:layout_width="wrap_content" android:src="@drawable/bubble32"
 			android:layout_alignParentBottom="true"
 			android:layout_alignParentRight="true" android:id="@+id/BubleView"></ImageView>
 
@@ -69,6 +69,9 @@
 			<ImageButton android:layout_height="wrap_content"
 				android:id="@+id/RemoveTabBtn" android:layout_width="wrap_content"
 				android:src="@drawable/removetab32" android:layout_marginTop="3dip"></ImageButton>
+			<ImageButton android:layout_height="wrap_content"
+				android:id="@+id/BookmarksBtn" android:layout_width="wrap_content"
+				android:src="@drawable/bookmarks32" android:layout_marginTop="3dip"></ImageButton>
 
 		</LinearLayout>
 

@@ -1,23 +1,30 @@
-package org.zirco;
+package org.zirco.ui.activities;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.zirco.R;
 import org.zirco.events.EventConstants;
 import org.zirco.events.EventController;
 import org.zirco.events.IWebListener;
-import org.zirco.ui.HideToolbarsRunnable;
 import org.zirco.ui.IToolbarsContainer;
+import org.zirco.ui.components.ZircoWebView;
+import org.zirco.ui.components.ZircoWebViewClient;
+import org.zirco.ui.runnables.HideToolbarsRunnable;
 import org.zirco.utils.AnimationManager;
-import org.zirco.views.ZircoWebView;
+import org.zirco.utils.BookmarksUtils;
+import org.zirco.utils.Constants;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -34,8 +41,12 @@ import android.widget.ViewFlipper;
 
 public class ZircoMain extends Activity implements IWebListener, IToolbarsContainer, OnTouchListener {
 	
-	private static final int FLIP_THRESHOLD = 200;		
-			
+	private static final int FLIP_THRESHOLD = 200;
+	
+	private static final int MENU_ADD_BOOKMARK = Menu.FIRST;
+	
+	private static final int BOOKMARKS_ACTIVITY = 0;
+	
 	private float mDownXValue;
 	
 	protected LayoutInflater mInflater = null;
@@ -56,6 +67,8 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 	
 	private ImageButton mNewTabButton;
 	private ImageButton mRemoveTabButton;
+	
+	private ImageButton mBookmarksButton;
 	
 	private boolean mUrlBarVisible;
 	
@@ -159,6 +172,13 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
             	removeTab();
             }          
         });
+		
+		mBookmarksButton = (ImageButton) findViewById(R.id.BookmarksBtn);
+		mBookmarksButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+            	openBookmarksList();
+            }          
+        });
     	
     }
     
@@ -228,6 +248,11 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     	mUrlEditText.clearFocus();
     }
     
+    private void openBookmarksList() {
+    	Intent i = new Intent(this, BookmarksList.class);
+    	startActivityForResult(i, BOOKMARKS_ACTIVITY);
+    }
+    
     private void setToolbarsVisibility(boolean visible) {
     	    	
     	if (visible) {
@@ -275,11 +300,9 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     	new Thread(mHideToolbarsRunnable).start();
     }
     
-    private void navigateToUrl() {
+    private void navigateToUrl(String url) {
     	// Needed to hide toolbars properly.
-    	mUrlEditText.clearFocus();
-    	
-    	String url = mUrlEditText.getText().toString();
+    	mUrlEditText.clearFocus();    	
     	
     	if ((url != null) &&
     			(url.length() > 0)) {
@@ -294,6 +317,10 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     		hideKeyboard(true);
     		mCurrentWebView.loadUrl(url);
     	}
+    }
+    
+    private void navigateToUrl() {
+    	navigateToUrl(mUrlEditText.getText().toString());    	
     }
     
     private void navigatePrevious() {
@@ -424,8 +451,41 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 
 	}
 	
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+    	super.onCreateOptionsMenu(menu);
+    	
+    	MenuItem item;
+    	
+    	item = menu.add(0, MENU_ADD_BOOKMARK, 0, R.string.Main_MenuAddBookmark);
+        item.setIcon(R.drawable.addbookmark32);
+    	
+    	return true;
+	}
+	
+	@Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    	switch(item.getItemId()) {
+    	case MENU_ADD_BOOKMARK:
+    		BookmarksUtils.saveBookmark(this, mCurrentWebView.getTitle(), mCurrentWebView.getUrl());
+            return true;
+    	}
+    	
+    	return super.onMenuItemSelected(featureId, item);
+    }
+	
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
+	}
+	
+	@Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        
+        Bundle b = intent.getExtras();
+        if (b != null) {
+        	navigateToUrl(b.getString(Constants.EXTRA_ID_URL));
+        }
 	}
 
 	@Override

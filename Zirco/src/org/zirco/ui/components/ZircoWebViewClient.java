@@ -1,8 +1,7 @@
-package org.zirco;
+package org.zirco.ui.components;
 
 import org.zirco.events.EventConstants;
 import org.zirco.events.EventController;
-import org.zirco.views.ZircoWebView;
 
 import android.graphics.Bitmap;
 import android.webkit.WebView;

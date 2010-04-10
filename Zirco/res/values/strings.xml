@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Zirco</string>
-    
+    <string name="app_name">Zirco</string>   
     <string name="app_name_url">Zirco - %s</string>
+    
+    <string name="Main.MenuAddBookmark">Add bookmark</string>
+    
+    <string name="BookmarksList.Empty">No bookmarks</string>
+    
 </resources>
