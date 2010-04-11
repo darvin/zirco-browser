@@ -13,6 +13,7 @@ import org.zirco.ui.IToolbarsContainer;
 import org.zirco.ui.components.ZircoWebView;
 import org.zirco.ui.components.ZircoWebViewClient;
 import org.zirco.ui.runnables.HideToolbarsRunnable;
+import org.zirco.ui.runnables.HistoryUpdater;
 import org.zirco.utils.AnimationManager;
 import org.zirco.utils.Constants;
 
@@ -58,7 +59,8 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 	private static final int CONTEXT_MENU_OPEN = Menu.FIRST + 10;
 	private static final int CONTEXT_MENU_OPEN_IN_NEW_TAB = Menu.FIRST + 11;
 	
-	private static final int ADD_BOOKMARKS_ACTIVITY = 0;
+	private static final int OPEN_BOOKMARKS_ACTIVITY = 0;
+	private static final int OPEN_HISTORY_ACTIVITY = 1;
 	
 	private long mDownDateValue;
 	private float mDownXValue;
@@ -84,6 +86,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 	private ImageButton mRemoveTabButton;
 	
 	private ImageButton mBookmarksButton;
+	private ImageButton mHistoryButton;
 	
 	private boolean mUrlBarVisible;
 	
@@ -206,6 +209,13 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
             	openBookmarksList();
             }          
         });
+		
+		mHistoryButton = (ImageButton) findViewById(R.id.HistoryBtn);
+		mHistoryButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+            	openHistoryList();
+            }          
+        });
     	
     }
     
@@ -271,6 +281,9 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 			@Override
 			public void onReceivedTitle(WebView view, String title) {
 				setTitle(String.format(getResources().getString(R.string.ApplicationNameUrl), title)); 
+				
+				startHistoryUpdaterRunnable(title, mCurrentWebView.getUrl());
+				
 				super.onReceivedTitle(view, title);
 			}
 		});
@@ -360,6 +373,10 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     	
     	mHideToolbarsRunnable = new HideToolbarsRunnable(this);    	
     	new Thread(mHideToolbarsRunnable).start();
+    }
+    
+    private void startHistoryUpdaterRunnable(String title, String url) {
+    	new Thread(new HistoryUpdater(this, title, url)).start();
     }
     
     private void navigateToUrl(String url) {
@@ -464,7 +481,12 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 	
 	private void openBookmarksList() {
     	Intent i = new Intent(this, BookmarksListActivity.class);
-    	startActivityForResult(i, ADD_BOOKMARKS_ACTIVITY);
+    	startActivityForResult(i, OPEN_BOOKMARKS_ACTIVITY);
+    }
+	
+	private void openHistoryList() {
+		Intent i = new Intent(this, HistoryListActivity.class);
+    	startActivityForResult(i, OPEN_HISTORY_ACTIVITY);
     }
 	
 	private void openPreferences() {
@@ -515,13 +537,16 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         
-        if (intent != null) {
-        	Bundle b = intent.getExtras();
-        	if (b != null) {
-        		if (b.getBoolean(Constants.EXTRA_ID_NEW_TAB)) {
-        			addTab(false);
+        if ((requestCode == OPEN_BOOKMARKS_ACTIVITY) ||
+        		(requestCode == OPEN_HISTORY_ACTIVITY)) {
+        	if (intent != null) {
+        		Bundle b = intent.getExtras();
+        		if (b != null) {
+        			if (b.getBoolean(Constants.EXTRA_ID_NEW_TAB)) {
+        				addTab(false);
+        			}
+        			navigateToUrl(b.getString(Constants.EXTRA_ID_URL));
         		}
-        		navigateToUrl(b.getString(Constants.EXTRA_ID_URL));
         	}
         }
 	}

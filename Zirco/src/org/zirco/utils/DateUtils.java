@@ -24,6 +24,36 @@ public class DateUtils {
 		return sdf.format(c.getTime());
 	} 
 	
+	public static String getHistoryLimit(Context context) {
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.DAY_OF_MONTH, -5);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat(getDefaultFormat(context));
+		
+		return sdf.format(c.getTime());		
+	}
+	
+	public static Date getDateAtMidnight(int roll) {
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.HOUR_OF_DAY, 0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		
+		c.roll(Calendar.DAY_OF_MONTH, roll);
+		
+		return c.getTime();
+	}
+	
+	public static String getDateAsUniversalString(Context context, Date date) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat(getDefaultFormat(context));				
+		
+		return sdf.format(c.getTime());
+	}
+	
 	public static String getDisplayDate(Context context, Date date) {
 		return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(date);
 	}

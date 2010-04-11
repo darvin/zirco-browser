@@ -1,7 +1,7 @@
 package org.zirco.ui.activities;
 
 import org.zirco.R;
-import org.zirco.model.BookmarksDbAdapter;
+import org.zirco.model.DbAdapter;
 import org.zirco.utils.Constants;
 
 import android.app.Activity;
@@ -87,7 +87,7 @@ public class EditBookmarkActivity extends Activity {
 	
 	private void updateBookmark() {
 		if (mUrlEditText.getText().toString() != null) {
-			BookmarksDbAdapter dbAdapter = new BookmarksDbAdapter(this);
+			DbAdapter dbAdapter = new DbAdapter(this);
 			dbAdapter.open();
 
 			dbAdapter.updateBookmark(mRowId, mTitleEditText.getText().toString(), mUrlEditText.getText().toString());
@@ -98,7 +98,7 @@ public class EditBookmarkActivity extends Activity {
 	
 	private void saveBookmark() {		
 		if (mUrlEditText.getText().toString() != null) {
-			BookmarksDbAdapter dbAdapter = new BookmarksDbAdapter(this);
+			DbAdapter dbAdapter = new DbAdapter(this);
 			dbAdapter.open();
 
 			dbAdapter.addBookmark(mTitleEditText.getText().toString(), mUrlEditText.getText().toString());

@@ -1,7 +1,7 @@
 package org.zirco.ui.activities;
 
 import org.zirco.R;
-import org.zirco.model.BookmarksDbAdapter;
+import org.zirco.model.DbAdapter;
 import org.zirco.utils.BookmarksUtils;
 import org.zirco.utils.Constants;
 
@@ -47,7 +47,7 @@ public class BookmarksListActivity extends ListActivity {
     private static final int ACTIVITY_ADD_BOOKMARK = 0;
     private static final int ACTIVITY_EDIT_BOOKMARK = 1;    
 	
-	private BookmarksDbAdapter mDbAdapter;
+	private DbAdapter mDbAdapter;
 	
 	private Cursor mCursor;
 	private SimpleCursorAdapter mCursorAdapter;
@@ -58,11 +58,11 @@ public class BookmarksListActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.bookmarkslist);
+        setContentView(R.layout.bookmarkslistactivity);
         
         setTitle(R.string.BookmarksListActivity_Title);
         
-        mDbAdapter = new BookmarksDbAdapter(this);
+        mDbAdapter = new DbAdapter(this);
         mDbAdapter.open();
         
         registerForContextMenu(getListView());
