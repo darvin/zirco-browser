@@ -1,5 +1,6 @@
 package org.zirco.model.bookmarks;
 
+import org.zirco.utils.Constants;
 import org.zirco.utils.DateUtils;
 
 import android.content.ContentValues;
@@ -8,6 +9,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class BookmarksDbAdapter {
@@ -27,7 +29,7 @@ public class BookmarksDbAdapter {
     	BOOKMARKS_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +   
     	BOOKMARKS_TITLE + " TEXT, " +
     	BOOKMARKS_URL + " TEXT NOT NULL, " +
-    	BOOKMARKS_CREATION_DATE + " TEXT);";
+    	BOOKMARKS_CREATION_DATE + " DATE);";
 	
 	private DatabaseHelper mDbHelper;
     private SQLiteDatabase mDb;
@@ -49,8 +51,21 @@ public class BookmarksDbAdapter {
     }
     
     public Cursor fetchBookmarks() {
+    	String orderClause;
+    	switch (PreferenceManager.getDefaultSharedPreferences(mCtx).getInt(Constants.PREFERENCES_BOOKMARKS_SORT_MODE, 0)) {
+    	case 0:
+    		orderClause = BOOKMARKS_TITLE + " COLLATE NOCASE";
+    		break;
+    	case 1:
+    		orderClause = BOOKMARKS_CREATION_DATE + " DESC";
+    		break;
+    	default:
+    		orderClause = BOOKMARKS_TITLE + " COLLATE NOCASE";
+    		break;
+    	}
+    	
     	return mDb.query(BOOKMARKS_DATABASE_TABLE,
-    			new String[] { BOOKMARKS_ROWID, BOOKMARKS_TITLE, BOOKMARKS_URL }, null, null, null, null, null);
+    			new String[] { BOOKMARKS_ROWID, BOOKMARKS_TITLE, BOOKMARKS_URL }, null, null, null, null, orderClause);
     }
     
     public long addBookmark(String title, String url) {

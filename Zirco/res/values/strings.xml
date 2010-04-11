@@ -18,6 +18,7 @@
     <string name="Main.MenuOpenNewTab">Open in new tab</string>
     
     <string name="BookmarksListActivity.Title">Zirco - Bookmarks</string>
+    <string name="BookmarksListActivity.MenuSortMode">Sort by</string>
     <string name="BookmarksListActivity.MenuAddBookmark">Add bookmark</string>
     <string name="BookmarksListActivity.Empty">No bookmarks</string>
     <string name="BookmarksListActivity.MenuOpenInTab">Open in new tab</string>
@@ -27,6 +28,8 @@
     <string name="BookmarksListActivity.ClearBookmarks">Clear bookmarks</string>
     <string name="BookmarksListActivity.ImportingBookmarks">Importing bookmarks...</string>
     <string name="BookmarksListActivity.ClearingBookmarks">Clearing bookmarks...</string>
+    <string name="BookmarksListActivity.AlphaSortMode">Alphabetical</string>
+    <string name="BookmarksListActivity.RecentSortMode">Most recent</string>
     
     <string name="EditBookmarkActivity.Title">Edit bookmark</string>
     <string name="EditBookmarkActivity.TitleLabel">Name:</string>
@@ -47,6 +50,9 @@
     <string name="Commons.Ok">Ok</string>
     <string name="Commons.Cancel">Cancel</string>
     <string name="Commons.PleaseWait">Please wait</string>
+    <string name="Commons.Yes">Yes</string>
+    <string name="Commons.No">No</string>
+    <string name="Commons.NoUndoMessage">This operation cannot be undone. Do you wish to proceed?</string>
     
     <string name="DATE_FORMAT_ISO8601">yyyy-MM-dd\'T\'HH:mm:ss.SSS</string>
     

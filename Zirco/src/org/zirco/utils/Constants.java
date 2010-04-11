@@ -17,5 +17,7 @@ public class Constants {
 	public static final String PREFERENCES_BROWSER_ENABLE_FORM_DATA = "BrowserEnableFormData";
 	public static final String PREFERENCES_BROWSER_ENABLE_PASSWORDS = "BrowserEnablePasswords";
 	public static final String PREFERENCES_BROWSER_ENABLE_COOKIES = "BrowserEnableCookies";
+	
+	public static final String PREFERENCES_BOOKMARKS_SORT_MODE = "BookmarksSortMode";
 
 }

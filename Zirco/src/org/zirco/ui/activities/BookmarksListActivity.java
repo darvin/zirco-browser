@@ -5,14 +5,19 @@ import org.zirco.model.bookmarks.BookmarksDbAdapter;
 import org.zirco.utils.BookmarksUtils;
 import org.zirco.utils.Constants;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnClickListener;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.provider.Browser.BookmarkColumns;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -30,9 +35,10 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class BookmarksListActivity extends ListActivity {
 			
-	private static final int MENU_ADD_BOOKMARK = Menu.FIRST;
-	private static final int MENU_IMPORT_BOOKMARKS = Menu.FIRST + 1;
-	private static final int MENU_CLEAR_BOOKMARKS = Menu.FIRST + 2;
+	private static final int MENU_SORT_MODE = Menu.FIRST;
+	private static final int MENU_ADD_BOOKMARK = Menu.FIRST + 1;
+	private static final int MENU_IMPORT_BOOKMARKS = Menu.FIRST + 2;
+	private static final int MENU_CLEAR_BOOKMARKS = Menu.FIRST + 3;
 	
 	private static final int MENU_OPEN_IN_TAB = Menu.FIRST + 10;
     private static final int MENU_EDIT_BOOKMARK = Menu.FIRST + 11;
@@ -126,6 +132,9 @@ public class BookmarksListActivity extends ListActivity {
     	super.onCreateOptionsMenu(menu);
     	
     	MenuItem item;
+    	item = menu.add(0, MENU_SORT_MODE, 0, R.string.BookmarksListActivity_MenuSortMode);
+        item.setIcon(R.drawable.sortmode32);
+    	
     	item = menu.add(0, MENU_ADD_BOOKMARK, 0, R.string.BookmarksListActivity_MenuAddBookmark);
         item.setIcon(R.drawable.addbookmark32);
         
@@ -142,6 +151,10 @@ public class BookmarksListActivity extends ListActivity {
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
     	
     	switch(item.getItemId()) {
+    	case MENU_SORT_MODE:
+    		changeSortMode();
+    		return true;
+    		
     	case MENU_ADD_BOOKMARK:    		
     		openAddBookmarkDialog();
             return true;
@@ -205,6 +218,37 @@ public class BookmarksListActivity extends ListActivity {
     	return super.onContextItemSelected(item);
     }
     
+    private void doChangeSortMode(int sortMode) {
+    	Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+    	editor.putInt(Constants.PREFERENCES_BOOKMARKS_SORT_MODE, sortMode);
+    	editor.commit();
+    	
+    	fillData();
+    }
+    
+    private void changeSortMode() {
+    	
+    	int currentSort = PreferenceManager.getDefaultSharedPreferences(this).getInt(Constants.PREFERENCES_BOOKMARKS_SORT_MODE, 0);
+    	
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	builder.setInverseBackgroundForced(true);
+    	builder.setIcon(android.R.drawable.ic_dialog_info);
+    	builder.setTitle(getResources().getString(R.string.BookmarksListActivity_MenuSortMode));
+    	builder.setSingleChoiceItems(new String[] { getResources().getString(R.string.BookmarksListActivity_AlphaSortMode),
+    													getResources().getString(R.string.BookmarksListActivity_RecentSortMode) },
+    			currentSort,
+    			new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				doChangeSortMode(which);
+				dialog.dismiss();				
+			}    		
+    	});    	
+    	
+    	AlertDialog alert = builder.create();
+    	alert.show();
+    }
+    
     private void importAndroidBookmarks() {    	
     	mProgressDialog = ProgressDialog.show(this,
     			this.getResources().getString(R.string.Commons_PleaseWait),
@@ -214,16 +258,37 @@ public class BookmarksListActivity extends ListActivity {
     	
     }
     
-    private void clearBookmarks() {
-    	mDbAdapter.clearBookmarks();
-    	
-    	fillData();
-    	
+    private void doClearBookmarks() {
     	mProgressDialog = ProgressDialog.show(this,
     			this.getResources().getString(R.string.Commons_PleaseWait),
     			this.getResources().getString(R.string.BookmarksListActivity_ClearingBookmarks));
     	
-    	new BookmarksCleaner();    	
+    	new BookmarksCleaner();
+    }
+    
+    private void clearBookmarks() {
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	builder.setCancelable(true);
+    	builder.setIcon(android.R.drawable.ic_dialog_alert);
+    	builder.setTitle(getResources().getString(R.string.BookmarksListActivity_ClearBookmarks));
+    	builder.setMessage(getResources().getString(R.string.Commons_NoUndoMessage));
+
+    	builder.setInverseBackgroundForced(true);
+    	builder.setPositiveButton(getResources().getString(R.string.Commons_Yes), new DialogInterface.OnClickListener() {
+    		@Override
+    		public void onClick(DialogInterface dialog, int which) {
+    			dialog.dismiss();
+    			doClearBookmarks();    			
+    		}
+    	});
+    	builder.setNegativeButton(getResources().getString(R.string.Commons_No), new DialogInterface.OnClickListener() {
+    		@Override
+    		public void onClick(DialogInterface dialog, int which) {
+    			dialog.dismiss();
+    		}
+    	});
+    	AlertDialog alert = builder.create();
+    	alert.show();        
     }
     
     private class AndroidImporter implements Runnable {
