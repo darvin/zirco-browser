@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory android:title="@string/PreferencesActivity.BrowserSettingsCategoryTitle">		
+		<CheckBoxPreference
+			android:title="@string/PreferencesActivity.EnableJavascriptPreferenceTitle"
+			android:defaultValue="true"
+			android:summary="@string/PreferencesActivity.EnableJavascriptPreferenceSummary"
+			android:key="BrowserEnableJavascript" />
+		<CheckBoxPreference
+			android:title="@string/PreferencesActivity.LoadImagesPreferenceTitle"
+			android:defaultValue="true"
+			android:summary="@string/PreferencesActivity.LoadImagesPreferenceSummary"
+			android:key="BrowserEnableImages" />
+		<CheckBoxPreference
+			android:title="@string/PreferencesActivity.EnableFormDataPreferenceTitle"
+			android:defaultValue="true"
+			android:summary="@string/PreferencesActivity.EnableFormDataPreferenceSummary"
+			android:key="BrowserEnableFormData" />
+		<CheckBoxPreference
+			android:title="@string/PreferencesActivity.EnablePasswordsPreferenceTitle"
+			android:defaultValue="true"
+			android:summary="@string/PreferencesActivity.EnablePasswordsPreferenceSummary"
+			android:key="BrowserEnablePasswords" />
+		<CheckBoxPreference
+			android:title="@string/PreferencesActivity.EnableCookiesPreferenceTitle"
+			android:defaultValue="true"
+			android:summary="@string/PreferencesActivity.EnableCookiesPreferenceSummary"
+			android:key="BrowserEnableCookies" />
+	</PreferenceCategory>
+</PreferenceScreen>

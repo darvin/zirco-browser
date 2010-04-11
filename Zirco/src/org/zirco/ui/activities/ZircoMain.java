@@ -2,6 +2,7 @@ package org.zirco.ui.activities;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.zirco.R;
@@ -18,9 +19,12 @@ import org.zirco.utils.Constants;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -48,7 +52,8 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 	private static final int FLIP_TIME_THRESHOLD = 400;
 	
 	private static final int MENU_ADD_BOOKMARK = Menu.FIRST;
-	private static final int MENU_ABOUT = Menu.FIRST + 1;
+	private static final int MENU_PREFERENCES = Menu.FIRST + 1;
+	private static final int MENU_ABOUT = Menu.FIRST + 2;
 	
 	private static final int CONTEXT_MENU_OPEN = Menu.FIRST + 10;
 	private static final int CONTEXT_MENU_OPEN_IN_NEW_TAB = Menu.FIRST + 11;
@@ -104,6 +109,13 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
         EventController.getInstance().addWebListener(this);
         
         mViewFlipper.removeAllViews();
+        
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener() {
+			@Override
+			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+				applyPreferences();
+			}        	
+        });
         
         addTab();
         
@@ -191,13 +203,20 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     	
     }
     
+    private void applyPreferences() {
+    	Iterator<ZircoWebView> iter = mWebViews.iterator();
+    	while (iter.hasNext()) {
+    		iter.next().initializeOptions();
+    	}
+    }
+    
     private void initializeCurrentWebView() {
     	
     	mCurrentWebView.setWebViewClient(new ZircoWebViewClient());
-    	mCurrentWebView.getSettings().setJavaScriptEnabled(true);
-    	mCurrentWebView.getSettings().setSupportMultipleWindows(true);
+    	//mCurrentWebView.getSettings().setJavaScriptEnabled(true);
+    	//mCurrentWebView.getSettings().setSupportMultipleWindows(true);
     	mCurrentWebView.setOnTouchListener((OnTouchListener) this);
-    	mCurrentWebView.setLongClickable(true);
+    	//mCurrentWebView.setLongClickable(true);
     	
     	mCurrentWebView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
 
@@ -287,11 +306,6 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     	updateUI();
     	
     	mUrlEditText.clearFocus();
-    }
-    
-    private void openBookmarksList() {
-    	Intent i = new Intent(this, BookmarksListActivity.class);
-    	startActivityForResult(i, ADD_BOOKMARKS_ACTIVITY);
     }
     
     private void setToolbarsVisibility(boolean visible) {
@@ -436,6 +450,16 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 		startActivity(i);
 	}
 	
+	private void openBookmarksList() {
+    	Intent i = new Intent(this, BookmarksListActivity.class);
+    	startActivityForResult(i, ADD_BOOKMARKS_ACTIVITY);
+    }
+	
+	private void openPreferences() {
+		Intent preferencesActivity = new Intent(this, PreferencesActivity.class);
+  		startActivity(preferencesActivity);
+	}
+	
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	super.onCreateOptionsMenu(menu);
@@ -444,6 +468,9 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     	
     	item = menu.add(0, MENU_ADD_BOOKMARK, 0, R.string.Main_MenuAddBookmark);
         item.setIcon(R.drawable.addbookmark32);
+        
+        item = menu.add(0, MENU_PREFERENCES, 0, R.string.Main_MenuPreferences);
+        item.setIcon(R.drawable.preferences32);
         
         item = menu.add(0, MENU_ABOUT, 0, R.string.Main_MenuAbout);
         item.setIcon(R.drawable.about32);
@@ -456,6 +483,9 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     	switch(item.getItemId()) {
     	case MENU_ADD_BOOKMARK:    		
     		openAddBookmarkDialog();
+            return true;
+    	case MENU_PREFERENCES:    		
+    		openPreferences();
             return true;
     	case MENU_ABOUT:
     		openAboutDialog();

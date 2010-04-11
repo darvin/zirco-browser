@@ -13,6 +13,7 @@
         
     <string name="Main.MenuAbout">About</string>
     <string name="Main.MenuAddBookmark">Add bookmark</string>
+    <string name="Main.MenuPreferences">Preferences</string>
     <string name="Main.MenuOpen">Open</string>
     <string name="Main.MenuOpenNewTab">Open in new tab</string>
     
@@ -30,6 +31,18 @@
     <string name="EditBookmarkActivity.Title">Edit bookmark</string>
     <string name="EditBookmarkActivity.TitleLabel">Name:</string>
     <string name="EditBookmarkActivity.UrlLabel">Location:</string>
+    
+    <string name="PreferencesActivity.BrowserSettingsCategoryTitle">Browser settings</string>
+    <string name="PreferencesActivity.EnableJavascriptPreferenceTitle">Enable JavaScript</string>
+    <string name="PreferencesActivity.EnableJavascriptPreferenceSummary">Enable or disable JavaScript</string>
+    <string name="PreferencesActivity.LoadImagesPreferenceTitle">Load images</string>
+    <string name="PreferencesActivity.LoadImagesPreferenceSummary">Enable or disable image loading</string>
+    <string name="PreferencesActivity.EnableFormDataPreferenceTitle">Save forms data</string>
+    <string name="PreferencesActivity.EnableFormDataPreferenceSummary">Enable or disable form data saving</string>
+    <string name="PreferencesActivity.EnablePasswordsPreferenceTitle">Save passwords</string>
+    <string name="PreferencesActivity.EnablePasswordsPreferenceSummary">Enable or disable password saving</string>
+    <string name="PreferencesActivity.EnableCookiesPreferenceTitle">Allow cookies</string>
+    <string name="PreferencesActivity.EnableCookiesPreferenceSummary">Enable or disable cookies</string>
     
     <string name="Commons.Ok">Ok</string>
     <string name="Commons.Cancel">Cancel</string>
