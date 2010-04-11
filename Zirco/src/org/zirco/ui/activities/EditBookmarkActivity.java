@@ -1,7 +1,7 @@
 package org.zirco.ui.activities;
 
 import org.zirco.R;
-import org.zirco.model.bookmarks.BookmarksDbAdapter;
+import org.zirco.model.BookmarksDbAdapter;
 import org.zirco.utils.Constants;
 
 import android.app.Activity;

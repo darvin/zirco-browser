@@ -1,4 +1,4 @@
-package org.zirco.model.bookmarks;
+package org.zirco.model;
 
 import org.zirco.utils.Constants;
 import org.zirco.utils.DateUtils;
