@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory android:title="@string/PreferencesActivity.GeneralSettingsCategoryTitle">
+		<EditTextPreference
+			android:name="@string/PreferencesActivity.HomePagePreferenceTitle"
+			android:summary="@string/PreferencesActivity.HomePagePreferenceSummary"
+			android:defaultValue="@string/PreferencesActivity.HomePagePreferenceDefaultValue"
+			android:title="@string/PreferencesActivity.HomePagePreferenceTitle"
+			android:key="GeneralHomePage" />
+	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/PreferencesActivity.BrowserSettingsCategoryTitle">		
 		<CheckBoxPreference
 			android:title="@string/PreferencesActivity.EnableJavascriptPreferenceTitle"

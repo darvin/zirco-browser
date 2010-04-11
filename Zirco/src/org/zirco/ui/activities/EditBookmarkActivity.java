@@ -79,6 +79,10 @@ public class EditBookmarkActivity extends Activity {
     		mRowId = extras.getLong(Constants.EXTRA_ID_BOOKMARK_ID);
     		
     	}
+    	
+    	if (mRowId == -1) {
+    		setTitle(R.string.EditBookmarkActivity_TitleAdd);
+    	}
 	}
 	
 	private void updateBookmark() {

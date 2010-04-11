@@ -68,6 +68,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 	private LinearLayout mTopBar;
 	private LinearLayout mBottomBar;
 	
+	private ImageButton mHomeButton;
 	private EditText mUrlEditText;
 	private ImageButton mGoButton;
 	
@@ -117,7 +118,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 			}        	
         });
         
-        addTab();
+        addTab(true);
         
         startToolbarsHideRunnable();
     }
@@ -141,7 +142,14 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     	
     	mTopBar = (LinearLayout) findViewById(R.id.BarLayout);    	
     	mBottomBar = (LinearLayout) findViewById(R.id.BottomBarLayout);
-    	    	
+    	
+    	mHomeButton = (ImageButton) findViewById(R.id.HomeBtn);    	
+    	mHomeButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+            	navigateToHome();
+            }          
+        });
+    	
     	mUrlEditText = (EditText) findViewById(R.id.UrlText);
     	mUrlEditText.setOnKeyListener(new View.OnKeyListener() {
 
@@ -155,10 +163,8 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 			}
     		
     	});
-    	
-    	
-    	mGoButton = (ImageButton) findViewById(R.id.GoBtn);
-    	
+    	    	
+    	mGoButton = (ImageButton) findViewById(R.id.GoBtn);    	
     	mGoButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
             	navigateToUrl();
@@ -183,7 +189,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 		mNewTabButton = (ImageButton) findViewById(R.id.NewTabBtn);
 		mNewTabButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-            	addTab();
+            	addTab(true);
             }          
         });
 		
@@ -213,10 +219,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     private void initializeCurrentWebView() {
     	
     	mCurrentWebView.setWebViewClient(new ZircoWebViewClient());
-    	//mCurrentWebView.getSettings().setJavaScriptEnabled(true);
-    	//mCurrentWebView.getSettings().setSupportMultipleWindows(true);
     	mCurrentWebView.setOnTouchListener((OnTouchListener) this);
-    	//mCurrentWebView.setLongClickable(true);
     	
     	mCurrentWebView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
 
@@ -257,7 +260,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 				
 				WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
 
-				addTab();
+				addTab(false);
 				
 				transport.setWebView(mCurrentWebView);
 				resultMsg.sendToTarget();
@@ -273,7 +276,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 		});
     }
     
-    private void addTab() {
+    private void addTab(boolean navigateToHome) {
     	RelativeLayout view = (RelativeLayout) mInflater.inflate(R.layout.webview, mViewFlipper, false);
     	
     	mCurrentWebView = (ZircoWebView) view.findViewById(R.id.webview);
@@ -290,6 +293,10 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     	updateUI();
     	
     	mUrlEditText.clearFocus();
+    	
+    	if (navigateToHome) {
+    		navigateToHome();
+    	}
     }
     
     private void removeTab() {
@@ -376,6 +383,11 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     
     private void navigateToUrl() {
     	navigateToUrl(mUrlEditText.getText().toString());    	
+    }
+    
+    private void navigateToHome() {
+    	navigateToUrl(PreferenceManager.getDefaultSharedPreferences(this).getString(Constants.PREFERENCES_GENERAL_HOME_PAGE,
+    			getResources().getString(R.string.PreferencesActivity_HomePagePreferenceDefaultValue)));
     }
     
     private void navigatePrevious() {
@@ -507,7 +519,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
         	Bundle b = intent.getExtras();
         	if (b != null) {
         		if (b.getBoolean(Constants.EXTRA_ID_NEW_TAB)) {
-        			addTab();
+        			addTab(false);
         		}
         		navigateToUrl(b.getString(Constants.EXTRA_ID_URL));
         	}
@@ -604,7 +616,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 			
 		case CONTEXT_MENU_OPEN_IN_NEW_TAB:
 			if (b != null) {
-				addTab();
+				addTab(false);
 				navigateToUrl(b.getString(Constants.EXTRA_ID_URL));
 			}			
 			return true;

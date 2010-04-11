@@ -12,6 +12,8 @@ public class Constants {
 	/**
 	 * Preferences
 	 */
+	public static final String PREFERENCES_GENERAL_HOME_PAGE = "GeneralHomePage";
+	
 	public static final String PREFERENCES_BROWSER_ENABLE_JAVASCRIPT = "BrowserEnableJavascript";
 	public static final String PREFERENCES_BROWSER_ENABLE_IMAGES = "BrowserEnableImages";
 	public static final String PREFERENCES_BROWSER_ENABLE_FORM_DATA = "BrowserEnableFormData";

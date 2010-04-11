@@ -2,7 +2,7 @@
 <resources>        
     <string name="ApplicationName">Zirco Browser</string>
     <string name="ApplicationNameUrl">Zirco - %s</string>
-    <string name="ApplicationDescription">Zirco is an alternative browser for Android.</string>
+    <string name="ApplicationDescription">Zirco is an open-source alternative browser for Android.</string>
     
     <string name="AboutActivity.Title">About</string>
 	<string name="AboutActivity.CloseBtn">Close</string>
@@ -17,7 +17,7 @@
     <string name="Main.MenuOpen">Open</string>
     <string name="Main.MenuOpenNewTab">Open in new tab</string>
     
-    <string name="BookmarksListActivity.Title">Zirco - Bookmarks</string>
+    <string name="BookmarksListActivity.Title">Zirco Browser - Bookmarks</string>
     <string name="BookmarksListActivity.MenuSortMode">Sort by</string>
     <string name="BookmarksListActivity.MenuAddBookmark">Add bookmark</string>
     <string name="BookmarksListActivity.Empty">No bookmarks</string>
@@ -32,9 +32,14 @@
     <string name="BookmarksListActivity.RecentSortMode">Most recent</string>
     
     <string name="EditBookmarkActivity.Title">Edit bookmark</string>
+    <string name="EditBookmarkActivity.TitleAdd">Add bookmark</string>
     <string name="EditBookmarkActivity.TitleLabel">Name:</string>
     <string name="EditBookmarkActivity.UrlLabel">Location:</string>
     
+    <string name="PreferencesActivity.GeneralSettingsCategoryTitle">General settings</string>
+    <string name="PreferencesActivity.HomePagePreferenceTitle">Home page</string>
+    <string name="PreferencesActivity.HomePagePreferenceSummary">Define your default home page</string>
+    <string name="PreferencesActivity.HomePagePreferenceDefaultValue">about:blank</string>
     <string name="PreferencesActivity.BrowserSettingsCategoryTitle">Browser settings</string>
     <string name="PreferencesActivity.EnableJavascriptPreferenceTitle">Enable JavaScript</string>
     <string name="PreferencesActivity.EnableJavascriptPreferenceSummary">Enable or disable JavaScript</string>
