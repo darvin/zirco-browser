@@ -22,6 +22,7 @@ public class HistoryUpdater implements Runnable {
 		dbAdapter.open();
 		
 		dbAdapter.updateHistory(mTitle, mUrl);
+		dbAdapter.truncateHistory();
 		
 		dbAdapter.close();
 	}

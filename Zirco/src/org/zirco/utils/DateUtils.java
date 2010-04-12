@@ -9,6 +9,7 @@ import java.util.Date;
 import org.zirco.R;
 
 import android.content.Context;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class DateUtils {
@@ -25,8 +26,14 @@ public class DateUtils {
 	} 
 	
 	public static String getHistoryLimit(Context context) {
+		int historySize = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(Constants.PREFERENCES_BROWSER_HISTORY_SIZE, "5"));
 		Calendar c = Calendar.getInstance();
-		c.add(Calendar.DAY_OF_MONTH, -5);
+		c.add(Calendar.DAY_OF_MONTH, -historySize);
+		
+		c.set(Calendar.HOUR_OF_DAY, 23);
+		c.set(Calendar.MINUTE, 59);
+		c.set(Calendar.SECOND, 59);
+		c.set(Calendar.MILLISECOND, 0);
 		
 		SimpleDateFormat sdf = new SimpleDateFormat(getDefaultFormat(context));
 		

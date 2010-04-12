@@ -222,8 +222,11 @@ public class DbAdapter {
     }
     
     public void clearHistory() {
-    	//mDb.execSQL("DELETE FROM " + HISTORY_DATABASE_TABLE + " WHERE " + HISTORY_LAST_VISITED_DATE + " < " + DateUtils.getHistoryLimit(mCtx) + ";");
     	mDb.execSQL("DELETE FROM " + HISTORY_DATABASE_TABLE + ";");
+    }
+    
+    public void truncateHistory() {
+    	mDb.execSQL("DELETE FROM " + HISTORY_DATABASE_TABLE + " WHERE " + HISTORY_LAST_VISITED_DATE + " < \"" + DateUtils.getHistoryLimit(mCtx) + "\";");
     }
     
     /**
