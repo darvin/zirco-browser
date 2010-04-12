@@ -41,7 +41,7 @@
 		<LinearLayout android:id="@+id/BottomBarLayout"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:scaleType="fitXY" android:background="@drawable/tb_background"
-			android:layout_alignParentBottom="true" android:weightSum="6">
+			android:layout_alignParentBottom="true" android:weightSum="5">
 
 			<ImageButton android:layout_height="wrap_content"
 				android:id="@+id/PreviousBtn" android:layout_width="wrap_content"
@@ -50,11 +50,8 @@
 				android:id="@+id/RemoveTabBtn" android:layout_width="wrap_content"
 				android:src="@drawable/removetab32" android:layout_marginTop="3dip" android:layout_weight="1"></ImageButton>
 			<ImageButton android:layout_height="wrap_content"
-				android:id="@+id/BookmarksBtn" android:layout_width="wrap_content"
-				android:src="@drawable/bookmarks32" android:layout_marginTop="3dip" android:layout_weight="1"></ImageButton>
-			<ImageButton android:layout_height="wrap_content"
-				android:id="@+id/HistoryBtn" android:layout_width="wrap_content"
-				android:src="@drawable/history32" android:layout_marginTop="3dip" android:layout_weight="1"></ImageButton>
+				android:id="@+id/QuickBtn" android:layout_width="wrap_content"
+				android:src="@drawable/bookmarks32" android:layout_marginTop="3dip" android:layout_weight="1"></ImageButton>			
 			<ImageButton android:layout_height="wrap_content"
 				android:id="@+id/NewTabBtn" android:layout_width="wrap_content"
 				android:src="@drawable/newtab32" android:layout_marginTop="3dip" android:layout_weight="1"></ImageButton>

@@ -53,8 +53,10 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 	private static final int FLIP_TIME_THRESHOLD = 400;
 	
 	private static final int MENU_ADD_BOOKMARK = Menu.FIRST;
-	private static final int MENU_PREFERENCES = Menu.FIRST + 1;
-	private static final int MENU_ABOUT = Menu.FIRST + 2;
+	private static final int MENU_SHOW_BOOKMARKS = Menu.FIRST + 1;
+	private static final int MENU_SHOW_HISTORY = Menu.FIRST + 2;
+	private static final int MENU_PREFERENCES = Menu.FIRST + 3;
+	private static final int MENU_ABOUT = Menu.FIRST + 4;
 	
 	private static final int CONTEXT_MENU_OPEN = Menu.FIRST + 10;
 	private static final int CONTEXT_MENU_OPEN_IN_NEW_TAB = Menu.FIRST + 11;
@@ -85,8 +87,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 	private ImageButton mNewTabButton;
 	private ImageButton mRemoveTabButton;
 	
-	private ImageButton mBookmarksButton;
-	private ImageButton mHistoryButton;
+	private ImageButton mQuickButton;
 	
 	private boolean mUrlBarVisible;
 	
@@ -203,23 +204,33 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
             }          
         });
 		
-		mBookmarksButton = (ImageButton) findViewById(R.id.BookmarksBtn);
-		mBookmarksButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-            	openBookmarksList();
+		mQuickButton = (ImageButton) findViewById(R.id.QuickBtn);
+		mQuickButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {            	
+            	onQuickButton();
             }          
         });
-		
-		mHistoryButton = (ImageButton) findViewById(R.id.HistoryBtn);
-		mHistoryButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-            	openHistoryList();
-            }          
-        });
+		applyQuickButtonPreferences();
     	
     }
     
+    private void applyQuickButtonPreferences() {
+    	String buttonPref = PreferenceManager.getDefaultSharedPreferences(this).getString(Constants.PREFERENCES_GENERAL_QUICK_BUTTON, "bookmarks");
+		
+		if (buttonPref.equals("bookmarks")) {
+			mQuickButton.setImageResource(R.drawable.bookmarks32);
+		} else if (buttonPref.equals("history")) {
+			mQuickButton.setImageResource(R.drawable.history32);
+		} else {
+			mQuickButton.setImageResource(R.drawable.bookmarks32);
+		}
+		mQuickButton.invalidate();
+    }
+    
     private void applyPreferences() {
+    	
+    	applyQuickButtonPreferences();
+    	
     	Iterator<ZircoWebView> iter = mWebViews.iterator();
     	while (iter.hasNext()) {
     		iter.next().initializeOptions();
@@ -495,6 +506,18 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     	startActivityForResult(i, OPEN_HISTORY_ACTIVITY);
     }
 	
+	private void onQuickButton() {
+		String buttonPref = PreferenceManager.getDefaultSharedPreferences(this).getString(Constants.PREFERENCES_GENERAL_QUICK_BUTTON, "bookmarks");
+		
+		if (buttonPref.equals("bookmarks")) {
+			openBookmarksList();
+		} else if (buttonPref.equals("history")) {
+			openHistoryList();
+		} else {
+			openBookmarksList();
+		}
+	}
+	
 	private void openPreferences() {
 		Intent preferencesActivity = new Intent(this, PreferencesActivity.class);
   		startActivity(preferencesActivity);
@@ -508,6 +531,12 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     	
     	item = menu.add(0, MENU_ADD_BOOKMARK, 0, R.string.Main_MenuAddBookmark);
         item.setIcon(R.drawable.addbookmark32);
+        
+        item = menu.add(0, MENU_SHOW_BOOKMARKS, 0, R.string.Main_MenuShowBookmarks);
+        item.setIcon(R.drawable.bookmarks32);
+        
+        item = menu.add(0, MENU_SHOW_HISTORY, 0, R.string.Main_MenuShowHistory);
+        item.setIcon(R.drawable.history32);
         
         item = menu.add(0, MENU_PREFERENCES, 0, R.string.Main_MenuPreferences);
         item.setIcon(R.drawable.preferences32);
@@ -523,6 +552,12 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     	switch(item.getItemId()) {
     	case MENU_ADD_BOOKMARK:    		
     		openAddBookmarkDialog();
+            return true;
+    	case MENU_SHOW_BOOKMARKS:    		
+    		openBookmarksList();
+            return true;
+    	case MENU_SHOW_HISTORY:    		
+    		openHistoryList();
             return true;
     	case MENU_PREFERENCES:    		
     		openPreferences();

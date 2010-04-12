@@ -13,6 +13,8 @@
         
     <string name="Main.MenuAbout">About</string>
     <string name="Main.MenuAddBookmark">Add bookmark</string>
+    <string name="Main.MenuShowBookmarks">Bookmarks</string>
+    <string name="Main.MenuShowHistory">History</string>
     <string name="Main.MenuPreferences">Preferences</string>
     <string name="Main.MenuOpen">Open</string>
     <string name="Main.MenuOpenNewTab">Open in new tab</string>
@@ -57,6 +59,20 @@
     <string name="PreferencesActivity.EnableCookiesPreferenceSummary">Enable or disable cookies</string>
     <string name="PreferencesActivity.HistorySizePreferenceTitle">History size</string>
     <string name="PreferencesActivity.HistorySizePreferenceSummary">History size in days</string>
+    
+    <string name="PreferencesActivity.QuickButtonPreferenceTitle">Quick button</string>
+    <string name="PreferencesActivity.QuickButtonPreferenceSummary">Set the quick button function</string>
+    
+    <string name="PreferencesActivity.QuickButtonBookmarks">Bookmarks</string>
+    <string name="PreferencesActivity.QuickButtonHistory">History</string>
+    <string-array name="QuickButtonEntries">
+		<item>@string/PreferencesActivity.QuickButtonBookmarks</item>
+		<item>@string/PreferencesActivity.QuickButtonHistory</item>
+	</string-array>
+	<string-array name="QuickButtonValues">
+		<item>bookmarks</item>
+		<item>history</item>
+	</string-array>
     
     <string name="PreferencesActivity.BarDurationPreferenceTitle">Bars display duration</string>
     <string name="PreferencesActivity.BarDurationPreferenceSummary">Display duration of tools bars</string>
