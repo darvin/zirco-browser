@@ -146,11 +146,13 @@ public class DbAdapter {
     	List<HistoryItem> items;
     	Cursor cursor;
     	
+    	int historyLimit = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(mCtx).getString(Constants.PREFERENCES_BROWSER_HISTORY_SIZE, "5"));
+    	
     	long id;
     	String title;
     	String url;
     	
-    	for (int i = 0; i < 5; i++) {
+    	for (int i = 0; i < historyLimit; i++) {
     		currentDate = DateUtils.getDateAtMidnight(-i);
     		
     		cursor = mDb.query(HISTORY_DATABASE_TABLE,
@@ -159,9 +161,9 @@ public class DbAdapter {
         			"(" + HISTORY_LAST_VISITED_DATE + " > \"" + DateUtils.getDateAsUniversalString(mCtx, currentDate) + "\")",
         			null, null, null, HISTORY_LAST_VISITED_DATE + " DESC");
     		
-    		if (cursor.moveToFirst()) {
-    			
-    			items = new ArrayList<HistoryItem>();
+    		items = new ArrayList<HistoryItem>();
+    		
+    		if (cursor.moveToFirst()) {    			    			
     			
     			do {
     				
@@ -171,10 +173,10 @@ public class DbAdapter {
     				
     				items.add(new HistoryItem(id, title, url));
     				
-    			} while (cursor.moveToNext());
-    			    			    		
-    			result.add(items);
+    			} while (cursor.moveToNext());    			    			    		    			
     		}
+    		
+    		result.add(items);
     		
     		cursor.close();
     		

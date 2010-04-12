@@ -371,7 +371,12 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     		mHideToolbarsRunnable.setDisabled();
     	}
     	
-    	mHideToolbarsRunnable = new HideToolbarsRunnable(this);    	
+    	int delay = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString(Constants.PREFERENCES_GENERAL_BARS_DURATION, "3000"));
+    	if (delay <= 0) {
+    		delay = 3000;
+    	}
+    	
+    	mHideToolbarsRunnable = new HideToolbarsRunnable(this, delay);    	
     	new Thread(mHideToolbarsRunnable).start();
     }
     
@@ -387,7 +392,8 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     			(url.length() > 0)) {
     	
     		if ((!url.startsWith("http://")) &&
-    				(!url.startsWith("https://"))) {
+    				(!url.startsWith("https://")) &&
+    				(!url.startsWith("about:blank"))) {
     			
     			url = "http://" + url;
     			

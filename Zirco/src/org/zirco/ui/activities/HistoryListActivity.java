@@ -202,16 +202,16 @@ public class HistoryListActivity extends ExpandableListActivity {
 		}
 
 		@Override
-		public Object getGroup(int groupPosition) {
+		public Object getGroup(int groupPosition) {						
 			switch (groupPosition) {
 			case 0:
-				return getResources().getString(R.string.Commons_Today);
+				return String.format(getResources().getString(R.string.Commons_Today), getChildrenCount(groupPosition));
 
 			case 1:
-				return getResources().getString(R.string.Commons_Yesterday);
+				return String.format(getResources().getString(R.string.Commons_Yesterday), getChildrenCount(groupPosition));
 				
 			default:
-				return String.format(getResources().getString(R.string.Commons_DaysAgo, groupPosition));
+				return String.format(getResources().getString(R.string.Commons_DaysAgo, groupPosition, getChildrenCount(groupPosition)));
 			}
 		}
 

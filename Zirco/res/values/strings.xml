@@ -55,6 +55,31 @@
     <string name="PreferencesActivity.EnablePasswordsPreferenceSummary">Enable or disable password saving</string>
     <string name="PreferencesActivity.EnableCookiesPreferenceTitle">Allow cookies</string>
     <string name="PreferencesActivity.EnableCookiesPreferenceSummary">Enable or disable cookies</string>
+    <string name="PreferencesActivity.HistorySizePreferenceTitle">History size</string>
+    <string name="PreferencesActivity.HistorySizePreferenceSummary">History size in days</string>
+    
+    <string name="PreferencesActivity.BarDurationPreferenceTitle">Bars display duration</string>
+    <string name="PreferencesActivity.BarDurationPreferenceSummary">Display duration of tools bars</string>
+    
+    <string name="PreferencesActivity.BarDuration1sec">1 second</string>
+    <string name="PreferencesActivity.BarDuration2sec">2 seconds</string>
+    <string name="PreferencesActivity.BarDuration3sec">3 seconds</string>
+    <string name="PreferencesActivity.BarDuration4sec">4 seconds</string>
+    <string name="PreferencesActivity.BarDuration5sec">5 seconds</string>
+    <string-array name="BarDurationEntries">
+		<item>@string/PreferencesActivity.BarDuration1sec</item>
+		<item>@string/PreferencesActivity.BarDuration2sec</item>
+		<item>@string/PreferencesActivity.BarDuration3sec</item>
+		<item>@string/PreferencesActivity.BarDuration4sec</item>
+		<item>@string/PreferencesActivity.BarDuration5sec</item>
+	</string-array>
+	<string-array name="BarDurationValues">
+		<item>1000</item>
+		<item>2000</item>
+		<item>3000</item>
+		<item>4000</item>
+		<item>5000</item>
+	</string-array>
     
     <string name="Commons.Ok">Ok</string>
     <string name="Commons.Cancel">Cancel</string>
@@ -62,9 +87,9 @@
     <string name="Commons.Yes">Yes</string>
     <string name="Commons.No">No</string>
     <string name="Commons.NoUndoMessage">This operation cannot be undone. Do you wish to proceed?</string>
-    <string name="Commons.Today">Today</string>
-    <string name="Commons.Yesterday">Yesterday</string>
-    <string name="Commons.DaysAgo">%s days ago</string>
+    <string name="Commons.Today">Today (%s)</string>
+    <string name="Commons.Yesterday">Yesterday (%s)</string>
+    <string name="Commons.DaysAgo">%s days ago (%s)</string>
     
     <string name="DATE_FORMAT_ISO8601">yyyy-MM-dd\'T\'HH:mm:ss.SSS</string>
     

@@ -10,14 +10,14 @@ public class HideToolbarsRunnable implements Runnable {
 	
 	private final static String TAG = "HideToolbarsThread";
 	
-	private static final int DELAY = 3000;
-	
 	private IToolbarsContainer mParent;
 	private boolean mDisabled;
+	private int mDelay;
 	
-	public HideToolbarsRunnable(IToolbarsContainer parent) {
+	public HideToolbarsRunnable(IToolbarsContainer parent, int delay) {
 		mParent = parent;
 		mDisabled = false;
+		mDelay = delay;
 	}
 	
 	private Handler mHandler = new Handler() {				
@@ -37,7 +37,7 @@ public class HideToolbarsRunnable implements Runnable {
 	public void run() {
 		try {
 			
-			Thread.sleep(DELAY);
+			Thread.sleep(mDelay);
 			
 			mHandler.sendEmptyMessage(0);
 			

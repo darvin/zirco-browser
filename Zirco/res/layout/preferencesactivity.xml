@@ -7,8 +7,21 @@
 			android:defaultValue="@string/PreferencesActivity.HomePagePreferenceDefaultValue"
 			android:title="@string/PreferencesActivity.HomePagePreferenceTitle"
 			android:key="GeneralHomePage" />
+		<ListPreference
+			android:title="@string/PreferencesActivity.BarDurationPreferenceTitle"
+			android:summary="@string/PreferencesActivity.BarDurationPreferenceSummary"
+			android:key="GeneralBarsDuration"
+			android:defaultValue="3000"
+			android:entries="@array/BarDurationEntries"
+			android:entryValues="@array/BarDurationValues" />
 	</PreferenceCategory>
-	<PreferenceCategory android:title="@string/PreferencesActivity.BrowserSettingsCategoryTitle">		
+	<PreferenceCategory android:title="@string/PreferencesActivity.BrowserSettingsCategoryTitle">
+		<EditTextPreference
+			android:name="@string/PreferencesActivity.HistorySizePreferenceTitle"
+			android:summary="@string/PreferencesActivity.HistorySizePreferenceSummary"
+			android:defaultValue="5"
+			android:title="@string/PreferencesActivity.HistorySizePreferenceTitle"
+			android:key="BrowserHistorySize" />		
 		<CheckBoxPreference
 			android:title="@string/PreferencesActivity.EnableJavascriptPreferenceTitle"
 			android:defaultValue="true"
