@@ -39,6 +39,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.DownloadListener;
@@ -152,7 +153,20 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     	mViewFlipper = (ViewFlipper) findViewById(R.id.ViewFlipper);
     	
     	mTopBar = (LinearLayout) findViewById(R.id.BarLayout);    	
-    	mBottomBar = (LinearLayout) findViewById(R.id.BottomBarLayout);
+    	mTopBar.setOnClickListener(new OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				// Dummy event to steel it from the WebView, in case of clicking between the buttons.				
+			}
+		});
+    	
+    	mBottomBar = (LinearLayout) findViewById(R.id.BottomBarLayout);    	
+    	mBottomBar.setOnClickListener(new OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				// Dummy event to steel it from the WebView, in case of clicking between the buttons.				
+			}
+		});
     	
     	mHomeButton = (ImageButton) findViewById(R.id.HomeBtn);    	
     	mHomeButton.setOnClickListener(new View.OnClickListener() {
