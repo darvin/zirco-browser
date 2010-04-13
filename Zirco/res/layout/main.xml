@@ -22,7 +22,8 @@
 
 			<ImageButton android:layout_height="wrap_content"
 				android:id="@+id/HomeBtn" android:layout_width="wrap_content"
-				android:src="@drawable/home32" android:layout_marginTop="3dip"></ImageButton>
+				android:src="@drawable/home32" android:background="@drawable/custom_button"
+				android:layout_marginTop="5dip" android:layout_marginBottom="2dp" android:layout_marginLeft="2dp" android:layout_marginRight="2dp"></ImageButton>
 
 			<EditText android:layout_height="wrap_content" android:id="@+id/UrlText"
 				android:layout_width="fill_parent" android:layout_weight="0.75"
@@ -30,7 +31,8 @@
 
 			<ImageButton android:layout_height="wrap_content"
 				android:id="@+id/GoBtn" android:layout_width="wrap_content"
-				android:src="@drawable/go32" android:layout_marginTop="3dip"></ImageButton>
+				android:src="@drawable/go32" android:background="@drawable/custom_button"			
+				android:layout_marginTop="5dip" android:layout_marginBottom="2dp" android:layout_marginLeft="2dp" android:layout_marginRight="2dp"></ImageButton>
 		</LinearLayout>
 
 		<ImageView android:layout_height="wrap_content"
@@ -45,21 +47,24 @@
 
 			<ImageButton android:layout_height="wrap_content"
 				android:id="@+id/PreviousBtn" android:layout_width="wrap_content"
-				android:src="@drawable/previous32" android:layout_marginTop="3dip" android:layout_weight="1"></ImageButton>						
+				android:src="@drawable/previous32" android:layout_marginTop="3dip" android:layout_weight="1"
+				android:background="@drawable/custom_button" android:layout_margin="2dp"></ImageButton>						
 			<ImageButton android:layout_height="wrap_content"
 				android:id="@+id/RemoveTabBtn" android:layout_width="wrap_content"
-				android:src="@drawable/removetab32" android:layout_marginTop="3dip" android:layout_weight="1"></ImageButton>
+				android:src="@drawable/removetab32" android:layout_marginTop="3dip" android:layout_weight="1"
+				android:background="@drawable/custom_button" android:layout_margin="2dp"></ImageButton>
 			<ImageButton android:layout_height="wrap_content"
 				android:id="@+id/QuickBtn" android:layout_width="wrap_content"
-				android:src="@drawable/bookmarks32" android:layout_marginTop="3dip" android:layout_weight="1"></ImageButton>			
+				android:src="@drawable/bookmarks32" android:layout_marginTop="3dip" android:layout_weight="1"
+				android:background="@drawable/custom_button" android:layout_margin="2dp"></ImageButton>			
 			<ImageButton android:layout_height="wrap_content"
 				android:id="@+id/NewTabBtn" android:layout_width="wrap_content"
-				android:src="@drawable/newtab32" android:layout_marginTop="3dip" android:layout_weight="1"></ImageButton>
+				android:src="@drawable/newtab32" android:layout_marginTop="3dip" android:layout_weight="1"
+				android:background="@drawable/custom_button" android:layout_margin="2dp"></ImageButton>
 			<ImageButton android:layout_height="wrap_content"
 				android:id="@+id/NextBtn" android:layout_width="wrap_content"
-				android:src="@drawable/next32" android:layout_marginTop="3dip" android:layout_weight="1"></ImageButton>
-			
-
+				android:src="@drawable/next32" android:layout_marginTop="3dip" android:layout_weight="1"
+				android:background="@drawable/custom_button" android:layout_margin="2dp"></ImageButton>			
 		</LinearLayout>
 
 	</RelativeLayout>

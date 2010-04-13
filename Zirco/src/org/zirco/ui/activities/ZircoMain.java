@@ -9,21 +9,25 @@ import org.zirco.R;
 import org.zirco.events.EventConstants;
 import org.zirco.events.EventController;
 import org.zirco.events.IWebListener;
+import org.zirco.ui.IDownloadListener;
 import org.zirco.ui.IToolbarsContainer;
 import org.zirco.ui.components.ZircoWebView;
 import org.zirco.ui.components.ZircoWebViewClient;
+import org.zirco.ui.runnables.DownloadRunnable;
 import org.zirco.ui.runnables.HideToolbarsRunnable;
 import org.zirco.ui.runnables.HistoryUpdater;
 import org.zirco.utils.AnimationManager;
 import org.zirco.utils.Constants;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.view.ContextMenu;
@@ -37,6 +41,7 @@ import android.view.Window;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnTouchListener;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebView.HitTestResult;
@@ -45,9 +50,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-public class ZircoMain extends Activity implements IWebListener, IToolbarsContainer, OnTouchListener {
+public class ZircoMain extends Activity implements IWebListener, IToolbarsContainer, OnTouchListener, IDownloadListener {
 	
 	private static final int FLIP_PIXEL_THRESHOLD = 200;
 	private static final int FLIP_TIME_THRESHOLD = 400;
@@ -60,6 +66,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 	
 	private static final int CONTEXT_MENU_OPEN = Menu.FIRST + 10;
 	private static final int CONTEXT_MENU_OPEN_IN_NEW_TAB = Menu.FIRST + 11;
+	private static final int CONTEXT_MENU_DOWNLOAD = Menu.FIRST + 12;
 	
 	private static final int OPEN_BOOKMARKS_ACTIVITY = 0;
 	private static final int OPEN_HISTORY_ACTIVITY = 1;
@@ -261,6 +268,9 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 	
 					item = menu.add(0, CONTEXT_MENU_OPEN_IN_NEW_TAB, 0, R.string.Main_MenuOpenNewTab);					
 					item.setIntent(i);
+					
+					item = menu.add(0, CONTEXT_MENU_DOWNLOAD, 0, R.string.Main_MenuDownload);					
+					item.setIntent(i);
 				
 					menu.setHeaderTitle(result.getExtra());
 				}
@@ -268,6 +278,17 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     		
     	});  	
 		
+    	mCurrentWebView.setDownloadListener(new DownloadListener() {
+
+			@Override
+			public void onDownloadStart(String url, String userAgent,
+					String contentDisposition, String mimetype,
+					long contentLength) {
+				doDownloadStart(url, userAgent, contentDisposition, mimetype, contentLength);
+			}
+    		
+    	});
+    	
 		final Activity activity = this;
 		mCurrentWebView.setWebChromeClient(new WebChromeClient() {
 			@Override
@@ -298,6 +319,33 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 				super.onReceivedTitle(view, title);
 			}
 		});
+    }
+    
+    private void doDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
+    	    			
+		// Check to see if we have an SDCard
+        String status = Environment.getExternalStorageState();
+        if (!status.equals(Environment.MEDIA_MOUNTED)) {
+            String msg;
+
+            // Check to see if the SDCard is busy, same as the music app
+            if (status.equals(Environment.MEDIA_SHARED)) {
+                msg = getString(R.string.Main_SDCardErrorSDUnavailable);
+            } else {
+                msg = getString(R.string.Main_SDCardErrorNoSDMsg);
+            }
+
+            new AlertDialog.Builder(this)
+                .setTitle(R.string.Main_SDCardErrorTitle)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setMessage(msg)
+                .setPositiveButton(R.string.Commons_Ok, null)
+                .show();
+            return;
+        }
+        
+        new Thread(new DownloadRunnable(this, url)).start();
+                
     }
     
     private void addTab(boolean navigateToHome) {
@@ -686,6 +734,12 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 				navigateToUrl(b.getString(Constants.EXTRA_ID_URL));
 			}			
 			return true;
+		
+		case CONTEXT_MENU_DOWNLOAD:
+			if (b != null) {
+				doDownloadStart(b.getString(Constants.EXTRA_ID_URL), null, null, null, 0);
+			}
+			return true;
 		}
 		
 		return super.onContextItemSelected(item);		
@@ -701,5 +755,16 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 		}
 		
 		mHideToolbarsRunnable = null;
+	}
+
+	@Override
+	public void onDownloadEnd(String url, boolean resultOk, String errorMessage) {
+		
+		if (resultOk) {
+			Toast.makeText(this, getString(R.string.Main_DownloadFinishedMsg), Toast.LENGTH_SHORT).show();
+		} else {
+			Toast.makeText(this, getString(R.string.Main_DownloadErrorMsg, errorMessage), Toast.LENGTH_SHORT).show();
+		}
+				
 	}
 }

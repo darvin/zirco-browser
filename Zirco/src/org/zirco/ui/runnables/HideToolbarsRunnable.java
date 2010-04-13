@@ -8,7 +8,7 @@ import android.util.Log;
 
 public class HideToolbarsRunnable implements Runnable {
 	
-	private final static String TAG = "HideToolbarsThread";
+	private final static String TAG = "HideToolbarsRunnable";
 	
 	private IToolbarsContainer mParent;
 	private boolean mDisabled;
