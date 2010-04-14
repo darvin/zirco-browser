@@ -9,10 +9,9 @@ import org.zirco.R;
 import org.zirco.controllers.Controller;
 import org.zirco.events.EventConstants;
 import org.zirco.events.EventController;
+import org.zirco.events.IDownloadEventsListener;
 import org.zirco.events.IWebEventListener;
 import org.zirco.model.DownloadItem;
-import org.zirco.ui.IDownloadEventsListener;
-import org.zirco.ui.IToolbarsContainer;
 import org.zirco.ui.components.ZircoWebView;
 import org.zirco.ui.components.ZircoWebViewClient;
 import org.zirco.ui.runnables.HideToolbarsRunnable;
@@ -63,8 +62,9 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	private static final int MENU_ADD_BOOKMARK = Menu.FIRST;
 	private static final int MENU_SHOW_BOOKMARKS = Menu.FIRST + 1;
 	private static final int MENU_SHOW_HISTORY = Menu.FIRST + 2;
-	private static final int MENU_PREFERENCES = Menu.FIRST + 3;
-	private static final int MENU_ABOUT = Menu.FIRST + 4;
+	private static final int MENU_SHOW_DOWNLOADS = Menu.FIRST + 3;
+	private static final int MENU_PREFERENCES = Menu.FIRST + 4;
+	private static final int MENU_ABOUT = Menu.FIRST + 5;
 	
 	private static final int CONTEXT_MENU_OPEN = Menu.FIRST + 10;
 	private static final int CONTEXT_MENU_OPEN_IN_NEW_TAB = Menu.FIRST + 11;
@@ -72,6 +72,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	
 	private static final int OPEN_BOOKMARKS_ACTIVITY = 0;
 	private static final int OPEN_HISTORY_ACTIVITY = 1;
+	private static final int OPEN_DOWNLOADS_ACTIVITY = 2;
 	
 	private long mDownDateValue;
 	private float mDownXValue;
@@ -362,7 +363,11 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
                 .show();
             return;
         }
-        new DownloadItem(url).startDownload();                
+        DownloadItem item = new DownloadItem(url);
+        Controller.getInstance().addToDownload(item);
+        item.startDownload();
+        
+        Toast.makeText(this, getString(R.string.Main_DownloadStartedMsg), Toast.LENGTH_SHORT).show();
     }
     
     private void addTab(boolean navigateToHome) {
@@ -571,6 +576,11 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     	startActivityForResult(i, OPEN_HISTORY_ACTIVITY);
     }
 	
+	private void openDownloadsList() {
+		Intent i = new Intent(this, DownloadsListActivity.class);
+    	startActivityForResult(i, OPEN_DOWNLOADS_ACTIVITY);
+	}
+	
 	private void onQuickButton() {
 		String buttonPref = Controller.getInstance().getPreferences().getString(Constants.PREFERENCES_GENERAL_QUICK_BUTTON, "bookmarks");
 		
@@ -603,6 +613,9 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         item = menu.add(0, MENU_SHOW_HISTORY, 0, R.string.Main_MenuShowHistory);
         item.setIcon(R.drawable.history32);
         
+        item = menu.add(0, MENU_SHOW_DOWNLOADS, 0, R.string.Main_MenuShowDownloads);
+        item.setIcon(R.drawable.downloads32);
+        
         item = menu.add(0, MENU_PREFERENCES, 0, R.string.Main_MenuPreferences);
         item.setIcon(R.drawable.preferences32);
         
@@ -623,6 +636,9 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
             return true;
     	case MENU_SHOW_HISTORY:    		
     		openHistoryList();
+            return true;
+    	case MENU_SHOW_DOWNLOADS:    		
+    		openDownloadsList();
             return true;
     	case MENU_PREFERENCES:    		
     		openPreferences();
@@ -776,7 +792,6 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 
 	@Override
 	public void onDownloadbEvent(String event, Object data) {
-		
 		if (event.equals(EventConstants.EVT_DOWNLOAD_ON_FINISHED)) {
 			
 			DownloadItem item = (DownloadItem) data;

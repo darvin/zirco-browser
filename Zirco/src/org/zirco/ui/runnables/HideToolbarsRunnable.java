@@ -1,6 +1,6 @@
 package org.zirco.ui.runnables;
 
-import org.zirco.ui.IToolbarsContainer;
+import org.zirco.ui.activities.IToolbarsContainer;
 
 import android.os.Handler;
 import android.os.Message;

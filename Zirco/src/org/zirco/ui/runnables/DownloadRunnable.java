@@ -77,28 +77,42 @@ public class DownloadRunnable implements Runnable {
 				URLConnection conn = url.openConnection();
 				
 				InputStream is = conn.getInputStream();
-								
-				mParent.onStart(conn.getContentLength());
+							
+				int size = conn.getContentLength();
+				mParent.onSetSize(size);
 				
 				bis = new BufferedInputStream( is );				
 				bos = new BufferedOutputStream(new FileOutputStream(downloadFile));
 				
-				int i;
-				int stepCount = 0;
-				int delta = 0;
-	            while (((i = bis.read()) != -1) &&
-	            		(!mAborted)) {
-	               bos.write( i );
-	               
-	               delta += i;
-	               stepCount++;
-	               
-	               if (stepCount > 10) {
-	            	   mParent.onProgress(delta);
-	            	   stepCount = 0;
-	            	   delta = 0;
-	               }
-	            }
+				boolean downLoading = true;
+				byte[] buffer;
+				int downloaded = 0;
+				int read;
+				int stepRead = 0;
+				
+				while ((downLoading) &&
+						(!mAborted)) {
+					if (size - downloaded > 1024) {
+						buffer = new byte[1024];
+					} else {
+						buffer = new byte[size - downloaded];
+					}
+
+					read = bis.read(buffer);
+					
+					if (read > 0) {
+						bos.write(buffer, 0, read);
+						downloaded += read;
+						stepRead++;
+					} else {
+						downLoading = false;
+					}
+					
+					if (stepRead >= 100) {
+						mParent.onProgress(downloaded);
+						stepRead = 0;
+					}
+				}
 
 			} catch (MalformedURLException mue) {
 				mParent.setErrorMessage(mue.getMessage());

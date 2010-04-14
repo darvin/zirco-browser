@@ -1,4 +1,4 @@
-package org.zirco.ui;
+package org.zirco.events;
 
 public interface IDownloadEventsListener {
 	

@@ -51,11 +51,13 @@ public class DownloadItem {
 		return mErrorMessage;
 	}
 	
-	public void onStart(int size) {
+	public void onStart() {				
+		EventController.getInstance().fireDownloadEvent(EventConstants.EVT_DOWNLOAD_ON_START, this);
+	}
+	
+	public void onSetSize(int size) {
 		mProgress = 0;
 		mTotal = size;
-		
-		EventController.getInstance().fireDownloadEvent(EventConstants.EVT_DOWNLOAD_ON_START, this);
 	}
 	
 	public void onFinished() {
@@ -65,8 +67,8 @@ public class DownloadItem {
 		EventController.getInstance().fireDownloadEvent(EventConstants.EVT_DOWNLOAD_ON_FINISHED, this);
 	}
 	
-	public void onProgress(int deltaProgress) {
-		mProgress += deltaProgress;
+	public void onProgress(int progress) {
+		mProgress = progress;
 		
 		EventController.getInstance().fireDownloadEvent(EventConstants.EVT_DOWNLOAD_ON_PROGRESS, this);
 	}

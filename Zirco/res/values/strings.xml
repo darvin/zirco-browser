@@ -15,6 +15,7 @@
     <string name="Main.MenuAddBookmark">Add bookmark</string>
     <string name="Main.MenuShowBookmarks">Bookmarks</string>
     <string name="Main.MenuShowHistory">History</string>
+    <string name="Main.MenuShowDownloads">Downloads</string>
     <string name="Main.MenuPreferences">Preferences</string>
     <string name="Main.MenuOpen">Open</string>
     <string name="Main.MenuOpenNewTab">Open in new tab</string>
@@ -22,6 +23,7 @@
     <string name="Main.SDCardErrorTitle">SD Card unavailable</string>
     <string name="Main.SDCardErrorNoSDMsg">No SD Card found.</string>
     <string name="Main.SDCardErrorSDUnavailable">SD Card is not available.</string>
+    <string name="Main.DownloadStartedMsg">Download started.</string>
     <string name="Main.DownloadFinishedMsg">Download finished.</string>
     <string name="Main.DownloadErrorMsg">Download error: %s</string>
     
@@ -47,6 +49,9 @@
     <string name="HistoryListActivity.Title">Zirco Browser - History</string>
     <string name="HistoryListActivity.ClearHistory">Clear history</string>
     <string name="HistoryListActivity.ClearingHistory">Clearing history...</string>
+    
+    <string name="DownloadListActivity.Title">Zirco Browser - Downloads</string>
+    <string name="DownloadListActivity.Empty">No downloads</string>
     
     <string name="PreferencesActivity.GeneralSettingsCategoryTitle">General settings</string>
     <string name="PreferencesActivity.HomePagePreferenceTitle">Home page</string>

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.zirco.ui.IDownloadEventsListener;
 
 public class EventController {
 	
@@ -49,17 +48,18 @@ public class EventController {
 		}
 	}
 	
-	public void addDownloadListener(IDownloadEventsListener listener) {
+	public synchronized void addDownloadListener(IDownloadEventsListener listener) {
+		
 		if (!mDownloadListeners.contains(listener)) {
 			mDownloadListeners.add(listener);
 		}
 	}
 	
-	public void removeDownloadListener(IDownloadEventsListener listener) {
+	public synchronized void removeDownloadListener(IDownloadEventsListener listener) {
 		mDownloadListeners.remove(listener);
 	}
 	
-	public void fireDownloadEvent(String event, Object data) {
+	public synchronized void fireDownloadEvent(String event, Object data) {
 		Iterator<IDownloadEventsListener> iter = mDownloadListeners.iterator();
 		while (iter.hasNext()) {
 			iter.next().onDownloadbEvent(event, data);
