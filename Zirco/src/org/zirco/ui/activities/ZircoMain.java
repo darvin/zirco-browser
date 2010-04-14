@@ -474,7 +474,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     	
     		if ((!url.startsWith("http://")) &&
     				(!url.startsWith("https://")) &&
-    				(!url.startsWith("about:blanck"))) {
+    				(!url.startsWith("about:blank"))) {
     			
     			url = "http://" + url;
     			
