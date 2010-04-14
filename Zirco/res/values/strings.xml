@@ -51,7 +51,7 @@
     <string name="PreferencesActivity.GeneralSettingsCategoryTitle">General settings</string>
     <string name="PreferencesActivity.HomePagePreferenceTitle">Home page</string>
     <string name="PreferencesActivity.HomePagePreferenceSummary">Define your default home page</string>
-    <string name="PreferencesActivity.HomePagePreferenceDefaultValue">about:blank</string>
+    <string name="PreferencesActivity.HomePagePreferenceDefaultValue">about:blanck</string>
     <string name="PreferencesActivity.BrowserSettingsCategoryTitle">Browser settings</string>
     <string name="PreferencesActivity.EnableJavascriptPreferenceTitle">Enable JavaScript</string>
     <string name="PreferencesActivity.EnableJavascriptPreferenceSummary">Enable or disable JavaScript</string>

@@ -6,14 +6,15 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.zirco.R;
+import org.zirco.controllers.Controller;
 import org.zirco.events.EventConstants;
 import org.zirco.events.EventController;
-import org.zirco.events.IWebListener;
-import org.zirco.ui.IDownloadListener;
+import org.zirco.events.IWebEventListener;
+import org.zirco.model.DownloadItem;
+import org.zirco.ui.IDownloadEventsListener;
 import org.zirco.ui.IToolbarsContainer;
 import org.zirco.ui.components.ZircoWebView;
 import org.zirco.ui.components.ZircoWebViewClient;
-import org.zirco.ui.runnables.DownloadRunnable;
 import org.zirco.ui.runnables.HideToolbarsRunnable;
 import org.zirco.ui.runnables.HistoryUpdater;
 import org.zirco.utils.AnimationManager;
@@ -54,7 +55,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-public class ZircoMain extends Activity implements IWebListener, IToolbarsContainer, OnTouchListener, IDownloadListener {
+public class ZircoMain extends Activity implements IWebEventListener, IToolbarsContainer, OnTouchListener, IDownloadEventsListener {
 	
 	private static final int FLIP_PIXEL_THRESHOLD = 200;
 	private static final int FLIP_TIME_THRESHOLD = 400;
@@ -113,6 +114,10 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
         
         setContentView(R.layout.main);
         
+        Controller.getInstance().setPreferences(PreferenceManager.getDefaultSharedPreferences(this));
+        
+        EventController.getInstance().addDownloadListener(this);
+        
         mHideToolbarsRunnable = null;
         
         mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -123,7 +128,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
         
         mViewFlipper.removeAllViews();
         
-        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener() {
+        Controller.getInstance().getPreferences().registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener() {
 			@Override
 			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 				applyPreferences();
@@ -236,7 +241,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     }
     
     private void applyQuickButtonPreferences() {
-    	String buttonPref = PreferenceManager.getDefaultSharedPreferences(this).getString(Constants.PREFERENCES_GENERAL_QUICK_BUTTON, "bookmarks");
+    	String buttonPref = Controller.getInstance().getPreferences().getString(Constants.PREFERENCES_GENERAL_QUICK_BUTTON, "bookmarks");
 		
 		if (buttonPref.equals("bookmarks")) {
 			mQuickButton.setImageResource(R.drawable.bookmarks32);
@@ -357,9 +362,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
                 .show();
             return;
         }
-        
-        new Thread(new DownloadRunnable(this, url)).start();
-                
+        new DownloadItem(url).startDownload();                
     }
     
     private void addTab(boolean navigateToHome) {
@@ -444,7 +447,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     		mHideToolbarsRunnable.setDisabled();
     	}
     	
-    	int delay = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString(Constants.PREFERENCES_GENERAL_BARS_DURATION, "3000"));
+    	int delay = Integer.parseInt(Controller.getInstance().getPreferences().getString(Constants.PREFERENCES_GENERAL_BARS_DURATION, "3000"));
     	if (delay <= 0) {
     		delay = 3000;
     	}
@@ -466,7 +469,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     	
     		if ((!url.startsWith("http://")) &&
     				(!url.startsWith("https://")) &&
-    				(!url.startsWith("about:blank"))) {
+    				(!url.startsWith("about:blanck"))) {
     			
     			url = "http://" + url;
     			
@@ -482,7 +485,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     }
     
     private void navigateToHome() {
-    	navigateToUrl(PreferenceManager.getDefaultSharedPreferences(this).getString(Constants.PREFERENCES_GENERAL_HOME_PAGE,
+    	navigateToUrl(Controller.getInstance().getPreferences().getString(Constants.PREFERENCES_GENERAL_HOME_PAGE,
     			getResources().getString(R.string.PreferencesActivity_HomePagePreferenceDefaultValue)));
     }
     
@@ -569,7 +572,7 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
     }
 	
 	private void onQuickButton() {
-		String buttonPref = PreferenceManager.getDefaultSharedPreferences(this).getString(Constants.PREFERENCES_GENERAL_QUICK_BUTTON, "bookmarks");
+		String buttonPref = Controller.getInstance().getPreferences().getString(Constants.PREFERENCES_GENERAL_QUICK_BUTTON, "bookmarks");
 		
 		if (buttonPref.equals("bookmarks")) {
 			openBookmarksList();
@@ -772,13 +775,17 @@ public class ZircoMain extends Activity implements IWebListener, IToolbarsContai
 	}
 
 	@Override
-	public void onDownloadEnd(String url, boolean resultOk, String errorMessage) {
+	public void onDownloadbEvent(String event, Object data) {
 		
-		if (resultOk) {
-			Toast.makeText(this, getString(R.string.Main_DownloadFinishedMsg), Toast.LENGTH_SHORT).show();
-		} else {
-			Toast.makeText(this, getString(R.string.Main_DownloadErrorMsg, errorMessage), Toast.LENGTH_SHORT).show();
-		}
-				
+		if (event.equals(EventConstants.EVT_DOWNLOAD_ON_FINISHED)) {
+			
+			DownloadItem item = (DownloadItem) data;
+			
+			if (item.getErrorMessage() == null) {
+				Toast.makeText(this, getString(R.string.Main_DownloadFinishedMsg), Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(this, getString(R.string.Main_DownloadErrorMsg, item.getErrorMessage()), Toast.LENGTH_SHORT).show();
+			}
+		}			
 	}
 }

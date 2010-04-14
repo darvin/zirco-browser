@@ -5,11 +5,12 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
-import org.zirco.ui.IDownloadListener;
+import org.zirco.model.DownloadItem;
 
 import android.os.Environment;
 import android.os.Handler;
@@ -19,31 +20,24 @@ public class DownloadRunnable implements Runnable {
 	
 	private static final String DOWNLOAD_FOLFER = "zirco-downloads";
 			
-	private IDownloadListener mParent;
-	private String mUrl;
+	private DownloadItem mParent;
 	
-	private boolean mResultOk;
-	private String mErrorMessage;
+	private boolean mAborted;
 	
-	public DownloadRunnable(IDownloadListener parent, String url) {
+	public DownloadRunnable(DownloadItem parent) {
 		mParent = parent;
-		mUrl = url;
-		
-		mResultOk = false;
-		mErrorMessage = "";
+		mAborted = false;
 	}
 	
 	private Handler mHandler = new Handler() {				
 		
 		public void handleMessage(Message msg) {
-			if (mParent != null) {
-				mParent.onDownloadEnd(mUrl, mResultOk, mErrorMessage);
-			}
+			mParent.onFinished();
 		}
 	};
 	
 	private String getFileNameFromUrl() {
-		return mUrl.substring(mUrl.lastIndexOf("/") + 1);
+		return mParent.getUrl().substring(mParent.getUrl().lastIndexOf("/") + 1);
 	}
 	
 	private File getFile() {
@@ -59,8 +53,7 @@ public class DownloadRunnable implements Runnable {
 			return new File(folder, getFileNameFromUrl());
 			
 		} else {
-			mResultOk = false;
-			mErrorMessage = "SD Card is not writeable.";			
+			mParent.setErrorMessage("SD Card is not writeable.");			
 			return null;
 		}
 	}
@@ -80,40 +73,51 @@ public class DownloadRunnable implements Runnable {
 			
 			try {
 				
-				URL url = new URL(mUrl);
+				URL url = new URL(mParent.getUrl());
 				URLConnection conn = url.openConnection();
+				
+				InputStream is = conn.getInputStream();
 								
-				bis = new BufferedInputStream( conn.getInputStream() );				
+				mParent.onStart(conn.getContentLength());
+				
+				bis = new BufferedInputStream( is );				
 				bos = new BufferedOutputStream(new FileOutputStream(downloadFile));
 				
 				int i;
-	            while ((i = bis.read()) != -1) {
+				int stepCount = 0;
+				int delta = 0;
+	            while (((i = bis.read()) != -1) &&
+	            		(!mAborted)) {
 	               bos.write( i );
+	               
+	               delta += i;
+	               stepCount++;
+	               
+	               if (stepCount > 10) {
+	            	   mParent.onProgress(delta);
+	            	   stepCount = 0;
+	            	   delta = 0;
+	               }
 	            }
 
 			} catch (MalformedURLException mue) {
-				mResultOk = false;
-				mErrorMessage = mue.getMessage();
+				mParent.setErrorMessage(mue.getMessage());
 			} catch (IOException ioe) {
-				mResultOk = false;
-				mErrorMessage = ioe.getMessage();
-			} finally {
-				mResultOk = true;
+				mParent.setErrorMessage(ioe.getMessage());
+			} finally {;
 				
 				if (bis != null) {
 					try {
 						bis.close();
 					} catch (IOException ioe) {
-						mResultOk = false;
-						mErrorMessage = ioe.getMessage();
+						mParent.setErrorMessage(ioe.getMessage());
 					}
 				}
 				if (bos != null) {
 					try {
 						bos.close();
 					} catch (IOException ioe) {
-						mResultOk = false;
-						mErrorMessage = ioe.getMessage();
+						mParent.setErrorMessage(ioe.getMessage());
 					}
 				}							
 			}
@@ -121,6 +125,10 @@ public class DownloadRunnable implements Runnable {
 		} 
 		
 		mHandler.sendEmptyMessage(0);
+	}
+	
+	public void abort() {
+		mAborted = true;
 	}
 
 }
