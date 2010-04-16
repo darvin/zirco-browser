@@ -111,7 +111,7 @@
 	
 	<string name="PreferencesActivity.AdBlockingSettingsCategoryTitle">Ad blocking settings</string>
 	<string name="PreferencesActivity.EnableAdBlockingPreferenceTitle">Enable Ad blocking</string>
-    <string name="PreferencesActivity.EnableAdBlockingPreferenceSummary">Enable or disable Ad blocking</string>
+    <string name="PreferencesActivity.EnableAdBlockingPreferenceSummary">Ad blocking will not work if JavaScript is not enabled.</string>
     
     <string name="Commons.Ok">Ok</string>
     <string name="Commons.Cancel">Cancel</string>
