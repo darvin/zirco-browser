@@ -57,6 +57,7 @@
     <string name="PreferencesActivity.HomePagePreferenceTitle">Home page</string>
     <string name="PreferencesActivity.HomePagePreferenceSummary">Define your default home page</string>
     <string name="PreferencesActivity.HomePagePreferenceDefaultValue">about:blank</string>
+    
     <string name="PreferencesActivity.BrowserSettingsCategoryTitle">Browser settings</string>
     <string name="PreferencesActivity.EnableJavascriptPreferenceTitle">Enable JavaScript</string>
     <string name="PreferencesActivity.EnableJavascriptPreferenceSummary">Enable or disable JavaScript</string>
@@ -107,6 +108,10 @@
 		<item>4000</item>
 		<item>5000</item>
 	</string-array>
+	
+	<string name="PreferencesActivity.AdBlockingSettingsCategoryTitle">Ad blocking settings</string>
+	<string name="PreferencesActivity.EnableAdBlockingPreferenceTitle">Enable Ad blocking</string>
+    <string name="PreferencesActivity.EnableAdBlockingPreferenceSummary">Enable or disable Ad blocking</string>
     
     <string name="Commons.Ok">Ok</string>
     <string name="Commons.Cancel">Cancel</string>
@@ -117,6 +122,7 @@
     <string name="Commons.Today">Today (%s)</string>
     <string name="Commons.Yesterday">Yesterday (%s)</string>
     <string name="Commons.DaysAgo">%s days ago (%s)</string>
+    <string name="Commons.JavaScriptDialog">JavaScript dialog</string>
     
     <string name="DATE_FORMAT_ISO8601">yyyy-MM-dd\'T\'HH:mm:ss.SSS</string>
     

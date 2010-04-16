@@ -1,5 +1,9 @@
 package org.zirco.ui.activities;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -22,6 +26,7 @@ import org.zirco.utils.Constants;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -30,6 +35,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -43,6 +49,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.DownloadListener;
+import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebView.HitTestResult;
@@ -104,6 +111,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	private HideToolbarsRunnable mHideToolbarsRunnable;
 	
 	private ViewFlipper mViewFlipper;
+	
+	private String mAdSweepString = null;
 	
     /** Called when the activity is first created. */
     @Override
@@ -341,6 +350,53 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 				
 				super.onReceivedTitle(view, title);
 			}
+
+			@Override
+			public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
+				new AlertDialog.Builder(activity)
+				.setTitle(R.string.Commons_JavaScriptDialog)
+				.setMessage(message)
+				.setPositiveButton(android.R.string.ok,
+						new AlertDialog.OnClickListener()
+				{
+					public void onClick(DialogInterface dialog, int which)
+					{
+						result.confirm();
+					}
+				})
+				.setCancelable(false)
+				.create()
+				.show();
+
+				return true;
+			}
+
+			@Override
+			public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
+				new AlertDialog.Builder(ZircoMain.this)
+				.setTitle(R.string.Commons_JavaScriptDialog)
+				.setMessage(message)
+				.setPositiveButton(android.R.string.ok, 
+						new DialogInterface.OnClickListener() 
+				{
+					public void onClick(DialogInterface dialog, int which) 
+					{
+						result.confirm();
+					}
+				})
+				.setNegativeButton(android.R.string.cancel, 
+						new DialogInterface.OnClickListener() 
+				{
+					public void onClick(DialogInterface dialog, int which) 
+					{
+						result.cancel();
+					}
+				})
+				.create()
+				.show();
+
+				return true;
+			}								
 		});
     }
     
@@ -732,12 +788,48 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 
 	}
 	
+	private String getAdSweepString() {
+		if (mAdSweepString == null) {
+			InputStream is = getResources().openRawResource(R.raw.adsweep);
+			if (is != null) {
+				StringBuilder sb = new StringBuilder();
+				String line;
+
+				try {
+					BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+					while ((line = reader.readLine()) != null) {
+						if ((line.length() > 0) &&
+								(!line.startsWith("//"))) {
+							sb.append(line).append("\n");
+						}
+					}
+				} catch (IOException e) {
+					Log.w("AdSweep", "Unable to load AdSweep: " + e.getMessage());
+				} finally {
+					try {
+						is.close();
+					} catch (IOException e) {
+						Log.w("AdSweep", "Unable to load AdSweep: " + e.getMessage());
+					}
+				}
+				mAdSweepString = sb.toString();
+			} else {        
+				mAdSweepString = "";
+			}
+		}
+		return mAdSweepString;
+	}
+	
 	@Override
 	public void onWebEvent(String event, Object data) {
 		
 		if (event.equals(EventConstants.EVT_WEB_ON_PAGE_FINISHED)) {
 			
 			updateUI();			
+						
+			if (Controller.getInstance().getPreferences().getBoolean(Constants.PREFERENCES_ADBLOCKING_ENABLE, true)) {
+				mCurrentWebView.loadUrl(getAdSweepString());
+			}
 			
 		} else if (event.equals(EventConstants.EVT_WEB_ON_PAGE_STARTED)) {
 			

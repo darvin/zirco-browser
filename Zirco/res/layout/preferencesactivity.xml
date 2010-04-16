@@ -55,4 +55,11 @@
 			android:summary="@string/PreferencesActivity.EnableCookiesPreferenceSummary"
 			android:key="BrowserEnableCookies" />
 	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/PreferencesActivity.AdBlockingSettingsCategoryTitle">
+		<CheckBoxPreference
+			android:title="@string/PreferencesActivity.EnableAdBlockingPreferenceTitle"
+			android:defaultValue="true"
+			android:summary="@string/PreferencesActivity.EnableAdBlockingPreferenceSummary"
+			android:key="AdBlockingEnable" />
+	</PreferenceCategory>
 </PreferenceScreen>
