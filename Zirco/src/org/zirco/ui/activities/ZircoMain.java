@@ -111,6 +111,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         super.onCreate(savedInstanceState);        
         
         getWindow().requestFeature(Window.FEATURE_PROGRESS);
+        getWindow().requestFeature(Window.FEATURE_LEFT_ICON);
+
         setProgressBarVisibility(true);
         
         setContentView(R.layout.main);
@@ -317,6 +319,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 				
 				activity.setProgress(mCurrentWebView.getProgress() * 100);
 			}
+			
 			@Override
 			public boolean onCreateWindow(WebView view, final boolean dialog, final boolean userGesture, final Message resultMsg) {
 				
@@ -523,11 +526,11 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		return super.onKeyDown(keyCode, event);
 	}
 
-	public void clearTitle() {
+	private void clearTitle() {
 		this.setTitle(getResources().getString(R.string.ApplicationName));
     }
 	
-	public void updateTitle() {
+	private void updateTitle() {
 		String value = mCurrentWebView.getTitle();
     	
     	if ((value != null) &&
@@ -538,7 +541,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     	}
 	}
 	
-	public void updateUI() {
+	private void updateUI() {
 		mUrlEditText.setText(mCurrentWebView.getUrl());
 		
 		mPreviousButton.setEnabled(mCurrentWebView.canGoBack());
