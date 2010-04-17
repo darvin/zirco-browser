@@ -16,6 +16,9 @@ public class DownloadItem {
 	
 	private DownloadRunnable mRunnable;
 	
+	private boolean mIsFinished;
+	private boolean mIsAborted;
+	
 	public DownloadItem(String url) {
 		mUrl = url;
 		mFileName = mUrl.substring(mUrl.lastIndexOf("/") + 1);
@@ -25,6 +28,9 @@ public class DownloadItem {
 	
 		mRunnable = null;
 		mErrorMessage = null;
+		
+		mIsFinished = false;
+		mIsAborted = false;
 	}
 	
 	public String getUrl() {
@@ -64,6 +70,8 @@ public class DownloadItem {
 		mProgress = mTotal;
 		mRunnable = null;
 		
+		mIsFinished = true;
+		
 		EventController.getInstance().fireDownloadEvent(EventConstants.EVT_DOWNLOAD_ON_FINISHED, this);
 	}
 	
@@ -79,6 +87,21 @@ public class DownloadItem {
 		}
 		mRunnable = new DownloadRunnable(this);
 		new Thread(mRunnable).start();
+	}
+	
+	public void abortDownload() {
+		if (mRunnable != null) {
+			mRunnable.abort();
+		}
+		mIsAborted = true;
+	}
+	
+	public boolean isFinished() {
+		return mIsFinished;
+	}
+	
+	public boolean isAborted() {
+		return mIsAborted;
 	}
 
 }

@@ -129,6 +129,12 @@ public class DownloadRunnable implements Runnable {
 					}
 				}							
 			}
+		
+			if (mAborted) {
+				if (downloadFile.exists()) {
+					downloadFile.delete();
+				}
+			}
 			
 		} 
 		

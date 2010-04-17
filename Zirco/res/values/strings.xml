@@ -46,12 +46,12 @@
     <string name="EditBookmarkActivity.TitleLabel">Name:</string>
     <string name="EditBookmarkActivity.UrlLabel">Location:</string>
     
-    <string name="HistoryListActivity.Title">Zirco Browser - History</string>
-    <string name="HistoryListActivity.ClearHistory">Clear history</string>
-    <string name="HistoryListActivity.ClearingHistory">Clearing history...</string>
+    <string name="HistoryListActivity.Title">Zirco Browser - History</string>    
     
     <string name="DownloadListActivity.Title">Zirco Browser - Downloads</string>
     <string name="DownloadListActivity.Empty">No downloads</string>
+    <string name="DownloadListActivity.Aborted">%s (Cancelled)</string>
+    <string name="DownloadListActivity.Finished">%s (Finished)</string>
     
     <string name="AdBlockerWhiteListActivity.Title">Zirco Browser - Ad blocker white list</string>
     <string name="AdBlockerWhiteListActivity.Empty">White list is empty.</string>
@@ -67,18 +67,27 @@
     <string name="PreferencesActivity.HomePagePreferenceDefaultValue">about:blank</string>
     
     <string name="PreferencesActivity.BrowserSettingsCategoryTitle">Browser settings</string>
+    <string name="PreferencesActivity.HistorySizePreferenceTitle">History size</string>
+    <string name="PreferencesActivity.HistorySizePreferenceSummary">History size in days</string>
     <string name="PreferencesActivity.EnableJavascriptPreferenceTitle">Enable JavaScript</string>
     <string name="PreferencesActivity.EnableJavascriptPreferenceSummary">Enable or disable JavaScript</string>
     <string name="PreferencesActivity.LoadImagesPreferenceTitle">Load images</string>
     <string name="PreferencesActivity.LoadImagesPreferenceSummary">Enable or disable image loading</string>
+    
+    <string name="PreferencesActivity.PrivacyPreferenceTitle">Privacy settings</string>
+    <string name="PreferencesActivity.PrivacyPreferenceSummary">Manage privacy settings.</string>
+    
     <string name="PreferencesActivity.EnableFormDataPreferenceTitle">Save forms data</string>
     <string name="PreferencesActivity.EnableFormDataPreferenceSummary">Enable or disable form data saving</string>
     <string name="PreferencesActivity.EnablePasswordsPreferenceTitle">Save passwords</string>
     <string name="PreferencesActivity.EnablePasswordsPreferenceSummary">Enable or disable password saving</string>
     <string name="PreferencesActivity.EnableCookiesPreferenceTitle">Allow cookies</string>
     <string name="PreferencesActivity.EnableCookiesPreferenceSummary">Enable or disable cookies</string>
-    <string name="PreferencesActivity.HistorySizePreferenceTitle">History size</string>
-    <string name="PreferencesActivity.HistorySizePreferenceSummary">History size in days</string>
+    
+    <string name="PreferencesActivity.PrivacyClearHistoryTitle">Clear history</string>
+    <string name="PreferencesActivity.PrivacyClearFormDataTitle">Clear form data</string>
+    <string name="PreferencesActivity.PrivacyClearCacheTitle">Clear cache</string>
+    <string name="PreferencesActivity.PrivacyClearCookiesTitle">Clear cookies</string>
     
     <string name="PreferencesActivity.QuickButtonPreferenceTitle">Quick button</string>
     <string name="PreferencesActivity.QuickButtonPreferenceSummary">Set the quick button function</string>
@@ -120,7 +129,7 @@
 	<string name="PreferencesActivity.AdBlockerSettingsCategoryTitle">Ad blocker settings</string>
 	<string name="PreferencesActivity.EnableAdBlockerPreferenceTitle">Enable Ad blocker</string>
     <string name="PreferencesActivity.EnableAdBlockerPreferenceSummary">Ad blocker will not work if JavaScript is not enabled.</string>
-    <string name="PreferencesActivity.AdBlockerWhiteListreferenceTitle">White list</string>
+    <string name="PreferencesActivity.AdBlockerWhiteListPreferenceTitle">White list</string>
     <string name="PreferencesActivity.AdBlockerWhiteListPreferenceSummary">Manage Ad blocker white list.</string>
     
     <string name="Commons.Ok">Ok</string>
@@ -133,6 +142,14 @@
     <string name="Commons.Yesterday">Yesterday (%s)</string>
     <string name="Commons.DaysAgo">%s days ago (%s)</string>
     <string name="Commons.JavaScriptDialog">JavaScript dialog</string>
+    <string name="Commons.ClearHistory">Clear history</string>
+    <string name="Commons.ClearingHistory">Clearing history...</string>
+    <string name="Commons.ClearFormData">Clear form data</string>
+    <string name="Commons.ClearingFormData">Clearing form data...</string>
+    <string name="Commons.ClearCache">Clear cache</string>
+    <string name="Commons.ClearingCache">Clearing cache...</string>
+    <string name="Commons.ClearCookies">Clear cookies</string>
+    <string name="Commons.ClearingCookies">Clearing cookies...</string>
     
     <string name="DATE_FORMAT_ISO8601">yyyy-MM-dd\'T\'HH:mm:ss.SSS</string>
     

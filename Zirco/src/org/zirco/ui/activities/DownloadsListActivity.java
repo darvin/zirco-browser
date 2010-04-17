@@ -10,7 +10,9 @@ import org.zirco.model.DownloadListAdapter;
 
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 public class DownloadsListActivity extends ListActivity implements IDownloadEventsListener {
 
@@ -45,6 +47,29 @@ public class DownloadsListActivity extends ListActivity implements IDownloadEven
 					bar.setMax(item.getTotalSize());
 					bar.setProgress(item.getProgress());
 				}				
+			}
+		} else if (event.equals(EventConstants.EVT_DOWNLOAD_ON_FINISHED)) {
+			if (data != null) {
+				DownloadItem item = (DownloadItem) data;
+				
+				TextView title = mAdapter.getTitleMap().get(item);
+				if (title != null) {
+					if (item.isAborted()) {
+						title.setText(String.format(getResources().getString(R.string.DownloadListActivity_Aborted), item.getFileName()));
+					} else {
+						title.setText(String.format(getResources().getString(R.string.DownloadListActivity_Finished), item.getFileName()));
+					}
+				}
+				
+				ProgressBar bar = mAdapter.getBarMap().get(item);
+				if (bar != null) {					
+					bar.setProgress(bar.getMax());
+				}
+				
+				ImageButton button = mAdapter.getButtonMap().get(item);
+				if (button != null) {
+					button.setEnabled(false);
+				}
 			}
 		}
 		

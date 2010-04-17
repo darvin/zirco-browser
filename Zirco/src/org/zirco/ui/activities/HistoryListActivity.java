@@ -5,9 +5,9 @@ import java.util.List;
 import org.zirco.R;
 import org.zirco.model.DbAdapter;
 import org.zirco.model.HistoryItem;
+import org.zirco.utils.ApplicationUtils;
 import org.zirco.utils.Constants;
 
-import android.app.AlertDialog;
 import android.app.ExpandableListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -66,7 +66,7 @@ public class HistoryListActivity extends ExpandableListActivity {
     	super.onCreateOptionsMenu(menu);
     	
     	MenuItem item;
-    	item = menu.add(0, MENU_CLEAR_HISTORY, 0, R.string.HistoryListActivity_ClearHistory);
+    	item = menu.add(0, MENU_CLEAR_HISTORY, 0, R.string.Commons_ClearHistory);
         item.setIcon(R.drawable.clear32);
         
         return true;
@@ -100,34 +100,23 @@ public class HistoryListActivity extends ExpandableListActivity {
 	private void doClearHistory() {
     	mProgressDialog = ProgressDialog.show(this,
     			this.getResources().getString(R.string.Commons_PleaseWait),
-    			this.getResources().getString(R.string.HistoryListActivity_ClearingHistory));
+    			this.getResources().getString(R.string.Commons_ClearingHistory));
     	
     	new HistoryClearer();
     }
 	
 	private void clearHistory() {
-    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setCancelable(true);
-    	builder.setIcon(android.R.drawable.ic_dialog_alert);
-    	builder.setTitle(getResources().getString(R.string.HistoryListActivity_ClearHistory));
-    	builder.setMessage(getResources().getString(R.string.Commons_NoUndoMessage));
-
-    	builder.setInverseBackgroundForced(true);
-    	builder.setPositiveButton(getResources().getString(R.string.Commons_Yes), new DialogInterface.OnClickListener() {
-    		@Override
-    		public void onClick(DialogInterface dialog, int which) {
-    			dialog.dismiss();
-    			doClearHistory();    			
-    		}
-    	});
-    	builder.setNegativeButton(getResources().getString(R.string.Commons_No), new DialogInterface.OnClickListener() {
-    		@Override
-    		public void onClick(DialogInterface dialog, int which) {
-    			dialog.dismiss();
-    		}
-    	});
-    	AlertDialog alert = builder.create();
-    	alert.show();        
+		ApplicationUtils.showYesNoDialog(this,
+				android.R.drawable.ic_dialog_alert,
+				R.string.Commons_ClearHistory,
+				R.string.Commons_NoUndoMessage,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+		    			doClearHistory();
+					}			
+		});
     }
 	
 	private class HistoryClearer implements Runnable {

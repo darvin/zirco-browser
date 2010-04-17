@@ -126,7 +126,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         
         setContentView(R.layout.main);
         
-        Controller.getInstance().setPreferences(PreferenceManager.getDefaultSharedPreferences(this));
+        Controller.getInstance().setPreferences(PreferenceManager.getDefaultSharedPreferences(this));        
         
         EventController.getInstance().addDownloadListener(this);
         
@@ -157,6 +157,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     	mUrlBarVisible = true;
     	
     	mWebViews = new ArrayList<ZircoWebView>();
+    	Controller.getInstance().setWebViewList(mWebViews);
     	
     	mBubleView = (ImageView) findViewById(R.id.BubleView);
     	mBubleView.setOnClickListener(new View.OnClickListener() {		

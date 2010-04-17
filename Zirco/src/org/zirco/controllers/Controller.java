@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.zirco.model.DownloadItem;
+import org.zirco.ui.components.ZircoWebView;
 import org.zirco.utils.IOUtils;
 
 import android.content.SharedPreferences;
@@ -25,6 +26,7 @@ public class Controller {
 	
 	private SharedPreferences mPreferences;
 
+	private List<ZircoWebView> mWebViewList;
 	private List<DownloadItem> mDownloadList;
 	private List<String> mAdBlockWhiteList;
 	
@@ -47,7 +49,38 @@ public class Controller {
 		mDownloadList = new ArrayList<DownloadItem>();
 		loadAdBlockWhiteList();
 	}
+		
+	public List<ZircoWebView> getWebViewList() {
+		return mWebViewList;
+	}
 	
+	public void setWebViewList(List<ZircoWebView> list) {
+		mWebViewList = list;
+	}
+	
+	public SharedPreferences getPreferences() {
+		return mPreferences;
+	}
+
+	public void setPreferences(SharedPreferences mPreferences) {
+		this.mPreferences = mPreferences;
+	}
+	
+	public List<DownloadItem> getDownloadList() {
+		return mDownloadList;
+	}
+	
+	public void addToDownload(DownloadItem item) {
+		mDownloadList.add(item);
+	}
+	
+	public List<String> getAdBlockWhiteList() {
+		return mAdBlockWhiteList;
+	}
+	
+	/**
+	 * Save the ad blocker white list.
+	 */
 	public void saveAdBlockWhiteList() {
 		File rootFolder = IOUtils.getApplicationFolder();
 		
@@ -81,11 +114,17 @@ public class Controller {
 		}
 	}
 
+	/**
+	 * Build a default ad blocker white list.
+	 */
 	private void loadDefaultAdBlockWhiteList() {
 		mAdBlockWhiteList.add("google.com/reader");
 		saveAdBlockWhiteList();
 	}
 	
+	/**
+	 * Load the ad blocker white list.
+	 */
 	private void loadAdBlockWhiteList() {
 		
 		mAdBlockWhiteList = new ArrayList<String>();
@@ -128,26 +167,6 @@ public class Controller {
 		} else {
 			loadDefaultAdBlockWhiteList();
 		}
-	}
-	
-	public SharedPreferences getPreferences() {
-		return mPreferences;
-	}
-
-	public void setPreferences(SharedPreferences mPreferences) {
-		this.mPreferences = mPreferences;
-	}
-	
-	public List<DownloadItem> getDownloadList() {
-		return mDownloadList;
-	}
-	
-	public void addToDownload(DownloadItem item) {
-		mDownloadList.add(item);
-	}
-	
-	public List<String> getAdBlockWhiteList() {
-		return mAdBlockWhiteList;
 	}
 	
 }

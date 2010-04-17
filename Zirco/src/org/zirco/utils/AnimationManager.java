@@ -6,7 +6,7 @@ import android.view.animation.TranslateAnimation;
 
 public class AnimationManager {
 
-	private static final int ANIMATION_DURATION = 400;
+	private static final int ANIMATION_DURATION = 350;
 
 	private Animation mInFromRightAnimation;
 	private Animation mOutToLeftAnimation;
