@@ -53,6 +53,14 @@
     <string name="DownloadListActivity.Title">Zirco Browser - Downloads</string>
     <string name="DownloadListActivity.Empty">No downloads</string>
     
+    <string name="AdBlockerWhiteListActivity.Title">Zirco Browser - Ad blocker white list</string>
+    <string name="AdBlockerWhiteListActivity.Empty">White list is empty.</string>
+    <string name="AdBlockerWhiteListActivity.Add">Add</string>
+    <string name="AdBlockerWhiteListActivity.Clear">Clear</string>
+    <string name="AdBlockerWhiteListActivity.AddMessage">Add to white list</string>
+    <string name="AdBlockerWhiteListActivity.ClearMessage">Clear white list</string>
+    <string name="AdBlockerWhiteListActivity.DeleteMenu">Delete</string>
+    
     <string name="PreferencesActivity.GeneralSettingsCategoryTitle">General settings</string>
     <string name="PreferencesActivity.HomePagePreferenceTitle">Home page</string>
     <string name="PreferencesActivity.HomePagePreferenceSummary">Define your default home page</string>
@@ -109,9 +117,11 @@
 		<item>5000</item>
 	</string-array>
 	
-	<string name="PreferencesActivity.AdBlockingSettingsCategoryTitle">Ad blocking settings</string>
-	<string name="PreferencesActivity.EnableAdBlockingPreferenceTitle">Enable Ad blocking</string>
-    <string name="PreferencesActivity.EnableAdBlockingPreferenceSummary">Ad blocking will not work if JavaScript is not enabled.</string>
+	<string name="PreferencesActivity.AdBlockerSettingsCategoryTitle">Ad blocker settings</string>
+	<string name="PreferencesActivity.EnableAdBlockerPreferenceTitle">Enable Ad blocker</string>
+    <string name="PreferencesActivity.EnableAdBlockerPreferenceSummary">Ad blocker will not work if JavaScript is not enabled.</string>
+    <string name="PreferencesActivity.AdBlockerWhiteListreferenceTitle">White list</string>
+    <string name="PreferencesActivity.AdBlockerWhiteListPreferenceSummary">Manage Ad blocker white list.</string>
     
     <string name="Commons.Ok">Ok</string>
     <string name="Commons.Cancel">Cancel</string>

@@ -788,6 +788,10 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 
 	}
 	
+	/**
+	 * Load the AdSweep script if necessary.
+	 * @return The AdSweep script.
+	 */
 	private String getAdSweepString() {
 		if (mAdSweepString == null) {
 			InputStream is = getResources().openRawResource(R.raw.adsweep);
@@ -820,6 +824,23 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		return mAdSweepString;
 	}
 	
+	/**
+	 * Check if the url is in the AdBlock white list
+	 * @param url The url to check
+	 * @return true if the url is in the white list
+	 */
+	private boolean checkInAdBlockWhiteList(String url) {
+		boolean inList = false;
+		Iterator<String> iter = Controller.getInstance().getAdBlockWhiteList().iterator();
+		while ((iter.hasNext()) &&
+				(!inList)) {
+			if (url.contains(iter.next())) {
+				inList = true;
+			}
+		}
+		return inList;
+	}
+	
 	@Override
 	public void onWebEvent(String event, Object data) {
 		
@@ -827,7 +848,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			
 			updateUI();			
 						
-			if (Controller.getInstance().getPreferences().getBoolean(Constants.PREFERENCES_ADBLOCKING_ENABLE, true)) {
+			if ((Controller.getInstance().getPreferences().getBoolean(Constants.PREFERENCES_ADBLOCKER_ENABLE, true)) &&
+					(!checkInAdBlockWhiteList(mCurrentWebView.getUrl()))) {
 				mCurrentWebView.loadUrl(getAdSweepString());
 			}
 			
@@ -873,15 +895,15 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		return super.onContextItemSelected(item);		
 	}
 	
-	@Override
+	/**
+	 * Hide the tool bars.
+	 */
 	public void hideToolbars() {
-		if (mUrlBarVisible) {
-			
+		if (mUrlBarVisible) {			
 			if (!mUrlEditText.hasFocus()) {
 				setToolbarsVisibility(false);
 			}
 		}
-		
 		mHideToolbarsRunnable = null;
 	}
 

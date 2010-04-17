@@ -11,14 +11,12 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import org.zirco.model.DownloadItem;
+import org.zirco.utils.IOUtils;
 
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 
 public class DownloadRunnable implements Runnable {
-	
-	private static final String DOWNLOAD_FOLFER = "zirco-downloads";
 			
 	private DownloadItem mParent;
 	
@@ -41,21 +39,17 @@ public class DownloadRunnable implements Runnable {
 	}
 	
 	private File getFile() {
-		File root = Environment.getExternalStorageDirectory();
-		if (root.canWrite()) {
+		
+		File downloadFolder = IOUtils.getDownloadFolder();
+		
+		if (downloadFolder != null) {
 			
-			File folder = new File(root, DOWNLOAD_FOLFER);
-			
-			if (!folder.exists()) {
-				folder.mkdir();
-			}
-			
-			return new File(folder, getFileNameFromUrl());
+			return new File(downloadFolder, getFileNameFromUrl());
 			
 		} else {
-			mParent.setErrorMessage("SD Card is not writeable.");			
+			mParent.setErrorMessage("Unable to get download folder from SD Card.");			
 			return null;
-		}
+		}				
 	}
 	
 	@Override

@@ -191,7 +191,7 @@ public class BookmarksListActivity extends ListActivity {
     	    	
     	Intent i;
     	
-    	switch(item.getItemId()) {
+    	switch (item.getItemId()) {
     	case MENU_OPEN_IN_TAB:    	
             i = new Intent();
             i.putExtra(Constants.EXTRA_ID_NEW_TAB, true);
