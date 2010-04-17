@@ -50,7 +50,7 @@
     
     <string name="DownloadListActivity.Title">Zirco Browser - Downloads</string>
     <string name="DownloadListActivity.Empty">No downloads</string>
-    <string name="DownloadListActivity.Aborted">%s (Cancelled)</string>
+    <string name="DownloadListActivity.Aborted">%s (Canceled)</string>
     <string name="DownloadListActivity.Finished">%s (Finished)</string>
     
     <string name="AdBlockerWhiteListActivity.Title">Zirco Browser - Ad blocker white list</string>
@@ -63,26 +63,26 @@
     
     <string name="PreferencesActivity.GeneralSettingsCategoryTitle">General settings</string>
     <string name="PreferencesActivity.HomePagePreferenceTitle">Home page</string>
-    <string name="PreferencesActivity.HomePagePreferenceSummary">Define your default home page</string>
+    <string name="PreferencesActivity.HomePagePreferenceSummary">Define your default home page.</string>
     <string name="PreferencesActivity.HomePagePreferenceDefaultValue">about:blank</string>
     
     <string name="PreferencesActivity.BrowserSettingsCategoryTitle">Browser settings</string>
     <string name="PreferencesActivity.HistorySizePreferenceTitle">History size</string>
-    <string name="PreferencesActivity.HistorySizePreferenceSummary">History size in days</string>
+    <string name="PreferencesActivity.HistorySizePreferenceSummary">History size in days.</string>
     <string name="PreferencesActivity.EnableJavascriptPreferenceTitle">Enable JavaScript</string>
-    <string name="PreferencesActivity.EnableJavascriptPreferenceSummary">Enable or disable JavaScript</string>
+    <string name="PreferencesActivity.EnableJavascriptPreferenceSummary">Enable or disable JavaScript.</string>
     <string name="PreferencesActivity.LoadImagesPreferenceTitle">Load images</string>
-    <string name="PreferencesActivity.LoadImagesPreferenceSummary">Enable or disable image loading</string>
+    <string name="PreferencesActivity.LoadImagesPreferenceSummary">Enable or disable image loading.</string>
     
     <string name="PreferencesActivity.PrivacyPreferenceTitle">Privacy settings</string>
     <string name="PreferencesActivity.PrivacyPreferenceSummary">Manage privacy settings.</string>
     
     <string name="PreferencesActivity.EnableFormDataPreferenceTitle">Save forms data</string>
-    <string name="PreferencesActivity.EnableFormDataPreferenceSummary">Enable or disable form data saving</string>
+    <string name="PreferencesActivity.EnableFormDataPreferenceSummary">Enable or disable form data saving.</string>
     <string name="PreferencesActivity.EnablePasswordsPreferenceTitle">Save passwords</string>
-    <string name="PreferencesActivity.EnablePasswordsPreferenceSummary">Enable or disable password saving</string>
+    <string name="PreferencesActivity.EnablePasswordsPreferenceSummary">Enable or disable password saving.</string>
     <string name="PreferencesActivity.EnableCookiesPreferenceTitle">Allow cookies</string>
-    <string name="PreferencesActivity.EnableCookiesPreferenceSummary">Enable or disable cookies</string>
+    <string name="PreferencesActivity.EnableCookiesPreferenceSummary">Enable or disable cookies.</string>
     
     <string name="PreferencesActivity.PrivacyClearHistoryTitle">Clear history</string>
     <string name="PreferencesActivity.PrivacyClearFormDataTitle">Clear form data</string>
@@ -90,7 +90,7 @@
     <string name="PreferencesActivity.PrivacyClearCookiesTitle">Clear cookies</string>
     
     <string name="PreferencesActivity.QuickButtonPreferenceTitle">Quick button</string>
-    <string name="PreferencesActivity.QuickButtonPreferenceSummary">Set the quick button function</string>
+    <string name="PreferencesActivity.QuickButtonPreferenceSummary">Set the quick button function.</string>
     
     <string name="PreferencesActivity.QuickButtonBookmarks">Bookmarks</string>
     <string name="PreferencesActivity.QuickButtonHistory">History</string>
@@ -104,7 +104,7 @@
 	</string-array>
     
     <string name="PreferencesActivity.BarDurationPreferenceTitle">Bars display duration</string>
-    <string name="PreferencesActivity.BarDurationPreferenceSummary">Display duration of tools bars</string>
+    <string name="PreferencesActivity.BarDurationPreferenceSummary">Display duration of tools bars.</string>
     
     <string name="PreferencesActivity.BarDuration1sec">1 second</string>
     <string name="PreferencesActivity.BarDuration2sec">2 seconds</string>

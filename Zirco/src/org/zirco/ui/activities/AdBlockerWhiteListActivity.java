@@ -2,6 +2,7 @@ package org.zirco.ui.activities;
 
 import org.zirco.R;
 import org.zirco.controllers.Controller;
+import org.zirco.utils.ApplicationUtils;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -168,28 +169,17 @@ public class AdBlockerWhiteListActivity extends ListActivity {
 	}
 	
 	private void clearWhiteList() {
-    	AlertDialog.Builder builder = new AlertDialog.Builder(this);    
-    	builder.setCancelable(true);
-    	builder.setIcon(android.R.drawable.ic_dialog_alert);
-    	builder.setTitle(getResources().getString(R.string.AdBlockerWhiteListActivity_ClearMessage));
-    	builder.setMessage(getResources().getString(R.string.Commons_NoUndoMessage));
-
-    	builder.setInverseBackgroundForced(true);
-    	builder.setPositiveButton(getResources().getString(R.string.Commons_Yes), new DialogInterface.OnClickListener() {
-    		@Override
-    		public void onClick(DialogInterface dialog, int which) {
-    			dialog.dismiss();
-    			doClearWhiteList();    			
-    		}
-    	});
-    	builder.setNegativeButton(getResources().getString(R.string.Commons_No), new DialogInterface.OnClickListener() {
-    		@Override
-    		public void onClick(DialogInterface dialog, int which) {
-    			dialog.dismiss();
-    		}
-    	});
-    	AlertDialog alert = builder.create();
-    	alert.show();        
+		ApplicationUtils.showYesNoDialog(this,
+				android.R.drawable.ic_dialog_alert,
+				R.string.AdBlockerWhiteListActivity_ClearMessage,
+				R.string.Commons_NoUndoMessage,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+						doClearWhiteList();
+					}			
+		});      
     }
 
 }

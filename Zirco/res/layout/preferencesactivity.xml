@@ -22,7 +22,7 @@
 			android:entries="@array/BarDurationEntries"
 			android:entryValues="@array/BarDurationValues" />
 	</PreferenceCategory>
-	<PreferenceCategory android:title="@string/PreferencesActivity.BrowserSettingsCategoryTitle">		
+	<PreferenceCategory android:title="@string/PreferencesActivity.BrowserSettingsCategoryTitle">	
 		<CheckBoxPreference
 			android:title="@string/PreferencesActivity.EnableJavascriptPreferenceTitle"
 			android:defaultValue="true"

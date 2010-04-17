@@ -573,10 +573,18 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_BACK:
 			if (mCurrentWebView.canGoBack()) {
 				mCurrentWebView.goBack();				
 			}
+			return true;
+			
+		case KeyEvent.KEYCODE_VOLUME_DOWN:
+			mCurrentWebView.zoomIn();
+			return true;
+		case KeyEvent.KEYCODE_VOLUME_UP:
+			mCurrentWebView.zoomOut();
 			return true;
 		}
 		
@@ -765,6 +773,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 
 						mCurrentWebView = mWebViews.get(mViewFlipper.getDisplayedChild());
 						updateUI();
+						
+						return true;
 					}
 
 					// going forwards: pushing stuff to the left
@@ -776,7 +786,9 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 						mViewFlipper.showNext();
 
 						mCurrentWebView = mWebViews.get(mViewFlipper.getDisplayedChild());
-						updateUI();					
+						updateUI();
+						
+						return true;
 					}
 				}
 			}
