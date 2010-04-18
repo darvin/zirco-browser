@@ -166,8 +166,10 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
      */
     @Override
 	protected void onNewIntent(Intent intent) {
-		addTab(false);
-		navigateToUrl(intent.getDataString());
+    	if (intent.getData() != null) {
+    		addTab(false);
+    		navigateToUrl(intent.getDataString());
+    	}
 		
 		setIntent(intent);
 		
