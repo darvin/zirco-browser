@@ -147,7 +147,15 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			}        	
         });
         
-        addTab(true);
+        Intent i = getIntent();
+        if (i.getData() != null) {
+        	// App first launch from another app.
+        	addTab(false);
+        	navigateToUrl(i.getDataString());
+        } else {
+        	// Normal start.
+        	addTab(true);
+        }
         
         startToolbarsHideRunnable();
     }
@@ -766,7 +774,12 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 
 	private void showToastOnTabSwitch() {
 		if (Controller.getInstance().getPreferences().getBoolean(Constants.PREFERENCES_SHOW_TOAST_ON_TAB_SWITCH, true)) {
-			String text = String.format(getString(R.string.Main_ToastTabSwitchMessage), mViewFlipper.getDisplayedChild() + 1, mCurrentWebView.getTitle());
+			String text;
+			if (mCurrentWebView.getTitle() != null) {
+				text = String.format(getString(R.string.Main_ToastTabSwitchFullMessage), mViewFlipper.getDisplayedChild() + 1, mCurrentWebView.getTitle());
+			} else {
+				text = String.format(getString(R.string.Main_ToastTabSwitchMessage), mViewFlipper.getDisplayedChild() + 1);
+			}
 			Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
 		}		
 	}

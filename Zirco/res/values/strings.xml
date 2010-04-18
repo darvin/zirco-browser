@@ -26,7 +26,8 @@
     <string name="Main.DownloadStartedMsg">Download started.</string>
     <string name="Main.DownloadFinishedMsg">Download finished.</string>
     <string name="Main.DownloadErrorMsg">Download error: %s</string>
-    <string name="Main.ToastTabSwitchMessage">Tab %s: %s</string>
+    <string name="Main.ToastTabSwitchMessage">Tab %s</string>
+    <string name="Main.ToastTabSwitchFullMessage">Tab %s: %s</string>
     
     <string name="BookmarksListActivity.Title">Zirco Browser - Bookmarks</string>
     <string name="BookmarksListActivity.MenuSortMode">Sort by</string>
