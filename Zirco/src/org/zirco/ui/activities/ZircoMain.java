@@ -117,7 +117,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);        
+        super.onCreate(savedInstanceState);              
         
         getWindow().requestFeature(Window.FEATURE_PROGRESS);
         getWindow().requestFeature(Window.FEATURE_LEFT_ICON);
@@ -147,17 +147,25 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			}        	
         });
         
-        addTab(true);    
-        
-        Intent intent = getIntent();
-        if (intent.getData() != null) {
-        	addTab(false);
-            navigateToUrl(intent.getDataString());
-        }
+        addTab(true);
         
         startToolbarsHideRunnable();
     }
-   
+
+    /**
+     * Handle url request from external apps.
+     * @param intent
+     */
+    @Override
+	protected void onNewIntent(Intent intent) {
+		addTab(false);
+		navigateToUrl(intent.getDataString());
+		
+		setIntent(intent);
+		
+		super.onNewIntent(intent);
+	}
+    
 	private void buildComponents() {
     	
     	mUrlBarVisible = true;
@@ -558,7 +566,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     		hideKeyboard(true);
     		mCurrentWebView.loadUrl(url);
     	}
-    }
+    }        
     
     private void navigateToUrl() {
     	navigateToUrl(mUrlEditText.getText().toString());    	
