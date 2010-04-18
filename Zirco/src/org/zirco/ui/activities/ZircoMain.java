@@ -465,12 +465,12 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     	
     	initializeCurrentWebView();    			
 		
-		mWebViews.add(mCurrentWebView);
-		
     	synchronized (mViewFlipper) {
     		if (parentIndex != -1) {
+    			mWebViews.add(parentIndex + 1, mCurrentWebView);    		
     			mViewFlipper.addView(view, parentIndex + 1);
     		} else {
+    			mWebViews.add(mCurrentWebView);
     			mViewFlipper.addView(view);
     		}
     		mViewFlipper.setDisplayedChild(mViewFlipper.indexOfChild(view));    		
