@@ -21,6 +21,11 @@
 			android:defaultValue="3000"
 			android:entries="@array/BarDurationEntries"
 			android:entryValues="@array/BarDurationValues" />
+		<CheckBoxPreference
+			android:title="@string/PreferencesActivity.ShowToastOnTabSwitchPreferenceTitle"
+			android:defaultValue="true"
+			android:summary="@string/PreferencesActivity.ShowToastOnTabSwitchPreferenceSummary"
+			android:key="GeneralShowToastOnTabSwitch" />
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/PreferencesActivity.BrowserSettingsCategoryTitle">	
 		<CheckBoxPreference

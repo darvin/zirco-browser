@@ -128,8 +128,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         
         Controller.getInstance().setPreferences(PreferenceManager.getDefaultSharedPreferences(this));        
         
-        EventController.getInstance().addDownloadListener(this);
-        
+        EventController.getInstance().addDownloadListener(this);                
+                
         mHideToolbarsRunnable = null;
         
         mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -147,12 +147,18 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			}        	
         });
         
-        addTab(true);
+        addTab(true);    
+        
+        Intent intent = getIntent();
+        if (intent.getData() != null) {
+        	addTab(false);
+            navigateToUrl(intent.getDataString());
+        }
         
         startToolbarsHideRunnable();
     }
-    
-    private void buildComponents() {
+   
+	private void buildComponents() {
     	
     	mUrlBarVisible = true;
     	
@@ -334,8 +340,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			public boolean onCreateWindow(WebView view, final boolean dialog, final boolean userGesture, final Message resultMsg) {
 				
 				WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
-
-				addTab(false);
+				
+				addTab(false, mViewFlipper.getDisplayedChild());
 				
 				transport.setWebView(mCurrentWebView);
 				resultMsg.sendToTarget();
@@ -431,6 +437,10 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     }
     
     private void addTab(boolean navigateToHome) {
+    	addTab(navigateToHome, -1);
+    }
+    
+    private void addTab(boolean navigateToHome, int parentIndex) {
     	RelativeLayout view = (RelativeLayout) mInflater.inflate(R.layout.webview, mViewFlipper, false);
     	
     	mCurrentWebView = (ZircoWebView) view.findViewById(R.id.webview);
@@ -440,7 +450,11 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		mWebViews.add(mCurrentWebView);
 		
     	synchronized (mViewFlipper) {
-    		mViewFlipper.addView(view);
+    		if (parentIndex != -1) {
+    			mViewFlipper.addView(view, parentIndex + 1);
+    		} else {
+    			mViewFlipper.addView(view);
+    		}
     		mViewFlipper.setDisplayedChild(mViewFlipper.indexOfChild(view));    		
     	}
     	
@@ -459,6 +473,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     	
     	synchronized (mViewFlipper) {
     		mViewFlipper.removeViewAt(removeIndex);
+    		mViewFlipper.setDisplayedChild(removeIndex - 1);    		
     		mWebViews.remove(removeIndex);    		
     	}
     	
@@ -741,6 +756,13 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         }
 	}
 
+	private void showToastOnTabSwitch() {
+		if (Controller.getInstance().getPreferences().getBoolean(Constants.PREFERENCES_SHOW_TOAST_ON_TAB_SWITCH, true)) {
+			String text = String.format(getString(R.string.Main_ToastTabSwitchMessage), mViewFlipper.getDisplayedChild() + 1, mCurrentWebView.getTitle());
+			Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+		}		
+	}
+	
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		
@@ -772,6 +794,9 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 						mViewFlipper.showPrevious();
 
 						mCurrentWebView = mWebViews.get(mViewFlipper.getDisplayedChild());
+						
+						showToastOnTabSwitch();
+						
 						updateUI();
 						
 						return true;
@@ -786,6 +811,9 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 						mViewFlipper.showNext();
 
 						mCurrentWebView = mWebViews.get(mViewFlipper.getDisplayedChild());
+						
+						showToastOnTabSwitch();
+						
 						updateUI();
 						
 						return true;
@@ -843,15 +871,20 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	 * @return true if the url is in the white list
 	 */
 	private boolean checkInAdBlockWhiteList(String url) {
-		boolean inList = false;
-		Iterator<String> iter = Controller.getInstance().getAdBlockWhiteList().iterator();
-		while ((iter.hasNext()) &&
-				(!inList)) {
-			if (url.contains(iter.next())) {
-				inList = true;
+		
+		if (url != null) {
+			boolean inList = false;
+			Iterator<String> iter = Controller.getInstance().getAdBlockWhiteList().iterator();
+			while ((iter.hasNext()) &&
+					(!inList)) {
+				if (url.contains(iter.next())) {
+					inList = true;
+				}
 			}
+			return inList;
+		} else {
+			return false;
 		}
-		return inList;
 	}
 	
 	@Override
@@ -893,7 +926,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			
 		case CONTEXT_MENU_OPEN_IN_NEW_TAB:
 			if (b != null) {
-				addTab(false);
+				addTab(false, mViewFlipper.getDisplayedChild());
 				navigateToUrl(b.getString(Constants.EXTRA_ID_URL));
 			}			
 			return true;

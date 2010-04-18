@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -139,8 +140,11 @@ public class AdBlockerWhiteListActivity extends ListActivity {
     	builder.setIcon(android.R.drawable.ic_input_add);
     	builder.setTitle(getResources().getString(R.string.AdBlockerWhiteListActivity_AddMessage));
     	
+    	builder.setInverseBackgroundForced(true);
+    	
     	// Set an EditText view to get user input 
     	final EditText input = new EditText(this);
+    	input.setInputType(InputType.TYPE_TEXT_VARIATION_URI);
     	builder.setView(input);
     	
     	builder.setInverseBackgroundForced(true);
