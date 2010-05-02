@@ -1012,6 +1012,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			
 			updateGoButton();
 			
+			setToolbarsVisibility(true);
+			
 		} else if (event.equals(EventConstants.EVT_WEB_ON_URL_LOADING)) {
 			setToolbarsVisibility(true);
 		}
@@ -1053,7 +1055,12 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	public void hideToolbars() {
 		if (mUrlBarVisible) {			
 			if (!mUrlEditText.hasFocus()) {
-				setToolbarsVisibility(false);
+				
+				if (!mCurrentWebView.IsLoading()) {
+					setToolbarsVisibility(false);
+				} else {
+					startToolbarsHideRunnable();
+				}
 			}
 		}
 		mHideToolbarsRunnable = null;
