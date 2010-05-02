@@ -15,6 +15,7 @@ public class Constants {
 	public static final String PREFERENCES_GENERAL_HOME_PAGE = "GeneralHomePage";
 	public static final String PREFERENCES_GENERAL_QUICK_BUTTON = "GeneralQuickButton";
 	public static final String PREFERENCES_GENERAL_BARS_DURATION = "GeneralBarsDuration";
+	public static final String PREFERENCES_SHOW_FULL_SCREEN = "GeneralFullScreen";
 	public static final String PREFERENCES_SHOW_TOAST_ON_TAB_SWITCH = "GeneralShowToastOnTabSwitch";
 	
 	public static final String PREFERENCES_BROWSER_HISTORY_SIZE = "BrowserHistorySize";

@@ -12,15 +12,17 @@ public class ZircoWebViewClient extends WebViewClient {
 	@Override
 	public void onPageFinished(WebView view, String url) {
 		
-		EventController.getInstance().fireWebEvent(EventConstants.EVT_WEB_ON_PAGE_FINISHED, url);
-		
 		((ZircoWebView) view).notifyPageFinished();
+		
+		EventController.getInstance().fireWebEvent(EventConstants.EVT_WEB_ON_PAGE_FINISHED, url);		
 		
 		super.onPageFinished(view, url);
 	}
 
 	@Override
 	public void onPageStarted(WebView view, String url, Bitmap favicon) {
+		
+		((ZircoWebView) view).notifyPageStarted();
 		
 		EventController.getInstance().fireWebEvent(EventConstants.EVT_WEB_ON_PAGE_STARTED, url);
 		

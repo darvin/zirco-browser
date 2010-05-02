@@ -44,6 +44,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
@@ -57,6 +58,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -92,6 +94,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	private ImageButton mHomeButton;
 	private EditText mUrlEditText;
 	private ImageButton mGoButton;
+	private ProgressBar mProgressBar;	
 	
 	private ImageView mBubleView;
 	
@@ -118,15 +121,23 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);              
+
+        Controller.getInstance().setPreferences(PreferenceManager.getDefaultSharedPreferences(this));
         
+        /*
         getWindow().requestFeature(Window.FEATURE_PROGRESS);
         getWindow().requestFeature(Window.FEATURE_LEFT_ICON);
+        */
+        
+        if (Controller.getInstance().getPreferences().getBoolean(Constants.PREFERENCES_SHOW_FULL_SCREEN, true)) {
+        	requestWindowFeature(Window.FEATURE_NO_TITLE);  
+        	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,   
+        			WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
 
         setProgressBarVisibility(true);
         
-        setContentView(R.layout.main);
-        
-        Controller.getInstance().setPreferences(PreferenceManager.getDefaultSharedPreferences(this));        
+        setContentView(R.layout.main);                        
         
         EventController.getInstance().addDownloadListener(this);                
                 
@@ -140,7 +151,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         
         mViewFlipper.removeAllViews();
         
-        Controller.getInstance().getPreferences().registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener() {
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener() {
 			@Override
 			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 				applyPreferences();
@@ -230,13 +241,32 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			}
     		
     	});
+    	
+    	mUrlEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+    		@Override
+    		public void onFocusChange(View v, boolean hasFocus) {
+    			// Select all when focus gained.
+    			if (hasFocus) {
+    				mUrlEditText.setSelection(0, mUrlEditText.getText().length());
+    			}
+    		}
+    	});
     	    	
     	mGoButton = (ImageButton) findViewById(R.id.GoBtn);    	
     	mGoButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-            	navigateToUrl();
+            	
+            	if (mCurrentWebView.IsLoading()) {
+            		mCurrentWebView.stopLoading();
+            	} else {
+            		navigateToUrl();
+            	}
             }          
         });
+    	
+    	mProgressBar = (ProgressBar) findViewById(R.id.WebViewProgress);
+    	mProgressBar.setMax(100);
     	
     	mPreviousButton = (ImageButton) findViewById(R.id.PreviousBtn);
     	mNextButton = (ImageButton) findViewById(R.id.NextBtn);
@@ -351,7 +381,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			public void onProgressChanged(WebView view, int newProgress) {
 				((ZircoWebView) view).setProgress(newProgress);
 				
-				activity.setProgress(mCurrentWebView.getProgress() * 100);
+				//activity.setProgress(mCurrentWebView.getProgress() * 100);
+				mProgressBar.setProgress(mCurrentWebView.getProgress());
 			}
 			
 			@Override
@@ -639,6 +670,14 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     	}
 	}
 	
+	private void updateGoButton() {
+		if (mCurrentWebView.IsLoading()) {
+			mGoButton.setImageResource(R.drawable.cancel32);
+		} else {
+			mGoButton.setImageResource(R.drawable.go32);
+		}
+	}
+	
 	private void updateUI() {
 		mUrlEditText.setText(mCurrentWebView.getUrl());
 		
@@ -647,7 +686,10 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		
 		mRemoveTabButton.setEnabled(mViewFlipper.getChildCount() > 1);
 		
-		setProgress(mCurrentWebView.getProgress() * 100);
+		//setProgress(mCurrentWebView.getProgress() * 100);
+		mProgressBar.setProgress(mCurrentWebView.getProgress());
+		
+		updateGoButton();
 		
 		updateTitle();
 	}
@@ -928,6 +970,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			
 			mPreviousButton.setEnabled(false);
 			mNextButton.setEnabled(false);
+			
+			updateGoButton();
 			
 		} else if (event.equals(EventConstants.EVT_WEB_ON_URL_LOADING)) {
 			setToolbarsVisibility(true);

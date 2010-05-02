@@ -13,6 +13,8 @@ public class ZircoWebView extends WebView {
 	
 	private int mProgress = 100;
 	
+	private boolean mIsLoading = false;
+	
 	public ZircoWebView(Context context) {
 		super(context);
 		
@@ -51,8 +53,17 @@ public class ZircoWebView extends WebView {
 		return mProgress;
 	}
 	
+	public void notifyPageStarted() {
+		mIsLoading = true;
+	}
+	
 	public void notifyPageFinished() {
 		mProgress = 100;
+		mIsLoading = false;
+	}
+	
+	public boolean IsLoading() {
+		return mIsLoading;
 	}
 
 }

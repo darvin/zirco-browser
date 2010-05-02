@@ -22,6 +22,11 @@
 			android:entries="@array/BarDurationEntries"
 			android:entryValues="@array/BarDurationValues" />
 		<CheckBoxPreference
+			android:title="@string/PreferencesActivity.FullScreenPreferenceTitle"
+			android:defaultValue="true"
+			android:summary="@string/PreferencesActivity.FullScreenPreferenceSummary"
+			android:key="GeneralFullScreen" />
+		<CheckBoxPreference
 			android:title="@string/PreferencesActivity.ShowToastOnTabSwitchPreferenceTitle"
 			android:defaultValue="true"
 			android:summary="@string/PreferencesActivity.ShowToastOnTabSwitchPreferenceSummary"
