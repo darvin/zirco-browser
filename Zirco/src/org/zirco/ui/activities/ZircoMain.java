@@ -15,6 +15,7 @@ import org.zirco.events.EventConstants;
 import org.zirco.events.EventController;
 import org.zirco.events.IDownloadEventsListener;
 import org.zirco.events.IWebEventListener;
+import org.zirco.model.DbAdapter;
 import org.zirco.model.DownloadItem;
 import org.zirco.ui.components.ZircoWebView;
 import org.zirco.ui.components.ZircoWebViewClient;
@@ -31,6 +32,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Message;
@@ -54,14 +56,17 @@ import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebView.HitTestResult;
-import android.widget.EditText;
+import android.widget.AutoCompleteTextView;
+import android.widget.FilterQueryProvider;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
+import android.widget.SimpleCursorAdapter.CursorToStringConverter;
 
 public class ZircoMain extends Activity implements IWebEventListener, IToolbarsContainer, OnTouchListener, IDownloadEventsListener {
 	
@@ -92,7 +97,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	private LinearLayout mBottomBar;
 	
 	private ImageButton mHomeButton;
-	private EditText mUrlEditText;
+	private AutoCompleteTextView mUrlEditText;
 	private ImageButton mGoButton;
 	private ProgressBar mProgressBar;	
 	
@@ -122,12 +127,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);              
 
-        Controller.getInstance().setPreferences(PreferenceManager.getDefaultSharedPreferences(this));
-        
-        /*
-        getWindow().requestFeature(Window.FEATURE_PROGRESS);
-        getWindow().requestFeature(Window.FEATURE_LEFT_ICON);
-        */
+        Controller.getInstance().setPreferences(PreferenceManager.getDefaultSharedPreferences(this));       
         
         if (Controller.getInstance().getPreferences().getBoolean(Constants.PREFERENCES_SHOW_FULL_SCREEN, true)) {
         	requestWindowFeature(Window.FEATURE_NO_TITLE);  
@@ -226,9 +226,48 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
             public void onClick(View view) {
             	navigateToHome();
             }          
-        });
+        });    	    	
     	
-    	mUrlEditText = (EditText) findViewById(R.id.UrlText);
+    	final DbAdapter dbAdapter = new DbAdapter(this);
+    	dbAdapter.open();
+
+    	String[] from = new String[] {DbAdapter.HISTORY_URL};
+    	int[] to = new int[] { android.R.id.text1 };
+    	
+    	SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, android.R.layout.simple_dropdown_item_1line, null, from, to);
+    	
+    	adapter.setCursorToStringConverter(new CursorToStringConverter() {			
+			@Override
+			public CharSequence convertToString(Cursor cursor) {
+				String aColumnString = cursor.getString(1);
+                return aColumnString;
+			}
+		});
+    	
+    	adapter.setFilterQueryProvider(new FilterQueryProvider() {		
+			@Override
+			public Cursor runQuery(CharSequence constraint) {
+				if ((constraint != null) &&
+						(constraint.length() > 0)) {
+					return dbAdapter.getSuggestionsFromHistory(constraint.toString());
+				} else {
+					return dbAdapter.getSuggestionsFromHistory(null);
+				}
+			}
+		});
+    	
+    	mUrlEditText = (AutoCompleteTextView) findViewById(R.id.UrlText);
+    	mUrlEditText.setThreshold(1);
+    	mUrlEditText.setAdapter(adapter);
+    	
+    	//dbAdapter.close();
+    	
+    	/*
+    	ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+    			android.R.layout.simple_dropdown_item_1line, dbAdapter.getSuggestionsFromHistory());
+    			*/
+    	
+    	
     	mUrlEditText.setOnKeyListener(new View.OnKeyListener() {
 
 			@Override

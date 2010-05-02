@@ -138,6 +138,20 @@ public class DbAdapter {
      * History
      */
     
+    public Cursor getSuggestionsFromHistory(String pattern) {
+    	Cursor cursor;
+    	
+    	if ((pattern != null) &&
+    			(pattern.length() > 0)) {	
+    		pattern = "%" + pattern + "%";    	
+    		cursor = mDb.query(HISTORY_DATABASE_TABLE, new String[] { HISTORY_ROWID, HISTORY_URL }, HISTORY_URL + " LIKE '" + pattern + "'", null, null, null, null);
+    	} else {
+    		cursor = mDb.query(HISTORY_DATABASE_TABLE, new String[] { HISTORY_ROWID, HISTORY_URL }, null, null, null, null, null);
+    	}
+    	
+    	return cursor;
+    }
+    
     public List<List<HistoryItem>> fetchHistory() {
     	List<List<HistoryItem>> result = new ArrayList<List<HistoryItem>>();
     	

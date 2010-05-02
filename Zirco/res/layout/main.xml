@@ -48,9 +48,9 @@
 				android:src="@drawable/home32"
 				android:layout_marginTop="3dip" ></ImageButton>
 
-			<EditText android:layout_height="wrap_content" android:id="@+id/UrlText"
+			<AutoCompleteTextView android:layout_height="wrap_content" android:id="@+id/UrlText"
 				android:layout_width="fill_parent" android:layout_weight="0.75"
-				android:inputType="textUri" android:layout_marginTop="4dip"></EditText>
+				android:inputType="textUri" android:layout_marginTop="4dip"></AutoCompleteTextView>
 
 			<ImageButton android:layout_height="wrap_content"
 				android:id="@+id/GoBtn" android:layout_width="wrap_content"
