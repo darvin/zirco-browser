@@ -122,6 +122,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	
 	private String mAdSweepString = null;
 	
+	private DbAdapter mDbAdapter = null;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -171,7 +173,17 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         startToolbarsHideRunnable();
     }
 
-    /**
+        
+    @Override
+	protected void onDestroy() {
+		if (mDbAdapter != null) {
+			mDbAdapter.close();
+		}
+		super.onDestroy();
+	}
+
+
+	/**
      * Handle url request from external apps.
      * @param intent
      */
@@ -228,8 +240,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
             }          
         });    	    	
     	
-    	final DbAdapter dbAdapter = new DbAdapter(this);
-    	dbAdapter.open();
+    	mDbAdapter = new DbAdapter(this);
+    	mDbAdapter.open();
 
     	String[] from = new String[] {DbAdapter.HISTORY_URL};
     	int[] to = new int[] { android.R.id.text1 };
@@ -249,9 +261,9 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			public Cursor runQuery(CharSequence constraint) {
 				if ((constraint != null) &&
 						(constraint.length() > 0)) {
-					return dbAdapter.getSuggestionsFromHistory(constraint.toString());
+					return mDbAdapter.getSuggestionsFromHistory(constraint.toString());
 				} else {
-					return dbAdapter.getSuggestionsFromHistory(null);
+					return mDbAdapter.getSuggestionsFromHistory(null);
 				}
 			}
 		});

@@ -71,7 +71,13 @@ public class BookmarksListActivity extends ListActivity {
         fillData();
     }
     
-    private void fillData() {
+    @Override
+	protected void onDestroy() {
+		mDbAdapter.close();
+		super.onDestroy();
+	}
+
+	private void fillData() {
     	mCursor = mDbAdapter.fetchBookmarks();
     	startManagingCursor(mCursor);
     	

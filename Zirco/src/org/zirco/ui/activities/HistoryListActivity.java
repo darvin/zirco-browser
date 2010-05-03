@@ -55,6 +55,12 @@ public class HistoryListActivity extends ExpandableListActivity {
         fillData();
 	}	
 	
+	@Override
+	protected void onDestroy() {
+		mDbAdapter.close();
+		super.onDestroy();
+	}
+
 	private void fillData() {
 		mData = mDbAdapter.fetchHistory();
 		mAdapter = new HistoryExpandableListAdapter();
