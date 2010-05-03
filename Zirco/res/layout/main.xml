@@ -22,9 +22,6 @@
 	<RelativeLayout android:id="@+id/MainContainer"
 		android:layout_width="fill_parent" android:layout_height="fill_parent">
 
-
-
-
 		<ViewFlipper android:id="@+id/ViewFlipper"
 			android:layout_width="fill_parent" android:layout_height="fill_parent">
 		</ViewFlipper>
@@ -33,24 +30,24 @@
 			android:layout_toRightOf="@+id/GoBtn" android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:scaleType="fitXY"
 			android:background="@drawable/tb_background" android:weightSum="0.75"
-			android:layout_alignParentTop="true" android:orientation="vertical">									
+			android:layout_alignParentTop="true" android:orientation="vertical">														
 			
 			<LinearLayout android:layout_width="fill_parent"
 			android:layout_height="wrap_content">
 			
-			<ImageButton android:layout_height="wrap_content"
-				android:id="@+id/HomeBtn" android:layout_width="wrap_content"
-				android:src="@drawable/home32"
-				android:layout_marginTop="3dip" ></ImageButton>
+				<ImageButton android:layout_height="wrap_content"
+					android:id="@+id/HomeBtn" android:layout_width="wrap_content"
+					android:src="@drawable/home32"
+					android:layout_marginTop="3dip" ></ImageButton>
 
-			<AutoCompleteTextView android:layout_height="wrap_content" android:id="@+id/UrlText"
-				android:layout_width="fill_parent" android:layout_weight="0.75"
-				android:inputType="textUri" android:layout_marginTop="4dip"></AutoCompleteTextView>
+				<AutoCompleteTextView android:layout_height="wrap_content" android:id="@+id/UrlText"
+					android:layout_width="fill_parent" android:layout_weight="0.75"
+					android:inputType="textUri" android:layout_marginTop="7dip" android:background="@drawable/custom_edit"></AutoCompleteTextView>
 
-			<ImageButton android:layout_height="wrap_content"
-				android:id="@+id/GoBtn" android:layout_width="wrap_content"
-				android:src="@drawable/go32"			
-				android:layout_marginTop="3dip" ></ImageButton>							
+				<ImageButton android:layout_height="wrap_content"
+					android:id="@+id/GoBtn" android:layout_width="wrap_content"
+					android:src="@drawable/go32"			
+					android:layout_marginTop="3dip" ></ImageButton>							
 				
 			</LinearLayout>
 			
@@ -58,7 +55,7 @@
 				android:layout_height="wrap_content" android:layout_width="fill_parent"
 				android:indeterminate="false" style="@android:style/Widget.ProgressBar.Horizontal"
 				android:layout_marginLeft="3dip" android:layout_marginRight="3dip" android:layout_marginBottom="5dip"
-				android:maxHeight="5px" android:minHeight="5px"></ProgressBar>						
+				android:maxHeight="5px" android:minHeight="5px"></ProgressBar>											
 			
 		</LinearLayout>
 

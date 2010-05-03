@@ -44,8 +44,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -84,6 +82,8 @@ import android.widget.ViewFlipper;
 import android.widget.SimpleCursorAdapter.CursorToStringConverter;
 
 public class ZircoMain extends Activity implements IWebEventListener, IToolbarsContainer, OnTouchListener, IDownloadEventsListener {
+	
+	public static ZircoMain INSTANCE = null;
 	
 	private static final int FLIP_PIXEL_THRESHOLD = 200;
 	private static final int FLIP_TIME_THRESHOLD = 400;
@@ -144,6 +144,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);              
 
+        INSTANCE = this;
+        
         Controller.getInstance().setPreferences(PreferenceManager.getDefaultSharedPreferences(this));       
         
         if (Controller.getInstance().getPreferences().getBoolean(Constants.PREFERENCES_SHOW_FULL_SCREEN, true)) {
@@ -166,14 +168,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         
         EventController.getInstance().addWebListener(this);
         
-        mViewFlipper.removeAllViews();
-        
-        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener() {
-			@Override
-			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-				applyPreferences();
-			}        	
-        });
+        mViewFlipper.removeAllViews();      
         
         Intent i = getIntent();
         if (i.getData() != null) {
@@ -285,15 +280,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     	
     	mUrlEditText = (AutoCompleteTextView) findViewById(R.id.UrlText);
     	mUrlEditText.setThreshold(1);
-    	mUrlEditText.setAdapter(adapter);
-    	
-    	//dbAdapter.close();
-    	
-    	/*
-    	ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-    			android.R.layout.simple_dropdown_item_1line, dbAdapter.getSuggestionsFromHistory());
-    			*/
-    	
+    	mUrlEditText.setAdapter(adapter);    	
     	
     	mUrlEditText.setOnKeyListener(new View.OnKeyListener() {
 
@@ -386,7 +373,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		mQuickButton.invalidate();
     }
     
-    private void applyPreferences() {
+    public void applyPreferences() {
     	
     	applyQuickButtonPreferences();
     	
