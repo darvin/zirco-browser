@@ -42,7 +42,7 @@
 
 				<AutoCompleteTextView android:layout_height="wrap_content" android:id="@+id/UrlText"
 					android:layout_width="fill_parent" android:layout_weight="0.75"
-					android:inputType="textUri" android:layout_marginTop="7dip" android:background="@drawable/custom_edit"></AutoCompleteTextView>
+					android:inputType="textUri" android:layout_marginTop="7.5dip" android:background="@drawable/custom_edit"></AutoCompleteTextView>
 
 				<ImageButton android:layout_height="wrap_content"
 					android:id="@+id/GoBtn" android:layout_width="wrap_content"
