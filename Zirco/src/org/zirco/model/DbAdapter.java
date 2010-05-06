@@ -250,6 +250,10 @@ public class DbAdapter {
     	}
     }
     
+    public void deleteFromHistory(long id) {
+    	mDb.execSQL("DELETE FROM " + HISTORY_DATABASE_TABLE + " WHERE " + HISTORY_ROWID + " = " + id + ";");
+    }
+    
     public void clearHistory() {
     	mDb.execSQL("DELETE FROM " + HISTORY_DATABASE_TABLE + ";");
     }

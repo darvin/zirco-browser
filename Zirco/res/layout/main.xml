@@ -32,6 +32,12 @@
 			android:background="@drawable/tb_background" android:weightSum="0.75"
 			android:layout_alignParentTop="true" android:orientation="vertical">														
 			
+			<ProgressBar android:id="@+id/WebViewProgress"
+				android:layout_height="wrap_content" android:layout_width="fill_parent"
+				android:indeterminate="false" style="@android:style/Widget.ProgressBar.Horizontal"
+				android:layout_marginLeft="3dip" android:layout_marginRight="3dip" android:layout_marginTop="3dip"
+				android:maxHeight="5px" android:minHeight="5px"></ProgressBar>
+			
 			<LinearLayout android:layout_width="fill_parent"
 			android:layout_height="wrap_content">
 			
@@ -49,13 +55,7 @@
 					android:src="@drawable/go32"			
 					android:layout_marginTop="3dip" ></ImageButton>							
 				
-			</LinearLayout>
-			
-			<ProgressBar android:id="@+id/WebViewProgress"
-				android:layout_height="wrap_content" android:layout_width="fill_parent"
-				android:indeterminate="false" style="@android:style/Widget.ProgressBar.Horizontal"
-				android:layout_marginLeft="3dip" android:layout_marginRight="3dip" android:layout_marginBottom="5dip"
-				android:maxHeight="5px" android:minHeight="5px"></ProgressBar>											
+			</LinearLayout>											
 			
 		</LinearLayout>
 

@@ -20,8 +20,26 @@ import org.zirco.R;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Paint;
 
 public class ApplicationUtils {
+	
+	public static String getTruncatedString(Paint paintObject, String text, int maxWidth) {
+		
+		boolean modified = false;
+		
+		while ((paintObject.measureText(text) > maxWidth) &&
+				(text.length() > 0)) {
+			text = text.substring(0, text.length() - 1);
+			modified = true;		
+		}
+		
+		if (modified) {
+			text += "...";
+		}
+		
+		return text;
+	}
 	
 	public static void showYesNoDialog(Context context, int icon, int title, int message, DialogInterface.OnClickListener onYes) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);

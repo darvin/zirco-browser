@@ -64,7 +64,9 @@
     <string name="EditBookmarkActivity.TitleLabel">Name:</string>
     <string name="EditBookmarkActivity.UrlLabel">Location:</string>
     
-    <string name="HistoryListActivity.Title">Zirco Browser - History</string>    
+    <string name="HistoryListActivity.Title">Zirco Browser - History</string>
+    <string name="HistoryListActivity.MenuOpenInTab">Open in new tab</string>
+    <string name="HistoryListActivity.MenuDelete">Delete</string>
     
     <string name="DownloadListActivity.Title">Zirco Browser - Downloads</string>
     <string name="DownloadListActivity.Empty">No downloads</string>

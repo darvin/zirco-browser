@@ -31,22 +31,28 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AbsListView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
 
 public class HistoryListActivity extends ExpandableListActivity {
 	
 	private static final int MENU_CLEAR_HISTORY = Menu.FIRST;
+	
+	private static final int MENU_OPEN_IN_TAB = Menu.FIRST + 10;
+	private static final int MENU_DELETE_FROM_HISTORY = Menu.FIRST + 11;
 	
 	private DbAdapter mDbAdapter;	
 	private ExpandableListAdapter mAdapter;
@@ -67,6 +73,8 @@ public class HistoryListActivity extends ExpandableListActivity {
         mDbAdapter = new DbAdapter(this);
         mDbAdapter.open();
         
+        registerForContextMenu(getExpandableListView());
+        
         fillData();
 	}	
 	
@@ -80,6 +88,50 @@ public class HistoryListActivity extends ExpandableListActivity {
 		mData = mDbAdapter.fetchHistory();
 		mAdapter = new HistoryExpandableListAdapter();
         setListAdapter(mAdapter);
+	}
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		
+		ExpandableListView.ExpandableListContextMenuInfo info =
+			(ExpandableListView.ExpandableListContextMenuInfo) menuInfo;
+
+		int type = ExpandableListView.getPackedPositionType(info.packedPosition);
+		int group = ExpandableListView.getPackedPositionGroup(info.packedPosition);
+		int child =	ExpandableListView.getPackedPositionChild(info.packedPosition);
+		
+		if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+			menu.setHeaderTitle(mData.get(group).get(child).getTitle());
+			menu.add(0, MENU_OPEN_IN_TAB, 0, R.string.HistoryListActivity_MenuOpenInTab);
+			menu.add(0, MENU_DELETE_FROM_HISTORY, 0, R.string.HistoryListActivity_MenuDelete);
+		}
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem menuItem) {
+		ExpandableListContextMenuInfo info = (ExpandableListContextMenuInfo) menuItem.getMenuInfo();
+		
+		int type = ExpandableListView.getPackedPositionType(info.packedPosition);
+		
+		if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+			int group = ExpandableListView.getPackedPositionGroup(info.packedPosition);
+			int child =	ExpandableListView.getPackedPositionChild(info.packedPosition);
+			
+			switch (menuItem.getItemId()) {
+			case MENU_OPEN_IN_TAB:
+				doNavigateToUrl(mData.get(group).get(child).getUrl(), true);
+				break;
+			case MENU_DELETE_FROM_HISTORY:
+				mDbAdapter.deleteFromHistory(mData.get(group).get(child).getId());
+				fillData();
+				break;
+			default:
+				break;
+			}
+		}
+		
+		return super.onContextItemSelected(menuItem);
 	}
 	
 	@Override
@@ -108,14 +160,18 @@ public class HistoryListActivity extends ExpandableListActivity {
 	@Override
 	public boolean onChildClick(ExpandableListView parent, View v,	int groupPosition, int childPosition, long id) {
 		
+        doNavigateToUrl(mData.get(groupPosition).get(childPosition).getUrl(), false);
+        
+		return super.onChildClick(parent, v, groupPosition, childPosition, id);
+	}
+	
+	private void doNavigateToUrl(String url, boolean newTab) {
 		Intent result = new Intent();
-        result.putExtra(Constants.EXTRA_ID_NEW_TAB, false);
-        result.putExtra(Constants.EXTRA_ID_URL,  mData.get(groupPosition).get(childPosition).getUrl());
+        result.putExtra(Constants.EXTRA_ID_NEW_TAB, newTab);
+        result.putExtra(Constants.EXTRA_ID_URL,  url);
         
         setResult(RESULT_OK, result);
         finish();
-		
-		return super.onChildClick(parent, v, groupPosition, childPosition, id);
 	}
 
 	private void doClearHistory() {
@@ -201,7 +257,12 @@ public class HistoryListActivity extends ExpandableListActivity {
 			titleView.setText(((HistoryItem) getChild(groupPosition, childPosition)).getTitle());
 			
 			TextView urlView = (TextView) view.findViewById(R.id.HistoryRow_Url);
-			urlView.setText(((HistoryItem) getChild(groupPosition, childPosition)).getUrl());
+			
+			String url = ((HistoryItem) getChild(groupPosition, childPosition)).getUrl(); 
+			
+			url = ApplicationUtils.getTruncatedString(urlView.getPaint(), url, parent.getMeasuredWidth() - 60);
+			
+			urlView.setText(url);
             
             return view;
 		}

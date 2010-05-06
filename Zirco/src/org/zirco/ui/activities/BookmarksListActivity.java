@@ -16,6 +16,7 @@
 package org.zirco.ui.activities;
 
 import org.zirco.R;
+import org.zirco.model.BookmarksCursorAdapter;
 import org.zirco.model.DbAdapter;
 import org.zirco.utils.ApplicationUtils;
 import org.zirco.utils.BookmarksUtils;
@@ -46,7 +47,6 @@ import android.view.animation.AnimationSet;
 import android.view.animation.LayoutAnimationController;
 import android.view.animation.TranslateAnimation;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class BookmarksListActivity extends ListActivity {
@@ -66,7 +66,7 @@ public class BookmarksListActivity extends ListActivity {
 	private DbAdapter mDbAdapter;
 	
 	private Cursor mCursor;
-	private SimpleCursorAdapter mCursorAdapter;
+	private BookmarksCursorAdapter mCursorAdapter;
 	
 	private ProgressDialog mProgressDialog;
 	
@@ -99,7 +99,7 @@ public class BookmarksListActivity extends ListActivity {
     	String[] from = new String[] { BookmarkColumns.TITLE, BookmarkColumns.URL };
     	int[] to = new int[] { R.id.BookmarkRow_Title, R.id.BookmarkRow_Url };
     	
-    	mCursorAdapter = new SimpleCursorAdapter(this, R.layout.bookmarkrow, mCursor, from, to);
+    	mCursorAdapter = new BookmarksCursorAdapter(this, R.layout.bookmarkrow, mCursor, from, to);
         setListAdapter(mCursorAdapter);
         
         setAnimation();
