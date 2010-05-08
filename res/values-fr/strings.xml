@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+   Zirco Browser for Android
+  
+   Copyright (C) 2010 J. Devauchelle and contributors.
+ 
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   version 3 as published by the Free Software Foundation.
+ 
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+ -->
+
+<resources>        
+    <string name="ApplicationName">Zirco Browser</string>
+    <string name="ApplicationNameUrl">Zirco - %s</string>
+    <string name="ApplicationDescription">Zirco est un navigateur open-source alternatif pour Android.</string>
+    
+    <string name="AboutActivity.Title">A propos</string>
+	<string name="AboutActivity.CloseBtn">Fermer</string>
+	<string name="AboutActivity.VersionText">Version :</string>
+	<string name="AboutActivity.UrlTextValue">http://code.google.com/p/zirco-browser/</string>
+	<string name="AboutActivity.LicenseText">License :</string>
+	<string name="AboutActivity.LicenseTextValue">GPL v3</string>
+        
+    <string name="Main.MenuAbout">A propos</string>
+    <string name="Main.MenuAddBookmark">Ajouter un favori</string>
+    <string name="Main.MenuShowBookmarks">Favoris</string>
+    <string name="Main.MenuShowHistory">Historique</string>
+    <string name="Main.MenuShowDownloads">Téléchargements</string>
+    <string name="Main.MenuPreferences">Préférences</string>
+    <string name="Main.MenuOpen">Ouvrir</string>
+    <string name="Main.MenuOpenNewTab">Ouvrir dans un nouvel onglet</string>
+    <string name="Main.MenuDownload">Télécharger</string>
+    <string name="Main.SDCardErrorTitle">Erreur de carte SD</string>
+    <string name="Main.SDCardErrorNoSDMsg">Carte SD introuvable.</string>
+    <string name="Main.SDCardErrorSDUnavailable">Carte SD non disponible.</string>
+    <string name="Main.DownloadStartedMsg">Téléchargement commencé.</string>
+    <string name="Main.DownloadFinishedMsg">Téléchargement terminé.</string>
+    <string name="Main.DownloadErrorMsg">Erreur de téléchargement : %s</string>
+    <string name="Main.ToastTabSwitchMessage">Onglet %s</string>
+    <string name="Main.ToastTabSwitchFullMessage">Onglet %s: %s</string>
+    
+    <string name="BookmarksListActivity.Title">Zirco Browser - Favoris</string>
+    <string name="BookmarksListActivity.MenuSortMode">Trier par</string>
+    <string name="BookmarksListActivity.MenuAddBookmark">Ajouter un favori</string>
+    <string name="BookmarksListActivity.Empty">Pas de favoris</string>
+    <string name="BookmarksListActivity.MenuOpenInTab">Ouvrir dans un nouvel onglet</string>
+    <string name="BookmarksListActivity.MenuEditBookmark">Modifier le favori</string>
+    <string name="BookmarksListActivity.MenuDeleteBookmark">Supprimer le favori</string>
+    <string name="BookmarksListActivity.ImportBookmarks">Importer les favoris</string>
+    <string name="BookmarksListActivity.ClearBookmarks">Effacer les favoris</string>
+    <string name="BookmarksListActivity.ImportingBookmarks">Import en cours...</string>
+    <string name="BookmarksListActivity.ClearingBookmarks">Suppression en cours...</string>
+    <string name="BookmarksListActivity.AlphaSortMode">Alphabétique</string>
+    <string name="BookmarksListActivity.RecentSortMode">Plus récent</string>
+    
+    <string name="EditBookmarkActivity.Title">Modifier le favori</string>
+    <string name="EditBookmarkActivity.TitleAdd">Ajouter un favori</string>
+    <string name="EditBookmarkActivity.TitleLabel">Nom :</string>
+    <string name="EditBookmarkActivity.UrlLabel">Localisation :</string>
+    
+    <string name="HistoryListActivity.Title">Zirco Browser - Historique</string>
+    <string name="HistoryListActivity.MenuOpenInTab">Ouvrir dans un nouvel onglet</string>
+    <string name="HistoryListActivity.MenuDelete">Supprimer</string>
+    
+    <string name="DownloadListActivity.Title">Zirco Browser - Téléchargements</string>
+    <string name="DownloadListActivity.Empty">Pas de téléchargements</string>
+    <string name="DownloadListActivity.Aborted">%s (Annulé)</string>
+    <string name="DownloadListActivity.Finished">%s (Terminé)</string>
+    
+    <string name="AdBlockerWhiteListActivity.Title">Zirco Browser - Ad blocker white list</string>
+    <string name="AdBlockerWhiteListActivity.Empty">La liste blanche est vide.</string>
+    <string name="AdBlockerWhiteListActivity.Add">Ajouter</string>
+    <string name="AdBlockerWhiteListActivity.Clear">Tout supprimer</string>
+    <string name="AdBlockerWhiteListActivity.AddMessage">Ajouter à la liste blanche</string>
+    <string name="AdBlockerWhiteListActivity.ClearMessage">Supprimer la liste blanche</string>
+    <string name="AdBlockerWhiteListActivity.DeleteMenu">Supprimer</string>
+    
+    <string name="PreferencesActivity.GeneralSettingsCategoryTitle">Paramètres généraux</string>
+    <string name="PreferencesActivity.HomePagePreferenceTitle">Page d\'accueil</string>
+    <string name="PreferencesActivity.HomePagePreferenceSummary">Choisissez votre page d\'accueil par défaut.</string>
+    <string name="PreferencesActivity.HomePagePreferenceDefaultValue">about:blank</string>
+    <string name="PreferencesActivity.FullScreenPreferenceTitle">Plein écran</string>
+    <string name="PreferencesActivity.FullScreenPreferenceSummary">Affiche le navigateur en mode plein écran (nécessite un redémarrage de l\'application).</string>
+    <string name="PreferencesActivity.ShowToastOnTabSwitchPreferenceTitle">Afficher une alerte au changement d\'onglet</string>
+    <string name="PreferencesActivity.ShowToastOnTabSwitchPreferenceSummary">Si activé, une alerte est affichée brièvement au changement d\'onglet.</string>
+    
+    <string name="PreferencesActivity.BrowserSettingsCategoryTitle">Paramètres du navigateur</string>
+    <string name="PreferencesActivity.HistorySizePreferenceTitle">Historique</string>
+    <string name="PreferencesActivity.HistorySizePreferenceSummary">Taille de l\'historique en jours.</string>
+    <string name="PreferencesActivity.EnableJavascriptPreferenceTitle">Activer le JavaScript</string>
+    <string name="PreferencesActivity.EnableJavascriptPreferenceSummary">Active ou désactive le JavaScript.</string>
+    <string name="PreferencesActivity.LoadImagesPreferenceTitle">Charger les images</string>
+    <string name="PreferencesActivity.LoadImagesPreferenceSummary">Active ou désactive le chargement des images.</string>
+    
+    <string name="PreferencesActivity.PrivacyPreferenceTitle">Paramètres de vie privée</string>
+    <string name="PreferencesActivity.PrivacyPreferenceSummary">Gérer les paramètres de vie privée</string>
+    
+    <string name="PreferencesActivity.EnableFormDataPreferenceTitle">Sauver les données des formulaires</string>
+    <string name="PreferencesActivity.EnableFormDataPreferenceSummary">Active ou désactive la sauvegarde des données des formulaires.</string>
+    <string name="PreferencesActivity.EnablePasswordsPreferenceTitle">Sauver les mots de passe</string>
+    <string name="PreferencesActivity.EnablePasswordsPreferenceSummary">Active ou désactive la sauvegarde des mots de passe.</string>
+    <string name="PreferencesActivity.EnableCookiesPreferenceTitle">Autoriser les cookies</string>
+    <string name="PreferencesActivity.EnableCookiesPreferenceSummary">Active ou désactive les cookies.</string>
+    
+    <string name="PreferencesActivity.PrivacyClearHistoryTitle">Purger l\'historique</string>
+    <string name="PreferencesActivity.PrivacyClearFormDataTitle">Purger les données des formulaires</string>
+    <string name="PreferencesActivity.PrivacyClearCacheTitle">Purger le cache</string>
+    <string name="PreferencesActivity.PrivacyClearCookiesTitle">Purger les cookies</string>
+    
+    <string name="PreferencesActivity.QuickButtonPreferenceTitle">Bouton rapide</string>
+    <string name="PreferencesActivity.QuickButtonPreferenceSummary">Définit la fonction du bouton rapide.</string>
+    
+    <string name="PreferencesActivity.QuickButtonBookmarks">Favoris</string>
+    <string name="PreferencesActivity.QuickButtonHistory">Historique</string>
+    <string-array name="QuickButtonEntries">
+		<item>@string/PreferencesActivity.QuickButtonBookmarks</item>
+		<item>@string/PreferencesActivity.QuickButtonHistory</item>
+	</string-array>
+	<string-array name="QuickButtonValues">
+		<item>bookmarks</item>
+		<item>history</item>
+	</string-array>
+    
+    <string name="PreferencesActivity.BarDurationPreferenceTitle">Durée d\'affichade des barres</string>
+    <string name="PreferencesActivity.BarDurationPreferenceSummary">Durée d\'affichage des barres d\'outils.</string>
+    
+    <string name="PreferencesActivity.BarDuration1sec">1 seconde</string>
+    <string name="PreferencesActivity.BarDuration2sec">2 secondes</string>
+    <string name="PreferencesActivity.BarDuration3sec">3 secondes</string>
+    <string name="PreferencesActivity.BarDuration4sec">4 secondes</string>
+    <string name="PreferencesActivity.BarDuration5sec">5 secondes</string>
+    <string-array name="BarDurationEntries">
+		<item>@string/PreferencesActivity.BarDuration1sec</item>
+		<item>@string/PreferencesActivity.BarDuration2sec</item>
+		<item>@string/PreferencesActivity.BarDuration3sec</item>
+		<item>@string/PreferencesActivity.BarDuration4sec</item>
+		<item>@string/PreferencesActivity.BarDuration5sec</item>
+	</string-array>
+	<string-array name="BarDurationValues">
+		<item>1000</item>
+		<item>2000</item>
+		<item>3000</item>
+		<item>4000</item>
+		<item>5000</item>
+	</string-array>
+	
+	<string name="PreferencesActivity.AdBlockerSettingsCategoryTitle">Paramètres du bloqueur de pubs</string>
+	<string name="PreferencesActivity.EnableAdBlockerPreferenceTitle">Activer le bloqueur de pubs</string>
+    <string name="PreferencesActivity.EnableAdBlockerPreferenceSummary">Le JavaScript doit être activé pour que le bloquer de pubs fonctionne.</string>
+    <string name="PreferencesActivity.AdBlockerWhiteListPreferenceTitle">Liste blanche</string>
+    <string name="PreferencesActivity.AdBlockerWhiteListPreferenceSummary">Gérer la liste blanche du bloqueur de pubs.</string>
+    
+    <string name="Commons.Ok">Ok</string>
+    <string name="Commons.Cancel">Annuler</string>
+    <string name="Commons.PleaseWait">Patientez</string>
+    <string name="Commons.Yes">Oui</string>
+    <string name="Commons.No">Non</string>
+    <string name="Commons.NoUndoMessage">Cette opération ne peut pas être annulée. Voulez vous continer ?</string>
+    <string name="Commons.Today">Aujourd\'hui (%s)</string>
+    <string name="Commons.Yesterday">Hier (%s)</string>
+    <string name="Commons.DaysAgo">Il y a %s jours (%s)</string>
+    <string name="Commons.JavaScriptDialog">Fenêtre JavaScript</string>
+    <string name="Commons.ClearHistory">Purger l\'historique</string>
+    <string name="Commons.ClearingHistory">Suppression de l\'historique...</string>
+    <string name="Commons.ClearFormData">Purger les données des formulaires</string>
+    <string name="Commons.ClearingFormData">Suppression des données des formulaires...</string>
+    <string name="Commons.ClearCache">Purger le cache</string>
+    <string name="Commons.ClearingCache">Suppression du cache...</string>
+    <string name="Commons.ClearCookies">Purger les cookies</string>
+    <string name="Commons.ClearingCookies">Suppression des cookies...</string>
+    
+    <string name="DATE_FORMAT_ISO8601">yyyy-MM-dd\'T\'HH:mm:ss.SSS</string>
+    
+</resources>
