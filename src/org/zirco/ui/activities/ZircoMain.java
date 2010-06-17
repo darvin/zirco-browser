@@ -50,6 +50,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.util.FloatMath;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
@@ -138,6 +139,15 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	private String mAdSweepString = null;
 	
 	private DbAdapter mDbAdapter = null;
+	
+	private float mOldDistance;
+	
+	private GestureMode mGestureMode;
+	
+	private enum GestureMode {
+		SWIP,
+		ZOOM
+	}
 	
     /** Called when the activity is first created. */
     @Override
@@ -881,15 +891,26 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		}		
 	}
 	
+	private float computeSpacing(MotionEvent event) {
+		float x = event.getX(0) - event.getX(1);
+		float y = event.getY(0) - event.getY(1);
+		return FloatMath.sqrt(x * x + y * y);
+	}
+	
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		
 		hideKeyboard(false);
 		
+		final int action = event.getAction();
+		
 		// Get the action that was done on this touch event
-		switch (event.getAction())
-		{
+		//switch (event.getAction()) {
+		switch (action & MotionEvent.ACTION_MASK) {
 		case MotionEvent.ACTION_DOWN: {
+			
+			mGestureMode = GestureMode.SWIP;
+			
 			// store the X value when the user's finger was pressed down
 			mDownXValue = event.getX();
 			mDownDateValue = new Date().getTime();
@@ -897,49 +918,102 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		}
 
 		case MotionEvent.ACTION_UP: {
-			// Get the X value when the user released his/her finger
-			float currentX = event.getX();
-			long timeDelta = new Date().getTime() - mDownDateValue;
 			
-			if (timeDelta <= FLIP_TIME_THRESHOLD) {
-				if (mViewFlipper.getChildCount() > 1) {
-					// going backwards: pushing stuff to the right
-					if (currentX > (mDownXValue + FLIP_PIXEL_THRESHOLD)) {						
+			if (mGestureMode == GestureMode.SWIP) {
+			
+				// Get the X value when the user released his/her finger
+				float currentX = event.getX();
+				long timeDelta = new Date().getTime() - mDownDateValue;
 
-						mViewFlipper.setInAnimation(AnimationManager.getInstance().getInFromLeftAnimation());
-						mViewFlipper.setOutAnimation(AnimationManager.getInstance().getOutToRightAnimation());
+				if (timeDelta <= FLIP_TIME_THRESHOLD) {
+					if (mViewFlipper.getChildCount() > 1) {
+						// going backwards: pushing stuff to the right
+						if (currentX > (mDownXValue + FLIP_PIXEL_THRESHOLD)) {						
 
-						mViewFlipper.showPrevious();
+							mViewFlipper.setInAnimation(AnimationManager.getInstance().getInFromLeftAnimation());
+							mViewFlipper.setOutAnimation(AnimationManager.getInstance().getOutToRightAnimation());
 
-						mCurrentWebView = mWebViews.get(mViewFlipper.getDisplayedChild());
-						
-						showToastOnTabSwitch();
-						
-						updateUI();
-						
-						return true;
-					}
+							mViewFlipper.showPrevious();
 
-					// going forwards: pushing stuff to the left
-					if (currentX < (mDownXValue - FLIP_PIXEL_THRESHOLD)) {					
+							mCurrentWebView = mWebViews.get(mViewFlipper.getDisplayedChild());
 
-						mViewFlipper.setInAnimation(AnimationManager.getInstance().getInFromRightAnimation());
-						mViewFlipper.setOutAnimation(AnimationManager.getInstance().getOutToLeftAnimation());
+							showToastOnTabSwitch();
 
-						mViewFlipper.showNext();
+							updateUI();
 
-						mCurrentWebView = mWebViews.get(mViewFlipper.getDisplayedChild());
-						
-						showToastOnTabSwitch();
-						
-						updateUI();
-						
-						return true;
+							return true;
+						}
+
+						// going forwards: pushing stuff to the left
+						if (currentX < (mDownXValue - FLIP_PIXEL_THRESHOLD)) {					
+
+							mViewFlipper.setInAnimation(AnimationManager.getInstance().getInFromRightAnimation());
+							mViewFlipper.setOutAnimation(AnimationManager.getInstance().getOutToLeftAnimation());
+
+							mViewFlipper.showNext();
+
+							mCurrentWebView = mWebViews.get(mViewFlipper.getDisplayedChild());
+
+							showToastOnTabSwitch();
+
+							updateUI();
+
+							return true;
+						}
 					}
 				}
 			}
 			break;
 		}
+		
+		case MotionEvent.ACTION_POINTER_DOWN: {
+			
+			mOldDistance = computeSpacing(event);
+			
+			if (mOldDistance > 10f) {
+				mGestureMode = GestureMode.ZOOM;
+			}
+			
+			break;
+		}				
+		
+		case MotionEvent.ACTION_MOVE: {
+			
+			if (mGestureMode == GestureMode.ZOOM) {
+			
+				float newDist = computeSpacing(event);
+				
+				if (newDist > 10f) {
+					
+					float scale = newDist / mOldDistance;
+					
+					if (scale > 1) {
+						
+						if (scale > 1.3f) {
+						
+							mCurrentWebView.zoomIn();							
+							mOldDistance = newDist;
+						
+						}
+						
+					} else {
+						
+						if (scale < 0.8f) {
+						
+							mCurrentWebView.zoomOut();
+							mOldDistance = newDist;
+							
+						}
+						
+					}
+					
+					//System.out.println("Scale: " + scale);
+				}
+				
+			}		
+			break;
+		}
+		
 		}
 
         // if you return false, these actions will not be recorded

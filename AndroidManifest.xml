@@ -20,7 +20,7 @@
       android:versionCode="1" android:versionName="0.2.8">
     <application
     	android:icon="@drawable/icon"
-    	android:label="@string/ApplicationName">
+    	android:label="@string/ApplicationName" android:debuggable="true">
     
         <activity android:name=".ui.activities.ZircoMain"
                   android:label="@string/ApplicationName"
@@ -48,7 +48,7 @@
 		<activity android:name=".ui.activities.AdBlockerWhiteListActivity"></activity>
 	</application>
 
-	<uses-sdk android:minSdkVersion="3" />
+	<uses-sdk android:minSdkVersion="6" />
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>	
 	<uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS"></uses-permission>
 	
