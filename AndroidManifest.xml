@@ -20,7 +20,7 @@
       android:versionCode="1" android:versionName="0.2.8">
     <application
     	android:icon="@drawable/icon"
-    	android:label="@string/ApplicationName" android:debuggable="true">
+    	android:label="@string/ApplicationName" android:debuggable="false">
     
         <activity android:name=".ui.activities.ZircoMain"
                   android:label="@string/ApplicationName"
