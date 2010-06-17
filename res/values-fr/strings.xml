@@ -44,6 +44,8 @@
     <string name="Main.DownloadErrorMsg">Erreur de téléchargement : %s</string>
     <string name="Main.ToastTabSwitchMessage">Onglet %s</string>
     <string name="Main.ToastTabSwitchFullMessage">Onglet %s: %s</string>
+    <string name="Main.YoutubeErrorTitle">Impossible d\'ouvrir la vidéo</string>
+    <string name="Main.YoutubeErrorMessage">Vous ne devez pas avoir d\'application capable de jouer une vidéo Youtube.</string>
     
     <string name="BookmarksListActivity.Title">Zirco Browser - Favoris</string>
     <string name="BookmarksListActivity.MenuSortMode">Trier par</string>

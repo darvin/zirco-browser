@@ -1109,8 +1109,26 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			
 		} else if (event.equals(EventConstants.EVT_YOUTUBE_VIDEO)) {
 			
-			Intent i  = new Intent(Intent.ACTION_VIEW, Uri.parse((String) data));
-			startActivity(i);
+			try {
+				
+				Intent i  = new Intent(Intent.ACTION_VIEW, Uri.parse((String) data));
+				startActivity(i);
+				
+			} catch (Exception e) {
+				
+				// Notify user that the Youtube video cannot be viewed.
+				new AlertDialog.Builder(this)
+				.setTitle(R.string.Main_YoutubeErrorTitle)
+				.setMessage(R.string.Main_YoutubeErrorMessage)
+				.setPositiveButton(android.R.string.ok,
+						new AlertDialog.OnClickListener()
+				{
+					public void onClick(DialogInterface dialog, int which) { }
+				})
+				.setCancelable(true)
+				.create()
+				.show();
+			}
 			
 		}
 		
