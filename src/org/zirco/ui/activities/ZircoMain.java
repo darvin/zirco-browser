@@ -46,6 +46,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Message;
@@ -1103,7 +1104,14 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			setToolbarsVisibility(true);
 			
 		} else if (event.equals(EventConstants.EVT_WEB_ON_URL_LOADING)) {
+			
 			setToolbarsVisibility(true);
+			
+		} else if (event.equals(EventConstants.EVT_YOUTUBE_VIDEO)) {
+			
+			Intent i  = new Intent(Intent.ACTION_VIEW, Uri.parse((String) data));
+			startActivity(i);
+			
 		}
 		
 	}
