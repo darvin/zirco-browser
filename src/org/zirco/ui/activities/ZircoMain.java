@@ -51,7 +51,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Message;
 import android.preference.PreferenceManager;
-//import android.util.FloatMath;
+import android.util.FloatMath;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
@@ -144,7 +144,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	
 	private DbAdapter mDbAdapter = null;
 	
-	//private float mOldDistance;
+	private float mOldDistance;
 	
 	private GestureMode mGestureMode;
 	
@@ -1016,24 +1016,22 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	 * @param event The event.
 	 * @return The distance between the two points.
 	 */
-	/*
 	private float computeSpacing(MotionEvent event) {
 		float x = event.getX(0) - event.getX(1);
 		float y = event.getY(0) - event.getY(1);
 		return FloatMath.sqrt(x * x + y * y);
 	}
-	*/
 	
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		
 		hideKeyboard(false);
 		
-		//final int action = event.getAction();
+		final int action = event.getAction();
 		
 		// Get the action that was done on this touch event
-		switch (event.getAction()) {
-		//switch (action & MotionEvent.ACTION_MASK) {
+		//switch (event.getAction()) {
+		switch (action & MotionEvent.ACTION_MASK) {
 		case MotionEvent.ACTION_DOWN: {
 			
 			mGestureMode = GestureMode.SWIP;
@@ -1093,7 +1091,6 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			break;
 		}
 		
-		/*
 		case MotionEvent.ACTION_POINTER_DOWN: {
 			
 			mOldDistance = computeSpacing(event);
@@ -1141,7 +1138,6 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			}		
 			break;
 		}
-		*/
 		default: break;
 		}
 
