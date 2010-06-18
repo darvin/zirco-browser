@@ -763,8 +763,22 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     	mCurrentWebView.goForward();
     }
 
+    
+    /*
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+		
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_BACK:
+			finish();
+			return true;
+		default: return super.onKeyLongPress(keyCode, event);
+		}
+	}
+	*/
+
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_BACK:
@@ -997,11 +1011,13 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	 * @param event The event.
 	 * @return The distance between the two points.
 	 */
+	/*
 	private float computeSpacing(MotionEvent event) {
 		float x = event.getX(0) - event.getX(1);
 		float y = event.getY(0) - event.getY(1);
 		return FloatMath.sqrt(x * x + y * y);
 	}
+	*/
 	
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
@@ -1011,8 +1027,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		final int action = event.getAction();
 		
 		// Get the action that was done on this touch event
-		//switch (event.getAction()) {
-		switch (action & MotionEvent.ACTION_MASK) {
+		switch (event.getAction()) {
+		//switch (action & MotionEvent.ACTION_MASK) {
 		case MotionEvent.ACTION_DOWN: {
 			
 			mGestureMode = GestureMode.SWIP;
@@ -1072,6 +1088,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			break;
 		}
 		
+		/*
 		case MotionEvent.ACTION_POINTER_DOWN: {
 			
 			mOldDistance = computeSpacing(event);
@@ -1119,6 +1136,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			}		
 			break;
 		}
+		*/
 		default: break;
 		}
 
