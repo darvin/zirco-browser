@@ -51,7 +51,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.util.FloatMath;
+//import android.util.FloatMath;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
@@ -144,7 +144,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	
 	private DbAdapter mDbAdapter = null;
 	
-	private float mOldDistance;
+	//private float mOldDistance;
 	
 	private GestureMode mGestureMode;
 	
@@ -763,8 +763,6 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     	mCurrentWebView.goForward();
     }
 
-    
-    /*
 	@Override
 	public boolean onKeyLongPress(int keyCode, KeyEvent event) {
 		
@@ -775,7 +773,6 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		default: return super.onKeyLongPress(keyCode, event);
 		}
 	}
-	*/
 
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
@@ -786,7 +783,17 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 				mCurrentWebView.goBack();				
 			}
 			return true;
-			
+		
+		default: return super.onKeyUp(keyCode, event);
+		}
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_BACK:
+			return true;
 		case KeyEvent.KEYCODE_VOLUME_DOWN:
 			mCurrentWebView.zoomIn();
 			return true;
@@ -909,7 +916,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	}
 	
 	/**
-	 * Open prefenreces.
+	 * Open preferences.
 	 */
 	private void openPreferences() {
 		Intent preferencesActivity = new Intent(this, PreferencesActivity.class);
@@ -1024,7 +1031,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		
 		hideKeyboard(false);
 		
-		final int action = event.getAction();
+		//final int action = event.getAction();
 		
 		// Get the action that was done on this touch event
 		switch (event.getAction()) {
@@ -1230,7 +1237,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			
 			setToolbarsVisibility(true);
 			
-		} else if (event.equals(EventConstants.EVT_YOUTUBE_VIDEO)) {
+		} else if (event.equals(EventConstants.EVT_VND_URL)) {
 			
 			try {
 				
@@ -1239,10 +1246,10 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 				
 			} catch (Exception e) {
 				
-				// Notify user that the Youtube video cannot be viewed.
+				// Notify user that the vnd url cannot be viewed.
 				new AlertDialog.Builder(this)
-				.setTitle(R.string.Main_YoutubeErrorTitle)
-				.setMessage(R.string.Main_YoutubeErrorMessage)
+				.setTitle(R.string.Main_VndErrorTitle)
+				.setMessage(String.format(getString(R.string.Main_VndErrorMessage), (String) data))
 				.setPositiveButton(android.R.string.ok,
 						new AlertDialog.OnClickListener()
 				{

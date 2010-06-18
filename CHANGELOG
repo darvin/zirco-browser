@@ -1,5 +1,6 @@
 0.2.8:
-- Added pinch zoom;
+- VND url handler;
+- Long back press quit application;
 - Added french translation;
 
 0.2.7: First public release.
