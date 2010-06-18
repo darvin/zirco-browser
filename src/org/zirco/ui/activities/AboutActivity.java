@@ -28,6 +28,9 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
+/**
+ * About dialog activity.
+ */
 public class AboutActivity extends Activity {
 	
 	@Override
@@ -60,21 +63,25 @@ public class AboutActivity extends Activity {
 		 });
 	 }
 	 
-	 private String getVersion() {		
-			String result = "";		
-	        try {
-	        	
-	        	PackageManager manager = this.getPackageManager();
-				PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
-				
-				result = info.versionName;
-				
-			} catch (NameNotFoundException e) {
-				Log.w(AboutActivity.class.toString(), "Unable to get application version: " + e.getMessage());
-				result = "Unable to get application version.";
-			}
-			
-			return result;
+	/**
+	 * Get the current package version.
+	 * @return The current version.
+	 */
+	private String getVersion() {
+		String result = "";		
+		try {
+
+			PackageManager manager = this.getPackageManager();
+			PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
+
+			result = info.versionName;
+
+		} catch (NameNotFoundException e) {
+			Log.w(AboutActivity.class.toString(), "Unable to get application version: " + e.getMessage());
+			result = "Unable to get application version.";
 		}
+
+		return result;
+	}
 
 }

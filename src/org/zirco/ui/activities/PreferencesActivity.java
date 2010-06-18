@@ -42,6 +42,9 @@ import android.text.method.DigitsKeyListener;
 import android.webkit.CookieManager;
 import android.widget.EditText;
 
+/**
+ * Preferences activity.
+ */
 public class PreferencesActivity extends PreferenceActivity {
 	
 	private ProgressDialog mProgressDialog;
@@ -109,11 +112,17 @@ public class PreferencesActivity extends PreferenceActivity {
 		});
 	}
 	
+	/**
+	 * Display the ad blocker white list activity.
+	 */
 	private void openWhiteListActivity() {
 		Intent i = new Intent(this, AdBlockerWhiteListActivity.class);
 		startActivity(i);
 	}
 	
+	/**
+	 * Clear the history.
+	 */
 	private void doClearHistory() {
     	mProgressDialog = ProgressDialog.show(this,
     			this.getResources().getString(R.string.Commons_PleaseWait),
@@ -122,6 +131,9 @@ public class PreferencesActivity extends PreferenceActivity {
     	new HistoryClearer(this);
     }
 	
+	/**
+	 * Display confirmation and clear the history.
+	 */
 	private void clearHistory() {
 		ApplicationUtils.showYesNoDialog(this,
 				android.R.drawable.ic_dialog_alert,
@@ -136,6 +148,9 @@ public class PreferencesActivity extends PreferenceActivity {
 		});
 	}
 	
+	/**
+	 * Clear form data.
+	 */
 	private void doClearFormData() {
     	mProgressDialog = ProgressDialog.show(this,
     			this.getResources().getString(R.string.Commons_PleaseWait),
@@ -144,6 +159,9 @@ public class PreferencesActivity extends PreferenceActivity {
     	new FormDataClearer();
     }
 	
+	/**
+	 * Display confirmation and clear form data.
+	 */
 	private void clearFormData() {
 		ApplicationUtils.showYesNoDialog(this,
 				android.R.drawable.ic_dialog_alert,
@@ -158,6 +176,9 @@ public class PreferencesActivity extends PreferenceActivity {
 		});
 	}
 	
+	/**
+	 * Clear the cache.
+	 */
 	private void doClearCache() {
     	mProgressDialog = ProgressDialog.show(this,
     			this.getResources().getString(R.string.Commons_PleaseWait),
@@ -166,6 +187,9 @@ public class PreferencesActivity extends PreferenceActivity {
     	new CacheClearer();
     }
 	
+	/**
+	 * Display confirmation and clear the cache.
+	 */
 	private void clearCache() {
 		ApplicationUtils.showYesNoDialog(this,
 				android.R.drawable.ic_dialog_alert,
@@ -180,6 +204,9 @@ public class PreferencesActivity extends PreferenceActivity {
 		});
 	}
 	
+	/**
+	 * Clear cookies.
+	 */
 	private void doClearCookies() {
     	mProgressDialog = ProgressDialog.show(this,
     			this.getResources().getString(R.string.Commons_PleaseWait),
@@ -188,6 +215,9 @@ public class PreferencesActivity extends PreferenceActivity {
     	new CookiesClearer();
     }
 	
+	/**
+	 * Display confirmation and clear cookies.
+	 */
 	private void clearCookies() {
 		ApplicationUtils.showYesNoDialog(this,
 				android.R.drawable.ic_dialog_alert,
@@ -209,6 +239,10 @@ public class PreferencesActivity extends PreferenceActivity {
 
 		private Context mContext;
 		
+		/**
+		 * Constructor.
+		 * @param context The current context.
+		 */
 		public HistoryClearer(Context context) {
 			mContext = context;
 			new Thread(this).start();
@@ -242,6 +276,9 @@ public class PreferencesActivity extends PreferenceActivity {
 	 * Form data clearer thread.
 	 */
 	private class FormDataClearer implements Runnable {
+		/**
+		 * Constructor.
+		 */
 		public FormDataClearer() {
 			new Thread(this).start();
 		}
@@ -265,6 +302,9 @@ public class PreferencesActivity extends PreferenceActivity {
 	 * Cache clearer thread.
 	 */
 	private class CacheClearer implements Runnable {
+		/**
+		 * Constructor.
+		 */
 		public CacheClearer() {
 			new Thread(this).start();
 		}
@@ -287,6 +327,9 @@ public class PreferencesActivity extends PreferenceActivity {
 	 * Cookies clearer thread.
 	 */
 	private class CookiesClearer implements Runnable {
+		/**
+		 * Constructor.
+		 */
 		public CookiesClearer() {
 			new Thread(this).start();
 		}

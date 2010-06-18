@@ -21,14 +21,22 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+/**
+ * A runnable to hide tool bars after the given delay.
+ */
 public class HideToolbarsRunnable implements Runnable {
 	
-	private final static String TAG = "HideToolbarsRunnable";
+	private static final String TAG = "HideToolbarsRunnable";
 	
 	private IToolbarsContainer mParent;
 	private boolean mDisabled;
 	private int mDelay;
 	
+	/**
+	 * Constructor.
+	 * @param parent The parent tool bar container.
+	 * @param delay The delay before hiding, in milliseconds.
+	 */
 	public HideToolbarsRunnable(IToolbarsContainer parent, int delay) {
 		mParent = parent;
 		mDisabled = false;
@@ -45,10 +53,14 @@ public class HideToolbarsRunnable implements Runnable {
 		}
 	};
 	
+	/**
+	 * Disable this runnable.
+	 */
 	public void setDisabled() {
 		mDisabled = true;
 	}
 	
+	@Override
 	public void run() {
 		try {
 			

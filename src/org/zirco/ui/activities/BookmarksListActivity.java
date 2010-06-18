@@ -49,6 +49,9 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ListView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
+/**
+ * Bookmarks list activity.
+ */
 public class BookmarksListActivity extends ListActivity {
 			
 	private static final int MENU_SORT_MODE = Menu.FIRST;
@@ -70,7 +73,6 @@ public class BookmarksListActivity extends ListActivity {
 	
 	private ProgressDialog mProgressDialog;
 	
-	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,12 +94,15 @@ public class BookmarksListActivity extends ListActivity {
 		super.onDestroy();
 	}
 
+    /**
+     * Fill the bookmark to the list UI. 
+     */
 	private void fillData() {
     	mCursor = mDbAdapter.fetchBookmarks();
     	startManagingCursor(mCursor);
     	
-    	String[] from = new String[] { BookmarkColumns.TITLE, BookmarkColumns.URL };
-    	int[] to = new int[] { R.id.BookmarkRow_Title, R.id.BookmarkRow_Url };
+    	String[] from = new String[] {BookmarkColumns.TITLE, BookmarkColumns.URL};
+    	int[] to = new int[] {R.id.BookmarkRow_Title, R.id.BookmarkRow_Url};
     	
     	mCursorAdapter = new BookmarksCursorAdapter(this, R.layout.bookmarkrow, mCursor, from, to);
         setListAdapter(mCursorAdapter);
@@ -107,6 +112,9 @@ public class BookmarksListActivity extends ListActivity {
         //mCursor.close();
     }
     
+	/**
+	 * Set the list loading animation.
+	 */
     private void setAnimation() {
     	AnimationSet set = new AnimationSet(true);
 
@@ -115,8 +123,8 @@ public class BookmarksListActivity extends ListActivity {
         set.addAnimation(animation);
 
         animation = new TranslateAnimation(
-            Animation.RELATIVE_TO_SELF, 0.0f,Animation.RELATIVE_TO_SELF, 0.0f,
-            Animation.RELATIVE_TO_SELF, -1.0f,Animation.RELATIVE_TO_SELF, 0.0f
+            Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
+            Animation.RELATIVE_TO_SELF, -1.0f, Animation.RELATIVE_TO_SELF, 0.0f
         );
         animation.setDuration(100);
         set.addAnimation(animation);
@@ -127,6 +135,9 @@ public class BookmarksListActivity extends ListActivity {
         listView.setLayoutAnimation(controller);
     }
     
+    /**
+     * Display the add bookmark dialog.
+     */
     private void openAddBookmarkDialog() {
 		Intent i = new Intent(this, EditBookmarkActivity.class);
 		
@@ -188,9 +199,8 @@ public class BookmarksListActivity extends ListActivity {
         case MENU_CLEAR_BOOKMARKS:
         	clearBookmarks();
         	return true;
+        default: return super.onMenuItemSelected(featureId, item);
     	}
-    	
-    	return super.onMenuItemSelected(featureId, item);
     }
     
     @Override
@@ -235,11 +245,14 @@ public class BookmarksListActivity extends ListActivity {
     		mDbAdapter.deleteBookmark(info.id);
     		fillData();
     		return true;
+    	default: return super.onContextItemSelected(item);
     	}
-    	
-    	return super.onContextItemSelected(item);
     }
     
+    /**
+     * Change list sort mode. Update list.
+     * @param sortMode The new sort mode.
+     */
     private void doChangeSortMode(int sortMode) {
     	Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
     	editor.putInt(Constants.PREFERENCES_BOOKMARKS_SORT_MODE, sortMode);
@@ -248,6 +261,10 @@ public class BookmarksListActivity extends ListActivity {
     	fillData();
     }
     
+    /**
+     * Show a dialog for choosing the sort mode.
+     * Perform the change if required.
+     */
     private void changeSortMode() {
     	
     	int currentSort = PreferenceManager.getDefaultSharedPreferences(this).getInt(Constants.PREFERENCES_BOOKMARKS_SORT_MODE, 0);
@@ -256,7 +273,7 @@ public class BookmarksListActivity extends ListActivity {
     	builder.setInverseBackgroundForced(true);
     	builder.setIcon(android.R.drawable.ic_dialog_info);
     	builder.setTitle(getResources().getString(R.string.BookmarksListActivity_MenuSortMode));
-    	builder.setSingleChoiceItems(new String[] { getResources().getString(R.string.BookmarksListActivity_AlphaSortMode),
+    	builder.setSingleChoiceItems(new String[] {getResources().getString(R.string.BookmarksListActivity_AlphaSortMode),
     													getResources().getString(R.string.BookmarksListActivity_RecentSortMode) },
     			currentSort,
     			new OnClickListener() {
@@ -271,7 +288,10 @@ public class BookmarksListActivity extends ListActivity {
     	alert.show();
     }
     
-    private void importAndroidBookmarks() {    	
+    /**
+     * Perform the android bookmarks import.
+     */
+    private void importAndroidBookmarks() {
     	mProgressDialog = ProgressDialog.show(this,
     			this.getResources().getString(R.string.Commons_PleaseWait),
     			this.getResources().getString(R.string.BookmarksListActivity_ImportingBookmarks));
@@ -280,6 +300,9 @@ public class BookmarksListActivity extends ListActivity {
     	
     }
     
+    /**
+     * Clear all the bookmarks.
+     */
     private void doClearBookmarks() {
     	mProgressDialog = ProgressDialog.show(this,
     			this.getResources().getString(R.string.Commons_PleaseWait),
@@ -288,6 +311,10 @@ public class BookmarksListActivity extends ListActivity {
     	new BookmarksCleaner();
     }
     
+    /**
+     * Show a confirmation dialog for bookmarks clearing.
+     * Perform the clear if required.
+     */
     private void clearBookmarks() {
     	ApplicationUtils.showYesNoDialog(this,
 				android.R.drawable.ic_dialog_alert,
@@ -302,10 +329,17 @@ public class BookmarksListActivity extends ListActivity {
 		}); 
     }
     
+    /**
+     * Runnable for import of Android bookmarks.
+     */
     private class AndroidImporter implements Runnable {
     	
     	private Context mContext;
 
+    	/**
+    	 * Constructor.
+    	 * @param context The current context.
+    	 */
     	public AndroidImporter(Context context) {
     		mContext = context;
     		
@@ -346,8 +380,14 @@ public class BookmarksListActivity extends ListActivity {
 		};
     }
     
+    /**
+     * Runnable for bookmark clearing.
+     */
     private class BookmarksCleaner implements Runnable {
     	
+    	/**
+    	 * Constructor.
+    	 */
     	public BookmarksCleaner() {	
     		new Thread(this).start();
     	}

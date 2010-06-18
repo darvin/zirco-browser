@@ -26,6 +26,9 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 
+/**
+ * Add / Edit bookmark activity.
+ */
 public class EditBookmarkActivity extends Activity {
 	
 	private EditText mTitleEditText;
@@ -100,6 +103,9 @@ public class EditBookmarkActivity extends Activity {
     	}
 	}
 	
+	/**
+	 * Update an existing bookmark in database.
+	 */
 	private void updateBookmark() {
 		if (mUrlEditText.getText().toString() != null) {
 			DbAdapter dbAdapter = new DbAdapter(this);
@@ -111,6 +117,9 @@ public class EditBookmarkActivity extends Activity {
 		}
 	}
 	
+	/**
+	 * Save a new bookmark to database.
+	 */
 	private void saveBookmark() {		
 		if (mUrlEditText.getText().toString() != null) {
 			DbAdapter dbAdapter = new DbAdapter(this);

@@ -24,24 +24,39 @@ import android.webkit.CookieManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+/**
+ * A convenient extension of WebView.
+ */
 public class ZircoWebView extends WebView {
 	
 	private int mProgress = 100;
 	
 	private boolean mIsLoading = false;
 	
+	/**
+	 * Constructor.
+	 * @param context The current context.
+	 */
 	public ZircoWebView(Context context) {
 		super(context);
 		
 		initializeOptions();
 	}
 	
+	/**
+	 * Constructor.
+	 * @param context The current context.
+	 * @param attrs The attribute set.
+	 */
 	public ZircoWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
         
         initializeOptions();
 	}	
 	
+	/**
+	 * Initialize the WebView with the options set by the user through preferences.
+	 */
 	public void initializeOptions() {
 		WebSettings settings = getSettings();
 		
@@ -60,24 +75,42 @@ public class ZircoWebView extends WebView {
     	setLongClickable(true);
 	}
 	
+	/**
+	 * Set the current loading progress of this view.
+	 * @param progress The current loading progress.
+	 */
 	public void setProgress(int progress) {
 		mProgress = progress;
 	}
 	
+	/**
+	 * Get the current loading progress of the view.
+	 * @return The current loading progress of the view.
+	 */
 	public int getProgress() {
 		return mProgress;
 	}
 	
+	/**
+	 * Triggered when a new page loading is requested.
+	 */
 	public void notifyPageStarted() {
 		mIsLoading = true;
 	}
 	
+	/**
+	 * Triggered when the page has finished loading.
+	 */
 	public void notifyPageFinished() {
 		mProgress = 100;
 		mIsLoading = false;
 	}
 	
-	public boolean IsLoading() {
+	/**
+	 * Check if the view is currently loading.
+	 * @return True if the view is currently loading.
+	 */
+	public boolean isLoading() {
 		return mIsLoading;
 	}
 

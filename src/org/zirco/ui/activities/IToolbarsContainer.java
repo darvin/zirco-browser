@@ -15,8 +15,14 @@
 
 package org.zirco.ui.activities;
 
+/**
+ * Interface defining a tool bar container.
+ */
 public interface IToolbarsContainer {
 	
-	public void hideToolbars();
+	/**
+	 * Hide the tool bars of this item.
+	 */
+	void hideToolbars();
 
 }

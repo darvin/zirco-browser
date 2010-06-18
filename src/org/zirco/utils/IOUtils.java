@@ -19,6 +19,9 @@ import java.io.File;
 
 import android.os.Environment;
 
+/**
+ * Utilities for I/O reading and writing.
+ */
 public class IOUtils {
 	
 	private static final String APPLICATION_FOLDER = "zirco";

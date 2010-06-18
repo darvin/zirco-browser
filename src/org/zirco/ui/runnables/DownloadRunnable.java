@@ -31,12 +31,19 @@ import org.zirco.utils.IOUtils;
 import android.os.Handler;
 import android.os.Message;
 
+/**
+ * Background downloader.
+ */
 public class DownloadRunnable implements Runnable {
 			
 	private DownloadItem mParent;
 	
 	private boolean mAborted;
 	
+	/**
+	 * Contructor.
+	 * @param parent The item to download.
+	 */
 	public DownloadRunnable(DownloadItem parent) {
 		mParent = parent;
 		mAborted = false;
@@ -49,10 +56,18 @@ public class DownloadRunnable implements Runnable {
 		}
 	};
 	
+	/**
+	 * Compute the file name given the url.
+	 * @return The file name.
+	 */
 	private String getFileNameFromUrl() {
 		return mParent.getUrl().substring(mParent.getUrl().lastIndexOf("/") + 1);
 	}
 	
+	/**
+	 * Get a file object representation of the file name, in th right folder of the SD card.
+	 * @return A file object.
+	 */
 	private File getFile() {
 		
 		File downloadFolder = IOUtils.getDownloadFolder();
@@ -90,7 +105,7 @@ public class DownloadRunnable implements Runnable {
 				int size = conn.getContentLength();
 				mParent.onSetSize(size);
 				
-				bis = new BufferedInputStream( is );				
+				bis = new BufferedInputStream(is);
 				bos = new BufferedOutputStream(new FileOutputStream(downloadFile));
 				
 				boolean downLoading = true;
@@ -127,7 +142,7 @@ public class DownloadRunnable implements Runnable {
 				mParent.setErrorMessage(mue.getMessage());
 			} catch (IOException ioe) {
 				mParent.setErrorMessage(ioe.getMessage());
-			} finally {;
+			} finally {
 				
 				if (bis != null) {
 					try {
@@ -156,6 +171,9 @@ public class DownloadRunnable implements Runnable {
 		mHandler.sendEmptyMessage(0);
 	}
 	
+	/**
+	 * Abort this download.
+	 */
 	public void abort() {
 		mAborted = true;
 	}

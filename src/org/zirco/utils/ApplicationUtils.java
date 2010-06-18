@@ -22,8 +22,18 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Paint;
 
+/**
+ * Application utilities.
+ */
 public class ApplicationUtils {
 	
+	/**
+	 * Truncate a string to a given maximum width, relative to its paint size.
+	 * @param paintObject The object the text will be painted on.
+	 * @param text The text to truncate.
+	 * @param maxWidth The maximum width of the truncated string.
+	 * @return The truncated string.
+	 */
 	public static String getTruncatedString(Paint paintObject, String text, int maxWidth) {
 		
 		boolean modified = false;
@@ -41,6 +51,14 @@ public class ApplicationUtils {
 		return text;
 	}
 	
+	/**
+	 * Display a standard yes / no dialog.
+	 * @param context The current context.
+	 * @param icon The dialog icon.
+	 * @param title The dialog title.
+	 * @param message The dialog message.
+	 * @param onYes The dialog listener for the yes button.
+	 */
 	public static void showYesNoDialog(Context context, int icon, int title, int message, DialogInterface.OnClickListener onYes) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
     	builder.setCancelable(true);

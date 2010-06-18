@@ -31,6 +31,9 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+/**
+ * The adapter for the download UI list.
+ */
 public class DownloadListAdapter extends BaseAdapter {
 
 	private Context mContext;
@@ -40,6 +43,11 @@ public class DownloadListAdapter extends BaseAdapter {
 	private Map<DownloadItem, ProgressBar> mBarMap;
 	private Map<DownloadItem, ImageButton> mButtonMap;
 	
+	/**
+	 * Constructor.
+	 * @param context The current context.
+	 * @param downloads The download list.
+	 */
 	public DownloadListAdapter(Context context, List<DownloadItem> downloads) {
 		mContext = context;
 		mDownloads = downloads;
@@ -48,14 +56,26 @@ public class DownloadListAdapter extends BaseAdapter {
 		mButtonMap = new Hashtable<DownloadItem, ImageButton>();
 	}
 	
+	/**
+	 * Get a map of download item related to the UI text component representing the download title.
+	 * @return A Map<DownloadItem, TextView>.
+	 */
 	public Map<DownloadItem, TextView> getTitleMap() {
 		return mTitleMap;
 	}
 	
+	/**
+	 * Get a map of download item related to the UI progress bar component.
+	 * @return A Map<DownloadItem, ProgressBar>.
+	 */
 	public Map<DownloadItem, ProgressBar> getBarMap() {
 		return mBarMap;
 	}
 	
+	/**
+	 * Get a map of download item related to the UI cancel button component.
+	 * @return A Map<DownloadItem, ImageButton>.
+	 */
 	public Map<DownloadItem, ImageButton> getButtonMap() {
 		return mButtonMap;
 	}

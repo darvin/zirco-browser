@@ -22,6 +22,9 @@ import android.graphics.Bitmap;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+/**
+ * Convenient extension of WebViewClient.
+ */
 public class ZircoWebViewClient extends WebViewClient {
 	
 	@Override

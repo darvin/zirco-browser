@@ -19,12 +19,21 @@ import org.zirco.model.DbAdapter;
 
 import android.content.Context;
 
+/**
+ * Runnable to update and truncate the history in background.
+ */
 public class HistoryUpdater implements Runnable {
 
 	private Context mContext;
 	private String mTitle;
 	private String mUrl;
 	
+	/**
+	 * Constructor.
+	 * @param context The current context.
+	 * @param title The title.
+	 * @param url The url.
+	 */
 	public HistoryUpdater(Context context, String title, String url) {
 		mContext = context;
 		mTitle = title;

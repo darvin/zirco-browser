@@ -47,6 +47,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
 
+/**
+ * history list activity.
+ */
 public class HistoryListActivity extends ExpandableListActivity {
 	
 	private static final int MENU_CLEAR_HISTORY = Menu.FIRST;
@@ -84,6 +87,9 @@ public class HistoryListActivity extends ExpandableListActivity {
 		super.onDestroy();
 	}
 
+	/**
+	 * Fill the history list.
+	 */
 	private void fillData() {
 		mData = mDbAdapter.fetchHistory();
 		mAdapter = new HistoryExpandableListAdapter();
@@ -152,9 +158,8 @@ public class HistoryListActivity extends ExpandableListActivity {
 		case MENU_CLEAR_HISTORY:
         	clearHistory();
         	return true;
+        default: return super.onMenuItemSelected(featureId, item);
 		}
-		
-		return super.onMenuItemSelected(featureId, item);
 	}
 	
 	@Override
@@ -165,6 +170,11 @@ public class HistoryListActivity extends ExpandableListActivity {
 		return super.onChildClick(parent, v, groupPosition, childPosition, id);
 	}
 	
+	/**
+	 * Load the given url.
+	 * @param url The url.
+	 * @param newTab If True, will open a new tab. If False, the current tab is used.
+	 */
 	private void doNavigateToUrl(String url, boolean newTab) {
 		Intent result = new Intent();
         result.putExtra(Constants.EXTRA_ID_NEW_TAB, newTab);
@@ -174,6 +184,9 @@ public class HistoryListActivity extends ExpandableListActivity {
         finish();
 	}
 
+	/**
+	 * Clear history.
+	 */
 	private void doClearHistory() {
     	mProgressDialog = ProgressDialog.show(this,
     			this.getResources().getString(R.string.Commons_PleaseWait),
@@ -182,6 +195,9 @@ public class HistoryListActivity extends ExpandableListActivity {
     	new HistoryClearer();
     }
 	
+	/**
+	 * Display confirmation and clear history.
+	 */
 	private void clearHistory() {
 		ApplicationUtils.showYesNoDialog(this,
 				android.R.drawable.ic_dialog_alert,
@@ -196,9 +212,15 @@ public class HistoryListActivity extends ExpandableListActivity {
 		});
     }
 	
+	/**
+	 * Runnable to clear history.
+	 */
 	private class HistoryClearer implements Runnable {
 
-		public HistoryClearer() {	
+		/**
+		 * Constructor.
+		 */
+		public HistoryClearer() {
 			new Thread(this).start();
 		}
 
@@ -216,8 +238,15 @@ public class HistoryListActivity extends ExpandableListActivity {
 		};
 	}
 	
+	/**
+	 * Custom expandable adapter for this view.
+	 */
 	private class HistoryExpandableListAdapter extends BaseExpandableListAdapter {				
 		
+		/**
+		 * Create a new view.
+		 * @return The created view.
+		 */
 		private TextView getGenericView() {
             // Layout parameters for the ExpandableListView
             AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
@@ -232,6 +261,10 @@ public class HistoryListActivity extends ExpandableListActivity {
             return textView;
         }
 		
+		/**
+		 * Create a new child view.
+		 * @return The created view.
+		 */
 		private View getChildView() {
 			LinearLayout view = (LinearLayout) mInflater.inflate(R.layout.historyrow, null, false);
 			

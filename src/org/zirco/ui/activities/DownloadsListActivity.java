@@ -29,6 +29,9 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+/**
+ * Download list activity.
+ */
 public class DownloadsListActivity extends ListActivity implements IDownloadEventsListener {
 
 	private DownloadListAdapter mAdapter;
@@ -45,6 +48,9 @@ public class DownloadsListActivity extends ListActivity implements IDownloadEven
         fillData();
 	}
 	
+	/**
+	 * Fill the download list.
+	 */
 	private void fillData() {
 		mAdapter = new DownloadListAdapter(this, Controller.getInstance().getDownloadList());
 		setListAdapter(mAdapter);

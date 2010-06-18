@@ -19,7 +19,10 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 
-public class AnimationManager {
+/**
+ * Holder for animation objects.
+ */
+public final class AnimationManager {
 
 	private static final int ANIMATION_DURATION = 350;
 
@@ -43,6 +46,9 @@ public class AnimationManager {
 		return AnimationManagerHolder.INSTANCE;
 	}
 
+	/**
+	 * Contructor.
+	 */
 	private AnimationManager() {
 		mInFromRightAnimation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, +1.0f,
 				Animation.RELATIVE_TO_PARENT, 0.0f,
@@ -77,18 +83,34 @@ public class AnimationManager {
 		mOutToRightAnimation.setInterpolator(new AccelerateInterpolator());
 	}
 
+	/**
+	 * Get the in from right animation object.
+	 * @return The animation object.
+	 */
 	public Animation getInFromRightAnimation() {
 		return mInFromRightAnimation;
 	}
 
+	/**
+	 * Get the out to left animation object.
+	 * @return The animation object.
+	 */
 	public Animation getOutToLeftAnimation() {
 		return mOutToLeftAnimation;
 	}
 
+	/**
+	 * Get the in from left animation object.
+	 * @return The animation object.
+	 */
 	public Animation getInFromLeftAnimation() {
 		return mInFromLeftAnimation;
 	}
 
+	/**
+	 * Get the out to right animation object.
+	 * @return The animation object.
+	 */
 	public Animation getOutToRightAnimation() {
 		return mOutToRightAnimation;
 	}

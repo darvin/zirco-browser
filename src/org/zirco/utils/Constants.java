@@ -15,6 +15,9 @@
 
 package org.zirco.utils;
 
+/**
+ * Defines constants.
+ */
 public class Constants {
 	
 	public static final String EXTRA_ID_NEW_TAB = "EXTRA_ID_NEW_TAB";
@@ -25,7 +28,7 @@ public class Constants {
 	public static final String EXTRA_ID_BOOKMARK_TITLE = "EXTRA_ID_BOOKMARK_TITLE";
 	
 	/**
-	 * Preferences
+	 * Preferences.
 	 */
 	public static final String PREFERENCES_GENERAL_HOME_PAGE = "GeneralHomePage";
 	public static final String PREFERENCES_GENERAL_QUICK_BUTTON = "GeneralQuickButton";

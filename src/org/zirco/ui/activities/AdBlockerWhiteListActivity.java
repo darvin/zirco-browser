@@ -39,6 +39,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
+/**
+ * AdBlocker white list activity.
+ */
 public class AdBlockerWhiteListActivity extends ListActivity {
 	
 	private static final int MENU_ADD = Menu.FIRST;
@@ -58,6 +61,9 @@ public class AdBlockerWhiteListActivity extends ListActivity {
         fillData();
 	}
 	
+	/**
+	 * Fill the list view.
+	 */
 	private void fillData() {
 				
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.adblockerwhitelistrow, R.id.AdBlockerWhiteListRow_Title, Controller.getInstance().getAdBlockWhiteList());
@@ -66,6 +72,9 @@ public class AdBlockerWhiteListActivity extends ListActivity {
 		setAnimation();
 	}
 	
+	/**
+	 * Set the view loading animation.
+	 */
 	private void setAnimation() {
     	AnimationSet set = new AnimationSet(true);
 
@@ -74,8 +83,8 @@ public class AdBlockerWhiteListActivity extends ListActivity {
         set.addAnimation(animation);
 
         animation = new TranslateAnimation(
-            Animation.RELATIVE_TO_SELF, 0.0f,Animation.RELATIVE_TO_SELF, 0.0f,
-            Animation.RELATIVE_TO_SELF, -1.0f,Animation.RELATIVE_TO_SELF, 0.0f
+            Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
+            Animation.RELATIVE_TO_SELF, -1.0f, Animation.RELATIVE_TO_SELF, 0.0f
         );
         animation.setDuration(100);
         set.addAnimation(animation);
@@ -108,9 +117,8 @@ public class AdBlockerWhiteListActivity extends ListActivity {
     		Controller.getInstance().saveAdBlockWhiteList();
     		fillData();
     		return true;
+    	default: return super.onContextItemSelected(item);
     	}
-    	
-    	return super.onContextItemSelected(item);
 	}
 	
 	@Override
@@ -137,18 +145,24 @@ public class AdBlockerWhiteListActivity extends ListActivity {
     		
     	case MENU_CLEAR:    		
     		clearWhiteList();
-            return true;           
+            return true;
+        default: return super.onMenuItemSelected(featureId, item);
     	}
-    	
-    	return super.onMenuItemSelected(featureId, item);
     }
 	
+	/**
+	 * Add a value to the white list.
+	 * @param value The value to add.
+	 */
 	private void doAddToWhiteList(String value) {
 		Controller.getInstance().getAdBlockWhiteList().add(value);
 		Controller.getInstance().saveAdBlockWhiteList();
 		fillData();
 	}
 	
+	/**
+	 * Build and show a dialog for user input. Add user input to the white list.
+	 */
 	private void addToWhiteList() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);    
     	builder.setCancelable(true);
@@ -181,12 +195,18 @@ public class AdBlockerWhiteListActivity extends ListActivity {
 
 	}
 	
+	/**
+	 * Clear the white list.
+	 */
 	private void doClearWhiteList() {
 		Controller.getInstance().getAdBlockWhiteList().clear();
 		Controller.getInstance().saveAdBlockWhiteList();
 		fillData();
 	}
 	
+	/**
+	 * Display a confirmation dialog and clear the white list.
+	 */
 	private void clearWhiteList() {
 		ApplicationUtils.showYesNoDialog(this,
 				android.R.drawable.ic_dialog_alert,
