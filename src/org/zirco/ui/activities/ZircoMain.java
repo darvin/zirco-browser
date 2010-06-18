@@ -792,8 +792,6 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		
 		switch (keyCode) {
-		case KeyEvent.KEYCODE_BACK:
-			return true;
 		case KeyEvent.KEYCODE_VOLUME_DOWN:
 			mCurrentWebView.zoomIn();
 			return true;
