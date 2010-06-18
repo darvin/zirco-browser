@@ -25,8 +25,19 @@ import android.view.ViewGroup;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+/**
+ * Cursor adapter for bookmarks.
+ */
 public class BookmarksCursorAdapter extends SimpleCursorAdapter {
 
+	/**
+	 * Constructor.
+	 * @param context The context.
+	 * @param layout The layout.
+	 * @param c The Cursor. 
+	 * @param from Input array.
+	 * @param to Output array.
+	 */
 	public BookmarksCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to) {
 		super(context, layout, c, from, to);
 	}

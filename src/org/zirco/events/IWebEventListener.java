@@ -15,8 +15,16 @@
 
 package org.zirco.events;
 
+/**
+ * Interface for object listening to web events.
+ */
 public interface IWebEventListener {
 	
-	public void onWebEvent(String event, Object data);
+	/**
+	 * The method run on web events.
+	 * @param event The event.
+	 * @param data Additional data.
+	 */
+	void onWebEvent(String event, Object data);
 
 }

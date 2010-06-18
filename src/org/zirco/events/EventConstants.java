@@ -15,6 +15,9 @@
 
 package org.zirco.events;
 
+/**
+ * This class defines events constants.
+ */
 public class EventConstants {
 	
 	public static final String EVT_WEB_ON_URL_LOADING = "EVT_WEB_ON_URL_LOADING";

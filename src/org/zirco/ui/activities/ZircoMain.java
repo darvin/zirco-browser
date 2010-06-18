@@ -1181,7 +1181,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	}
 
 	@Override
-	public void onDownloadbEvent(String event, Object data) {
+	public void onDownloadEvent(String event, Object data) {
 		if (event.equals(EventConstants.EVT_DOWNLOAD_ON_FINISHED)) {
 			
 			DownloadItem item = (DownloadItem) data;

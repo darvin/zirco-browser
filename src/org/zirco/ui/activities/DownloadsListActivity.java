@@ -51,7 +51,7 @@ public class DownloadsListActivity extends ListActivity implements IDownloadEven
 	}
 
 	@Override
-	public void onDownloadbEvent(String event, Object data) {
+	public void onDownloadEvent(String event, Object data) {
 		if (event.equals(EventConstants.EVT_DOWNLOAD_ON_START)) {
 			fillData();
 		} else if (event.equals(EventConstants.EVT_DOWNLOAD_ON_PROGRESS)) {				

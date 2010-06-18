@@ -35,7 +35,10 @@ import org.zirco.utils.IOUtils;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-public class Controller {
+/**
+ * Controller implementation.
+ */
+public final class Controller {
 	
 	private static final String ADBLOCK_WHITELIST_FILE = "adblock-whitelist";
 	
@@ -48,8 +51,12 @@ public class Controller {
 	/**
 	 * Holder for singleton implementation.
 	 */
-	private static class ControllerHolder {
+	private static final class ControllerHolder {
 		private static final Controller INSTANCE = new Controller();
+		/**
+		 * Private Constructor.
+		 */
+		private ControllerHolder() { }
 	}
 	
 	/**
@@ -60,35 +67,66 @@ public class Controller {
 		return ControllerHolder.INSTANCE;
 	}
 	
+	/**
+	 * Private Constructor.
+	 */
 	private Controller() {
 		mDownloadList = new ArrayList<DownloadItem>();
 		loadAdBlockWhiteList();
 	}
 		
+	/**
+	 * Get the list of current WebViews.
+	 * @return The list of current WebViews.
+	 */
 	public List<ZircoWebView> getWebViewList() {
 		return mWebViewList;
 	}
 	
+	/**
+	 * Set the list of current WebViews.
+	 * @param list The list of current WebViews.
+	 */
 	public void setWebViewList(List<ZircoWebView> list) {
 		mWebViewList = list;
 	}
 	
+	/**
+	 * Get a SharedPreferences instance.
+	 * @return The SharedPreferences instance.
+	 */
 	public SharedPreferences getPreferences() {
 		return mPreferences;
 	}
 
-	public void setPreferences(SharedPreferences mPreferences) {
-		this.mPreferences = mPreferences;
+	/**
+	 * Set the SharedPreferences instance.
+	 * @param preferences The SharedPreferences instance.
+	 */
+	public void setPreferences(SharedPreferences preferences) {
+		this.mPreferences = preferences;
 	}
 	
+	/**
+	 * Get the current download list.
+	 * @return The current download list.
+	 */
 	public List<DownloadItem> getDownloadList() {
 		return mDownloadList;
 	}
 	
+	/**
+	 * Add an item to the download list.
+	 * @param item The new item.
+	 */
 	public void addToDownload(DownloadItem item) {
 		mDownloadList.add(item);
 	}
 	
+	/**
+	 * Get the list of white-listed url for the AdBlocker.
+	 * @return A list of String url.
+	 */
 	public List<String> getAdBlockWhiteList() {
 		return mAdBlockWhiteList;
 	}

@@ -25,12 +25,14 @@ import org.zirco.utils.DateUtils;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+/**
+ * Implementation of the database adapter.
+ */
 public class DbAdapter {
 	
 	private static final String TAG = "DbAdapter";
@@ -45,11 +47,11 @@ public class DbAdapter {
 	
     private static final String BOOKMARKS_DATABASE_TABLE = "BOOKMARKS";    
     
-    private static final String BOOKMARKS_DATABASE_CREATE = "CREATE TABLE " + BOOKMARKS_DATABASE_TABLE + " (" + 
-    	BOOKMARKS_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +   
-    	BOOKMARKS_TITLE + " TEXT, " +
-    	BOOKMARKS_URL + " TEXT NOT NULL, " +
-    	BOOKMARKS_CREATION_DATE + " DATE);";
+    private static final String BOOKMARKS_DATABASE_CREATE = "CREATE TABLE " + BOOKMARKS_DATABASE_TABLE + " (" 
+    	+ BOOKMARKS_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+    	+ BOOKMARKS_TITLE + " TEXT, "
+    	+ BOOKMARKS_URL + " TEXT NOT NULL, "
+    	+ BOOKMARKS_CREATION_DATE + " DATE);";
     
     public static final String HISTORY_ROWID = "_id";
 	public static final String HISTORY_TITLE = "title";
@@ -58,33 +60,45 @@ public class DbAdapter {
 	
 	private static final String HISTORY_DATABASE_TABLE = "HISTORY";
 	
-	private static final String HISTORY_DATABASE_CREATE = "CREATE TABLE " + HISTORY_DATABASE_TABLE + " (" + 
-	HISTORY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +   
-	HISTORY_TITLE + " TEXT, " +
-	HISTORY_URL + " TEXT NOT NULL, " +
-	HISTORY_LAST_VISITED_DATE + " DATE);";
+	private static final String HISTORY_DATABASE_CREATE = "CREATE TABLE " + HISTORY_DATABASE_TABLE + " ("
+	+ HISTORY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+	+ HISTORY_TITLE + " TEXT, "
+	+ HISTORY_URL + " TEXT NOT NULL, "
+	+ HISTORY_LAST_VISITED_DATE + " DATE);";
 	
 	private DatabaseHelper mDbHelper;
     private SQLiteDatabase mDb;
     
     private final Context mCtx;
     
+    /**
+     * Constructor.
+     * @param ctx The current context.
+     */
     public DbAdapter(Context ctx) {
         this.mCtx = ctx;
     }
     
-    public DbAdapter open() throws SQLException {
+    /**
+     * Open the database helper.
+     * @return The current database adapter.
+     */
+    public DbAdapter open() {
         mDbHelper = new DatabaseHelper(mCtx);
         mDb = mDbHelper.getWritableDatabase();
         return this;
     }
     
+    /**
+     * Close the database helper.
+     */
     public void close() {
         mDbHelper.close();
     }
     
     /**
-     * Bookmarks
+     * Get the bookmarks.
+     * @return A cursor to the bookmarks.
      */    
     public Cursor fetchBookmarks() {
     	String orderClause;
@@ -101,9 +115,15 @@ public class DbAdapter {
     	}
     	
     	return mDb.query(BOOKMARKS_DATABASE_TABLE,
-    			new String[] { BOOKMARKS_ROWID, BOOKMARKS_TITLE, BOOKMARKS_URL }, null, null, null, null, orderClause);
+    			new String[] {BOOKMARKS_ROWID, BOOKMARKS_TITLE, BOOKMARKS_URL}, null, null, null, null, orderClause);
     }
     
+    /**
+     * Add a bookmark to database.
+     * @param title The title.
+     * @param url The url.
+     * @return The new bookmark id.
+     */
     public long addBookmark(String title, String url) {
     	ContentValues initialValues = new ContentValues();
     	initialValues.put(BOOKMARKS_TITLE, title);
@@ -113,6 +133,13 @@ public class DbAdapter {
         return mDb.insert(BOOKMARKS_DATABASE_TABLE, null, initialValues);
     }
     
+    /**
+     * Update a bookmark to database.
+     * @param rowId The bookmark id.
+     * @param title The new title.
+     * @param url The new url.
+     * @return True if the update succeeded.
+     */
     public boolean updateBookmark(long rowId, String title, String url) {
         ContentValues args = new ContentValues();
         args.put(BOOKMARKS_TITLE, title);
@@ -121,21 +148,34 @@ public class DbAdapter {
         return mDb.update(BOOKMARKS_DATABASE_TABLE, args, BOOKMARKS_ROWID + "=" + rowId, null) > 0;
     }
     
+    /**
+     * Delete a bookmark.
+     * @param rowId The bookmark id.
+     * @return True if the deletion succeeded.
+     */
     public boolean deleteBookmark(long rowId) { 
         return mDb.delete(BOOKMARKS_DATABASE_TABLE, BOOKMARKS_ROWID + "=" + rowId, null) > 0;
     }
     
+    /**
+     * Delete all bookmarks.
+     */
     public void clearBookmarks() {
     	mDb.execSQL("DELETE FROM " + BOOKMARKS_DATABASE_TABLE + ";");
     }
     
+    /**
+     * Get a bookmark by its id.
+     * @param rowId The bookmark id.
+     * @return An array of string, with bookmark title at index 0 and bookmark url at index 1.
+     */
     public String[] getBookmarkById(long rowId) {
-    	Cursor cursor = mDb.query(true, BOOKMARKS_DATABASE_TABLE, new String[] { BOOKMARKS_ROWID, BOOKMARKS_TITLE, BOOKMARKS_URL },
+    	Cursor cursor = mDb.query(true, BOOKMARKS_DATABASE_TABLE, new String[] {BOOKMARKS_ROWID, BOOKMARKS_TITLE, BOOKMARKS_URL},
     			BOOKMARKS_ROWID + "=" + rowId, null, null, null, null, null);
     	
     	if (cursor.moveToFirst()) {
     		
-    		String result[] = new String[2];
+    		String[] result = new String[2];
     		result[0] = cursor.getString(cursor.getColumnIndex(BOOKMARKS_TITLE));
     		result[1] = cursor.getString(cursor.getColumnIndex(BOOKMARKS_URL));
     		
@@ -150,23 +190,28 @@ public class DbAdapter {
     }
     
     /**
-     * History
-     */
-    
+     * Get a cursor to suggestions from history..
+     * @param pattern The pattern to match.
+     * @return A Cursor to suggestions.
+     */    
     public Cursor getSuggestionsFromHistory(String pattern) {
     	Cursor cursor;
     	
     	if ((pattern != null) &&
     			(pattern.length() > 0)) {	
     		pattern = "%" + pattern + "%";    	
-    		cursor = mDb.query(HISTORY_DATABASE_TABLE, new String[] { HISTORY_ROWID, HISTORY_URL }, HISTORY_URL + " LIKE '" + pattern + "'", null, null, null, null);
+    		cursor = mDb.query(HISTORY_DATABASE_TABLE, new String[] {HISTORY_ROWID, HISTORY_URL}, HISTORY_URL + " LIKE '" + pattern + "'", null, null, null, null);
     	} else {
-    		cursor = mDb.query(HISTORY_DATABASE_TABLE, new String[] { HISTORY_ROWID, HISTORY_URL }, null, null, null, null, null);
+    		cursor = mDb.query(HISTORY_DATABASE_TABLE, new String[] {HISTORY_ROWID, HISTORY_URL}, null, null, null, null, null);
     	}
     	
     	return cursor;
     }
     
+    /**
+     * Get the history.
+     * @return A list of lists of HistoryItem. Each top-level list represents a day of history.
+     */
     public List<List<HistoryItem>> fetchHistory() {
     	List<List<HistoryItem>> result = new ArrayList<List<HistoryItem>>();
     	
@@ -185,7 +230,7 @@ public class DbAdapter {
     		currentDate = DateUtils.getDateAtMidnight(-i);
     		
     		cursor = mDb.query(HISTORY_DATABASE_TABLE,
-        			new String[] { HISTORY_ROWID, HISTORY_TITLE, HISTORY_URL, HISTORY_LAST_VISITED_DATE },
+        			new String[] {HISTORY_ROWID, HISTORY_TITLE, HISTORY_URL, HISTORY_LAST_VISITED_DATE},
         			"(" + HISTORY_LAST_VISITED_DATE + " <= \"" + DateUtils.getDateAsUniversalString(mCtx, lastDate) + "\") AND " + 
         			"(" + HISTORY_LAST_VISITED_DATE + " > \"" + DateUtils.getDateAsUniversalString(mCtx, currentDate) + "\")",
         			null, null, null, HISTORY_LAST_VISITED_DATE + " DESC");
@@ -215,10 +260,15 @@ public class DbAdapter {
     	return result;
     }
     
-    private long getIdByUrl(String url) {
+    /**
+     * Get the id for an history record identified by its url.
+     * @param url The url to look for.
+     * @return The history record index, or -1 if not found.
+     */
+    private long getHistoryItemIdByUrl(String url) {
     	long result = -1;
     	
-    	Cursor cursor = mDb.query(HISTORY_DATABASE_TABLE, new String[] { HISTORY_ROWID }, HISTORY_URL + " = \"" + url + "\"", null, null, null, null);
+    	Cursor cursor = mDb.query(HISTORY_DATABASE_TABLE, new String[] {HISTORY_ROWID}, HISTORY_URL + " = \"" + url + "\"", null, null, null, null);
     	
     	if (cursor.moveToFirst()) {
     		
@@ -230,9 +280,15 @@ public class DbAdapter {
     	return result;
     }
     
+    /**
+     * Update the history. If the url is already present, the visited date is updated.
+     * If not, a new record is created.
+     * @param title The page title.
+     * @param url The page url.
+     */
     public void updateHistory(String title, String url) {
     	
-    	long existingId = getIdByUrl(url);
+    	long existingId = getHistoryItemIdByUrl(url);
     	
     	if (existingId != -1) {
     		ContentValues args = new ContentValues();
@@ -250,23 +306,37 @@ public class DbAdapter {
     	}
     }
     
+    /**
+     * Delete an history record given its id.
+     * @param id The id to delete.
+     */
     public void deleteFromHistory(long id) {
     	mDb.execSQL("DELETE FROM " + HISTORY_DATABASE_TABLE + " WHERE " + HISTORY_ROWID + " = " + id + ";");
     }
     
+    /**
+     * Delete all records from history.
+     */
     public void clearHistory() {
     	mDb.execSQL("DELETE FROM " + HISTORY_DATABASE_TABLE + ";");
     }
     
+    /**
+     * Delete all records from history witch have a visited date prior to the history max age.
+     */
     public void truncateHistory() {
     	mDb.execSQL("DELETE FROM " + HISTORY_DATABASE_TABLE + " WHERE " + HISTORY_LAST_VISITED_DATE + " < \"" + DateUtils.getHistoryLimit(mCtx) + "\";");
     }
     
     /**
-     * DatabaseHelper 
+     * DatabaseHelper.
      */
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
+    	/**
+    	 * Constructor.
+    	 * @param context The current context.
+    	 */
 		public DatabaseHelper(Context context) {
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		}

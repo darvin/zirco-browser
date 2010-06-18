@@ -19,7 +19,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class EventController {
+/**
+ * Implementation of the EventController.
+ */
+public final class EventController {
 	
 	private List<IWebEventListener> mWebListeners;
 	
@@ -40,28 +43,48 @@ public class EventController {
 		return EventControllerHolder.INSTANCE;
 	}
 	
+	/**
+	 * Private Constructor.
+	 */
 	private EventController() {
 		mWebListeners = new ArrayList<IWebEventListener>();
 		mDownloadListeners = new ArrayList<IDownloadEventsListener>();
 	}
 	
-	public void addWebListener(IWebEventListener listener) {
+	/**
+	 * Add a listener for web events.
+	 * @param listener The listener to add.
+	 */
+	public synchronized void addWebListener(IWebEventListener listener) {
 		if (!mWebListeners.contains(listener)) {
 			mWebListeners.add(listener);
 		}
 	}
 	
-	public void removeWebListener(IWebEventListener listener) {
+	/**
+	 * Remove a listener for web events.
+	 * @param listener The listener to remove.
+	 */
+	public synchronized void removeWebListener(IWebEventListener listener) {
 		mWebListeners.remove(listener);
 	}
 	
-	public void fireWebEvent(String event, Object data) {
+	/**
+	 * Trigger a web event.
+	 * @param event The event.
+	 * @param data Additional data.
+	 */
+	public synchronized void fireWebEvent(String event, Object data) {
 		Iterator<IWebEventListener> iter = mWebListeners.iterator();
 		while (iter.hasNext()) {
 			iter.next().onWebEvent(event, data);
 		}
 	}
 	
+	/**
+	 * Add a listener for download events.
+	 * @param listener The listener to add.
+	 */
 	public synchronized void addDownloadListener(IDownloadEventsListener listener) {
 		
 		if (!mDownloadListeners.contains(listener)) {
@@ -69,14 +92,23 @@ public class EventController {
 		}
 	}
 	
+	/**
+	 * Remove a listener for download events.
+	 * @param listener The listener to remove.
+	 */
 	public synchronized void removeDownloadListener(IDownloadEventsListener listener) {
 		mDownloadListeners.remove(listener);
 	}
 	
+	/**
+	 * Trigger a download event.
+	 * @param event The event.
+	 * @param data Additional data.
+	 */
 	public synchronized void fireDownloadEvent(String event, Object data) {
 		Iterator<IDownloadEventsListener> iter = mDownloadListeners.iterator();
 		while (iter.hasNext()) {
-			iter.next().onDownloadbEvent(event, data);
+			iter.next().onDownloadEvent(event, data);
 		}
 	}
 
