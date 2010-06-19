@@ -51,7 +51,18 @@ public class DateUtils {
 		SimpleDateFormat sdf = new SimpleDateFormat(getDefaultFormat(context));				
 		
 		return sdf.format(c.getTime());
-	} 
+	}
+	
+	/**
+	 * Get a string representation of the current date / time in a format suitable for a file name.
+	 * @return A string representation of the current date / time.
+	 */
+	public static String getNowForFileName() {
+		Calendar c = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss");
+		
+		return sdf.format(c.getTime());
+	}
 	
 	/**
 	 * Get a string representation in default format of the history limit.

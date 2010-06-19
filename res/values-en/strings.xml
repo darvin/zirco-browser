@@ -55,8 +55,10 @@
     <string name="BookmarksListActivity.MenuEditBookmark">Edit bookmark</string>
     <string name="BookmarksListActivity.MenuDeleteBookmark">Delete bookmark</string>
     <string name="BookmarksListActivity.ImportBookmarks">Import bookmarks</string>
+    <string name="BookmarksListActivity.ExportBookmarks">Export bookmarks</string>
     <string name="BookmarksListActivity.ClearBookmarks">Clear bookmarks</string>
     <string name="BookmarksListActivity.ImportingBookmarks">Importing bookmarks...</string>
+    <string name="BookmarksListActivity.ExportingBookmarks">Exporting bookmarks...</string>
     <string name="BookmarksListActivity.ClearingBookmarks">Clearing bookmarks...</string>
     <string name="BookmarksListActivity.AlphaSortMode">Alphabetical</string>
     <string name="BookmarksListActivity.RecentSortMode">Most recent</string>

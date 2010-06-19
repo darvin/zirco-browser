@@ -26,6 +26,7 @@ public class IOUtils {
 	
 	private static final String APPLICATION_FOLDER = "zirco";
 	private static final String DOWNLOAD_FOLDER = "downloads";
+	private static final String BOOKMARKS_EXPORT_FOLDER = "bookmarks-exports";
 	
 	/**
 	 * Get the application folder on the SD Card. Create it if not present.
@@ -58,6 +59,28 @@ public class IOUtils {
 		if (root != null) {
 			
 			File folder = new File(root, DOWNLOAD_FOLDER);
+			
+			if (!folder.exists()) {
+				folder.mkdir();
+			}
+			
+			return folder;
+			
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Get the application folder for bookmarks export. Create it if not present.
+	 * @return The application folder for bookmarks export.
+	 */
+	public static File getBookmarksExportFolder() {
+		File root = getApplicationFolder();
+		
+		if (root != null) {
+			
+			File folder = new File(root, BOOKMARKS_EXPORT_FOLDER);
 			
 			if (!folder.exists()) {
 				folder.mkdir();

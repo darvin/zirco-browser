@@ -15,12 +15,19 @@
 
 package org.zirco.ui.activities;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.URLEncoder;
+
 import org.zirco.R;
 import org.zirco.model.BookmarksCursorAdapter;
 import org.zirco.model.DbAdapter;
 import org.zirco.utils.ApplicationUtils;
 import org.zirco.utils.BookmarksUtils;
 import org.zirco.utils.Constants;
+import org.zirco.utils.DateUtils;
+import org.zirco.utils.IOUtils;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -32,6 +39,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -57,7 +65,8 @@ public class BookmarksListActivity extends ListActivity {
 	private static final int MENU_SORT_MODE = Menu.FIRST;
 	private static final int MENU_ADD_BOOKMARK = Menu.FIRST + 1;
 	private static final int MENU_IMPORT_BOOKMARKS = Menu.FIRST + 2;
-	private static final int MENU_CLEAR_BOOKMARKS = Menu.FIRST + 3;
+	private static final int MENU_EXPORT_BOOKMARKS = Menu.FIRST + 3;
+	private static final int MENU_CLEAR_BOOKMARKS = Menu.FIRST + 4;
 	
 	private static final int MENU_OPEN_IN_TAB = Menu.FIRST + 10;
     private static final int MENU_EDIT_BOOKMARK = Menu.FIRST + 11;
@@ -174,6 +183,9 @@ public class BookmarksListActivity extends ListActivity {
         item = menu.add(0, MENU_IMPORT_BOOKMARKS, 0, R.string.BookmarksListActivity_ImportBookmarks);
         item.setIcon(R.drawable.import32);
         
+        item = menu.add(0, MENU_EXPORT_BOOKMARKS, 0, R.string.BookmarksListActivity_ExportBookmarks);
+        item.setIcon(R.drawable.export32);
+        
         item = menu.add(0, MENU_CLEAR_BOOKMARKS, 0, R.string.BookmarksListActivity_ClearBookmarks);
         item.setIcon(R.drawable.clear32);
     	
@@ -195,6 +207,10 @@ public class BookmarksListActivity extends ListActivity {
         case MENU_IMPORT_BOOKMARKS:
             importAndroidBookmarks();
             return true;
+            
+        case MENU_EXPORT_BOOKMARKS:
+        	exportBookmarks();
+        	return true;
             
         case MENU_CLEAR_BOOKMARKS:
         	clearBookmarks();
@@ -301,6 +317,17 @@ public class BookmarksListActivity extends ListActivity {
     }
     
     /**
+     * Perform the bookmarks export.
+     */
+    private void exportBookmarks() {
+    	mProgressDialog = ProgressDialog.show(this,
+    			this.getResources().getString(R.string.Commons_PleaseWait),
+    			this.getResources().getString(R.string.BookmarksListActivity_ExportingBookmarks));
+    	
+    	new XmlBookmarksExporter(this);
+    }
+    
+    /**
      * Clear all the bookmarks.
      */
     private void doClearBookmarks() {
@@ -378,6 +405,104 @@ public class BookmarksListActivity extends ListActivity {
 				fillData();
 			}
 		};
+    }
+    
+    /**
+     * Runnable for bookmarks export to xml.
+     */
+    private class XmlBookmarksExporter implements Runnable {
+
+    	private Context mContext;
+    	
+    	/**
+    	 * Constructor.
+    	 * @param context The current context.
+    	 */
+    	public XmlBookmarksExporter(Context context) {
+    		mContext = context;
+    		
+    		new Thread(this).start();
+    	}
+    	
+    	/**
+    	 * Check if the SD card is available. Display an alert if not.
+    	 * @return True if the SD card is available, false otherwise.
+    	 */
+    	private boolean checkCardState() {
+    		// Check to see if we have an SDCard
+            String status = Environment.getExternalStorageState();
+            if (!status.equals(Environment.MEDIA_MOUNTED)) {
+                String msg;
+
+                // Check to see if the SDCard is busy, same as the music app
+                if (status.equals(Environment.MEDIA_SHARED)) {
+                    msg = getString(R.string.Main_SDCardErrorSDUnavailable);
+                } else {
+                    msg = getString(R.string.Main_SDCardErrorNoSDMsg);
+                }
+
+                new AlertDialog.Builder(mContext)
+                    .setTitle(R.string.Main_SDCardErrorTitle)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setMessage(msg)
+                    .setPositiveButton(R.string.Commons_Ok, null)
+                    .show();
+                
+                return false;
+            }
+            
+            return true;
+    	}
+    	
+		@Override
+		public void run() {
+			
+			if (checkCardState()) {
+				
+				try {
+					
+					FileWriter writer = new FileWriter(new File(IOUtils.getBookmarksExportFolder(), DateUtils.getNowForFileName() + ".xml"));
+				
+					writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+					writer.write("<bookmarkslist>\n");
+					
+					if (mCursor.moveToFirst()) {
+					
+						do {
+							
+							writer.write("<bookmark>\n");
+							
+							writer.write(String.format("<title>%s</title>\n", mCursor.getString(mCursor.getColumnIndex(DbAdapter.BOOKMARKS_TITLE))));
+							writer.write(String.format("<url>%s</url>\n", URLEncoder.encode(mCursor.getString(mCursor.getColumnIndex(DbAdapter.BOOKMARKS_URL)))));
+							writer.write(String.format("<creationdate>%s</creationdate>\n", mCursor.getString(mCursor.getColumnIndex(DbAdapter.BOOKMARKS_CREATION_DATE))));
+							
+							writer.write("</bookmark>\n");
+							
+						} while (mCursor.moveToNext());
+						
+					}
+					
+					writer.write("</bookmarkslist>\n");
+					
+					writer.flush();
+					writer.close();
+					
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				
+			}
+			
+			handler.sendEmptyMessage(0);
+		}
+		private Handler handler = new Handler() {
+			public void handleMessage(Message msg) {
+				mProgressDialog.dismiss();
+			}
+		};
+    	
     }
     
     /**

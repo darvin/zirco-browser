@@ -115,7 +115,7 @@ public class DbAdapter {
     	}
     	
     	return mDb.query(BOOKMARKS_DATABASE_TABLE,
-    			new String[] {BOOKMARKS_ROWID, BOOKMARKS_TITLE, BOOKMARKS_URL}, null, null, null, null, orderClause);
+    			new String[] {BOOKMARKS_ROWID, BOOKMARKS_TITLE, BOOKMARKS_URL, BOOKMARKS_CREATION_DATE}, null, null, null, null, orderClause);
     }
     
     /**
