@@ -62,6 +62,8 @@
     <string name="BookmarksListActivity.ClearingBookmarks">Clearing bookmarks...</string>
     <string name="BookmarksListActivity.AlphaSortMode">Alphabetical</string>
     <string name="BookmarksListActivity.RecentSortMode">Most recent</string>
+    <string name="BookmarksListActivity.ImportSource">Choose the import source</string>
+    <string name="BookmarksListActivity.AndroidImportSource">Android browser bookmarks</string>
     
     <string name="EditBookmarkActivity.Title">Edit bookmark</string>
     <string name="EditBookmarkActivity.TitleAdd">Add bookmark</string>

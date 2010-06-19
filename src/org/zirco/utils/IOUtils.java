@@ -16,6 +16,9 @@
 package org.zirco.utils;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.os.Environment;
 
@@ -91,6 +94,40 @@ public class IOUtils {
 		} else {
 			return null;
 		}
+	}
+	
+	/**
+	 * Get the list of xml files in the bookmark export folder.
+	 * @return The list of xml files in the bookmark export folder.
+	 */
+	public static List<String> getExportedBookmarksFileList() {
+		List<String> result = new ArrayList<String>();
+		
+		File folder = getBookmarksExportFolder();		
+		
+		if (folder != null) {
+			
+			FileFilter filter = new FileFilter() {
+				
+				@Override
+				public boolean accept(File pathname) {
+					if ((pathname.isFile()) &&
+							(pathname.getPath().endsWith(".xml"))) {
+						return true;
+					}
+					return false;
+				}
+			};
+			
+			File[] files = folder.listFiles(filter);
+			
+			for (File file : files) {
+				result.add(file.getName());
+			}
+			
+		}
+		
+		return result;
 	}
 
 }

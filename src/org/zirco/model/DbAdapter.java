@@ -69,14 +69,14 @@ public class DbAdapter {
 	private DatabaseHelper mDbHelper;
     private SQLiteDatabase mDb;
     
-    private final Context mCtx;
+    private final Context mContext;
     
     /**
      * Constructor.
      * @param ctx The current context.
      */
     public DbAdapter(Context ctx) {
-        this.mCtx = ctx;
+        this.mContext = ctx;
     }
     
     /**
@@ -84,7 +84,7 @@ public class DbAdapter {
      * @return The current database adapter.
      */
     public DbAdapter open() {
-        mDbHelper = new DatabaseHelper(mCtx);
+        mDbHelper = new DatabaseHelper(mContext);
         mDb = mDbHelper.getWritableDatabase();
         return this;
     }
@@ -102,7 +102,7 @@ public class DbAdapter {
      */    
     public Cursor fetchBookmarks() {
     	String orderClause;
-    	switch (PreferenceManager.getDefaultSharedPreferences(mCtx).getInt(Constants.PREFERENCES_BOOKMARKS_SORT_MODE, 0)) {
+    	switch (PreferenceManager.getDefaultSharedPreferences(mContext).getInt(Constants.PREFERENCES_BOOKMARKS_SORT_MODE, 0)) {
     	case 0:
     		orderClause = BOOKMARKS_TITLE + " COLLATE NOCASE";
     		break;
@@ -125,10 +125,21 @@ public class DbAdapter {
      * @return The new bookmark id.
      */
     public long addBookmark(String title, String url) {
+        return addBookmark(title, url, DateUtils.getNow(mContext));
+    }
+    
+    /**
+     * Add a bookmark to database.
+     * @param title The title.
+     * @param url The url.
+     * @param creationDate The creation date.
+     * @return The new bookmark id.
+     */
+    public long addBookmark(String title, String url, String creationDate) {
     	ContentValues initialValues = new ContentValues();
     	initialValues.put(BOOKMARKS_TITLE, title);
         initialValues.put(BOOKMARKS_URL, url);
-        initialValues.put(BOOKMARKS_CREATION_DATE, DateUtils.getNow(mCtx));
+        initialValues.put(BOOKMARKS_CREATION_DATE, creationDate);
         
         return mDb.insert(BOOKMARKS_DATABASE_TABLE, null, initialValues);
     }
@@ -220,7 +231,7 @@ public class DbAdapter {
     	List<HistoryItem> items;
     	Cursor cursor;
     	
-    	int historyLimit = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(mCtx).getString(Constants.PREFERENCES_BROWSER_HISTORY_SIZE, "5"));
+    	int historyLimit = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(mContext).getString(Constants.PREFERENCES_BROWSER_HISTORY_SIZE, "5"));
     	
     	long id;
     	String title;
@@ -231,8 +242,8 @@ public class DbAdapter {
     		
     		cursor = mDb.query(HISTORY_DATABASE_TABLE,
         			new String[] {HISTORY_ROWID, HISTORY_TITLE, HISTORY_URL, HISTORY_LAST_VISITED_DATE},
-        			"(" + HISTORY_LAST_VISITED_DATE + " <= \"" + DateUtils.getDateAsUniversalString(mCtx, lastDate) + "\") AND " + 
-        			"(" + HISTORY_LAST_VISITED_DATE + " > \"" + DateUtils.getDateAsUniversalString(mCtx, currentDate) + "\")",
+        			"(" + HISTORY_LAST_VISITED_DATE + " <= \"" + DateUtils.getDateAsUniversalString(mContext, lastDate) + "\") AND " + 
+        			"(" + HISTORY_LAST_VISITED_DATE + " > \"" + DateUtils.getDateAsUniversalString(mContext, currentDate) + "\")",
         			null, null, null, HISTORY_LAST_VISITED_DATE + " DESC");
     		
     		items = new ArrayList<HistoryItem>();
@@ -293,14 +304,14 @@ public class DbAdapter {
     	if (existingId != -1) {
     		ContentValues args = new ContentValues();
             args.put(HISTORY_TITLE, title);            
-            args.put(HISTORY_LAST_VISITED_DATE, DateUtils.getNow(mCtx));
+            args.put(HISTORY_LAST_VISITED_DATE, DateUtils.getNow(mContext));
 
             mDb.update(HISTORY_DATABASE_TABLE, args, HISTORY_ROWID + "=" + existingId, null);
     	} else {
     		ContentValues initialValues = new ContentValues();
         	initialValues.put(HISTORY_TITLE, title);
             initialValues.put(HISTORY_URL, url);
-            initialValues.put(HISTORY_LAST_VISITED_DATE, DateUtils.getNow(mCtx));
+            initialValues.put(HISTORY_LAST_VISITED_DATE, DateUtils.getNow(mContext));
             
             mDb.insert(HISTORY_DATABASE_TABLE, null, initialValues);
     	}
@@ -325,7 +336,7 @@ public class DbAdapter {
      * Delete all records from history witch have a visited date prior to the history max age.
      */
     public void truncateHistory() {
-    	mDb.execSQL("DELETE FROM " + HISTORY_DATABASE_TABLE + " WHERE " + HISTORY_LAST_VISITED_DATE + " < \"" + DateUtils.getHistoryLimit(mCtx) + "\";");
+    	mDb.execSQL("DELETE FROM " + HISTORY_DATABASE_TABLE + " WHERE " + HISTORY_LAST_VISITED_DATE + " < \"" + DateUtils.getHistoryLimit(mContext) + "\";");
     }
     
     /**
