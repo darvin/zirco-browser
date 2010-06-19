@@ -67,11 +67,13 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.DownloadListener;
+import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebView.HitTestResult;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.FilterQueryProvider;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -79,6 +81,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 import android.widget.SimpleCursorAdapter.CursorToStringConverter;
@@ -529,7 +532,45 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 				.show();
 
 				return true;
-			}								
+			}
+
+			@Override
+			public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, final JsPromptResult result) {
+				
+				final LayoutInflater factory = LayoutInflater.from(ZircoMain.this);
+                final View v = factory.inflate(R.layout.javascriptpromptdialog, null);
+                ((TextView) v.findViewById(R.id.JavaScriptPromptMessage)).setText(message);
+                ((EditText) v.findViewById(R.id.JavaScriptPromptInput)).setText(defaultValue);
+
+                new AlertDialog.Builder(ZircoMain.this)
+                    .setTitle(R.string.Commons_JavaScriptDialog)
+                    .setView(v)
+                    .setPositiveButton(android.R.string.ok,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    String value = ((EditText) v.findViewById(R.id.JavaScriptPromptInput)).getText()
+                                            .toString();
+                                    result.confirm(value);
+                                }
+                            })
+                    .setNegativeButton(android.R.string.cancel,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    result.cancel();
+                                }
+                            })
+                    .setOnCancelListener(
+                            new DialogInterface.OnCancelListener() {
+                                public void onCancel(DialogInterface dialog) {
+                                    result.cancel();
+                                }
+                            })
+                    .show();
+                
+                return true;
+
+			}		
+			
 		});
     }
     

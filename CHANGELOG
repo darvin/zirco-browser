@@ -1,3 +1,7 @@
+0.2.9:
+- Pinch zoom;
+- Javascript prompt support;
+
 0.2.8:
 - VND url handler;
 - Long back press quit application;
