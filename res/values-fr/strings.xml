@@ -59,7 +59,7 @@
     <string name="BookmarksListActivity.ClearingBookmarks">Suppression en cours...</string>
     <string name="BookmarksListActivity.AlphaSortMode">Alphabétique</string>
     <string name="BookmarksListActivity.RecentSortMode">Plus récent</string>
-    <string name="BookmarksListActivity.ImportSource">Choisissez la cource d\'import</string>
+    <string name="BookmarksListActivity.ImportSource">Choisissez la source d\'import</string>
     <string name="BookmarksListActivity.AndroidImportSource">Favoris du navigateur Android</string>
     
     <string name="EditBookmarkActivity.Title">Modifier le favori</string>
