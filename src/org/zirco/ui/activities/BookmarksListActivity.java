@@ -50,7 +50,6 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -379,11 +378,13 @@ public class BookmarksListActivity extends ListActivity {
      * Perform the bookmarks export.
      */
     private void exportBookmarks() {
-    	mProgressDialog = ProgressDialog.show(this,
-    			this.getResources().getString(R.string.Commons_PleaseWait),
-    			this.getResources().getString(R.string.BookmarksListActivity_ExportingBookmarks));
-    	
-    	new XmlBookmarksExporter(this);
+    	if (ApplicationUtils.checkCardState(this)) {
+    		mProgressDialog = ProgressDialog.show(this,
+    				this.getResources().getString(R.string.Commons_PleaseWait),
+    				this.getResources().getString(R.string.BookmarksListActivity_ExportingBookmarks));
+
+    		new XmlBookmarksExporter();
+    	}
     }
     
     /**
@@ -594,7 +595,7 @@ public class BookmarksListActivity extends ListActivity {
 		private Handler handler = new Handler() {
 			public void handleMessage(Message msg) {
 				mProgressDialog.dismiss();
-				fillData();
+				fillData();								
 			}
 		};
     	
@@ -604,88 +605,48 @@ public class BookmarksListActivity extends ListActivity {
      * Runnable for bookmarks export to xml.
      */
     private class XmlBookmarksExporter implements Runnable {
-
-    	private Context mContext;
     	
     	/**
     	 * Constructor.
-    	 * @param context The current context.
     	 */
-    	public XmlBookmarksExporter(Context context) {
-    		mContext = context;
-    		
+    	public XmlBookmarksExporter() {
     		new Thread(this).start();
-    	}
-    	
-    	/**
-    	 * Check if the SD card is available. Display an alert if not.
-    	 * @return True if the SD card is available, false otherwise.
-    	 */
-    	private boolean checkCardState() {
-    		// Check to see if we have an SDCard
-            String status = Environment.getExternalStorageState();
-            if (!status.equals(Environment.MEDIA_MOUNTED)) {
-                String msg;
-
-                // Check to see if the SDCard is busy, same as the music app
-                if (status.equals(Environment.MEDIA_SHARED)) {
-                    msg = getString(R.string.Main_SDCardErrorSDUnavailable);
-                } else {
-                    msg = getString(R.string.Main_SDCardErrorNoSDMsg);
-                }
-
-                new AlertDialog.Builder(mContext)
-                    .setTitle(R.string.Main_SDCardErrorTitle)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setMessage(msg)
-                    .setPositiveButton(R.string.Commons_Ok, null)
-                    .show();
-                
-                return false;
-            }
-            
-            return true;
     	}
     	
 		@Override
 		public void run() {
-			
-			if (checkCardState()) {
 				
-				try {
-					
-					FileWriter writer = new FileWriter(new File(IOUtils.getBookmarksExportFolder(), DateUtils.getNowForFileName() + ".xml"));
-				
-					writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-					writer.write("<bookmarkslist>\n");
-					
-					if (mCursor.moveToFirst()) {
-					
-						do {
-							
-							writer.write("<bookmark>\n");
-							
-							writer.write(String.format("<title>%s</title>\n", mCursor.getString(mCursor.getColumnIndex(DbAdapter.BOOKMARKS_TITLE))));
-							writer.write(String.format("<url>%s</url>\n", URLEncoder.encode(mCursor.getString(mCursor.getColumnIndex(DbAdapter.BOOKMARKS_URL)))));
-							writer.write(String.format("<creationdate>%s</creationdate>\n", mCursor.getString(mCursor.getColumnIndex(DbAdapter.BOOKMARKS_CREATION_DATE))));
-							
-							writer.write("</bookmark>\n");
-							
-						} while (mCursor.moveToNext());
-						
-					}
-					
-					writer.write("</bookmarkslist>\n");
-					
-					writer.flush();
-					writer.close();
-					
-				} catch (IOException e1) {
-					Log.w("Bookmark export failed", e1.getMessage());
+			try {
+
+				FileWriter writer = new FileWriter(new File(IOUtils.getBookmarksExportFolder(), DateUtils.getNowForFileName() + ".xml"));
+
+				writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+				writer.write("<bookmarkslist>\n");
+
+				if (mCursor.moveToFirst()) {
+
+					do {
+
+						writer.write("<bookmark>\n");
+
+						writer.write(String.format("<title>%s</title>\n", mCursor.getString(mCursor.getColumnIndex(DbAdapter.BOOKMARKS_TITLE))));
+						writer.write(String.format("<url>%s</url>\n", URLEncoder.encode(mCursor.getString(mCursor.getColumnIndex(DbAdapter.BOOKMARKS_URL)))));
+						writer.write(String.format("<creationdate>%s</creationdate>\n", mCursor.getString(mCursor.getColumnIndex(DbAdapter.BOOKMARKS_CREATION_DATE))));
+
+						writer.write("</bookmark>\n");
+
+					} while (mCursor.moveToNext());
+
 				}
-				
-				
-			}
+
+				writer.write("</bookmarkslist>\n");
+
+				writer.flush();
+				writer.close();
+
+			} catch (IOException e1) {
+				Log.w("Bookmark export failed", e1.getMessage());
+			}							
 			
 			handler.sendEmptyMessage(0);
 		}

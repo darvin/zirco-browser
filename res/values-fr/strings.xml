@@ -36,9 +36,6 @@
     <string name="Main.MenuOpen">Ouvrir</string>
     <string name="Main.MenuOpenNewTab">Ouvrir dans un nouvel onglet</string>
     <string name="Main.MenuDownload">Télécharger</string>
-    <string name="Main.SDCardErrorTitle">Erreur de carte SD</string>
-    <string name="Main.SDCardErrorNoSDMsg">Carte SD introuvable.</string>
-    <string name="Main.SDCardErrorSDUnavailable">Carte SD non disponible.</string>
     <string name="Main.DownloadStartedMsg">Téléchargement commencé.</string>
     <string name="Main.DownloadFinishedMsg">Téléchargement terminé.</string>
     <string name="Main.DownloadErrorMsg">Erreur de téléchargement : %s</string>
@@ -180,6 +177,9 @@
     <string name="Commons.ClearingCache">Suppression du cache...</string>
     <string name="Commons.ClearCookies">Purger les cookies</string>
     <string name="Commons.ClearingCookies">Suppression des cookies...</string>
+    <string name="Commons.SDCardErrorTitle">Erreur de carte SD</string>
+    <string name="Commons.SDCardErrorNoSDMsg">Carte SD introuvable.</string>
+    <string name="Commons.SDCardErrorSDUnavailable">Carte SD non disponible.</string>
     
     <string name="DATE_FORMAT_ISO8601">yyyy-MM-dd\'T\'HH:mm:ss.SSS</string>
     

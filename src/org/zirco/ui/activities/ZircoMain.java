@@ -37,6 +37,7 @@ import org.zirco.ui.components.ZircoWebViewClient;
 import org.zirco.ui.runnables.HideToolbarsRunnable;
 import org.zirco.ui.runnables.HistoryUpdater;
 import org.zirco.utils.AnimationManager;
+import org.zirco.utils.ApplicationUtils;
 import org.zirco.utils.Constants;
 
 import android.app.Activity;
@@ -48,7 +49,6 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.FloatMath;
@@ -583,32 +583,14 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
      * @param contentLength The content length.
      */
     private void doDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
-    	    			
-		// Check to see if we have an SDCard
-        String status = Environment.getExternalStorageState();
-        if (!status.equals(Environment.MEDIA_MOUNTED)) {
-            String msg;
+    	    
+        if (ApplicationUtils.checkCardState(this)) {
+        	DownloadItem item = new DownloadItem(url);
+        	Controller.getInstance().addToDownload(item);
+        	item.startDownload();
 
-            // Check to see if the SDCard is busy, same as the music app
-            if (status.equals(Environment.MEDIA_SHARED)) {
-                msg = getString(R.string.Main_SDCardErrorSDUnavailable);
-            } else {
-                msg = getString(R.string.Main_SDCardErrorNoSDMsg);
-            }
-
-            new AlertDialog.Builder(this)
-                .setTitle(R.string.Main_SDCardErrorTitle)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setMessage(msg)
-                .setPositiveButton(R.string.Commons_Ok, null)
-                .show();
-            return;
+        	Toast.makeText(this, getString(R.string.Main_DownloadStartedMsg), Toast.LENGTH_SHORT).show();
         }
-        DownloadItem item = new DownloadItem(url);
-        Controller.getInstance().addToDownload(item);
-        item.startDownload();
-        
-        Toast.makeText(this, getString(R.string.Main_DownloadStartedMsg), Toast.LENGTH_SHORT).show();
     }
     
     /**

@@ -35,10 +35,7 @@
     <string name="Main.MenuPreferences">Preferences</string>
     <string name="Main.MenuOpen">Open</string>
     <string name="Main.MenuOpenNewTab">Open in new tab</string>
-    <string name="Main.MenuDownload">Download</string>
-    <string name="Main.SDCardErrorTitle">SD Card unavailable</string>
-    <string name="Main.SDCardErrorNoSDMsg">No SD Card found.</string>
-    <string name="Main.SDCardErrorSDUnavailable">SD Card is not available.</string>
+    <string name="Main.MenuDownload">Download</string>   
     <string name="Main.DownloadStartedMsg">Download started.</string>
     <string name="Main.DownloadFinishedMsg">Download finished.</string>
     <string name="Main.DownloadErrorMsg">Download error: %s</string>
@@ -180,6 +177,9 @@
     <string name="Commons.ClearingCache">Clearing cache...</string>
     <string name="Commons.ClearCookies">Clear cookies</string>
     <string name="Commons.ClearingCookies">Clearing cookies...</string>
+    <string name="Commons.SDCardErrorTitle">SD Card unavailable</string>
+    <string name="Commons.SDCardErrorNoSDMsg">No SD Card found.</string>
+    <string name="Commons.SDCardErrorSDUnavailable">SD Card is not available.</string>
     
     <string name="DATE_FORMAT_ISO8601">yyyy-MM-dd\'T\'HH:mm:ss.SSS</string>
     

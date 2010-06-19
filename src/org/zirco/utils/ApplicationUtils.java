@@ -21,6 +21,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Paint;
+import android.os.Environment;
 
 /**
  * Application utilities.
@@ -76,6 +77,48 @@ public class ApplicationUtils {
     	});
     	AlertDialog alert = builder.create();
     	alert.show();
+	}
+	
+	/**
+	 * Check if the SD card is available. Display an alert if not.
+	 * @param context The current context.
+	 * @return True if the SD card is available, false otherwise.
+	 */
+	public static boolean checkCardState(Context context) {
+		// Check to see if we have an SDCard
+        String status = Environment.getExternalStorageState();
+        if (!status.equals(Environment.MEDIA_MOUNTED)) {
+            
+        	int messageId;
+
+            // Check to see if the SDCard is busy, same as the music app
+            if (status.equals(Environment.MEDIA_SHARED)) {
+                messageId = R.string.Commons_SDCardErrorSDUnavailable;
+            } else {
+                messageId = R.string.Commons_SDCardErrorNoSDMsg;
+            }
+            
+            ApplicationUtils.showErrorDialog(context, R.string.Commons_SDCardErrorTitle, messageId);
+            
+            return false;
+        }
+        
+        return true;
+	}
+	
+	/**
+	 * Show an error dialog.
+	 * @param context The current context.
+	 * @param title The title string id.
+	 * @param message The message string id.
+	 */
+	public static void showErrorDialog(Context context, int title, int message) {
+		new AlertDialog.Builder(context)
+        .setTitle(title)
+        .setIcon(android.R.drawable.ic_dialog_alert)
+        .setMessage(message)
+        .setPositiveButton(R.string.Commons_Ok, null)
+        .show();
 	}
 
 }
