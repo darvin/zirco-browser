@@ -153,6 +153,23 @@
 		<item>5000</item>
 	</string-array>
 	
+	<string name="PreferencesActivity.BubblePositionPreferenceTitle">Bubble position</string>
+    <string name="PreferencesActivity.BubblePositionPreferenceSummary">Position of the "bubble".</string>
+    
+    <string name="PreferencesActivity.BubbleRight">Right</string>
+    <string name="PreferencesActivity.BubbleLeft">Left</string>
+    <string name="PreferencesActivity.BubbleBoth">Both</string>
+    <string-array name="BubblePositionEntries">
+		<item>@string/PreferencesActivity.BubbleRight</item>
+		<item>@string/PreferencesActivity.BubbleLeft</item>
+		<item>@string/PreferencesActivity.BubbleBoth</item>
+	</string-array>
+    <string-array name="BubblePositionValues">
+		<item>right</item>
+		<item>left</item>
+		<item>both</item>
+	</string-array>
+	
 	<string name="PreferencesActivity.AdBlockerSettingsCategoryTitle">Ad-blocker settings</string>
 	<string name="PreferencesActivity.EnableAdBlockerPreferenceTitle">Enable Ad-blocker</string>
     <string name="PreferencesActivity.EnableAdBlockerPreferenceSummary">Ad-blocker will not work if JavaScript is not enabled.</string>

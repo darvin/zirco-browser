@@ -153,6 +153,23 @@
 		<item>5000</item>
 	</string-array>
 	
+	<string name="PreferencesActivity.BubblePositionPreferenceTitle">Position de la bulle</string>
+    <string name="PreferencesActivity.BubblePositionPreferenceSummary">Position de la "bulle" d\'affichage des barres d\'outils.</string>
+    
+    <string name="PreferencesActivity.BubbleRight">Droit</string>
+    <string name="PreferencesActivity.BubbleLeft">Gauche</string>
+    <string name="PreferencesActivity.BubbleBoth">Les deux</string>
+    <string-array name="BubblePositionEntries">
+		<item>@string/PreferencesActivity.BubbleRight</item>
+		<item>@string/PreferencesActivity.BubbleLeft</item>
+		<item>@string/PreferencesActivity.BubbleBoth</item>
+	</string-array>
+    <string-array name="BubblePositionValues">
+		<item>right</item>
+		<item>left</item>
+		<item>both</item>
+	</string-array>
+	
 	<string name="PreferencesActivity.AdBlockerSettingsCategoryTitle">Paramètres du bloqueur de pubs</string>
 	<string name="PreferencesActivity.EnableAdBlockerPreferenceTitle">Activer le bloqueur de pubs</string>
     <string name="PreferencesActivity.EnableAdBlockerPreferenceSummary">Le JavaScript doit être activé pour que le bloquer de pubs fonctionne.</string>

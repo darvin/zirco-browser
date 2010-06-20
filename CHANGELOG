@@ -1,5 +1,6 @@
 0.2.9:
 - Pinch zoom;
+- "Bubble" position can be set to right, left or both.
 - Bookmark import/export from/to SD card.
 - Javascript prompt support;
 

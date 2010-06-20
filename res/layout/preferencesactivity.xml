@@ -37,6 +37,13 @@
 			android:defaultValue="3000"
 			android:entries="@array/BarDurationEntries"
 			android:entryValues="@array/BarDurationValues" />
+		<ListPreference
+			android:title="@string/PreferencesActivity.BubblePositionPreferenceTitle"
+			android:summary="@string/PreferencesActivity.BubblePositionPreferenceSummary"
+			android:key="GeneralBubblePosition"
+			android:defaultValue="right"
+			android:entries="@array/BubblePositionEntries"
+			android:entryValues="@array/BubblePositionValues" />
 		<CheckBoxPreference
 			android:title="@string/PreferencesActivity.FullScreenPreferenceTitle"
 			android:defaultValue="true"

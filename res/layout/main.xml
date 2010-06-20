@@ -60,9 +60,9 @@
 		</LinearLayout>
 
 		<ImageView android:layout_height="wrap_content"
-			android:layout_width="wrap_content" android:src="@drawable/bubble48"
+			android:layout_width="wrap_content" android:src="@drawable/bubbleright48"
 			android:layout_alignParentBottom="true"
-			android:layout_alignParentRight="true" android:id="@+id/BubleView"></ImageView>
+			android:layout_alignParentRight="true" android:id="@+id/BubbleRightView"></ImageView>
 
 		<LinearLayout android:id="@+id/BottomBarLayout"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
@@ -85,6 +85,11 @@
 				android:id="@+id/NextBtn" android:layout_width="wrap_content"
 				android:src="@drawable/next32" android:layout_marginTop="3dip" android:layout_weight="1"></ImageButton>
 		</LinearLayout>
+		
+		<ImageView android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:src="@drawable/bubbleleft48"
+			android:layout_alignParentBottom="true"
+			android:layout_alignParentLeft="true" android:id="@+id/BubbleLeftView"></ImageView>
 
 	</RelativeLayout>
 

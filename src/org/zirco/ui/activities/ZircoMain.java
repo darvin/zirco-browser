@@ -120,7 +120,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	private ImageButton mGoButton;
 	private ProgressBar mProgressBar;	
 	
-	private ImageView mBubleView;
+	private ImageView mBubbleRightView;
+	private ImageView mBubbleLeftView;
 	
 	private ZircoWebView mCurrentWebView;
 	private List<ZircoWebView> mWebViews;
@@ -231,14 +232,23 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     	mWebViews = new ArrayList<ZircoWebView>();
     	Controller.getInstance().setWebViewList(mWebViews);
     	
-    	mBubleView = (ImageView) findViewById(R.id.BubleView);
-    	mBubleView.setOnClickListener(new View.OnClickListener() {		
+    	mBubbleRightView = (ImageView) findViewById(R.id.BubbleRightView);
+    	mBubbleRightView.setOnClickListener(new View.OnClickListener() {
+    		@Override
 			public void onClick(View v) {
 				setToolbarsVisibility(true);				
 			}
-		});
+		});    	
+    	mBubbleRightView.setVisibility(View.GONE);
     	
-    	mBubleView.setVisibility(View.GONE);
+    	mBubbleLeftView = (ImageView) findViewById(R.id.BubbleLeftView);
+    	mBubbleLeftView.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				setToolbarsVisibility(true);
+			}
+		});
+    	mBubbleLeftView.setVisibility(View.GONE);
     	
     	mViewFlipper = (ViewFlipper) findViewById(R.id.ViewFlipper);
     	
@@ -397,6 +407,9 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     public void applyPreferences() {
     	
     	applyQuickButtonPreferences();
+    	
+    	// To update to Bubble position.
+    	setToolbarsVisibility(false);
     	
     	Iterator<ZircoWebView> iter = mWebViews.iterator();
     	while (iter.hasNext()) {
@@ -658,7 +671,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     		mTopBar.setVisibility(View.VISIBLE);
     		mBottomBar.setVisibility(View.VISIBLE);
     		
-    		mBubleView.setVisibility(View.GONE);    		    		    		 
+    		mBubbleRightView.setVisibility(View.GONE);
+    		mBubbleLeftView.setVisibility(View.GONE);
     		
     		startToolbarsHideRunnable();
     		
@@ -669,7 +683,21 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     		mTopBar.setVisibility(View.GONE);
     		mBottomBar.setVisibility(View.GONE);
     		
-			mBubleView.setVisibility(View.VISIBLE);
+    		String bubblePosition = Controller.getInstance().getPreferences().getString(Constants.PREFERENCES_GENERAL_BUBBLE_POSITION, "right");
+    		
+    		if (bubblePosition.equals("right")) {
+    			mBubbleRightView.setVisibility(View.VISIBLE);
+    			mBubbleLeftView.setVisibility(View.GONE);
+    		} else if (bubblePosition.equals("left")) {
+    			mBubbleRightView.setVisibility(View.GONE);
+    			mBubbleLeftView.setVisibility(View.VISIBLE);
+    		} else if (bubblePosition.equals("both")) {
+    			mBubbleRightView.setVisibility(View.VISIBLE);
+    			mBubbleLeftView.setVisibility(View.VISIBLE);
+    		} else {
+    			mBubbleRightView.setVisibility(View.VISIBLE);
+    			mBubbleLeftView.setVisibility(View.GONE);
+    		}
 			
 			mUrlBarVisible = false;
     	}
