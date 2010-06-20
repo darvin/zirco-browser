@@ -15,6 +15,7 @@
 
 package org.zirco.model;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +28,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -38,12 +40,13 @@ public class DbAdapter {
 	private static final String TAG = "DbAdapter";
 
 	private static final String DATABASE_NAME = "ZIRCO";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	
 	public static final String BOOKMARKS_ROWID = "_id";
 	public static final String BOOKMARKS_TITLE = "title";
 	public static final String BOOKMARKS_URL = "url";
-	public static final String BOOKMARKS_CREATION_DATE = "creation_date";	
+	public static final String BOOKMARKS_CREATION_DATE = "creation_date";
+	public static final String BOOKMARKS_THUMBNAIL = "thumbnail";
 	
     private static final String BOOKMARKS_DATABASE_TABLE = "BOOKMARKS";    
     
@@ -51,7 +54,8 @@ public class DbAdapter {
     	+ BOOKMARKS_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
     	+ BOOKMARKS_TITLE + " TEXT, "
     	+ BOOKMARKS_URL + " TEXT NOT NULL, "
-    	+ BOOKMARKS_CREATION_DATE + " DATE);";
+    	+ BOOKMARKS_CREATION_DATE + " DATE, "
+    	+ BOOKMARKS_THUMBNAIL + " BLOB);";
     
     public static final String HISTORY_ROWID = "_id";
 	public static final String HISTORY_TITLE = "title";
@@ -115,7 +119,21 @@ public class DbAdapter {
     	}
     	
     	return mDb.query(BOOKMARKS_DATABASE_TABLE,
-    			new String[] {BOOKMARKS_ROWID, BOOKMARKS_TITLE, BOOKMARKS_URL, BOOKMARKS_CREATION_DATE}, null, null, null, null, orderClause);
+    			new String[] {BOOKMARKS_ROWID, BOOKMARKS_TITLE, BOOKMARKS_URL, BOOKMARKS_CREATION_DATE, BOOKMARKS_THUMBNAIL}, null, null, null, null, orderClause);
+    }
+    
+    /**
+     * Get a cursor on a specific bookmark, given its url.
+     * @param url The url to search for.
+     * @return The query result.
+     */
+    public Cursor getBookmarkFromUrl(String url) {
+    	String whereClause = BOOKMARKS_URL + " = \"" + url + "\"";
+    	
+    	return mDb.query(BOOKMARKS_DATABASE_TABLE,
+    			new String[] {BOOKMARKS_ROWID, BOOKMARKS_TITLE, BOOKMARKS_URL, BOOKMARKS_CREATION_DATE},
+    			whereClause,
+    			null, null, null, null);
     }
     
     /**
@@ -157,6 +175,23 @@ public class DbAdapter {
         args.put(BOOKMARKS_URL, url);
 
         return mDb.update(BOOKMARKS_DATABASE_TABLE, args, BOOKMARKS_ROWID + "=" + rowId, null) > 0;
+    }
+    
+    /**
+     * Update the thumbnail for the given bookmark.
+     * @param rowId The bookmark id.
+     * @param bm The thumbnail.
+     * @return True if the update succeeded.
+     */
+    public boolean updateBookmarkThumbnail(long rowId, Bitmap bm) {
+    	
+    	ByteArrayOutputStream os = new ByteArrayOutputStream();    	
+    	bm.compress(Bitmap.CompressFormat.PNG, 100, os);
+    	
+    	ContentValues args = new ContentValues();
+    	args.put(BOOKMARKS_THUMBNAIL, os.toByteArray());
+    	
+    	return mDb.update(BOOKMARKS_DATABASE_TABLE, args, BOOKMARKS_ROWID + "=" + rowId, null) > 0;
     }
     
     /**
@@ -359,14 +394,17 @@ public class DbAdapter {
 		}
 
 		@Override
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
-                    + newVersion + ", which will destroy all old data");
+		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {			
 			
-            db.execSQL("DROP TABLE IF EXISTS " + BOOKMARKS_DATABASE_TABLE);
-            db.execSQL("DROP TABLE IF EXISTS " + HISTORY_DATABASE_TABLE);
-            
-            onCreate(db);
+			Log.d(TAG, "Upgrading database.");
+			
+            //db.execSQL("DROP TABLE IF EXISTS " + BOOKMARKS_DATABASE_TABLE);
+            //db.execSQL("DROP TABLE IF EXISTS " + HISTORY_DATABASE_TABLE);
+			
+			switch (oldVersion) {
+			case 1: db.execSQL("ALTER TABLE " + BOOKMARKS_DATABASE_TABLE + " ADD " + BOOKMARKS_THUMBNAIL + " BLOB;"); break;
+			default: break;
+			}
 		}
     	
     }

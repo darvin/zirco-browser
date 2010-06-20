@@ -34,6 +34,7 @@ import org.zirco.model.DbAdapter;
 import org.zirco.model.DownloadItem;
 import org.zirco.ui.components.ZircoWebView;
 import org.zirco.ui.components.ZircoWebViewClient;
+import org.zirco.ui.runnables.BookmarkThumbnailUpdater;
 import org.zirco.ui.runnables.HideToolbarsRunnable;
 import org.zirco.ui.runnables.HistoryUpdater;
 import org.zirco.utils.AnimationManager;
@@ -790,8 +791,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	public boolean onKeyLongPress(int keyCode, KeyEvent event) {
 		
 		switch (keyCode) {
-		case KeyEvent.KEYCODE_BACK:
-			finish();
+		case KeyEvent.KEYCODE_BACK:			
+			this.moveTaskToBack(true);
 			return true;
 		default: return super.onKeyLongPress(keyCode, event);
 		}
@@ -1227,6 +1228,52 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		}
 	}
 	
+	/*
+	
+	private void updateBookmarkScreenShot() {
+		Cursor c = mDbAdapter.getBookmarkFromUrl(mCurrentWebView.getOriginalUrl());
+		
+		if ((c != null) &&
+				(c.moveToFirst())) {
+			
+			long id = c.getLong(c.getColumnIndex(DbAdapter.BOOKMARKS_ROWID));
+			
+			Bitmap bm = createScreenshot(mCurrentWebView);
+			
+			if (bm != null) {
+				
+				mDbAdapter.updateBookmarkThumbnail(id, bm);
+				
+			}
+		}
+	}
+	
+	private Bitmap createScreenshot(WebView view) {
+		Picture thumbnail = view.capturePicture();
+		if (thumbnail == null) {
+			return null;
+		}
+		
+		float density = this.getResources().getDisplayMetrics().density;
+		
+		int thumbnailWidth = (int) (90 * density);
+		int thumbnailHeight = (int) (80 * density);
+		
+		Bitmap bm = Bitmap.createBitmap(thumbnailWidth,
+				thumbnailHeight, Bitmap.Config.ARGB_4444);
+		
+		Canvas canvas = new Canvas(bm);
+		
+		if (thumbnail.getWidth() > 0) {
+			float scaleFactor = (float) thumbnailWidth / (float) thumbnail.getWidth();
+			canvas.scale(scaleFactor, scaleFactor);
+		}
+		
+		thumbnail.draw(canvas);
+		return bm;
+	}
+	*/
+	
 	@Override
 	public void onWebEvent(String event, Object data) {
 		
@@ -1238,6 +1285,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 					(!checkInAdBlockWhiteList(mCurrentWebView.getUrl()))) {
 				mCurrentWebView.loadUrl(getAdSweepString());
 			}
+			
+			new Thread(new BookmarkThumbnailUpdater(this, mCurrentWebView)).start();
 			
 		} else if (event.equals(EventConstants.EVT_WEB_ON_PAGE_STARTED)) {
 			

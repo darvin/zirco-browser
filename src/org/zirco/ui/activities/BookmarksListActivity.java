@@ -73,8 +73,8 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
  */
 public class BookmarksListActivity extends ListActivity {
 			
-	private static final int MENU_SORT_MODE = Menu.FIRST;
-	private static final int MENU_ADD_BOOKMARK = Menu.FIRST + 1;
+	private static final int MENU_ADD_BOOKMARK = Menu.FIRST;
+	private static final int MENU_SORT_MODE = Menu.FIRST + 1;	
 	private static final int MENU_IMPORT_BOOKMARKS = Menu.FIRST + 2;
 	private static final int MENU_EXPORT_BOOKMARKS = Menu.FIRST + 3;
 	private static final int MENU_CLEAR_BOOKMARKS = Menu.FIRST + 4;
@@ -121,7 +121,7 @@ public class BookmarksListActivity extends ListActivity {
     	mCursor = mDbAdapter.fetchBookmarks();
     	startManagingCursor(mCursor);
     	
-    	String[] from = new String[] {BookmarkColumns.TITLE, BookmarkColumns.URL};
+    	String[] from = new String[] {DbAdapter.BOOKMARKS_TITLE, DbAdapter.BOOKMARKS_URL};
     	int[] to = new int[] {R.id.BookmarkRow_Title, R.id.BookmarkRow_Url};
     	
     	mCursorAdapter = new BookmarksCursorAdapter(this, R.layout.bookmarkrow, mCursor, from, to);
@@ -185,11 +185,11 @@ public class BookmarksListActivity extends ListActivity {
     	super.onCreateOptionsMenu(menu);
     	
     	MenuItem item;
-    	item = menu.add(0, MENU_SORT_MODE, 0, R.string.BookmarksListActivity_MenuSortMode);
-        item.setIcon(R.drawable.sortmode32);
-    	
     	item = menu.add(0, MENU_ADD_BOOKMARK, 0, R.string.BookmarksListActivity_MenuAddBookmark);
         item.setIcon(R.drawable.addbookmark32);
+    	
+    	item = menu.add(0, MENU_SORT_MODE, 0, R.string.BookmarksListActivity_MenuSortMode);
+        item.setIcon(R.drawable.sortmode32);    	    	
         
         item = menu.add(0, MENU_IMPORT_BOOKMARKS, 0, R.string.BookmarksListActivity_ImportBookmarks);
         item.setIcon(R.drawable.import32);
