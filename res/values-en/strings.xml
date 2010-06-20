@@ -61,6 +61,8 @@
     <string name="BookmarksListActivity.RecentSortMode">Most recent</string>
     <string name="BookmarksListActivity.ImportSource">Choose the import source</string>
     <string name="BookmarksListActivity.AndroidImportSource">Android browser bookmarks</string>
+    <string name="BookmarksListActivity.ExportDialogTitle">Bookmarks export</string>
+    <string name="BookmarksListActivity.ExportDialogMessage">Bookmarks will be exported to %s.</string>
     
     <string name="EditBookmarkActivity.Title">Edit bookmark</string>
     <string name="EditBookmarkActivity.TitleAdd">Add bookmark</string>

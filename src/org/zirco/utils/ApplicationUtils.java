@@ -88,6 +88,33 @@ public class ApplicationUtils {
 	}
 	
 	/**
+	 * Display a standard Ok / Cancel dialog.
+	 * @param context The current context.
+	 * @param icon The dialog icon.
+	 * @param title The dialog title.
+	 * @param message The dialog message.
+	 * @param onYes The dialog listener for the yes button.
+	 */
+	public static void showOkCancelDialog(Context context, int icon, String title, String message, DialogInterface.OnClickListener onYes) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+    	builder.setCancelable(true);
+    	builder.setIcon(icon);
+    	builder.setTitle(title);
+    	builder.setMessage(message);
+
+    	builder.setInverseBackgroundForced(true);
+    	builder.setPositiveButton(context.getResources().getString(R.string.Commons_Ok), onYes);
+    	builder.setNegativeButton(context.getResources().getString(R.string.Commons_Cancel), new DialogInterface.OnClickListener() {
+    		@Override
+    		public void onClick(DialogInterface dialog, int which) {
+    			dialog.dismiss();
+    		}
+    	});
+    	AlertDialog alert = builder.create();
+    	alert.show();
+	}
+	
+	/**
 	 * Check if the SD card is available. Display an alert if not.
 	 * @param context The current context.
 	 * @return True if the SD card is available, false otherwise.

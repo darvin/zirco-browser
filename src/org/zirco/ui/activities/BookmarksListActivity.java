@@ -20,6 +20,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -309,10 +310,29 @@ public class BookmarksListActivity extends ListActivity {
 				doChangeSortMode(which);
 				dialog.dismiss();				
 			}    		
-    	});    	
+    	}); 
+    	builder.setCancelable(true);
+    	builder.setNegativeButton(R.string.Commons_Cancel, null);
     	
     	AlertDialog alert = builder.create();
     	alert.show();
+    }
+    
+    /**
+     * Perform the bookmarks import.
+     * @param file The file to import. If null, will import Android bookmarks.
+     */
+    private void doImportBookmarks(String file) {
+    	mProgressDialog = ProgressDialog.show(this,
+    			this.getResources().getString(R.string.Commons_PleaseWait),
+    			this.getResources().getString(R.string.BookmarksListActivity_ImportingBookmarks));
+    	
+    	if (file == null) {
+    		new AndroidImporter(this);
+    	} else {
+    		new XmlBookmarksImporter(this, file);
+    	}
+    	
     }
     
     /**
@@ -321,6 +341,8 @@ public class BookmarksListActivity extends ListActivity {
     private void importBookmarks() {
     	
     	List<String> exportedFiles = IOUtils.getExportedBookmarksFileList();
+    	
+    	Collections.sort(exportedFiles);
     	
     	final String[] choices = new String[exportedFiles.size() + 1];
     	
@@ -352,39 +374,50 @@ public class BookmarksListActivity extends ListActivity {
 			}    		
     	});    	
     	
+    	builder.setCancelable(true);
+    	builder.setNegativeButton(R.string.Commons_Cancel, null);
+    	
     	AlertDialog alert = builder.create();
     	alert.show();
     	
     }
     
     /**
-     * Perform the android bookmarks import.
-     * @param file The file to import. If null, will import Android bookmarks.
-     */
-    private void doImportBookmarks(String file) {
-    	mProgressDialog = ProgressDialog.show(this,
-    			this.getResources().getString(R.string.Commons_PleaseWait),
-    			this.getResources().getString(R.string.BookmarksListActivity_ImportingBookmarks));
-    	
-    	if (file == null) {
-    		new AndroidImporter(this);
-    	} else {
-    		new XmlBookmarksImporter(this, file);
-    	}
-    	
-    }
-    
-    /**
      * Perform the bookmarks export.
+     * @param fileName The export file name.
      */
-    private void exportBookmarks() {
+    private void doExportBookmarks(String fileName) {
     	if (ApplicationUtils.checkCardState(this)) {
     		mProgressDialog = ProgressDialog.show(this,
     				this.getResources().getString(R.string.Commons_PleaseWait),
     				this.getResources().getString(R.string.BookmarksListActivity_ExportingBookmarks));
 
-    		new XmlBookmarksExporter();
+    		new XmlBookmarksExporter(fileName);
     	}
+    }
+    
+    /**
+     * Display a confirmation dialog and perform the bookmarks export.
+     */
+    private void exportBookmarks() {
+    	
+    	final String fileName = DateUtils.getNowForFileName() + ".xml";
+    	
+    	ApplicationUtils.showOkCancelDialog(this,
+    			android.R.drawable.ic_dialog_info,
+    			this.getString(R.string.BookmarksListActivity_ExportDialogTitle),
+    			String.format(this.getString(R.string.BookmarksListActivity_ExportDialogMessage),
+    					IOUtils.getBookmarksExportFolder().getAbsolutePath() + "/" + fileName),
+    			new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						
+						doExportBookmarks(fileName);
+						
+					}
+    		
+    	});    	    	
     }
     
     /**
@@ -606,10 +639,14 @@ public class BookmarksListActivity extends ListActivity {
      */
     private class XmlBookmarksExporter implements Runnable {
     	
+    	private String mFileName;
+    	
     	/**
     	 * Constructor.
+    	 * @param fileName The export file name.
     	 */
-    	public XmlBookmarksExporter() {
+    	public XmlBookmarksExporter(String fileName) {
+    		mFileName = fileName;
     		new Thread(this).start();
     	}
     	
@@ -618,7 +655,7 @@ public class BookmarksListActivity extends ListActivity {
 				
 			try {
 
-				FileWriter writer = new FileWriter(new File(IOUtils.getBookmarksExportFolder(), DateUtils.getNowForFileName() + ".xml"));
+				FileWriter writer = new FileWriter(new File(IOUtils.getBookmarksExportFolder(), mFileName));
 
 				writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 				writer.write("<bookmarkslist>\n");

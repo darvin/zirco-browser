@@ -61,6 +61,8 @@
     <string name="BookmarksListActivity.RecentSortMode">Plus récent</string>
     <string name="BookmarksListActivity.ImportSource">Choisissez la source d\'import</string>
     <string name="BookmarksListActivity.AndroidImportSource">Favoris du navigateur Android</string>
+    <string name="BookmarksListActivity.ExportDialogTitle">Export des favoris</string>
+    <string name="BookmarksListActivity.ExportDialogMessage">les favoris seront exportés vers %s.</string>
     
     <string name="EditBookmarkActivity.Title">Modifier le favori</string>
     <string name="EditBookmarkActivity.TitleAdd">Ajouter un favori</string>
