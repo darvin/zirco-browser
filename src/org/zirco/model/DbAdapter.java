@@ -124,11 +124,13 @@ public class DbAdapter {
     
     /**
      * Get a cursor on a specific bookmark, given its url.
-     * @param url The url to search for.
+     * @param originalUrl The original url to search for.
+     * @param loadedUrl The loaded url to search for.
      * @return The query result.
      */
-    public Cursor getBookmarkFromUrl(String url) {
-    	String whereClause = BOOKMARKS_URL + " = \"" + url + "\"";
+    public Cursor getBookmarkFromUrl(String originalUrl, String loadedUrl) {
+    	String whereClause = "(" + BOOKMARKS_URL + " = \"" + originalUrl + "\") OR ("
+    		+ BOOKMARKS_URL + " = \"" + loadedUrl + "\")";
     	
     	return mDb.query(BOOKMARKS_DATABASE_TABLE,
     			new String[] {BOOKMARKS_ROWID, BOOKMARKS_TITLE, BOOKMARKS_URL, BOOKMARKS_CREATION_DATE},

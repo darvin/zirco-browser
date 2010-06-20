@@ -16,13 +16,13 @@
 package org.zirco.ui.runnables;
 
 import org.zirco.model.DbAdapter;
+import org.zirco.ui.components.ZircoWebView;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Picture;
-import android.webkit.WebView;
 
 /**
  * Runnable to update a bookmark screen shot in background.
@@ -31,14 +31,14 @@ public class BookmarkThumbnailUpdater implements Runnable {
 	
 	private Context mContext;
 	private DbAdapter mDbAdapter;
-	private WebView mWebView;
+	private ZircoWebView mWebView;
 
 	/**
 	 * Constructor.
 	 * @param context The current context.
 	 * @param view The view to take screen shot from.
 	 */
-	public BookmarkThumbnailUpdater(Context context, WebView view) {
+	public BookmarkThumbnailUpdater(Context context, ZircoWebView view) {
 		mContext = context;
 		mWebView = view;
 	}
@@ -76,7 +76,8 @@ public class BookmarkThumbnailUpdater implements Runnable {
 	 * Update the bookmark screen shot.
 	 */
 	private void updateBookmarkScreenShot() {
-		Cursor c = mDbAdapter.getBookmarkFromUrl(mWebView.getOriginalUrl());
+		
+		Cursor c = mDbAdapter.getBookmarkFromUrl(mWebView.getOriginalUrl(), mWebView.getLoadedUrl());
 		
 		if ((c != null) &&
 				(c.moveToFirst())) {

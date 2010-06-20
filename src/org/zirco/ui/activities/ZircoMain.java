@@ -15,10 +15,6 @@
 
 package org.zirco.ui.activities;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -53,7 +49,6 @@ import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.FloatMath;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -143,8 +138,6 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	private HideToolbarsRunnable mHideToolbarsRunnable;
 	
 	private ViewFlipper mViewFlipper;
-	
-	private String mAdSweepString = null;
 	
 	private DbAdapter mDbAdapter = null;
 	
@@ -1171,42 +1164,6 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	}
 	
 	/**
-	 * Load the AdSweep script if necessary.
-	 * @return The AdSweep script.
-	 */
-	private String getAdSweepString() {
-		if (mAdSweepString == null) {
-			InputStream is = getResources().openRawResource(R.raw.adsweep);
-			if (is != null) {
-				StringBuilder sb = new StringBuilder();
-				String line;
-
-				try {
-					BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-					while ((line = reader.readLine()) != null) {
-						if ((line.length() > 0) &&
-								(!line.startsWith("//"))) {
-							sb.append(line).append("\n");
-						}
-					}
-				} catch (IOException e) {
-					Log.w("AdSweep", "Unable to load AdSweep: " + e.getMessage());
-				} finally {
-					try {
-						is.close();
-					} catch (IOException e) {
-						Log.w("AdSweep", "Unable to load AdSweep: " + e.getMessage());
-					}
-				}
-				mAdSweepString = sb.toString();
-			} else {        
-				mAdSweepString = "";
-			}
-		}
-		return mAdSweepString;
-	}
-	
-	/**
 	 * Check if the url is in the AdBlock white list.
 	 * @param url The url to check
 	 * @return true if the url is in the white list
@@ -1228,52 +1185,6 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		}
 	}
 	
-	/*
-	
-	private void updateBookmarkScreenShot() {
-		Cursor c = mDbAdapter.getBookmarkFromUrl(mCurrentWebView.getOriginalUrl());
-		
-		if ((c != null) &&
-				(c.moveToFirst())) {
-			
-			long id = c.getLong(c.getColumnIndex(DbAdapter.BOOKMARKS_ROWID));
-			
-			Bitmap bm = createScreenshot(mCurrentWebView);
-			
-			if (bm != null) {
-				
-				mDbAdapter.updateBookmarkThumbnail(id, bm);
-				
-			}
-		}
-	}
-	
-	private Bitmap createScreenshot(WebView view) {
-		Picture thumbnail = view.capturePicture();
-		if (thumbnail == null) {
-			return null;
-		}
-		
-		float density = this.getResources().getDisplayMetrics().density;
-		
-		int thumbnailWidth = (int) (90 * density);
-		int thumbnailHeight = (int) (80 * density);
-		
-		Bitmap bm = Bitmap.createBitmap(thumbnailWidth,
-				thumbnailHeight, Bitmap.Config.ARGB_4444);
-		
-		Canvas canvas = new Canvas(bm);
-		
-		if (thumbnail.getWidth() > 0) {
-			float scaleFactor = (float) thumbnailWidth / (float) thumbnail.getWidth();
-			canvas.scale(scaleFactor, scaleFactor);
-		}
-		
-		thumbnail.draw(canvas);
-		return bm;
-	}
-	*/
-	
 	@Override
 	public void onWebEvent(String event, Object data) {
 		
@@ -1283,7 +1194,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 						
 			if ((Controller.getInstance().getPreferences().getBoolean(Constants.PREFERENCES_ADBLOCKER_ENABLE, true)) &&
 					(!checkInAdBlockWhiteList(mCurrentWebView.getUrl()))) {
-				mCurrentWebView.loadUrl(getAdSweepString());
+				mCurrentWebView.loadAdSweep();
 			}
 			
 			new Thread(new BookmarkThumbnailUpdater(this, mCurrentWebView)).start();

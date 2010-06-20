@@ -15,6 +15,11 @@
 
 package org.zirco.utils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import org.zirco.R;
 
 import android.app.AlertDialog;
@@ -22,11 +27,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.os.Environment;
+import android.util.Log;
 
 /**
  * Application utilities.
  */
 public class ApplicationUtils {
+	
+	private static String mAdSweepString = null;
 	
 	/**
 	 * Truncate a string to a given maximum width, relative to its paint size.
@@ -119,6 +127,43 @@ public class ApplicationUtils {
         .setMessage(message)
         .setPositiveButton(R.string.Commons_Ok, null)
         .show();
+	}
+	
+	/**
+	 * Load the AdSweep script if necessary.
+	 * @param context The current context.
+	 * @return The AdSweep script.
+	 */
+	public static String getAdSweepString(Context context) {
+		if (mAdSweepString == null) {
+			InputStream is = context.getResources().openRawResource(R.raw.adsweep);
+			if (is != null) {
+				StringBuilder sb = new StringBuilder();
+				String line;
+
+				try {
+					BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+					while ((line = reader.readLine()) != null) {
+						if ((line.length() > 0) &&
+								(!line.startsWith("//"))) {
+							sb.append(line).append("\n");
+						}
+					}
+				} catch (IOException e) {
+					Log.w("AdSweep", "Unable to load AdSweep: " + e.getMessage());
+				} finally {
+					try {
+						is.close();
+					} catch (IOException e) {
+						Log.w("AdSweep", "Unable to load AdSweep: " + e.getMessage());
+					}
+				}
+				mAdSweepString = sb.toString();
+			} else {        
+				mAdSweepString = "";
+			}
+		}
+		return mAdSweepString;
 	}
 
 }

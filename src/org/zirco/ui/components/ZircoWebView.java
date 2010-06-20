@@ -16,6 +16,7 @@
 package org.zirco.ui.components;
 
 import org.zirco.controllers.Controller;
+import org.zirco.utils.ApplicationUtils;
 import org.zirco.utils.Constants;
 
 import android.content.Context;
@@ -29,9 +30,13 @@ import android.webkit.WebView;
  */
 public class ZircoWebView extends WebView {
 	
+	private Context mContext;
+	
 	private int mProgress = 100;
 	
 	private boolean mIsLoading = false;
+	
+	private String mLoadedUrl;
 	
 	/**
 	 * Constructor.
@@ -39,6 +44,8 @@ public class ZircoWebView extends WebView {
 	 */
 	public ZircoWebView(Context context) {
 		super(context);
+		
+		mContext = context;
 		
 		initializeOptions();
 	}
@@ -50,6 +57,8 @@ public class ZircoWebView extends WebView {
 	 */
 	public ZircoWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        
+        mContext = context;
         
         initializeOptions();
 	}	
@@ -73,6 +82,19 @@ public class ZircoWebView extends WebView {
 		// Technical settings
 		settings.setSupportMultipleWindows(true);						
     	setLongClickable(true);
+	}
+	
+	@Override
+	public void loadUrl(String url) {
+		mLoadedUrl = url;
+		super.loadUrl(url);
+	}
+
+	/**
+	 * Inject the AdSweep javascript.
+	 */
+	public void loadAdSweep() {
+		super.loadUrl(ApplicationUtils.getAdSweepString(mContext));
 	}
 	
 	/**
@@ -112,6 +134,21 @@ public class ZircoWebView extends WebView {
 	 */
 	public boolean isLoading() {
 		return mIsLoading;
+	}
+	
+	/**
+	 * Get the loaded url, e.g. the one asked by the user, without redirections.
+	 * @return The loaded url.
+	 */
+	public String getLoadedUrl() {
+		return mLoadedUrl;
+	}
+	
+	/**
+	 * Reset the loaded url.
+	 */
+	public void resetLoadedUrl() {
+		mLoadedUrl = null;
 	}
 
 }

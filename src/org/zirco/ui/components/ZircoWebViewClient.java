@@ -57,6 +57,7 @@ public class ZircoWebViewClient extends WebViewClient {
 			
 		} else {
 		
+			((ZircoWebView) view).resetLoadedUrl();
 			EventController.getInstance().fireWebEvent(EventConstants.EVT_WEB_ON_URL_LOADING, url);				
 			return false;
 		}
