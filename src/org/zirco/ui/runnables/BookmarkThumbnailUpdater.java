@@ -56,7 +56,7 @@ public class BookmarkThumbnailUpdater implements Runnable {
 		float density = mContext.getResources().getDisplayMetrics().density;
 		
 		int thumbnailWidth = (int) (70 * density);
-		int thumbnailHeight = (int) (50 * density);
+		int thumbnailHeight = (int) (60 * density);
 		
 		Bitmap bm = Bitmap.createBitmap(thumbnailWidth,
 				thumbnailHeight, Bitmap.Config.ARGB_4444);

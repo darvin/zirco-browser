@@ -16,6 +16,7 @@
 package org.zirco.model;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 import org.zirco.R;
 import org.zirco.utils.ApplicationUtils;
@@ -24,6 +25,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -34,9 +36,9 @@ import android.widget.TextView;
  * Cursor adapter for bookmarks.
  */
 public class BookmarksCursorAdapter extends SimpleCursorAdapter {
-	
-	private Cursor mCursor;
 
+	private Bitmap mDefaultImage;
+	
 	/**
 	 * Constructor.
 	 * @param context The context.
@@ -47,7 +49,32 @@ public class BookmarksCursorAdapter extends SimpleCursorAdapter {
 	 */
 	public BookmarksCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to) {
 		super(context, layout, c, from, to);
-		mCursor = c;
+
+		createDefaultImage(context);
+	}
+	
+	/**
+	 * Create the default image for bookmarks that do not have a screen shot.
+	 * @param context The current context.
+	 */
+	private void createDefaultImage(Context context) {
+		float density = context.getResources().getDisplayMetrics().density;
+		
+		int thumbnailWidth = (int) (70 * density);
+		int thumbnailHeight = (int) (60 * density);
+		
+		InputStream is = context.getResources().openRawResource(R.drawable.bookmarkthumbnail64);
+		
+		Bitmap inputImage = BitmapFactory.decodeStream(is);
+	
+		float scaleWidth = ((float) thumbnailWidth) / inputImage.getWidth();
+		float scaleHeight = ((float) thumbnailHeight) / inputImage.getHeight();
+		
+		Matrix matrix = new Matrix();	
+		matrix.postScale(scaleWidth, scaleHeight);
+		
+		mDefaultImage = Bitmap.createBitmap(inputImage, 0, 0,
+				inputImage.getWidth(), inputImage.getHeight(), matrix, true); 
 	}
 
 	@Override
@@ -61,13 +88,13 @@ public class BookmarksCursorAdapter extends SimpleCursorAdapter {
 		url = ApplicationUtils.getTruncatedString(urlView.getPaint(), url, parent.getMeasuredWidth() - 40);		
 		urlView.setText(url);
 		
-		byte[] image = getCursor().getBlob(mCursor.getColumnIndex(DbAdapter.BOOKMARKS_THUMBNAIL)); 	
+		byte[] image = getCursor().getBlob(getCursor().getColumnIndex(DbAdapter.BOOKMARKS_THUMBNAIL)); 	
 		if (image != null) {
 			ByteArrayInputStream imageStream = new ByteArrayInputStream(image);
 			Bitmap theImage = BitmapFactory.decodeStream(imageStream);
 			thumbnailView.setImageBitmap(theImage);
 		} else {
-			thumbnailView.setImageBitmap(null);
+			thumbnailView.setImageBitmap(mDefaultImage);
 		}
 		
 		return superView;
