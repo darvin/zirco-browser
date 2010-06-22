@@ -20,6 +20,7 @@ import java.io.InputStream;
 
 import org.zirco.R;
 import org.zirco.utils.ApplicationUtils;
+import org.zirco.utils.Constants;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -60,8 +61,8 @@ public class BookmarksCursorAdapter extends SimpleCursorAdapter {
 	private void createDefaultImage(Context context) {
 		float density = context.getResources().getDisplayMetrics().density;
 		
-		int thumbnailWidth = (int) (70 * density);
-		int thumbnailHeight = (int) (60 * density);
+		int thumbnailWidth = (int) (Constants.BOOKMARK_THUMBNAIL_WIDTH_FACTOR * density);
+		int thumbnailHeight = (int) (Constants.BOOKMARK_THUMBNAIL_HEIGHT_FACTOR * density);
 		
 		InputStream is = context.getResources().openRawResource(R.drawable.bookmarkthumbnail64);
 		

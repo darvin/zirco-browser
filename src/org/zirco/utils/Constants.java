@@ -27,6 +27,9 @@ public class Constants {
 	public static final String EXTRA_ID_BOOKMARK_URL = "EXTRA_ID_BOOKMARK_URL";
 	public static final String EXTRA_ID_BOOKMARK_TITLE = "EXTRA_ID_BOOKMARK_TITLE";
 	
+	public static final int BOOKMARK_THUMBNAIL_WIDTH_FACTOR = 70;
+	public static final int BOOKMARK_THUMBNAIL_HEIGHT_FACTOR = 60;
+	
 	/**
 	 * Preferences.
 	 */

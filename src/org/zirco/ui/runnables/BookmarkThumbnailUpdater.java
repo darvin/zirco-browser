@@ -17,6 +17,7 @@ package org.zirco.ui.runnables;
 
 import org.zirco.model.DbAdapter;
 import org.zirco.ui.components.ZircoWebView;
+import org.zirco.utils.Constants;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -55,8 +56,8 @@ public class BookmarkThumbnailUpdater implements Runnable {
 		
 		float density = mContext.getResources().getDisplayMetrics().density;
 		
-		int thumbnailWidth = (int) (70 * density);
-		int thumbnailHeight = (int) (60 * density);
+		int thumbnailWidth = (int) (Constants.BOOKMARK_THUMBNAIL_WIDTH_FACTOR * density);
+		int thumbnailHeight = (int) (Constants.BOOKMARK_THUMBNAIL_HEIGHT_FACTOR * density);
 		
 		Bitmap bm = Bitmap.createBitmap(thumbnailWidth,
 				thumbnailHeight, Bitmap.Config.ARGB_4444);
