@@ -26,8 +26,7 @@
 	<string name="AboutActivity.UrlTextValue">http://code.google.com/p/zirco-browser/</string>
 	<string name="AboutActivity.LicenseText">License :</string>
 	<string name="AboutActivity.LicenseTextValue">GPL v3</string>
-        
-    <string name="Main.MenuAbout">A propos</string>
+
     <string name="Main.MenuAddBookmark">Ajouter un favori</string>
     <string name="Main.MenuShowBookmarks">Favoris</string>
     <string name="Main.MenuShowHistory">Historique</string>
@@ -201,5 +200,10 @@
     <string name="Commons.SDCardErrorSDUnavailable">Carte SD non disponible.</string>
     
     <string name="DATE_FORMAT_ISO8601">yyyy-MM-dd\'T\'HH:mm:ss.SSS</string>
+    
+    <!-- 0.3.1 -->
+    <string name="PreferencesActivity.AboutCategoryTitle">A propos</string>
+    <string name="PreferencesActivity.AboutPreferenceTitle">A propos</string>
+    <string name="PreferencesActivity.AboutPreferenceSummary">Informations à propos de cette application.</string>
     
 </resources>

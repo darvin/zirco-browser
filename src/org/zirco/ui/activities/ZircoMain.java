@@ -97,7 +97,6 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	private static final int MENU_SHOW_HISTORY = Menu.FIRST + 2;
 	private static final int MENU_SHOW_DOWNLOADS = Menu.FIRST + 3;
 	private static final int MENU_PREFERENCES = Menu.FIRST + 4;
-	private static final int MENU_ABOUT = Menu.FIRST + 5;
 	
 	private static final int CONTEXT_MENU_OPEN = Menu.FIRST + 10;
 	private static final int CONTEXT_MENU_OPEN_IN_NEW_TAB = Menu.FIRST + 11;
@@ -899,14 +898,6 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	}
 	
 	/**
-	 * Open the About dialog.
-	 */
-	private void openAboutDialog() {
-		Intent i = new Intent(this, AboutActivity.class);
-		startActivity(i);
-	}
-	
-	/**
 	 * Open the "Add bookmark" dialog.
 	 */
 	private void openAddBookmarkDialog() {
@@ -986,9 +977,6 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         
         item = menu.add(0, MENU_PREFERENCES, 0, R.string.Main_MenuPreferences);
         item.setIcon(R.drawable.preferences32);
-        
-        item = menu.add(0, MENU_ABOUT, 0, R.string.Main_MenuAbout);
-        item.setIcon(R.drawable.about32);
     	
     	return true;
 	}
@@ -1010,11 +998,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
             return true;
     	case MENU_PREFERENCES:    		
     		openPreferences();
-            return true;
-    	case MENU_ABOUT:
-    		openAboutDialog();
-            return true;
-           default: return super.onMenuItemSelected(featureId, item);
+            return true;    	
+        default: return super.onMenuItemSelected(featureId, item);
     	}
     }
 	

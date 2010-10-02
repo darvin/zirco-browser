@@ -1,5 +1,9 @@
+0.3.1:
+- Updated design.
+- Move about dialog to preferences.
+
 0.3.0:
-- New design
+- New design.
 - Bugfix: FC at start-up for locale other than english/french.
 
 0.2.9:

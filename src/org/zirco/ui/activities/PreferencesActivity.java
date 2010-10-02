@@ -59,6 +59,15 @@ public class PreferencesActivity extends PreferenceActivity {
 		EditText myEditText = (EditText) historySizeEditTextPreference.getEditText();
 		myEditText.setKeyListener(DigitsKeyListener.getInstance(false, false)); 
 		
+		Preference aboutPref = (Preference) findPreference("About");
+		aboutPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {			
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				openAboutActivity();
+				return true;
+			}
+		});
+		
 		Preference whiteListPref = (Preference) findPreference("AdBlockerWhiteList");
 		whiteListPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
@@ -110,6 +119,14 @@ public class PreferencesActivity extends PreferenceActivity {
 				ZircoMain.INSTANCE.applyPreferences();
 			}
 		});
+	}
+	
+	/**
+	 * Display the about dialog.
+	 */
+	private void openAboutActivity() {
+		Intent i = new Intent(this, AboutActivity.class);
+		startActivity(i);
 	}
 	
 	/**
