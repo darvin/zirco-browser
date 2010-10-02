@@ -1,3 +1,7 @@
+0.3.0:
+- New design
+- Bugfix: FC at start-up for locale other than english/french.
+
 0.2.9:
 - Pinch zoom;
 - "Bubble" position can be set to right, left or both.
