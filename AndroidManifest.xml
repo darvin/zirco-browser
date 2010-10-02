@@ -46,7 +46,8 @@
 		<activity android:name=".ui.activities.HistoryListActivity"></activity>
 		<activity android:name=".ui.activities.DownloadsListActivity"></activity>
 		<activity android:name=".ui.activities.AdBlockerWhiteListActivity"></activity>
-	</application>
+	<activity android:name=".ui.activities.BookmarksHistoryActivity"></activity>
+</application>
 
 	<uses-sdk android:minSdkVersion="6" />
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>	

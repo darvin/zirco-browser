@@ -914,7 +914,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	 * Open the bookmark list.
 	 */
 	private void openBookmarksList() {
-    	Intent i = new Intent(this, BookmarksListActivity.class);
+    	Intent i = new Intent(this, BookmarksHistoryActivity.class);
     	startActivityForResult(i, OPEN_BOOKMARKS_ACTIVITY);
     }
 	

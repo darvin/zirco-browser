@@ -180,7 +180,11 @@ public class HistoryListActivity extends ExpandableListActivity {
         result.putExtra(Constants.EXTRA_ID_NEW_TAB, newTab);
         result.putExtra(Constants.EXTRA_ID_URL,  url);
         
-        setResult(RESULT_OK, result);
+        if (getParent() != null) {
+        	getParent().setResult(RESULT_OK, result);
+        } else {
+        	setResult(RESULT_OK, result);
+        }
         finish();
 	}
 

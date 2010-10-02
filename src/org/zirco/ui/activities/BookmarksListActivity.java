@@ -177,7 +177,12 @@ public class BookmarksListActivity extends ListActivity {
         result.putExtra(Constants.EXTRA_ID_NEW_TAB, false);
         result.putExtra(Constants.EXTRA_ID_URL,  mDbAdapter.getBookmarkById(id)[1]);
         
-        setResult(RESULT_OK, result);
+        if (getParent() != null) {
+        	getParent().setResult(RESULT_OK, result);
+        } else {
+        	setResult(RESULT_OK, result);
+        }
+        
         finish();
     }
     
@@ -256,7 +261,13 @@ public class BookmarksListActivity extends ListActivity {
             i = new Intent();
             i.putExtra(Constants.EXTRA_ID_NEW_TAB, true);
             i.putExtra(Constants.EXTRA_ID_URL, mDbAdapter.getBookmarkById(info.id)[1]);
-            setResult(RESULT_OK, i);
+            
+            if (getParent() != null) {
+            	getParent().setResult(RESULT_OK, i);
+            } else {
+            	setResult(RESULT_OK, i);            
+            }
+            
             finish();
             return true;
             
