@@ -1096,7 +1096,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 
 							updateUI();
 
-							return true;
+							return false;
 						}
 
 						// going forwards: pushing stuff to the left
@@ -1113,7 +1113,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 
 							updateUI();
 
-							return true;
+							return false;
 						}
 					}
 				}
