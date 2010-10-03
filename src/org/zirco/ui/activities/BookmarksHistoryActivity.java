@@ -41,7 +41,7 @@ public class BookmarksHistoryActivity extends TabActivity {
 		// Bookmarks
 		intent = new Intent().setClass(this, BookmarksListActivity.class);
 		
-		spec = tabHost.newTabSpec("bookmarks").setIndicator("Bookmarks",
+		spec = tabHost.newTabSpec("bookmarks").setIndicator(res.getString(R.string.Main_MenuShowBookmarks),
                 res.getDrawable(R.drawable.ic_tab_bookmarks))
                 .setContent(intent);
 		tabHost.addTab(spec);
@@ -49,7 +49,7 @@ public class BookmarksHistoryActivity extends TabActivity {
 		// History
 		intent = new Intent().setClass(this, HistoryListActivity.class);
 
-		spec = tabHost.newTabSpec("history").setIndicator("History",
+		spec = tabHost.newTabSpec("history").setIndicator(res.getString(R.string.Main_MenuShowHistory),
                 res.getDrawable(R.drawable.ic_tab_history))
                 .setContent(intent);
 		tabHost.addTab(spec);

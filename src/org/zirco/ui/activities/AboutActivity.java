@@ -74,7 +74,7 @@ public class AboutActivity extends Activity {
 			PackageManager manager = this.getPackageManager();
 			PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
 
-			result = info.versionName;
+			result = String.format("%s (%s)", info.versionName, info.versionCode);
 
 		} catch (NameNotFoundException e) {
 			Log.w(AboutActivity.class.toString(), "Unable to get application version: " + e.getMessage());

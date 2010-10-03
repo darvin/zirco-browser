@@ -18,7 +18,7 @@
 <resources>        
     <string name="ApplicationName">Zirco Browser</string>
     <string name="ApplicationNameUrl">Zirco - %s</string>
-    <string name="ApplicationDescription">Zirco is an open-source alternative browser for Android.</string>
+    <string name="ApplicationDescription">Zirco is an open-source browser for Android.</string>
     
     <string name="AboutActivity.Title">About</string>
 	<string name="AboutActivity.CloseBtn">Close</string>
@@ -116,20 +116,6 @@
     <string name="PreferencesActivity.PrivacyClearFormDataTitle">Clear form data</string>
     <string name="PreferencesActivity.PrivacyClearCacheTitle">Clear cache</string>
     <string name="PreferencesActivity.PrivacyClearCookiesTitle">Clear cookies</string>
-    
-    <string name="PreferencesActivity.QuickButtonPreferenceTitle">Quick button</string>
-    <string name="PreferencesActivity.QuickButtonPreferenceSummary">Set the quick button function.</string>
-    
-    <string name="PreferencesActivity.QuickButtonBookmarks">Bookmarks</string>
-    <string name="PreferencesActivity.QuickButtonHistory">History</string>
-    <string-array name="QuickButtonEntries">
-		<item>@string/PreferencesActivity.QuickButtonBookmarks</item>
-		<item>@string/PreferencesActivity.QuickButtonHistory</item>
-	</string-array>
-	<string-array name="QuickButtonValues">
-		<item>bookmarks</item>
-		<item>history</item>
-	</string-array>
     
     <string name="PreferencesActivity.BarDurationPreferenceTitle">Bars display duration</string>
     <string name="PreferencesActivity.BarDurationPreferenceSummary">Display duration of tools bars.</string>

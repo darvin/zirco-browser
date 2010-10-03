@@ -1,6 +1,9 @@
 0.3.1:
+- Zoom by double-tap.
+- Combined bookmarks/history window.
 - Updated design.
 - Move about dialog to preferences.
+- Fix bug: sometimes a page load but do not show.
 
 0.3.0:
 - New design.

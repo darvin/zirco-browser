@@ -18,7 +18,7 @@
 <resources>        
     <string name="ApplicationName">Zirco Browser</string>
     <string name="ApplicationNameUrl">Zirco - %s</string>
-    <string name="ApplicationDescription">Zirco est un navigateur open-source alternatif pour Android.</string>
+    <string name="ApplicationDescription">Zirco est un navigateur open-source pour Android.</string>
     
     <string name="AboutActivity.Title">A propos</string>
 	<string name="AboutActivity.CloseBtn">Fermer</string>
@@ -116,20 +116,6 @@
     <string name="PreferencesActivity.PrivacyClearFormDataTitle">Purger les données des formulaires</string>
     <string name="PreferencesActivity.PrivacyClearCacheTitle">Purger le cache</string>
     <string name="PreferencesActivity.PrivacyClearCookiesTitle">Purger les cookies</string>
-    
-    <string name="PreferencesActivity.QuickButtonPreferenceTitle">Bouton rapide</string>
-    <string name="PreferencesActivity.QuickButtonPreferenceSummary">Définit la fonction du bouton rapide.</string>
-    
-    <string name="PreferencesActivity.QuickButtonBookmarks">Favoris</string>
-    <string name="PreferencesActivity.QuickButtonHistory">Historique</string>
-    <string-array name="QuickButtonEntries">
-		<item>@string/PreferencesActivity.QuickButtonBookmarks</item>
-		<item>@string/PreferencesActivity.QuickButtonHistory</item>
-	</string-array>
-	<string-array name="QuickButtonValues">
-		<item>bookmarks</item>
-		<item>history</item>
-	</string-array>
     
     <string name="PreferencesActivity.BarDurationPreferenceTitle">Durée d\'affichade des barres</string>
     <string name="PreferencesActivity.BarDurationPreferenceSummary">Durée d\'affichage des barres d\'outils.</string>

@@ -16,7 +16,6 @@
 package org.zirco.ui.activities;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -94,17 +93,15 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	
 	private static final int MENU_ADD_BOOKMARK = Menu.FIRST;
 	private static final int MENU_SHOW_BOOKMARKS = Menu.FIRST + 1;
-	private static final int MENU_SHOW_HISTORY = Menu.FIRST + 2;
-	private static final int MENU_SHOW_DOWNLOADS = Menu.FIRST + 3;
-	private static final int MENU_PREFERENCES = Menu.FIRST + 4;
+	private static final int MENU_SHOW_DOWNLOADS = Menu.FIRST + 2;
+	private static final int MENU_PREFERENCES = Menu.FIRST + 3;
 	
 	private static final int CONTEXT_MENU_OPEN = Menu.FIRST + 10;
 	private static final int CONTEXT_MENU_OPEN_IN_NEW_TAB = Menu.FIRST + 11;
 	private static final int CONTEXT_MENU_DOWNLOAD = Menu.FIRST + 12;
 	
-	private static final int OPEN_BOOKMARKS_ACTIVITY = 0;
-	private static final int OPEN_HISTORY_ACTIVITY = 1;
-	private static final int OPEN_DOWNLOADS_ACTIVITY = 2;
+	private static final int OPEN_BOOKMARKS_HISTORY_ACTIVITY = 0;
+	private static final int OPEN_DOWNLOADS_ACTIVITY = 1;
 	
 	private long mDownDateValue;
 	private float mDownXValue;
@@ -114,7 +111,6 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	private LinearLayout mTopBar;
 	private LinearLayout mBottomBar;
 	
-	private ImageButton mHomeButton;
 	private AutoCompleteTextView mUrlEditText;
 	private ImageButton mGoButton;
 	private ProgressBar mProgressBar;	
@@ -144,6 +140,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	private float mOldDistance;
 	
 	private GestureMode mGestureMode;
+	private long mLastDownTimeForDoubleTap = -1;
 	
 	/**
 	 * Gesture mode.
@@ -265,14 +262,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			public void onClick(View v) {
 				// Dummy event to steel it from the WebView, in case of clicking between the buttons.				
 			}
-		});
-    	
-    	mHomeButton = (ImageButton) findViewById(R.id.HomeBtn);    	
-    	mHomeButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-            	navigateToHome();
-            }          
-        });    	    	
+		});   	
     	
     	mDbAdapter = new DbAdapter(this);
     	mDbAdapter.open();
@@ -380,33 +370,12 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
             	onQuickButton();
             }          
         });
-		applyQuickButtonPreferences();
-    	
-    }
-    
-	/**
-	 * Apply a change to the quick button: Change its image.
-	 */
-    private void applyQuickButtonPreferences() {
-    	String buttonPref = Controller.getInstance().getPreferences().getString(Constants.PREFERENCES_GENERAL_QUICK_BUTTON, "bookmarks");
-		
-		if (buttonPref.equals("bookmarks")) {
-			mQuickButton.setImageResource(R.drawable.bookmarks32);
-		} else if (buttonPref.equals("history")) {
-			mQuickButton.setImageResource(R.drawable.history32);
-		} else {
-			mQuickButton.setImageResource(R.drawable.bookmarks32);
-		}
-		mQuickButton.invalidate();
     }
     
     /**
      * Apply preferences to the current UI objects.
      */
-    public void applyPreferences() {
-    	
-    	applyQuickButtonPreferences();
-    	
+    public void applyPreferences() {    	
     	// To update to Bubble position.
     	setToolbarsVisibility(false);
     	
@@ -913,17 +882,9 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	/**
 	 * Open the bookmark list.
 	 */
-	private void openBookmarksList() {
+	private void openBookmarksHistoryActivity() {
     	Intent i = new Intent(this, BookmarksHistoryActivity.class);
-    	startActivityForResult(i, OPEN_BOOKMARKS_ACTIVITY);
-    }
-	
-	/**
-	 * Open the history list.
-	 */
-	private void openHistoryList() {
-		Intent i = new Intent(this, HistoryListActivity.class);
-    	startActivityForResult(i, OPEN_HISTORY_ACTIVITY);
+    	startActivityForResult(i, OPEN_BOOKMARKS_HISTORY_ACTIVITY);
     }
 	
 	/**
@@ -938,15 +899,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	 * Perform the user-defined action when clicking on the quick button.
 	 */
 	private void onQuickButton() {
-		String buttonPref = Controller.getInstance().getPreferences().getString(Constants.PREFERENCES_GENERAL_QUICK_BUTTON, "bookmarks");
-		
-		if (buttonPref.equals("bookmarks")) {
-			openBookmarksList();
-		} else if (buttonPref.equals("history")) {
-			openHistoryList();
-		} else {
-			openBookmarksList();
-		}
+		openBookmarksHistoryActivity();
 	}
 	
 	/**
@@ -969,9 +922,6 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         item = menu.add(0, MENU_SHOW_BOOKMARKS, 0, R.string.Main_MenuShowBookmarks);
         item.setIcon(R.drawable.bookmarks32);
         
-        item = menu.add(0, MENU_SHOW_HISTORY, 0, R.string.Main_MenuShowHistory);
-        item.setIcon(R.drawable.history32);
-        
         item = menu.add(0, MENU_SHOW_DOWNLOADS, 0, R.string.Main_MenuShowDownloads);
         item.setIcon(R.drawable.downloads32);
         
@@ -988,10 +938,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     		openAddBookmarkDialog();
             return true;
     	case MENU_SHOW_BOOKMARKS:    		
-    		openBookmarksList();
-            return true;
-    	case MENU_SHOW_HISTORY:    		
-    		openHistoryList();
+    		openBookmarksHistoryActivity();
             return true;
     	case MENU_SHOW_DOWNLOADS:    		
     		openDownloadsList();
@@ -1012,8 +959,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         
-        if ((requestCode == OPEN_BOOKMARKS_ACTIVITY) ||
-        		(requestCode == OPEN_HISTORY_ACTIVITY)) {
+        if (requestCode == OPEN_BOOKMARKS_HISTORY_ACTIVITY) {
         	if (intent != null) {
         		Bundle b = intent.getExtras();
         		if (b != null) {
@@ -1068,7 +1014,17 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			
 			// store the X value when the user's finger was pressed down
 			mDownXValue = event.getX();
-			mDownDateValue = new Date().getTime();
+			mDownDateValue = System.currentTimeMillis();
+			
+			System.out.println("mLastDownTimeForDoubleTap: " + Long.toString(mLastDownTimeForDoubleTap));
+			
+			if (mDownDateValue - mLastDownTimeForDoubleTap < 250) {
+				mCurrentWebView.zoomIn();
+				mLastDownTimeForDoubleTap = -1;
+			} else {
+				mLastDownTimeForDoubleTap = mDownDateValue;
+			}
+			
 			break;
 		}
 
@@ -1078,7 +1034,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			
 				// Get the X value when the user released his/her finger
 				float currentX = event.getX();
-				long timeDelta = new Date().getTime() - mDownDateValue;
+				long timeDelta = System.currentTimeMillis() - mDownDateValue;
 
 				if (timeDelta <= FLIP_TIME_THRESHOLD) {
 					if (mViewFlipper.getChildCount() > 1) {
@@ -1160,9 +1116,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 							
 						}
 						
-					}
-					
-					//System.out.println("Scale: " + scale);
+					}					
 				}
 				
 			}		

@@ -24,13 +24,6 @@
 			android:title="@string/PreferencesActivity.HomePagePreferenceTitle"
 			android:key="GeneralHomePage" />
 		<ListPreference
-			android:title="@string/PreferencesActivity.QuickButtonPreferenceTitle"
-			android:summary="@string/PreferencesActivity.QuickButtonPreferenceSummary"
-			android:key="GeneralQuickButton"
-			android:defaultValue="bookmarks"
-			android:entries="@array/QuickButtonEntries"
-			android:entryValues="@array/QuickButtonValues" />
-		<ListPreference
 			android:title="@string/PreferencesActivity.BarDurationPreferenceTitle"
 			android:summary="@string/PreferencesActivity.BarDurationPreferenceSummary"
 			android:key="GeneralBarsDuration"
