@@ -40,13 +40,14 @@ public class DbAdapter {
 	private static final String TAG = "DbAdapter";
 
 	private static final String DATABASE_NAME = "ZIRCO";
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 3;
 	
 	public static final String BOOKMARKS_ROWID = "_id";
 	public static final String BOOKMARKS_TITLE = "title";
 	public static final String BOOKMARKS_URL = "url";
 	public static final String BOOKMARKS_CREATION_DATE = "creation_date";
-	public static final String BOOKMARKS_THUMBNAIL = "thumbnail";
+	public static final String BOOKMARKS_COUNT = "count";
+	public static final String BOOKMARKS_THUMBNAIL = "thumbnail";	
 	
     private static final String BOOKMARKS_DATABASE_TABLE = "BOOKMARKS";    
     
@@ -55,6 +56,7 @@ public class DbAdapter {
     	+ BOOKMARKS_TITLE + " TEXT, "
     	+ BOOKMARKS_URL + " TEXT NOT NULL, "
     	+ BOOKMARKS_CREATION_DATE + " DATE, "
+    	+ BOOKMARKS_COUNT + " INTEGER NOT NULL DEFAULT 0, "
     	+ BOOKMARKS_THUMBNAIL + " BLOB);";
     
     public static final String HISTORY_ROWID = "_id";
@@ -108,11 +110,14 @@ public class DbAdapter {
     	String orderClause;
     	switch (PreferenceManager.getDefaultSharedPreferences(mContext).getInt(Constants.PREFERENCES_BOOKMARKS_SORT_MODE, 0)) {
     	case 0:
-    		orderClause = BOOKMARKS_TITLE + " COLLATE NOCASE";
+    		orderClause = BOOKMARKS_COUNT + " DESC, " + BOOKMARKS_TITLE + " COLLATE NOCASE";
     		break;
     	case 1:
-    		orderClause = BOOKMARKS_CREATION_DATE + " DESC";
+    		orderClause = BOOKMARKS_TITLE + " COLLATE NOCASE";
     		break;
+    	case 2:
+    		orderClause = BOOKMARKS_CREATION_DATE + " DESC";
+    		break;    	
     	default:
     		orderClause = BOOKMARKS_TITLE + " COLLATE NOCASE";
     		break;
@@ -177,6 +182,21 @@ public class DbAdapter {
         args.put(BOOKMARKS_URL, url);
 
         return mDb.update(BOOKMARKS_DATABASE_TABLE, args, BOOKMARKS_ROWID + "=" + rowId, null) > 0;
+    }
+    
+    /**
+     * Update the hit count for the given bookmark.
+     * @param rowId The bookmark id.
+     */
+    public void updateBookmarkCount(long rowId) {
+    	String query = String.format("UPDATE %s SET %s = %s + 1 WHERE %s = %s;",
+    			BOOKMARKS_DATABASE_TABLE,
+    			BOOKMARKS_COUNT,
+    			BOOKMARKS_COUNT,
+    			BOOKMARKS_ROWID,
+    			rowId);
+    	
+    	mDb.execSQL(query);
     }
     
     /**
@@ -400,11 +420,9 @@ public class DbAdapter {
 			
 			Log.d(TAG, "Upgrading database.");
 			
-            //db.execSQL("DROP TABLE IF EXISTS " + BOOKMARKS_DATABASE_TABLE);
-            //db.execSQL("DROP TABLE IF EXISTS " + HISTORY_DATABASE_TABLE);
-			
 			switch (oldVersion) {
-			case 1: db.execSQL("ALTER TABLE " + BOOKMARKS_DATABASE_TABLE + " ADD " + BOOKMARKS_THUMBNAIL + " BLOB;"); break;
+			case 1: db.execSQL("ALTER TABLE " + BOOKMARKS_DATABASE_TABLE + " ADD " + BOOKMARKS_THUMBNAIL + " BLOB;");
+			case 2: db.execSQL("ALTER TABLE " + BOOKMARKS_DATABASE_TABLE + " ADD " + BOOKMARKS_COUNT + " INTEGER NOT NULL DEFAULT 0;");
 			default: break;
 			}
 		}

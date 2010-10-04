@@ -192,4 +192,7 @@
     <string name="PreferencesActivity.AboutPreferenceTitle">About</string>
     <string name="PreferencesActivity.AboutPreferenceSummary">Information about this application.</string>
     
+    <!-- 0.3.2 -->
+    <string name="BookmarksListActivity.MostUsedSortMode">Most used</string>
+    
 </resources>
