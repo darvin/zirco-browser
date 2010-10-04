@@ -17,7 +17,7 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="org.zirco"
-      android:versionCode="5" android:versionName="0.3.1">
+      android:versionName="0.3.2" android:versionCode="6">
     <application
     	android:icon="@drawable/icon"
     	android:label="@string/ApplicationName" android:debuggable="false">
