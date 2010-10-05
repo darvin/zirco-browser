@@ -1016,8 +1016,6 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			mDownXValue = event.getX();
 			mDownDateValue = System.currentTimeMillis();
 			
-			System.out.println("mLastDownTimeForDoubleTap: " + Long.toString(mLastDownTimeForDoubleTap));
-			
 			if (mDownDateValue - mLastDownTimeForDoubleTap < 250) {
 				mCurrentWebView.zoomIn();
 				mLastDownTimeForDoubleTap = -1;
