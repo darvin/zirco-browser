@@ -39,6 +39,8 @@ public class Constants {
 	public static final String PREFERENCES_SHOW_FULL_SCREEN = "GeneralFullScreen";
 	public static final String PREFERENCES_SHOW_TOAST_ON_TAB_SWITCH = "GeneralShowToastOnTabSwitch";
 	
+	public static final String PREFERENCES_DEFAULT_ZOOM_LEVEL = "DefaultZoomLevel";
+	
 	public static final String PREFERENCES_BROWSER_HISTORY_SIZE = "BrowserHistorySize";
 	public static final String PREFERENCES_BROWSER_ENABLE_JAVASCRIPT = "BrowserEnableJavascript";
 	public static final String PREFERENCES_BROWSER_ENABLE_IMAGES = "BrowserEnableImages";

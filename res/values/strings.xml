@@ -194,5 +194,22 @@
     
     <!-- 0.3.2 -->
     <string name="BookmarksListActivity.MostUsedSortMode">Most used</string>
+    <string name="PreferencesActivity.DefaultZoomPreferenceTitle">Default zoom level</string>
+    <string name="PreferencesActivity.DefaultZoomPreferenceSummary">Set the default zoom level.</string>
+    
+    <string name="PreferencesActivity.DefaultZoomClose">Close</string>
+    <string name="PreferencesActivity.DefaultZoomMedium">Medium</string>
+    <string name="PreferencesActivity.DefaultZoomFar">Far</string>
+    
+    <string-array name="DefaultZoomEntries">
+		<item>@string/PreferencesActivity.DefaultZoomClose</item>
+		<item>@string/PreferencesActivity.DefaultZoomMedium</item>
+		<item>@string/PreferencesActivity.DefaultZoomFar</item>
+	</string-array>
+    <string-array name="DefaultZoomValues">
+		<item>CLOSE</item>
+		<item>MEDIUM</item>
+		<item>FAR</item>
+	</string-array>
     
 </resources>

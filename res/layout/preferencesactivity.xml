@@ -48,7 +48,14 @@
 			android:summary="@string/PreferencesActivity.ShowToastOnTabSwitchPreferenceSummary"
 			android:key="GeneralShowToastOnTabSwitch" />
 	</PreferenceCategory>
-	<PreferenceCategory android:title="@string/PreferencesActivity.BrowserSettingsCategoryTitle">	
+	<PreferenceCategory android:title="@string/PreferencesActivity.BrowserSettingsCategoryTitle">
+		<ListPreference
+			android:title="@string/PreferencesActivity.DefaultZoomPreferenceTitle"
+			android:summary="@string/PreferencesActivity.DefaultZoomPreferenceSummary"
+			android:key="DefaultZoomLevel"
+			android:defaultValue="MEDIUM"
+			android:entries="@array/DefaultZoomEntries"
+			android:entryValues="@array/DefaultZoomValues" />	
 		<CheckBoxPreference
 			android:title="@string/PreferencesActivity.EnableJavascriptPreferenceTitle"
 			android:defaultValue="true"
