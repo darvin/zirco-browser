@@ -93,6 +93,8 @@ public class BookmarkThumbnailUpdater implements Runnable {
 				
 			}
 		}
+		
+		c.close();
 	}
 	
 	@Override
