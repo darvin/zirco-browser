@@ -211,5 +211,9 @@
 		<item>MEDIUM</item>
 		<item>FAR</item>
 	</string-array>
+	
+	<string name="StartPage.Welcome">Welcome!</string>
+	<string name="StartPage.Bookmarks">Most used bookmarks</string>
+	<string name="StartPage.History">Recent history</string>
     
 </resources>

@@ -728,14 +728,23 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     	
     		if ((!url.startsWith("http://")) &&
     				(!url.startsWith("https://")) &&
-    				(!url.startsWith("about:blank"))) {
+    				(!url.startsWith(Constants.URL_ABOUT_BLANK)) &&
+    				(!url.startsWith(Constants.URL_ABOUT_START))) {
     			
     			url = "http://" + url;
     			
     		}
     		
     		hideKeyboard(true);
-    		mCurrentWebView.loadUrl(url);
+    		
+    		if (url.equals(Constants.URL_ABOUT_START)) {
+    			
+    			mCurrentWebView.loadDataWithBaseURL("file:///android_asset/startpage/",
+    					ApplicationUtils.getStartPage(this), "text/html", "UTF-8", "about:start");
+    			
+    		} else {    		    	
+    			mCurrentWebView.loadUrl(url);
+    		}
     	}
     }        
     

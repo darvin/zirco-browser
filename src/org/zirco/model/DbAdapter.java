@@ -128,6 +128,18 @@ public class DbAdapter {
     }
     
     /**
+     * Get a limited list of most used bookmarks.
+     * @param limit The number of records.
+     * @return A cursor with BOOKMARKS_TITLE and BOOKMARKS_URL columns.
+     */
+    public Cursor fetchBookmarksWithLimitForStartPage(int limit) {
+    	return mDb.query(BOOKMARKS_DATABASE_TABLE,
+    			new String[] {BOOKMARKS_TITLE, BOOKMARKS_URL}, null, null, null, null,
+    			BOOKMARKS_COUNT + " DESC, " + BOOKMARKS_TITLE + " COLLATE NOCASE",
+    			Integer.toString(limit));
+    }
+    
+    /**
      * Get a cursor on a specific bookmark, given its url.
      * @param originalUrl The original url to search for.
      * @param loadedUrl The loaded url to search for.
@@ -274,6 +286,18 @@ public class DbAdapter {
     	}
     	
     	return cursor;
+    }
+    
+    /**
+     * Get a limited list of last visited websites.
+     * @param limit The number of records.
+     * @return A cursor with HISTORY_TITLE and HISTORY_URL columns.
+     */
+    public Cursor fetchHistoryWithLimitForStartPage(int limit) {
+    	return mDb.query(HISTORY_DATABASE_TABLE,
+    			new String[] {HISTORY_TITLE, HISTORY_URL}, null, null, null, null,
+    			HISTORY_LAST_VISITED_DATE + " DESC, " + HISTORY_TITLE + " COLLATE NOCASE",
+    			Integer.toString(limit));
     }
     
     /**

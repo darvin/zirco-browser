@@ -21,10 +21,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.zirco.R;
+import org.zirco.model.DbAdapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.graphics.Paint;
 import android.os.Environment;
 import android.util.Log;
@@ -35,6 +37,8 @@ import android.util.Log;
 public class ApplicationUtils {
 	
 	private static String mAdSweepString = null;
+	
+	private static String mRawStartPage = null;
 	
 	/**
 	 * Truncate a string to a given maximum width, relative to its paint size.
@@ -191,6 +195,97 @@ public class ApplicationUtils {
 			}
 		}
 		return mAdSweepString;
+	}
+	
+	/**
+	 * Load the start page html.
+	 * @param context The current context.
+	 * @return The start page html.
+	 */
+	public static String getStartPage(Context context) {
+		if (mRawStartPage == null) {
+		
+			InputStream is = context.getResources().openRawResource(R.raw.start);
+			if (is != null) {
+			
+				StringBuilder sb = new StringBuilder();
+				String line;
+
+				try {
+					BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+					while ((line = reader.readLine()) != null) {
+						if (line.length() > 0) {
+							sb.append(line).append("\n");
+						}
+					}
+				} catch (IOException e) {
+					Log.w("StartPage", "Unable to load start page: " + e.getMessage());
+				} finally {
+					try {
+						is.close();
+					} catch (IOException e) {
+						Log.w("StartPage", "Unable to load start page: " + e.getMessage());
+					}
+				}
+				mRawStartPage = sb.toString();
+				
+			} else {
+				mRawStartPage = "";
+			}
+			
+		}
+		
+		String result = mRawStartPage;
+		
+		DbAdapter db = new DbAdapter(context);
+		db.open();
+		
+		StringBuilder bookmarksSb = new StringBuilder();
+		StringBuilder historySb = new StringBuilder();
+		
+		Cursor cursor = db.fetchBookmarksWithLimitForStartPage(5);
+		
+		if ((cursor != null) &&
+				(cursor.moveToFirst())) {			
+			
+			do {
+				
+				bookmarksSb.append(String.format("<li><a href=\"%s\">%s</a></li>",
+						cursor.getString(cursor.getColumnIndex(DbAdapter.BOOKMARKS_URL)),
+						cursor.getString(cursor.getColumnIndex(DbAdapter.BOOKMARKS_TITLE))));
+				
+			} while (cursor.moveToNext());						
+		}
+		
+		cursor.close();
+		
+		cursor = db.fetchHistoryWithLimitForStartPage(5);
+		
+
+		if ((cursor != null) &&
+				(cursor.moveToFirst())) {			
+			
+			do {
+				
+				historySb.append(String.format("<li><a href=\"%s\">%s</a></li>",
+						cursor.getString(cursor.getColumnIndex(DbAdapter.HISTORY_URL)),
+						cursor.getString(cursor.getColumnIndex(DbAdapter.HISTORY_TITLE))));
+				
+			} while (cursor.moveToNext());						
+		}
+		
+		cursor.close();
+		
+		db.close();
+		
+		result = String.format(mRawStartPage,
+				context.getResources().getString(R.string.StartPage_Welcome),
+				context.getResources().getString(R.string.StartPage_Bookmarks),
+				bookmarksSb.toString(),
+				context.getResources().getString(R.string.StartPage_History),
+				historySb.toString());
+		
+		return result;
 	}
 
 }

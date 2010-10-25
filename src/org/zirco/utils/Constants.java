@@ -31,6 +31,12 @@ public class Constants {
 	public static final int BOOKMARK_THUMBNAIL_HEIGHT_FACTOR = 60;
 	
 	/**
+	 * Specials urls.
+	 */
+	public static final String URL_ABOUT_BLANK = "about:blank";
+	public static final String URL_ABOUT_START = "about:start";
+	
+	/**
 	 * Preferences.
 	 */
 	public static final String PREFERENCES_GENERAL_HOME_PAGE = "GeneralHomePage";

@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+	<head>
+		<style type="text/css">			
+			#title { margin-left: 1em; }
+			#title img { vertical-align: middle; margin-right: 1em; }
+			h2 { margin: 0; padding: 0.25em 0.5em 0.25em 0; }
+			#main { margin: 0; padding: 0; }
+			.box-title { margin: 1em 1em 0 1em; padding: 0; background-color: lightgrey; border: 1px solid grey; border-radius: 5px 5px 0 0; }
+			.box-title p { margin: 0.25em 0; }
+			.box-title img { vertical-align: middle; padding: 0 0.5em; }
+			.box-content { margin: 0 1em 0 1em; padding: 0; border: 1px solid grey; border-top: 1px solid transparent; border-radius: 0 0 5px 5px; }
+			#help { margin-top: 1em; text-align: center; }
+		</style>
+		<script type="text/javascript">
+			function toggle(obj, img) {
+				var el1 = document.getElementById(obj);
+				var el2 = document.getElementById(img);
+				if ( el1.style.display != 'none' ) {
+					el1.style.display = 'none';
+					el2.src = 'close.png';
+				}
+				else {
+					el1.style.display = '';
+					el2.src = 'open.png';
+				}
+			}			
+		</script>
+	</head>
+	<body>
+		<div id="main">
+			<div id="title">
+				<img src="icon.png" />%s
+			</div>
+			<div id="bookmarks-title" class="box-title">
+				<p><a href="javascript:toggle('bookmarks-content', 'bookmarks-content-img');"><img id="bookmarks-content-img" src="open.png" /></a>%s</p>				
+			</div>
+			<div id="bookmarks-content" class="box-content">
+				<ul>%s</ul>
+			</div>
+			<div id="history-title" class="box-title">
+				<p><a href="javascript:toggle('history-content', 'history-content-img');"><img id="history-content-img" src="open.png" /></a>%s</p>				
+			</div>
+			<div id="history-content" class="box-content">
+				<ul>%s</ul>
+			</div>
+			<div id="help">
+				<a href="about:help">Help</a>
+			</div>
+		</div>
+	</body>
+</html>

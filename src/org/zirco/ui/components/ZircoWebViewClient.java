@@ -17,6 +17,8 @@ package org.zirco.ui.components;
 
 import org.zirco.events.EventConstants;
 import org.zirco.events.EventController;
+import org.zirco.utils.ApplicationUtils;
+import org.zirco.utils.Constants;
 
 import android.graphics.Bitmap;
 import android.webkit.WebView;
@@ -39,6 +41,14 @@ public class ZircoWebViewClient extends WebViewClient {
 
 	@Override
 	public void onPageStarted(WebView view, String url, Bitmap favicon) {
+		
+		// Some magic here: when performing WebView.loadDataWithBaseURL, the url is "file:///android_asset/startpage,
+		// whereas when the doing a "previous" or "next", the url is "about:start", and we need to perform the
+		// loadDataWithBaseURL here, otherwise it won't load.
+		if (url.equals(Constants.URL_ABOUT_START)) {
+			view.loadDataWithBaseURL("file:///android_asset/startpage/",
+					ApplicationUtils.getStartPage(view.getContext()), "text/html", "UTF-8", "about:start");
+		}
 		
 		((ZircoWebView) view).notifyPageStarted();
 		
