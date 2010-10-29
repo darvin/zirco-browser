@@ -21,6 +21,7 @@ import org.zirco.utils.Constants;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -84,6 +85,8 @@ public class ZircoWebView extends WebView {
 		// Technical settings
 		settings.setSupportMultipleWindows(true);						
     	setLongClickable(true);
+    	setScrollbarFadingEnabled(true);
+    	setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
 	}
 	
 	@Override
