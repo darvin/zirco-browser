@@ -68,6 +68,15 @@ public class PreferencesActivity extends PreferenceActivity {
 			}
 		});
 		
+		Preference changelogPref = (Preference) findPreference("Changelog");
+		changelogPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {			
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				openChangelogActivity();
+				return true;
+			}
+		});
+		
 		Preference whiteListPref = (Preference) findPreference("AdBlockerWhiteList");
 		whiteListPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
@@ -126,6 +135,14 @@ public class PreferencesActivity extends PreferenceActivity {
 	 */
 	private void openAboutActivity() {
 		Intent i = new Intent(this, AboutActivity.class);
+		startActivity(i);
+	}
+	
+	/**
+	 * Display the changelog dialog.
+	 */
+	private void openChangelogActivity() {
+		Intent i = new Intent(this, ChangelogActivity.class);
 		startActivity(i);
 	}
 	

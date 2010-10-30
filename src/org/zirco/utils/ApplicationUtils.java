@@ -161,6 +161,42 @@ public class ApplicationUtils {
 	}
 	
 	/**
+	 * Load a raw string resource.
+	 * @param context The current context.
+	 * @param resourceId The resource id.
+	 * @return The loaded string.
+	 */
+	private static String getStringFromRawResource(Context context, int resourceId) {
+		String result = null;
+		
+		InputStream is = context.getResources().openRawResource(resourceId);
+		if (is != null) {
+			StringBuilder sb = new StringBuilder();
+			String line;
+
+			try {
+				BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+				while ((line = reader.readLine()) != null) {					
+					sb.append(line).append("\n");
+				}
+			} catch (IOException e) {
+				Log.w("ApplicationUtils", String.format("Unable to load resource %s: %s", resourceId, e.getMessage()));
+			} finally {
+				try {
+					is.close();
+				} catch (IOException e) {
+					Log.w("ApplicationUtils", String.format("Unable to load resource %s: %s", resourceId, e.getMessage()));
+				}
+			}
+			result = sb.toString();
+		} else {        
+			result = "";
+		}
+		
+		return result;
+	}
+	
+	/**
 	 * Load the AdSweep script if necessary.
 	 * @param context The current context.
 	 * @return The AdSweep script.
@@ -198,40 +234,23 @@ public class ApplicationUtils {
 	}
 	
 	/**
+	 * Load the changelog string.
+	 * @param context The current context.
+	 * @return The changelog string.
+	 */
+	public static String getChangelogString(Context context) {
+		return getStringFromRawResource(context, R.raw.changelog);
+	}
+	
+	/**
 	 * Load the start page html.
 	 * @param context The current context.
 	 * @return The start page html.
 	 */
 	public static String getStartPage(Context context) {
 		if (mRawStartPage == null) {
-		
-			InputStream is = context.getResources().openRawResource(R.raw.start);
-			if (is != null) {
-			
-				StringBuilder sb = new StringBuilder();
-				String line;
-
-				try {
-					BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-					while ((line = reader.readLine()) != null) {
-						if (line.length() > 0) {
-							sb.append(line).append("\n");
-						}
-					}
-				} catch (IOException e) {
-					Log.w("StartPage", "Unable to load start page: " + e.getMessage());
-				} finally {
-					try {
-						is.close();
-					} catch (IOException e) {
-						Log.w("StartPage", "Unable to load start page: " + e.getMessage());
-					}
-				}
-				mRawStartPage = sb.toString();
-				
-			} else {
-				mRawStartPage = "";
-			}
+					
+			mRawStartPage = getStringFromRawResource(context, R.raw.start);
 			
 		}
 		

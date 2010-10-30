@@ -47,6 +47,7 @@
 		<activity android:name=".ui.activities.DownloadsListActivity"></activity>
 		<activity android:name=".ui.activities.AdBlockerWhiteListActivity"></activity>
 	<activity android:name=".ui.activities.BookmarksHistoryActivity"></activity>
+<activity android:name=".ui.activities.ChangelogActivity" android:theme="@android:style/Theme.Dialog" android:label="@string/ChangelogActivity.Title"></activity>
 </application>
 
 	<uses-sdk android:minSdkVersion="7" />

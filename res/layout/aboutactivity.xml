@@ -52,7 +52,7 @@
 					android:layout_height="wrap_content" android:layout_marginTop="8dp" android:autoLink="web"/>
 			</LinearLayout>
 		</LinearLayout>
-		<Button android:text="@string/AboutActivity.CloseBtn" android:id="@+id/AboutActivity.CloseBtn"
+		<Button android:text="@string/Commons.Close" android:id="@+id/AboutActivity.CloseBtn"
 			android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_gravity="center" android:layout_marginLeft="30dip" android:layout_marginRight="30dip" android:layout_marginTop="30dip"></Button>
 	</LinearLayout>
 </ScrollView>

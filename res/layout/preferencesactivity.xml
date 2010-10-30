@@ -121,5 +121,9 @@
 			android:title="@string/PreferencesActivity.AboutPreferenceTitle"
 			android:summary="@string/PreferencesActivity.AboutPreferenceSummary"
 			android:key="About" />
+		<Preference
+			android:title="@string/PreferencesActivity.ChangelogPreferenceTitle"
+			android:summary="@string/PreferencesActivity.ChangelogPreferenceSummary"
+			android:key="Changelog" />
 	</PreferenceCategory>
 </PreferenceScreen>

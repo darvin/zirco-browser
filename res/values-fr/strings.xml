@@ -21,7 +21,6 @@
     <string name="ApplicationDescription">Zirco est un navigateur open-source pour Android.</string>
     
     <string name="AboutActivity.Title">A propos</string>
-	<string name="AboutActivity.CloseBtn">Fermer</string>
 	<string name="AboutActivity.VersionText">Version :</string>
 	<string name="AboutActivity.UrlTextValue">http://code.google.com/p/zirco-browser/</string>
 	<string name="AboutActivity.LicenseText">License :</string>
@@ -184,6 +183,7 @@
     <string name="Commons.SDCardErrorTitle">Erreur de carte SD</string>
     <string name="Commons.SDCardErrorNoSDMsg">Carte SD introuvable.</string>
     <string name="Commons.SDCardErrorSDUnavailable">Carte SD non disponible.</string>
+    <string name="Commons.Close">Fermer</string>
     
     <string name="DATE_FORMAT_ISO8601">yyyy-MM-dd\'T\'HH:mm:ss.SSS</string>
     
@@ -215,5 +215,9 @@
 	<string name="StartPage.Welcome">Bienvenue !</string>
 	<string name="StartPage.Bookmarks">Favoris les plus utilisés</string>
 	<string name="StartPage.History">Historique récent</string>
+	
+	<string name="ChangelogActivity.Title">Changelog</string>	
+    <string name="PreferencesActivity.ChangelogPreferenceTitle">Changelog</string>
+    <string name="PreferencesActivity.ChangelogPreferenceSummary">Liste des modifications de cette application.</string>
     
 </resources>
