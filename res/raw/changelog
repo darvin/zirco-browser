@@ -1,6 +1,8 @@
 0.3.2:
-- Added changelog dialog.
+- Change icon set to match Android guidelines.
+- Added icons for mdpi/hdpi devices.
 - Bookmarks can be sorted by hit count.
+- Added changelog dialog.
 
 0.3.1:
 - Zoom by double-tap.

@@ -850,9 +850,9 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	 */
 	private void updateGoButton() {
 		if (mCurrentWebView.isLoading()) {
-			mGoButton.setImageResource(R.drawable.cancel32);
+			mGoButton.setImageResource(R.drawable.ic_btn_stop);
 		} else {
-			mGoButton.setImageResource(R.drawable.go32);
+			mGoButton.setImageResource(R.drawable.ic_btn_go);
 		}
 	}
 	
@@ -926,16 +926,16 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     	MenuItem item;
     	
     	item = menu.add(0, MENU_ADD_BOOKMARK, 0, R.string.Main_MenuAddBookmark);
-        item.setIcon(R.drawable.addbookmark32);
+        item.setIcon(R.drawable.ic_menu_add_bookmark);
         
         item = menu.add(0, MENU_SHOW_BOOKMARKS, 0, R.string.Main_MenuShowBookmarks);
-        item.setIcon(R.drawable.bookmarks32);
+        item.setIcon(R.drawable.ic_menu_bookmarks);
         
         item = menu.add(0, MENU_SHOW_DOWNLOADS, 0, R.string.Main_MenuShowDownloads);
-        item.setIcon(R.drawable.downloads32);
+        item.setIcon(R.drawable.ic_menu_downloads);
         
         item = menu.add(0, MENU_PREFERENCES, 0, R.string.Main_MenuPreferences);
-        item.setIcon(R.drawable.preferences32);
+        item.setIcon(R.drawable.ic_menu_preferences);
     	
     	return true;
 	}

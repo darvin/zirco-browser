@@ -146,7 +146,7 @@ public class HistoryListActivity extends ExpandableListActivity {
     	
     	MenuItem item;
     	item = menu.add(0, MENU_CLEAR_HISTORY, 0, R.string.Commons_ClearHistory);
-        item.setIcon(R.drawable.clear32);
+        item.setIcon(R.drawable.ic_menu_delete);
         
         return true;
 	}

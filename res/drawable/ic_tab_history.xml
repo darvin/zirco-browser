@@ -16,9 +16,6 @@
  -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- When selected, use grey -->
-    <item android:drawable="@drawable/history32"
-          android:state_selected="true" />
-    <!-- When not selected, use white-->
-    <item android:drawable="@drawable/history_disable32" />
+    <item android:state_selected="true" android:state_pressed="false" android:drawable="@drawable/ic_tab_history_selected" />
+  	<item android:drawable="@drawable/ic_tab_history_unselected" />
 </selector>

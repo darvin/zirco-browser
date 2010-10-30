@@ -34,7 +34,7 @@
 		</LinearLayout>
 		<ImageButton android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:id="@+id/DownloadRow.StopBtn"
-			android:src="@drawable/cancel32" android:layout_gravity="center_vertical"></ImageButton>
+			android:src="@drawable/ic_btn_stop" android:layout_gravity="center_vertical"></ImageButton>
 	</LinearLayout>
 
 	<ProgressBar android:layout_height="wrap_content" android:layout_width="fill_parent" android:indeterminate="false" android:id="@+id/DownloadRow.ProgressBar" style="@android:style/Widget.ProgressBar.Horizontal" android:layout_marginTop="5dip"></ProgressBar>

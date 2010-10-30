@@ -195,19 +195,19 @@ public class BookmarksListActivity extends ListActivity {
     	
     	MenuItem item;
     	item = menu.add(0, MENU_ADD_BOOKMARK, 0, R.string.BookmarksListActivity_MenuAddBookmark);
-        item.setIcon(R.drawable.addbookmark32);
+        item.setIcon(R.drawable.ic_menu_add_bookmark);
     	
     	item = menu.add(0, MENU_SORT_MODE, 0, R.string.BookmarksListActivity_MenuSortMode);
-        item.setIcon(R.drawable.sortmode32);    	    	
+        item.setIcon(R.drawable.ic_menu_sort);    	    	
         
         item = menu.add(0, MENU_IMPORT_BOOKMARKS, 0, R.string.BookmarksListActivity_ImportBookmarks);
-        item.setIcon(R.drawable.import32);
+        item.setIcon(R.drawable.ic_menu_import);
         
         item = menu.add(0, MENU_EXPORT_BOOKMARKS, 0, R.string.BookmarksListActivity_ExportBookmarks);
-        item.setIcon(R.drawable.export32);
+        item.setIcon(R.drawable.ic_menu_export);
         
         item = menu.add(0, MENU_CLEAR_BOOKMARKS, 0, R.string.BookmarksListActivity_ClearBookmarks);
-        item.setIcon(R.drawable.clear32);
+        item.setIcon(R.drawable.ic_menu_delete);
     	
     	return true;
     }

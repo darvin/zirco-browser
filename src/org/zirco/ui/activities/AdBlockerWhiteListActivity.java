@@ -127,10 +127,10 @@ public class AdBlockerWhiteListActivity extends ListActivity {
     	
     	MenuItem item;
     	item = menu.add(0, MENU_ADD, 0, R.string.AdBlockerWhiteListActivity_Add);
-        item.setIcon(R.drawable.add32);
+        item.setIcon(R.drawable.ic_menu_add);
     	
     	item = menu.add(0, MENU_CLEAR, 0, R.string.AdBlockerWhiteListActivity_Clear);
-        item.setIcon(R.drawable.clear32);
+        item.setIcon(R.drawable.ic_menu_delete);
         
         return true;
 	}

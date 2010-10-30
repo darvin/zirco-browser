@@ -54,7 +54,7 @@
 					android:layout_marginTop="2dip"
 					android:layout_marginBottom="3dip"
 					android:layout_marginRight="3dip"
-					android:src="@drawable/go32"			
+					android:src="@drawable/ic_btn_go"			
 					 ></ImageButton>							
 				
 			</LinearLayout>											
@@ -76,32 +76,32 @@
 				android:background="@drawable/buttons_bottom"
 				android:layout_marginTop="7dip"
 				android:layout_marginLeft="3dip" 
-				android:src="@drawable/previous32" android:layout_weight="1"></ImageButton>						
+				android:src="@drawable/ic_btn_next" android:layout_weight="1"></ImageButton>						
 			<ImageButton android:layout_height="wrap_content"
 				android:id="@+id/RemoveTabBtn" android:layout_width="wrap_content"
 				android:background="@drawable/buttons_bottom"
 				android:layout_marginTop="7dip"
 				android:layout_marginLeft="3dip"
-				android:src="@drawable/removetab32" android:layout_weight="1"></ImageButton>
+				android:src="@drawable/ic_btn_close_tab" android:layout_weight="1"></ImageButton>
 			<ImageButton android:layout_height="wrap_content"
 				android:id="@+id/QuickBtn" android:layout_width="wrap_content"
 				android:background="@drawable/buttons_bottom"
 				android:layout_marginTop="7dip"
 				android:layout_marginLeft="3dip"
-				android:src="@drawable/bookmarks32" android:layout_weight="1"></ImageButton>			
+				android:src="@drawable/ic_btn_bookmarks" android:layout_weight="1"></ImageButton>			
 			<ImageButton android:layout_height="wrap_content"
 				android:id="@+id/NewTabBtn" android:layout_width="wrap_content"
 				android:background="@drawable/buttons_bottom"
 				android:layout_marginTop="7dip"
 				android:layout_marginLeft="3dip"
-				android:src="@drawable/newtab32" android:layout_weight="1"></ImageButton>
+				android:src="@drawable/ic_btn_open_tab" android:layout_weight="1"></ImageButton>
 			<ImageButton android:layout_height="wrap_content"
 				android:id="@+id/NextBtn" android:layout_width="wrap_content"
 				android:background="@drawable/buttons_bottom"
 				android:layout_marginTop="7dip"
 				android:layout_marginLeft="3dip"
 				android:layout_marginRight="3dip"
-				android:src="@drawable/next32" android:layout_weight="1"></ImageButton>
+				android:src="@drawable/ic_btn_forward" android:layout_weight="1"></ImageButton>
 		</LinearLayout>
 		
 		<ImageView android:layout_height="wrap_content"
