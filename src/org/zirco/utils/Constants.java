@@ -57,5 +57,7 @@ public class Constants {
 	public static final String PREFERENCES_ADBLOCKER_ENABLE = "AdBlockerEnable";
 	
 	public static final String PREFERENCES_BOOKMARKS_SORT_MODE = "BookmarksSortMode";
+	
+	public static final String PREFERENCES_LAST_VERSION_CODE = "LastVersionCode";
 
 }

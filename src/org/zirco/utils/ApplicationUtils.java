@@ -26,6 +26,9 @@ import org.zirco.model.DbAdapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.graphics.Paint;
 import android.os.Environment;
@@ -303,6 +306,30 @@ public class ApplicationUtils {
 				bookmarksSb.toString(),
 				context.getResources().getString(R.string.StartPage_History),
 				historySb.toString());
+		
+		return result;
+	}
+	
+	/**
+	 * Get the application version code.
+	 * @param context The current context.
+	 * @return The application version code.
+	 */
+	public static int getApplicationVersionCode(Context context) {
+    	
+		int result = -1;
+		
+		try {
+			
+			PackageManager manager = context.getPackageManager();
+			PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);
+			
+			result = info.versionCode;
+			
+		} catch (NameNotFoundException e) {
+			Log.w("ApplicationUtils", "Unable to get application version: " + e.getMessage());
+			result = -1;
+		}
 		
 		return result;
 	}

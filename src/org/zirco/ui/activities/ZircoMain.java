@@ -41,6 +41,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
@@ -187,6 +188,21 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         	navigateToUrl(i.getDataString());
         } else {
         	// Normal start.
+        	int currentVersionCode = ApplicationUtils.getApplicationVersionCode(this);
+        	int savedVersionCode = PreferenceManager.getDefaultSharedPreferences(this).getInt(Constants.PREFERENCES_LAST_VERSION_CODE, -1);
+        	
+        	// If currentVersionCode and savedVersionCode are different, the application has been updated.
+        	if (currentVersionCode != savedVersionCode) {
+        		// Save current version code.
+        		Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+            	editor.putInt(Constants.PREFERENCES_LAST_VERSION_CODE, currentVersionCode);
+            	editor.commit();
+            	
+            	// Display changelog dialog.
+            	Intent changelogIntent = new Intent(this, ChangelogActivity.class);
+        		startActivity(changelogIntent);
+        	}
+        	
         	addTab(true);
         }
         
