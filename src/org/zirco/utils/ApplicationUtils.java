@@ -301,6 +301,7 @@ public class ApplicationUtils {
 		db.close();
 		
 		result = String.format(mRawStartPage,
+				context.getResources().getString(R.string.StartPage_Title),
 				context.getResources().getString(R.string.StartPage_Welcome),
 				context.getResources().getString(R.string.StartPage_Bookmarks),
 				bookmarksSb.toString(),

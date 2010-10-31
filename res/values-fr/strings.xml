@@ -212,6 +212,7 @@
 		<item>FAR</item>
 	</string-array>
 	
+	<string name="StartPage.Title">Page d\'accueil</string>
 	<string name="StartPage.Welcome">Bienvenue !</string>
 	<string name="StartPage.Bookmarks">Favoris les plus utilisés</string>
 	<string name="StartPage.History">Historique récent</string>
