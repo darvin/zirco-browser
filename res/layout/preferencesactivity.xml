@@ -17,11 +17,9 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 	<PreferenceCategory android:title="@string/PreferencesActivity.GeneralSettingsCategoryTitle">
-		<EditTextPreference
-			android:name="@string/PreferencesActivity.HomePagePreferenceTitle"
-			android:summary="@string/PreferencesActivity.HomePagePreferenceSummary"
-			android:defaultValue="@string/PreferencesActivity.HomePagePreferenceDefaultValue"
+		<Preference
 			android:title="@string/PreferencesActivity.HomePagePreferenceTitle"
+			android:summary="@string/PreferencesActivity.HomePagePreferenceSummary"
 			android:key="GeneralHomePage" />
 		<ListPreference
 			android:title="@string/PreferencesActivity.BarDurationPreferenceTitle"

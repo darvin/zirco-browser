@@ -59,8 +59,17 @@ public class PreferencesActivity extends PreferenceActivity {
 		EditText myEditText = (EditText) historySizeEditTextPreference.getEditText();
 		myEditText.setKeyListener(DigitsKeyListener.getInstance(false, false)); 
 		
+		Preference homepagePref = (Preference) findPreference(Constants.PREFERENCES_GENERAL_HOME_PAGE);
+		homepagePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				openHomepageActivity();
+				return true;
+			}
+		});
+		
 		Preference aboutPref = (Preference) findPreference("About");
-		aboutPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {			
+		aboutPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				openAboutActivity();
@@ -128,6 +137,14 @@ public class PreferencesActivity extends PreferenceActivity {
 				ZircoMain.INSTANCE.applyPreferences();
 			}
 		});
+	}
+	
+	/**
+	 * Display the homepage preference dialog.
+	 */
+	private void openHomepageActivity() {
+		Intent i = new Intent(this, HomepagePreferenceActivity.class);
+		startActivity(i);
 	}
 	
 	/**

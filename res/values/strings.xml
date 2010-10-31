@@ -220,4 +220,18 @@
     <string name="PreferencesActivity.ChangelogPreferenceTitle">Changelog</string>
     <string name="PreferencesActivity.ChangelogPreferenceSummary">Changelog of this application.</string>
     
+    <string name="HomepagePreferenceActivity.Title">Home page</string>
+    <string name="HomepagePreferenceActivity.Prompt">Home page</string>
+    
+    <string name="PreferencesActivity.HomepageStart">Start page</string>
+    <string name="PreferencesActivity.HomepageBlank">Blank page</string>
+    <string name="PreferencesActivity.HomepageCustom">Custom page</string>
+    
+    <string-array name="HomepageValues">
+        <item>@string/PreferencesActivity.HomepageStart</item>
+        <item>@string/PreferencesActivity.HomepageBlank</item>
+        <item>@string/PreferencesActivity.HomepageCustom</item>
+    </string-array>
+    
+    
 </resources>
