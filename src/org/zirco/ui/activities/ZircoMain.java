@@ -776,7 +776,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
      */
     private void navigateToHome() {
     	navigateToUrl(Controller.getInstance().getPreferences().getString(Constants.PREFERENCES_GENERAL_HOME_PAGE,
-    			getResources().getString(R.string.PreferencesActivity_HomePagePreferenceDefaultValue)));
+    			Constants.URL_ABOUT_START));
     }
     
     /**

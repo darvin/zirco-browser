@@ -87,7 +87,6 @@
     <string name="PreferencesActivity.GeneralSettingsCategoryTitle">General settings</string>
     <string name="PreferencesActivity.HomePagePreferenceTitle">Home page</string>
     <string name="PreferencesActivity.HomePagePreferenceSummary">Define your default home page.</string>
-    <string name="PreferencesActivity.HomePagePreferenceDefaultValue">about:blank</string>
     <string name="PreferencesActivity.FullScreenPreferenceTitle">Full screen</string>
     <string name="PreferencesActivity.FullScreenPreferenceSummary">Display browser in full screen mode (need application restart).</string>
     <string name="PreferencesActivity.ShowToastOnTabSwitchPreferenceTitle">Show alert on tab switch</string>

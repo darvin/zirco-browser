@@ -87,7 +87,6 @@
     <string name="PreferencesActivity.GeneralSettingsCategoryTitle">Paramètres généraux</string>
     <string name="PreferencesActivity.HomePagePreferenceTitle">Page d\'accueil</string>
     <string name="PreferencesActivity.HomePagePreferenceSummary">Choisissez votre page d\'accueil par défaut.</string>
-    <string name="PreferencesActivity.HomePagePreferenceDefaultValue">about:blank</string>
     <string name="PreferencesActivity.FullScreenPreferenceTitle">Plein écran</string>
     <string name="PreferencesActivity.FullScreenPreferenceSummary">Affiche le navigateur en mode plein écran (nécessite un redémarrage de l\'application).</string>
     <string name="PreferencesActivity.ShowToastOnTabSwitchPreferenceTitle">Afficher une alerte au changement d\'onglet</string>
