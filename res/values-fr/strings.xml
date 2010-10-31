@@ -167,7 +167,7 @@
     <string name="Commons.PleaseWait">Patientez</string>
     <string name="Commons.Yes">Oui</string>
     <string name="Commons.No">Non</string>
-    <string name="Commons.NoUndoMessage">Cette opération ne peut pas être annulée. Voulez vous continer ?</string>
+    <string name="Commons.NoUndoMessage">Cette opération ne peut pas être annulée. Voulez vous continuer ?</string>
     <string name="Commons.Today">Aujourd\'hui (%s)</string>
     <string name="Commons.Yesterday">Hier (%s)</string>
     <string name="Commons.DaysAgo">Il y a %s jours (%s)</string>

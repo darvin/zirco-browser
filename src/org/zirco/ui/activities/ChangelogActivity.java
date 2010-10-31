@@ -39,9 +39,9 @@ public class ChangelogActivity extends Activity {
 		
 		setContentView(R.layout.changelogactivity);
 		
-		w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON,	android.R.drawable.ic_dialog_info);
+		w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, android.R.drawable.ic_dialog_info);
 		
-		TextView changelogText = (TextView) findViewById(R.id.ChangelogContent);
+		TextView changelogText = (TextView) findViewById(R.id.ChangelogContent);		
 		changelogText.setText(ApplicationUtils.getChangelogString(this));
 		
 		Button closeBtn = (Button) this.findViewById(R.id.ChangelogActivity_CloseBtn);
