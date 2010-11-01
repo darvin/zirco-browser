@@ -184,8 +184,6 @@ public class BookmarksListActivity extends ListActivity {
         	setResult(RESULT_OK, result);
         }
         
-        mDbAdapter.updateBookmarkCount(id);
-        
         finish();
     }
     
@@ -270,8 +268,6 @@ public class BookmarksListActivity extends ListActivity {
             } else {
             	setResult(RESULT_OK, i);            
             }
-            
-            mDbAdapter.updateBookmarkCount(info.id);
             
             finish();
             return true;

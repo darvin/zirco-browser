@@ -92,6 +92,8 @@ public class BookmarkThumbnailUpdater implements Runnable {
 				mDbAdapter.updateBookmarkThumbnail(id, bm);
 				
 			}
+			
+			mDbAdapter.updateBookmarkCount(id);
 		}
 		
 		c.close();
