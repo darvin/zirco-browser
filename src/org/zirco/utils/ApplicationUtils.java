@@ -300,7 +300,9 @@ public class ApplicationUtils {
 		
 		db.close();
 		
-		result = String.format(mRawStartPage,				
+		result = String.format(mRawStartPage,		
+				"http://en.wikipedia.org/w/index.php?search=%s&go=Go",
+				"%s",
 				context.getResources().getString(R.string.StartPage_Welcome),
 				context.getResources().getString(R.string.StartPage_Bookmarks),
 				bookmarksSb.toString(),
