@@ -237,10 +237,10 @@
     <string name="Constants.SearchUrlWikipedia">http://fr.wikipedia.org/w/index.php?search=%s&amp;go=Go</string>
     
     <string name="PreferencesActivity.SearchUrlPreferenceTitle">Url de recherche</string>
-    <string name="PreferencesActivity.SearchUrlPreferenceSummary">Define the search url.</string>
+    <string name="PreferencesActivity.SearchUrlPreferenceSummary">Choisissez votre url de recherche.</string>
     
     <string name="SearchUrlPreferenceActivity.Title">Url de recherche</string>
-    <string name="SearchUrlPreferenceActivity.Prompt">Choisissez votre url de recherche</string>
+    <string name="SearchUrlPreferenceActivity.Prompt">Url de recherche</string>
     
     <string name="PreferencesActivity.SearchUrlGoogle">Google</string>
     <string name="PreferencesActivity.SearchUrlWikipedia">Wikipedia</string>
