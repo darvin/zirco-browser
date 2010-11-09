@@ -159,6 +159,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 
         INSTANCE = this;
         
+        Constants.initializeConstantsFromResources(this);
+        
         Controller.getInstance().setPreferences(PreferenceManager.getDefaultSharedPreferences(this));       
         
         if (Controller.getInstance().getPreferences().getBoolean(Constants.PREFERENCES_SHOW_FULL_SCREEN, true)) {

@@ -15,6 +15,10 @@
 
 package org.zirco.utils;
 
+import org.zirco.R;
+
+import android.content.Context;
+
 /**
  * Defines constants.
  */
@@ -38,9 +42,9 @@ public class Constants {
 	
 	/**
 	 * Search urls.
-	 */
-	public static final String URL_SEARCH_GOOGLE = "http://www.google.com/search?ie=UTF-8&sourceid=navclient&gfns=1&q=%s";
-	public static final String URL_SEARCH_WIKIPEDIA = "http://en.wikipedia.org/w/index.php?search=%s&go=Go";
+	 */	
+	public static String URL_SEARCH_GOOGLE = "http://www.google.com/search?ie=UTF-8&sourceid=navclient&gfns=1&q=%s";
+	public static String URL_SEARCH_WIKIPEDIA = "http://en.wikipedia.org/w/index.php?search=%s&go=Go";
 	
 	/**
 	 * Preferences.
@@ -66,5 +70,18 @@ public class Constants {
 	public static final String PREFERENCES_BOOKMARKS_SORT_MODE = "BookmarksSortMode";
 	
 	public static final String PREFERENCES_LAST_VERSION_CODE = "LastVersionCode";
+	
+	/**
+	 * Methods.
+	 */
+	
+	/**
+	 * Initialize the search url "constants", which depends on the user local.
+	 * @param context The current context.
+	 */
+	public static void initializeConstantsFromResources(Context context) {
+		URL_SEARCH_GOOGLE = context.getResources().getString(R.string.Constants_SearchUrlGoogle);
+		URL_SEARCH_WIKIPEDIA = context.getResources().getString(R.string.Constants_SearchUrlWikipedia);
+	}
 
 }

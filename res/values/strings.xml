@@ -224,7 +224,7 @@
     
     <string name="PreferencesActivity.HomepageStart">Start page</string>
     <string name="PreferencesActivity.HomepageBlank">Blank page</string>
-    <string name="PreferencesActivity.HomepageCustom">Custom page</string>
+    <string name="PreferencesActivity.HomepageCustom">Custom page test</string>
     
     <string-array name="HomepageValues">
         <item>@string/PreferencesActivity.HomepageStart</item>
@@ -233,6 +233,9 @@
     </string-array>
     
     <!-- 0.3.3 -->
+    <string name="Constants.SearchUrlGoogle">http://www.google.com/search?ie=UTF-8&amp;sourceid=navclient&amp;gfns=1&amp;q=%s</string>
+    <string name="Constants.SearchUrlWikipedia">http://en.wikipedia.org/w/index.php?search=%s&amp;go=Go</string>
+    
     <string name="PreferencesActivity.SearchUrlPreferenceTitle">Search url</string>
     <string name="PreferencesActivity.SearchUrlPreferenceSummary">Define the search url.</string>
     

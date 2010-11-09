@@ -233,6 +233,9 @@
     </string-array>
     
     <!-- 0.3.3 -->
+    <string name="Constants.SearchUrlGoogle">http://www.google.fr/search?ie=UTF-8&amp;sourceid=navclient&amp;gfns=1&amp;q=%s</string>
+    <string name="Constants.SearchUrlWikipedia">http://fr.wikipedia.org/w/index.php?search=%s&amp;go=Go</string>
+    
     <string name="PreferencesActivity.SearchUrlPreferenceTitle">Url de recherche</string>
     <string name="PreferencesActivity.SearchUrlPreferenceSummary">Define the search url.</string>
     
