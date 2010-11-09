@@ -232,4 +232,21 @@
         <item>@string/PreferencesActivity.HomepageCustom</item>
     </string-array>
     
+    <!-- 0.3.3 -->
+    <string name="PreferencesActivity.SearchUrlPreferenceTitle">Url de recherche</string>
+    <string name="PreferencesActivity.SearchUrlPreferenceSummary">Define the search url.</string>
+    
+    <string name="SearchUrlPreferenceActivity.Title">Url de recherche</string>
+    <string name="SearchUrlPreferenceActivity.Prompt">Choisissez votre url de recherche</string>
+    
+    <string name="PreferencesActivity.SearchUrlGoogle">Google</string>
+    <string name="PreferencesActivity.SearchUrlWikipedia">Wikipedia</string>
+    <string name="PreferencesActivity.SearchUrlCustom">Personalisée</string>
+    
+    <string-array name="SearchUrlValues">
+        <item>@string/PreferencesActivity.SearchUrlGoogle</item>
+        <item>@string/PreferencesActivity.SearchUrlWikipedia</item>
+        <item>@string/PreferencesActivity.SearchUrlCustom</item>
+    </string-array>
+    
 </resources>

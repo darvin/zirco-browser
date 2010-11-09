@@ -27,6 +27,7 @@ import org.zirco.events.IDownloadEventsListener;
 import org.zirco.events.IWebEventListener;
 import org.zirco.model.DbAdapter;
 import org.zirco.model.DownloadItem;
+import org.zirco.ui.activities.preferences.PreferencesActivity;
 import org.zirco.ui.components.ZircoWebView;
 import org.zirco.ui.components.ZircoWebViewClient;
 import org.zirco.ui.runnables.BookmarkThumbnailUpdater;
@@ -35,6 +36,7 @@ import org.zirco.ui.runnables.HistoryUpdater;
 import org.zirco.utils.AnimationManager;
 import org.zirco.utils.ApplicationUtils;
 import org.zirco.utils.Constants;
+import org.zirco.utils.UrlUtils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -742,21 +744,18 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     	if ((url != null) &&
     			(url.length() > 0)) {
     	
-    		if ((!url.startsWith("http://")) &&
-    				(!url.startsWith("https://")) &&
-    				(!url.startsWith(Constants.URL_ABOUT_BLANK)) &&
-    				(!url.startsWith(Constants.URL_ABOUT_START))) {
-    			
-    			url = "http://" + url;
-    			
-    		}
+    		if (UrlUtils.isUrl(url)) {
+    			url = UrlUtils.checkUrl(url);
+    		} else {
+    			url = UrlUtils.getSearchUrl(this, url);
+    		}    		    	
     		
     		hideKeyboard(true);
     		
     		if (url.equals(Constants.URL_ABOUT_START)) {
     			
     			mCurrentWebView.loadDataWithBaseURL("file:///android_asset/startpage/",
-    					ApplicationUtils.getStartPage(this), "text/html", "UTF-8", "about:start");
+    					ApplicationUtils.getStartPage(this), "text/html", "UTF-8", Constants.URL_ABOUT_START);
     			
     		} else {    		    	
     			mCurrentWebView.loadUrl(url);

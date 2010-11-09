@@ -13,13 +13,17 @@
  * GNU General Public License for more details.
  */
 
-package org.zirco.ui.activities;
+package org.zirco.ui.activities.preferences;
 
 import java.util.Iterator;
 
 import org.zirco.R;
 import org.zirco.controllers.Controller;
 import org.zirco.model.DbAdapter;
+import org.zirco.ui.activities.AboutActivity;
+import org.zirco.ui.activities.AdBlockerWhiteListActivity;
+import org.zirco.ui.activities.ChangelogActivity;
+import org.zirco.ui.activities.ZircoMain;
 import org.zirco.ui.components.ZircoWebView;
 import org.zirco.utils.ApplicationUtils;
 import org.zirco.utils.Constants;
@@ -58,6 +62,15 @@ public class PreferencesActivity extends PreferenceActivity {
 		
 		EditText myEditText = (EditText) historySizeEditTextPreference.getEditText();
 		myEditText.setKeyListener(DigitsKeyListener.getInstance(false, false)); 
+		
+		Preference searchUrlPref = (Preference) findPreference(Constants.PREFERENCES_GENERAL_SEARCH_URL);
+		searchUrlPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				openSearchUrlActivity();
+				return true;
+			}
+		});
 		
 		Preference homepagePref = (Preference) findPreference(Constants.PREFERENCES_GENERAL_HOME_PAGE);
 		homepagePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -144,6 +157,14 @@ public class PreferencesActivity extends PreferenceActivity {
 	 */
 	private void openHomepageActivity() {
 		Intent i = new Intent(this, HomepagePreferenceActivity.class);
+		startActivity(i);
+	}
+	
+	/**
+	 * Display the search url preference dialog.
+	 */
+	private void openSearchUrlActivity() {
+		Intent i = new Intent(this, SearchUrlPreferenceActivity.class);
 		startActivity(i);
 	}
 	

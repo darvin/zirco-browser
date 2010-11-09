@@ -25,13 +25,11 @@
 	android:paddingLeft="10dip"
 	android:paddingRight="10dip">
 	
-	<Spinner android:id="@+id/HomepagePreferenceSpinner"
+	<Spinner android:id="@+id/BaseSpinnerCustomPreferenceSpinner"
 		android:layout_height="wrap_content"
-		android:layout_width="fill_parent"
-		android:entries="@array/HomepageValues"
-		android:prompt="@string/HomepagePreferenceActivity.Prompt"></Spinner>
+		android:layout_width="fill_parent"></Spinner>
 	
-	<EditText android:id="@+id/HomepagePreferenceUrl"
+	<EditText android:id="@+id/BaseSpinnerCustomPreferenceEditText"
 		android:layout_height="wrap_content"
 		android:layout_width="fill_parent"></EditText>
 
@@ -40,12 +38,12 @@
 		android:layout_marginTop="5dip"
 		android:layout_height="wrap_content"
 		android:layout_width="fill_parent">
-		<Button android:id="@+id/HomepagePreferenceOk"
+		<Button android:id="@+id/BaseSpinnerCustomPreferenceOk"
 			android:text="@string/Commons.Ok"			
 			android:layout_weight="0.5"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"></Button>
-		<Button android:id="@+id/HomepagePreferenceCancel"
+		<Button android:id="@+id/BaseSpinnerCustomPreferenceCancel"
 			android:text="@string/Commons.Cancel"
 			android:layout_weight="0.5"
 			android:layout_width="fill_parent"

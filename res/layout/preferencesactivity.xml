@@ -21,6 +21,10 @@
 			android:title="@string/PreferencesActivity.HomePagePreferenceTitle"
 			android:summary="@string/PreferencesActivity.HomePagePreferenceSummary"
 			android:key="GeneralHomePage" />
+		<Preference
+			android:title="@string/PreferencesActivity.SearchUrlPreferenceTitle"
+			android:summary="@string/PreferencesActivity.SearchUrlPreferenceSummary"
+			android:key="GeneralSearchUrl" />
 		<ListPreference
 			android:title="@string/PreferencesActivity.BarDurationPreferenceTitle"
 			android:summary="@string/PreferencesActivity.BarDurationPreferenceSummary"
