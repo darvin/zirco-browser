@@ -42,6 +42,10 @@ public class ApplicationUtils {
 	private static String mAdSweepString = null;
 	
 	private static String mRawStartPage = null;
+	private static String mRawStartPageStyles = null;
+	private static String mRawStartPageJs = null;
+	private static String mRawStartPageBookmarks = null;
+	private static String mRawStartPageHistory = null;
 	
 	/**
 	 * Truncate a string to a given maximum width, relative to its paint size.
@@ -246,24 +250,14 @@ public class ApplicationUtils {
 	}
 	
 	/**
-	 * Load the start page html.
+	 * Build the html result of the most recent bookmarks.
 	 * @param context The current context.
-	 * @return The start page html.
+	 * @param db The database adapter.
+	 * @return The html result of the most recent bookmarks.
 	 */
-	public static String getStartPage(Context context) {
-		if (mRawStartPage == null) {
-					
-			mRawStartPage = getStringFromRawResource(context, R.raw.start);
-			
-		}
-		
-		String result = mRawStartPage;
-		
-		DbAdapter db = new DbAdapter(context);
-		db.open();
-		
+	private static String getBookmarksHtml(Context context, DbAdapter db) {
+		String result = "";
 		StringBuilder bookmarksSb = new StringBuilder();
-		StringBuilder historySb = new StringBuilder();
 		
 		Cursor cursor = db.fetchBookmarksWithLimitForStartPage(5);
 		
@@ -276,14 +270,30 @@ public class ApplicationUtils {
 						cursor.getString(cursor.getColumnIndex(DbAdapter.BOOKMARKS_URL)),
 						cursor.getString(cursor.getColumnIndex(DbAdapter.BOOKMARKS_TITLE))));
 				
-			} while (cursor.moveToNext());						
+			} while (cursor.moveToNext());
+			
+			result = String.format(mRawStartPageBookmarks,
+					context.getResources().getString(R.string.StartPage_Bookmarks),
+					bookmarksSb.toString());
 		}
 		
 		cursor.close();
 		
-		cursor = db.fetchHistoryWithLimitForStartPage(5);
+		return result;
+	}
+	
+	/**
+	 * Build the html result of the most recent history.
+	 * @param context The current context.
+	 * @param db The database adapter.
+	 * @return The html result of the most recent history.
+	 */
+	private static String getHistoryHtml(Context context, DbAdapter db) {
+		String result = "";
+		StringBuilder historySb = new StringBuilder();
 		
-
+		Cursor cursor = db.fetchHistoryWithLimitForStartPage(5);
+		
 		if ((cursor != null) &&
 				(cursor.moveToFirst())) {			
 			
@@ -293,21 +303,51 @@ public class ApplicationUtils {
 						cursor.getString(cursor.getColumnIndex(DbAdapter.HISTORY_URL)),
 						cursor.getString(cursor.getColumnIndex(DbAdapter.HISTORY_TITLE))));
 				
-			} while (cursor.moveToNext());						
+			} while (cursor.moveToNext());
+			
+			result = String.format(mRawStartPageHistory,
+					context.getResources().getString(R.string.StartPage_History),
+					historySb.toString());
 		}
 		
 		cursor.close();
 		
+		return result;
+	}
+	
+	/**
+	 * Load the start page html.
+	 * @param context The current context.
+	 * @return The start page html.
+	 */
+	public static String getStartPage(Context context) {
+		
+		if (mRawStartPage == null) {
+			
+			mRawStartPage = getStringFromRawResource(context, R.raw.start);
+			mRawStartPageStyles = getStringFromRawResource(context, R.raw.start_style);
+			mRawStartPageJs = getStringFromRawResource(context, R.raw.start_js);
+			mRawStartPageBookmarks = getStringFromRawResource(context, R.raw.start_bookmarks);
+			mRawStartPageHistory = getStringFromRawResource(context, R.raw.start_history);
+		}
+		
+		String result = mRawStartPage;
+		
+		DbAdapter db = new DbAdapter(context);
+		db.open();			
+	
+		String bookmarksHtml = getBookmarksHtml(context, db);
+		String historyHtml = getHistoryHtml(context, db);				
+		
 		db.close();
 		
-		result = String.format(mRawStartPage,		
-				"http://en.wikipedia.org/w/index.php?search=%s&go=Go",
-				"%s",
+		String bodyHtml = bookmarksHtml + historyHtml;
+		
+		result = String.format(mRawStartPage,
+				mRawStartPageStyles,
+				mRawStartPageJs,
 				context.getResources().getString(R.string.StartPage_Welcome),
-				context.getResources().getString(R.string.StartPage_Bookmarks),
-				bookmarksSb.toString(),
-				context.getResources().getString(R.string.StartPage_History),
-				historySb.toString());
+				bodyHtml);		
 		
 		return result;
 	}

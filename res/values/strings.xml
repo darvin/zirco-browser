@@ -250,6 +250,6 @@
         <item>@string/PreferencesActivity.SearchUrlGoogle</item>
         <item>@string/PreferencesActivity.SearchUrlWikipedia</item>
         <item>@string/PreferencesActivity.SearchUrlCustom</item>
-    </string-array>
+    </string-array>    
     
 </resources>
