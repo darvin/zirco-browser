@@ -260,10 +260,10 @@ public class ApplicationUtils {
 	 */
 	private static String getBookmarksHtml(Context context, DbAdapter db) {
 		String result = "";
+		StringBuilder bookmarksSb = new StringBuilder();
 		
 		if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Constants.PREFERENCES_START_PAGE_SHOW_BOOKMARKS, true)) {
-			StringBuilder bookmarksSb = new StringBuilder();
-
+			
 			int limit;
 			try {
 				limit = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(Constants.PREFERENCES_START_PAGE_BOOKMARKS_LIMIT, "5"));
@@ -283,14 +283,14 @@ public class ApplicationUtils {
 							cursor.getString(cursor.getColumnIndex(DbAdapter.BOOKMARKS_TITLE))));
 
 				} while (cursor.moveToNext());
-
-				result = String.format(mRawStartPageBookmarks,
-						context.getResources().getString(R.string.StartPage_Bookmarks),
-						bookmarksSb.toString());
 			}
 
 			cursor.close();
 		}
+		
+		result = String.format(mRawStartPageBookmarks,
+				context.getResources().getString(R.string.StartPage_Bookmarks),
+				bookmarksSb.toString());
 		
 		return result;
 	}
@@ -303,9 +303,9 @@ public class ApplicationUtils {
 	 */
 	private static String getHistoryHtml(Context context, DbAdapter db) {
 		String result = "";
+		StringBuilder historySb = new StringBuilder();
 		
-		if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Constants.PREFERENCES_START_PAGE_SHOW_HISTORY, true)) {
-			StringBuilder historySb = new StringBuilder();
+		if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Constants.PREFERENCES_START_PAGE_SHOW_HISTORY, true)) {			
 
 			int limit;
 			try {
@@ -325,15 +325,15 @@ public class ApplicationUtils {
 							cursor.getString(cursor.getColumnIndex(DbAdapter.HISTORY_URL)),
 							cursor.getString(cursor.getColumnIndex(DbAdapter.HISTORY_TITLE))));
 
-				} while (cursor.moveToNext());
-
-				result = String.format(mRawStartPageHistory,
-						context.getResources().getString(R.string.StartPage_History),
-						historySb.toString());
+				} while (cursor.moveToNext());				
 			}
 
 			cursor.close();
 		}
+		
+		result = String.format(mRawStartPageHistory,
+				context.getResources().getString(R.string.StartPage_History),
+				historySb.toString());
 		
 		return result;
 	}

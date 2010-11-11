@@ -17,11 +17,13 @@ package org.zirco.ui.activities;
 
 import org.zirco.R;
 import org.zirco.controllers.Controller;
+import org.zirco.model.DbAdapter;
 import org.zirco.utils.ApplicationUtils;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.ContextMenu;
@@ -34,9 +36,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.LayoutAnimationController;
 import android.view.animation.TranslateAnimation;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 /**
@@ -49,6 +51,10 @@ public class AdBlockerWhiteListActivity extends ListActivity {
 	
 	private static final int MENU_DELETE = Menu.FIRST + 10;
 	
+	private Cursor mCursor;
+	private DbAdapter mDbAdapter;
+	private SimpleCursorAdapter mCursorAdapter;
+	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,18 +62,33 @@ public class AdBlockerWhiteListActivity extends ListActivity {
         
         setTitle(R.string.AdBlockerWhiteListActivity_Title);
         
+        mDbAdapter = new DbAdapter(this);
+        mDbAdapter.open();
+        
         registerForContextMenu(getListView());
         
         fillData();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		mDbAdapter.close();
+		mCursor.close();
+		super.onDestroy();
 	}
 	
 	/**
 	 * Fill the list view.
 	 */
 	private void fillData() {
-				
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.adblockerwhitelistrow, R.id.AdBlockerWhiteListRow_Title, Controller.getInstance().getAdBlockWhiteList());
-		setListAdapter(adapter);
+		mCursor = mDbAdapter.getWhiteListCursor();
+		startManagingCursor(mCursor);
+		
+		String[] from = new String[] {DbAdapter.ADBLOCK_URL};
+    	int[] to = new int[] {R.id.AdBlockerWhiteListRow_Title};
+		
+    	mCursorAdapter = new SimpleCursorAdapter(this, R.layout.adblockerwhitelistrow, mCursor, from, to);
+		setListAdapter(mCursorAdapter);
 		
 		setAnimation();
 	}
@@ -99,10 +120,10 @@ public class AdBlockerWhiteListActivity extends ListActivity {
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		
-		int position = ((AdapterContextMenuInfo) menuInfo).position;
-		if (position != -1) {
-			menu.setHeaderTitle(Controller.getInstance().getAdBlockWhiteList().get(position));
-		}
+		long id = ((AdapterContextMenuInfo) menuInfo).id;
+		if (id != -1) {
+			menu.setHeaderTitle(mDbAdapter.getWhiteListItemById(id));
+		}		
 		
 		menu.add(0, MENU_DELETE, 0, R.string.AdBlockerWhiteListActivity_DeleteMenu);
 	}
@@ -113,8 +134,8 @@ public class AdBlockerWhiteListActivity extends ListActivity {
     	
     	switch (item.getItemId()) {
     	case MENU_DELETE:
-    		Controller.getInstance().getAdBlockWhiteList().remove(info.position);
-    		Controller.getInstance().saveAdBlockWhiteList();
+    		mDbAdapter.deleteFromWhiteList(info.id);
+    		Controller.getInstance().resetAdBlockWhiteList();
     		fillData();
     		return true;
     	default: return super.onContextItemSelected(item);
@@ -155,8 +176,8 @@ public class AdBlockerWhiteListActivity extends ListActivity {
 	 * @param value The value to add.
 	 */
 	private void doAddToWhiteList(String value) {
-		Controller.getInstance().getAdBlockWhiteList().add(value);
-		Controller.getInstance().saveAdBlockWhiteList();
+		mDbAdapter.insertInWhiteList(value);
+		Controller.getInstance().resetAdBlockWhiteList();
 		fillData();
 	}
 	
@@ -199,8 +220,8 @@ public class AdBlockerWhiteListActivity extends ListActivity {
 	 * Clear the white list.
 	 */
 	private void doClearWhiteList() {
-		Controller.getInstance().getAdBlockWhiteList().clear();
-		Controller.getInstance().saveAdBlockWhiteList();
+		mDbAdapter.clearWhiteList();
+		Controller.getInstance().resetAdBlockWhiteList();
 		fillData();
 	}
 	

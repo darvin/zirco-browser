@@ -1163,7 +1163,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		
 		if (url != null) {
 			boolean inList = false;
-			Iterator<String> iter = Controller.getInstance().getAdBlockWhiteList().iterator();
+			Iterator<String> iter = Controller.getInstance().getAdBlockWhiteList(this).iterator();			
 			while ((iter.hasNext()) &&
 					(!inList)) {
 				if (url.contains(iter.next())) {

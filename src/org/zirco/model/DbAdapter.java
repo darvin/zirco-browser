@@ -40,8 +40,11 @@ public class DbAdapter {
 	private static final String TAG = "DbAdapter";
 
 	private static final String DATABASE_NAME = "ZIRCO";
-	private static final int DATABASE_VERSION = 3;
+	private static final int DATABASE_VERSION = 4;
 	
+	/**
+	 * Bookmarks table.
+	 */
 	public static final String BOOKMARKS_ROWID = "_id";
 	public static final String BOOKMARKS_TITLE = "title";
 	public static final String BOOKMARKS_URL = "url";
@@ -51,14 +54,17 @@ public class DbAdapter {
 	
     private static final String BOOKMARKS_DATABASE_TABLE = "BOOKMARKS";    
     
-    private static final String BOOKMARKS_DATABASE_CREATE = "CREATE TABLE " + BOOKMARKS_DATABASE_TABLE + " (" 
-    	+ BOOKMARKS_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-    	+ BOOKMARKS_TITLE + " TEXT, "
-    	+ BOOKMARKS_URL + " TEXT NOT NULL, "
-    	+ BOOKMARKS_CREATION_DATE + " DATE, "
-    	+ BOOKMARKS_COUNT + " INTEGER NOT NULL DEFAULT 0, "
-    	+ BOOKMARKS_THUMBNAIL + " BLOB);";
+    private static final String BOOKMARKS_DATABASE_CREATE = "CREATE TABLE " + BOOKMARKS_DATABASE_TABLE + " (" + 
+    	BOOKMARKS_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+    	BOOKMARKS_TITLE + " TEXT, " +
+    	BOOKMARKS_URL + " TEXT NOT NULL, " +
+    	BOOKMARKS_CREATION_DATE + " DATE, " +
+    	BOOKMARKS_COUNT + " INTEGER NOT NULL DEFAULT 0, " +
+    	BOOKMARKS_THUMBNAIL + " BLOB);";
     
+    /**
+     * History table.
+     */
     public static final String HISTORY_ROWID = "_id";
 	public static final String HISTORY_TITLE = "title";
 	public static final String HISTORY_URL = "url";
@@ -66,11 +72,25 @@ public class DbAdapter {
 	
 	private static final String HISTORY_DATABASE_TABLE = "HISTORY";
 	
-	private static final String HISTORY_DATABASE_CREATE = "CREATE TABLE " + HISTORY_DATABASE_TABLE + " ("
-	+ HISTORY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-	+ HISTORY_TITLE + " TEXT, "
-	+ HISTORY_URL + " TEXT NOT NULL, "
-	+ HISTORY_LAST_VISITED_DATE + " DATE);";
+	private static final String HISTORY_DATABASE_CREATE = "CREATE TABLE " + HISTORY_DATABASE_TABLE + " (" +
+		HISTORY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+		HISTORY_TITLE + " TEXT, " +
+		HISTORY_URL + " TEXT NOT NULL, " +
+		HISTORY_LAST_VISITED_DATE + " DATE);";
+	
+	/**
+	 * Adblock white list table.
+	 */
+	public static final String ADBLOCK_ROWID = "_id";
+	public static final String ADBLOCK_URL = "url";
+	
+	private static final String ADBLOCK_WHITELIST_DATABASE_TABLE = "ADBLOCK_WHITELIST";
+	
+	private static final String ADBLOCK_WHITELIST_DATABASE_CREATE = "CREATE TABLE " + ADBLOCK_WHITELIST_DATABASE_TABLE + " (" +
+		ADBLOCK_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+		ADBLOCK_URL + " TEXT NOT NULL);";
+	
+	protected boolean mAdBlockListNeedPopulate = false;
 	
 	private DatabaseHelper mDbHelper;
     private SQLiteDatabase mDb;
@@ -90,8 +110,14 @@ public class DbAdapter {
      * @return The current database adapter.
      */
     public DbAdapter open() {
-        mDbHelper = new DatabaseHelper(mContext);
+        mDbHelper = new DatabaseHelper(mContext, this);
         mDb = mDbHelper.getWritableDatabase();
+        
+        if (mAdBlockListNeedPopulate) {
+        	populateDefaultWhiteList();
+        	mAdBlockListNeedPopulate = false;
+        }
+        
         return this;
     }
     
@@ -101,6 +127,10 @@ public class DbAdapter {
     public void close() {
         mDbHelper.close();
     }
+    
+    /*******************************************************************************************************************************************************    
+     * Bookmarks.
+     */
     
     /**
      * Get the bookmarks.
@@ -269,6 +299,10 @@ public class DbAdapter {
     	}
     }
     
+    /*******************************************************************************************************************************************************    
+     * History.
+     */
+    
     /**
      * Get a cursor to suggestions from history..
      * @param pattern The pattern to match.
@@ -425,23 +459,120 @@ public class DbAdapter {
     	mDb.execSQL("DELETE FROM " + HISTORY_DATABASE_TABLE + " WHERE " + HISTORY_LAST_VISITED_DATE + " < \"" + DateUtils.getHistoryLimit(mContext) + "\";");
     }
     
+    /*******************************************************************************************************************************************************    
+     * Adblock white list.
+     */
+    
+    /**
+     * Get the white list url given its id.
+     * @param rowId The id.
+     * @return The white list url. 
+     */
+    public String getWhiteListItemById(long rowId) {
+    	Cursor cursor = mDb.query(true, ADBLOCK_WHITELIST_DATABASE_TABLE, new String[] {ADBLOCK_ROWID, ADBLOCK_URL},
+    			ADBLOCK_ROWID + "=" + rowId, null, null, null, null, null);
+    	
+    	if (cursor.moveToFirst()) {
+    		
+    		String result;
+    		result = cursor.getString(cursor.getColumnIndex(ADBLOCK_URL));
+    		
+    		cursor.close();
+    		
+    		return result;
+    		
+    	} else {
+    		cursor.close();
+    		return null;
+    	}
+    }
+    
+    /**
+     * Get the list of url presents in white list.
+     * @return The list of url presents in white list.
+     */
+    public List<String> getWhiteList() {
+    	List<String> result = new ArrayList<String>();
+    	
+    	Cursor cursor = getWhiteListCursor();
+    	
+    	if (cursor.moveToFirst()) {
+    		do {
+    			
+    			result.add(cursor.getString(cursor.getColumnIndex(ADBLOCK_URL)));
+    			
+    		} while (cursor.moveToNext());
+    	}
+    	
+    	cursor.close();
+    	
+    	return result;
+    }
+    
+    /**
+     * Get a cursor to the list of url presents in white list.
+     * @return A cursor to the list of url presents in white list.
+     */
+    public Cursor getWhiteListCursor() {    	
+    	return mDb.query(ADBLOCK_WHITELIST_DATABASE_TABLE, new String[] {ADBLOCK_ROWID, ADBLOCK_URL}, null, null, null, null, null);
+    }
+    
+    /**
+     * Insert an item in the white list.
+     * @param url The url to insert.
+     */
+    public void insertInWhiteList(String url) {
+    	ContentValues initialValues = new ContentValues();
+        initialValues.put(ADBLOCK_URL, url);
+        
+        mDb.insert(ADBLOCK_WHITELIST_DATABASE_TABLE, null, initialValues);
+    }
+    
+    /**
+     * Delete an item in white list given its id.
+     * @param id The id to delete.
+     */
+    public void deleteFromWhiteList(long id) {
+    	mDb.execSQL("DELETE FROM " + ADBLOCK_WHITELIST_DATABASE_TABLE + " WHERE " + ADBLOCK_ROWID + " = " + id + ";");
+    }
+    
+    /**
+     * Delete all records from the white list.
+     */
+    public void clearWhiteList() {
+    	mDb.execSQL("DELETE FROM " + ADBLOCK_WHITELIST_DATABASE_TABLE + ";");
+    }
+    
+    /**
+     * Populate the white list with default values.
+     */
+    private void populateDefaultWhiteList() {
+    	insertInWhiteList("google.com/reader");    	
+    }
+    
     /**
      * DatabaseHelper.
      */
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
+    	private DbAdapter mParent;
+    	
     	/**
     	 * Constructor.
     	 * @param context The current context.
+    	 * @param parent The DbAdapter parent.
     	 */
-		public DatabaseHelper(Context context) {
+		public DatabaseHelper(Context context, DbAdapter parent) {
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
+			mParent = parent;
 		}
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(BOOKMARKS_DATABASE_CREATE);
 			db.execSQL(HISTORY_DATABASE_CREATE);
+			db.execSQL(ADBLOCK_WHITELIST_DATABASE_CREATE);
+			mParent.mAdBlockListNeedPopulate = true;
 		}
 
 		@Override
@@ -452,6 +583,9 @@ public class DbAdapter {
 			switch (oldVersion) {
 			case 1: db.execSQL("ALTER TABLE " + BOOKMARKS_DATABASE_TABLE + " ADD " + BOOKMARKS_THUMBNAIL + " BLOB;");
 			case 2: db.execSQL("ALTER TABLE " + BOOKMARKS_DATABASE_TABLE + " ADD " + BOOKMARKS_COUNT + " INTEGER NOT NULL DEFAULT 0;");
+			case 3:
+				db.execSQL(ADBLOCK_WHITELIST_DATABASE_CREATE);
+				mParent.mAdBlockListNeedPopulate = true;
 			default: break;
 			}
 		}
