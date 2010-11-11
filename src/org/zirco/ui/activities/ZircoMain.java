@@ -46,6 +46,8 @@ import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
@@ -132,6 +134,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	
 	private ImageButton mQuickButton;
 	
+	private Drawable mCircularProgress;
+	
 	private boolean mUrlBarVisible;
 	
 	private HideToolbarsRunnable mHideToolbarsRunnable;
@@ -172,6 +176,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         setProgressBarVisibility(true);
         
         setContentView(R.layout.main);                        
+        
+        mCircularProgress = getResources().getDrawable(R.drawable.spinner);
         
         EventController.getInstance().addDownloadListener(this);                
                 
@@ -339,6 +345,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     			}
     		}
     	});
+    	
+    	mUrlEditText.setCompoundDrawablePadding(5);
     	    	
     	mGoButton = (ImageButton) findViewById(R.id.GoBtn);    	
     	mGoButton.setOnClickListener(new View.OnClickListener() {
@@ -867,9 +875,13 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	 */
 	private void updateGoButton() {
 		if (mCurrentWebView.isLoading()) {
-			mGoButton.setImageResource(R.drawable.ic_btn_stop);
+			mGoButton.setImageResource(R.drawable.ic_btn_stop);			
+			mUrlEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, mCircularProgress, null);
+			((AnimationDrawable) mCircularProgress).start();
 		} else {
-			mGoButton.setImageResource(R.drawable.ic_btn_go);
+			mGoButton.setImageResource(R.drawable.ic_btn_go);			
+			mUrlEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);			
+			((AnimationDrawable) mCircularProgress).stop();
 		}
 	}
 	
