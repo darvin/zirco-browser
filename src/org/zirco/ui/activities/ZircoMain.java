@@ -46,7 +46,9 @@ import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -70,6 +72,7 @@ import android.webkit.DownloadListener;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
+import android.webkit.WebIconDatabase;
 import android.webkit.WebView;
 import android.webkit.WebView.HitTestResult;
 import android.widget.AutoCompleteTextView;
@@ -216,15 +219,28 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         	addTab(true);
         }
         
+        initializeWebIconDatabase();
+        
         startToolbarsHideRunnable();
     }
 
+    /**
+     * Initialize the Web icons database.
+     */
+    private void initializeWebIconDatabase() {
         
+    	final WebIconDatabase db = WebIconDatabase.getInstance();
+    	db.open(getDir("icons", 0).getPath());   
+    }
+
     @Override
 	protected void onDestroy() {
 		if (mDbAdapter != null) {
 			mDbAdapter.close();
 		}
+		
+		WebIconDatabase.getInstance().close();
+		
 		super.onDestroy();
 	}
 
@@ -470,7 +486,14 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 				//activity.setProgress(mCurrentWebView.getProgress() * 100);
 				mProgressBar.setProgress(mCurrentWebView.getProgress());
 			}
-			
+						
+			@Override
+			public void onReceivedIcon(WebView view, Bitmap icon) {				
+				updateFavIcon();
+				
+				super.onReceivedIcon(view, icon);
+			}
+
 			@Override
 			public boolean onCreateWindow(WebView view, final boolean dialog, final boolean userGesture, final Message resultMsg) {
 				
@@ -876,13 +899,23 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	private void updateGoButton() {
 		if (mCurrentWebView.isLoading()) {
 			mGoButton.setImageResource(R.drawable.ic_btn_stop);			
-			mUrlEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, mCircularProgress, null);
+			mUrlEditText.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(mCurrentWebView.getFavicon()), null, mCircularProgress, null);
 			((AnimationDrawable) mCircularProgress).start();
 		} else {
 			mGoButton.setImageResource(R.drawable.ic_btn_go);			
-			mUrlEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);			
+			mUrlEditText.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(mCurrentWebView.getFavicon()), null, null, null);			
 			((AnimationDrawable) mCircularProgress).stop();
 		}
+	}
+	
+	/**
+	 * Update the fav icon display.
+	 */
+	private void updateFavIcon() {
+		mUrlEditText.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(mCurrentWebView.getFavicon()),
+				null,
+				mUrlEditText.getCompoundDrawables()[2],
+				null);
 	}
 	
 	/**
@@ -902,6 +935,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		updateGoButton();
 		
 		updateTitle();
+		
+		updateFavIcon();
 	}
 	
 	/**
@@ -1199,6 +1234,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 					(!checkInAdBlockWhiteList(mCurrentWebView.getUrl()))) {
 				mCurrentWebView.loadAdSweep();
 			}
+			
+			WebIconDatabase.getInstance().retainIconForPageUrl(mCurrentWebView.getUrl());
 			
 			new Thread(new BookmarkThumbnailUpdater(this, mCurrentWebView)).start();
 			
