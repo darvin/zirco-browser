@@ -233,7 +233,7 @@
     </string-array>
     
     <!-- 0.3.3 -->
-    <string name="Constants.SearchUrlGoogle">http://www.google.com/search?ie=UTF-8&amp;sourceid=navclient&amp;gfns=1&amp;q=%s</string>
+    <string name="Constants.SearchUrlGoogle">http://www.google.com/m?hl=en&amp;gl=us&amp;client=ms-null&amp;source=android-browser-key&amp;q=%s</string>
     <string name="Constants.SearchUrlWikipedia">http://en.wikipedia.org/w/index.php?search=%s&amp;go=Go</string>
     
     <string name="PreferencesActivity.SearchUrlPreferenceTitle">Search url</string>
@@ -250,6 +250,22 @@
         <item>@string/PreferencesActivity.SearchUrlGoogle</item>
         <item>@string/PreferencesActivity.SearchUrlWikipedia</item>
         <item>@string/PreferencesActivity.SearchUrlCustom</item>
-    </string-array>    
+    </string-array>
+    
+    <string name="StartPage.Search">Search</string>
+    <string name="StartPage.SearchButton">Go</string>
+    
+    <string name="PreferencesActivity.StartPageCustomizationPreferenceTitle">Start page customization</string>
+    <string name="PreferencesActivity.StartPageCustomizationPreferenceSummary">Customize the start page.</string>
+    <string name="PreferencesActivity.StartPageEnableSearchPreferenceTitle">Show search box</string>
+    <string name="PreferencesActivity.StartPageEnableSearchPreferenceSummary">If checked, a search box will be shown.</string>
+    <string name="PreferencesActivity.StartPageEnableBookmarksPreferenceTitle">Show most used bookmarks</string>
+    <string name="PreferencesActivity.StartPageEnableBookmarksPreferenceSummary">If checked, the most used bookmarks will be shown.</string>
+    <string name="PreferencesActivity.StartPageEnableHistoryPreferenceTitle">Show recent history</string>
+    <string name="PreferencesActivity.StartPageEnableHistoryPreferenceSummary">If checked, the recent history will be shown.</string>
+    <string name="PreferencesActivity.StartPageBookmarksLimitPreferenceTitle">Number of most used bookmarks</string>
+    <string name="PreferencesActivity.StartPageBookmarksLimitPreferenceSummary">The number of most used bookmarks to show.</string>
+    <string name="PreferencesActivity.StartPageHistoryLimitPreferenceTitle">Number of recent history items</string>
+    <string name="PreferencesActivity.StartPageHistoryLimitPreferenceSummary">The number of recent history item to show.</string>
     
 </resources>

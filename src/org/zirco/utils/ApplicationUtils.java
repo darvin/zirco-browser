@@ -32,6 +32,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.graphics.Paint;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 /**
@@ -46,6 +47,8 @@ public class ApplicationUtils {
 	private static String mRawStartPageJs = null;
 	private static String mRawStartPageBookmarks = null;
 	private static String mRawStartPageHistory = null;
+	
+	private static String mRawStartPageSearch = null;
 	
 	/**
 	 * Truncate a string to a given maximum width, relative to its paint size.
@@ -257,27 +260,37 @@ public class ApplicationUtils {
 	 */
 	private static String getBookmarksHtml(Context context, DbAdapter db) {
 		String result = "";
-		StringBuilder bookmarksSb = new StringBuilder();
 		
-		Cursor cursor = db.fetchBookmarksWithLimitForStartPage(5);
-		
-		if ((cursor != null) &&
-				(cursor.moveToFirst())) {			
+		if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Constants.PREFERENCES_START_PAGE_SHOW_BOOKMARKS, true)) {
+			StringBuilder bookmarksSb = new StringBuilder();
+
+			int limit;
+			try {
+				limit = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(Constants.PREFERENCES_START_PAGE_BOOKMARKS_LIMIT, "5"));
+			} catch (Exception e) {
+				limit = 5;
+			}
 			
-			do {
-				
-				bookmarksSb.append(String.format("<li><a href=\"%s\">%s</a></li>",
-						cursor.getString(cursor.getColumnIndex(DbAdapter.BOOKMARKS_URL)),
-						cursor.getString(cursor.getColumnIndex(DbAdapter.BOOKMARKS_TITLE))));
-				
-			} while (cursor.moveToNext());
-			
-			result = String.format(mRawStartPageBookmarks,
-					context.getResources().getString(R.string.StartPage_Bookmarks),
-					bookmarksSb.toString());
+			Cursor cursor = db.fetchBookmarksWithLimitForStartPage(limit);
+
+			if ((cursor != null) &&
+					(cursor.moveToFirst())) {			
+
+				do {
+
+					bookmarksSb.append(String.format("<li><a href=\"%s\">%s</a></li>",
+							cursor.getString(cursor.getColumnIndex(DbAdapter.BOOKMARKS_URL)),
+							cursor.getString(cursor.getColumnIndex(DbAdapter.BOOKMARKS_TITLE))));
+
+				} while (cursor.moveToNext());
+
+				result = String.format(mRawStartPageBookmarks,
+						context.getResources().getString(R.string.StartPage_Bookmarks),
+						bookmarksSb.toString());
+			}
+
+			cursor.close();
 		}
-		
-		cursor.close();
 		
 		return result;
 	}
@@ -290,27 +303,37 @@ public class ApplicationUtils {
 	 */
 	private static String getHistoryHtml(Context context, DbAdapter db) {
 		String result = "";
-		StringBuilder historySb = new StringBuilder();
 		
-		Cursor cursor = db.fetchHistoryWithLimitForStartPage(5);
-		
-		if ((cursor != null) &&
-				(cursor.moveToFirst())) {			
+		if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Constants.PREFERENCES_START_PAGE_SHOW_HISTORY, true)) {
+			StringBuilder historySb = new StringBuilder();
+
+			int limit;
+			try {
+				limit = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(Constants.PREFERENCES_START_PAGE_HISTORY_LIMIT, "5"));
+			} catch (Exception e) {
+				limit = 5;
+			}
 			
-			do {
-				
-				historySb.append(String.format("<li><a href=\"%s\">%s</a></li>",
-						cursor.getString(cursor.getColumnIndex(DbAdapter.HISTORY_URL)),
-						cursor.getString(cursor.getColumnIndex(DbAdapter.HISTORY_TITLE))));
-				
-			} while (cursor.moveToNext());
-			
-			result = String.format(mRawStartPageHistory,
-					context.getResources().getString(R.string.StartPage_History),
-					historySb.toString());
+			Cursor cursor = db.fetchHistoryWithLimitForStartPage(limit);
+
+			if ((cursor != null) &&
+					(cursor.moveToFirst())) {			
+
+				do {
+
+					historySb.append(String.format("<li><a href=\"%s\">%s</a></li>",
+							cursor.getString(cursor.getColumnIndex(DbAdapter.HISTORY_URL)),
+							cursor.getString(cursor.getColumnIndex(DbAdapter.HISTORY_TITLE))));
+
+				} while (cursor.moveToNext());
+
+				result = String.format(mRawStartPageHistory,
+						context.getResources().getString(R.string.StartPage_History),
+						historySb.toString());
+			}
+
+			cursor.close();
 		}
-		
-		cursor.close();
 		
 		return result;
 	}
@@ -329,6 +352,8 @@ public class ApplicationUtils {
 			mRawStartPageJs = getStringFromRawResource(context, R.raw.start_js);
 			mRawStartPageBookmarks = getStringFromRawResource(context, R.raw.start_bookmarks);
 			mRawStartPageHistory = getStringFromRawResource(context, R.raw.start_history);
+			
+			mRawStartPageSearch = getStringFromRawResource(context, R.raw.start_search);
 		}
 		
 		String result = mRawStartPage;
@@ -341,7 +366,12 @@ public class ApplicationUtils {
 		
 		db.close();
 		
-		String bodyHtml = bookmarksHtml + historyHtml;
+		String searchHtml = "";
+		if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Constants.PREFERENCES_START_PAGE_SHOW_SEARCH, true)) {
+			searchHtml = String.format(mRawStartPageSearch, context.getResources().getString(R.string.StartPage_Search), context.getResources().getString(R.string.StartPage_SearchButton));
+		}
+		
+		String bodyHtml = searchHtml + bookmarksHtml + historyHtml;
 		
 		result = String.format(mRawStartPage,
 				mRawStartPageStyles,

@@ -1,3 +1,8 @@
+0.3.3:
+- Search can be done from the url bar. The search url is customizable.
+- The start page can be customized.
+- The start page can show a search box.
+
 0.3.2:
 - Added start page, showing most used bookmarks and recent history.
 - Bookmarks can be sorted by hit count.

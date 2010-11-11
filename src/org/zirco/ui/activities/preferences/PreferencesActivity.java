@@ -56,6 +56,7 @@ public class PreferencesActivity extends PreferenceActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		addPreferencesFromResource(R.layout.preferencesactivity);	
 		
 		EditTextPreference historySizeEditTextPreference = (EditTextPreference) findPreference(Constants.PREFERENCES_BROWSER_HISTORY_SIZE);

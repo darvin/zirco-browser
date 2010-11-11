@@ -39,6 +39,7 @@ public class Constants {
 	 */
 	public static final String URL_ABOUT_BLANK = "about:blank";
 	public static final String URL_ABOUT_START = "about:start";
+	public static final String URL_ACTION_SEARCH = "action:search?q=";
 	
 	/**
 	 * Search urls.
@@ -70,6 +71,12 @@ public class Constants {
 	public static final String PREFERENCES_BOOKMARKS_SORT_MODE = "BookmarksSortMode";
 	
 	public static final String PREFERENCES_LAST_VERSION_CODE = "LastVersionCode";
+	
+	public static final String PREFERENCES_START_PAGE_SHOW_SEARCH = "StartPageEnableSearch";
+	public static final String PREFERENCES_START_PAGE_SHOW_BOOKMARKS = "StartPageEnableBookmarks";
+	public static final String PREFERENCES_START_PAGE_SHOW_HISTORY = "StartPageEnableHistory";
+	public static final String PREFERENCES_START_PAGE_BOOKMARKS_LIMIT = "StartPageBookmarksLimit";
+	public static final String PREFERENCES_START_PAGE_HISTORY_LIMIT = "StartPageHistoryLimit";
 	
 	/**
 	 * Methods.

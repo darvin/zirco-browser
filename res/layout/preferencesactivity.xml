@@ -21,6 +21,40 @@
 			android:title="@string/PreferencesActivity.HomePagePreferenceTitle"
 			android:summary="@string/PreferencesActivity.HomePagePreferenceSummary"
 			android:key="GeneralHomePage" />
+		<PreferenceScreen
+			android:key="StartPageCustomizationPreferencesScreen"
+			android:title="@string/PreferencesActivity.StartPageCustomizationPreferenceTitle"
+			android:summary="@string/PreferencesActivity.StartPageCustomizationPreferenceSummary">
+			<CheckBoxPreference
+				android:title="@string/PreferencesActivity.StartPageEnableSearchPreferenceTitle"
+				android:defaultValue="true"
+				android:summary="@string/PreferencesActivity.StartPageEnableSearchPreferenceSummary"
+				android:key="StartPageEnableSearch" />
+			<CheckBoxPreference
+				android:title="@string/PreferencesActivity.StartPageEnableBookmarksPreferenceTitle"
+				android:defaultValue="true"
+				android:summary="@string/PreferencesActivity.StartPageEnableBookmarksPreferenceSummary"
+				android:key="StartPageEnableBookmarks" />
+			<EditTextPreference
+				android:name="@string/PreferencesActivity.StartPageBookmarksLimitPreferenceTitle"
+				android:summary="@string/PreferencesActivity.StartPageBookmarksLimitPreferenceSummary"
+				android:defaultValue="5"
+				android:numeric="integer"
+				android:title="@string/PreferencesActivity.StartPageBookmarksLimitPreferenceTitle"
+				android:key="StartPageBookmarksLimit" />
+			<CheckBoxPreference
+				android:title="@string/PreferencesActivity.StartPageEnableHistoryPreferenceTitle"
+				android:defaultValue="true"
+				android:summary="@string/PreferencesActivity.StartPageEnableHistoryPreferenceSummary"
+				android:key="StartPageEnableHistory" />
+			<EditTextPreference
+				android:name="@string/PreferencesActivity.StartPageHistoryLimitPreferenceTitle"
+				android:summary="@string/PreferencesActivity.StartPageHistoryLimitPreferenceSummary"
+				android:defaultValue="5"
+				android:numeric="integer"
+				android:title="@string/PreferencesActivity.StartPageHistoryLimitPreferenceTitle"
+				android:key="StartPageHistoryLimit" />
+		</PreferenceScreen>
 		<Preference
 			android:title="@string/PreferencesActivity.SearchUrlPreferenceTitle"
 			android:summary="@string/PreferencesActivity.SearchUrlPreferenceSummary"

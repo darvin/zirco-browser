@@ -233,7 +233,7 @@
     </string-array>
     
     <!-- 0.3.3 -->
-    <string name="Constants.SearchUrlGoogle">http://www.google.fr/search?ie=UTF-8&amp;sourceid=navclient&amp;gfns=1&amp;q=%s</string>
+    <string name="Constants.SearchUrlGoogle">http://www.google.com/m?hl=fr&amp;gl=fr&amp;client=ms-null&amp;source=android-browser-key&amp;q=%s</string>    
     <string name="Constants.SearchUrlWikipedia">http://fr.wikipedia.org/w/index.php?search=%s&amp;go=Go</string>
     
     <string name="PreferencesActivity.SearchUrlPreferenceTitle">Url de recherche</string>
@@ -251,5 +251,21 @@
         <item>@string/PreferencesActivity.SearchUrlWikipedia</item>
         <item>@string/PreferencesActivity.SearchUrlCustom</item>
     </string-array>
+    
+    <string name="StartPage.Search">Rechercher</string>
+    <string name="StartPage.SearchButton">Go</string>
+    
+    <string name="PreferencesActivity.StartPageCustomizationPreferenceTitle">Personalisation de la page de démarrage</string>
+    <string name="PreferencesActivity.StartPageCustomizationPreferenceSummary">Permet de personaliser la page de démarrage.</string>
+    <string name="PreferencesActivity.StartPageEnableSearchPreferenceTitle">Afficher la recherche</string>
+    <string name="PreferencesActivity.StartPageEnableSearchPreferenceSummary">Si coché, la boite de recherche sera affichée.</string>
+    <string name="PreferencesActivity.StartPageEnableBookmarksPreferenceTitle">Afficher les favoris les plus utilisés</string>
+    <string name="PreferencesActivity.StartPageEnableBookmarksPreferenceSummary">Si coché, les favoris les plus utilisés seront affichés.</string>
+    <string name="PreferencesActivity.StartPageEnableHistoryPreferenceTitle">Afficher l\'historique récent</string>
+    <string name="PreferencesActivity.StartPageEnableHistoryPreferenceSummary">Si coché, l\'historique récent sera affiché.</string>
+    <string name="PreferencesActivity.StartPageBookmarksLimitPreferenceTitle">Nombre de favoris les plus utilisés</string>
+    <string name="PreferencesActivity.StartPageBookmarksLimitPreferenceSummary">Définit le nombre de favoris à afficher.</string>
+    <string name="PreferencesActivity.StartPageHistoryLimitPreferenceTitle">Nombre d\'éléments dans l\'historique récent</string>
+    <string name="PreferencesActivity.StartPageHistoryLimitPreferenceSummary">Définit le nombre d\'élément à afficher dans l\'historique récent.</string>
     
 </resources>

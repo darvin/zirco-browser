@@ -15,6 +15,7 @@
 
 package org.zirco.ui.components;
 
+import org.zirco.controllers.Controller;
 import org.zirco.events.EventConstants;
 import org.zirco.events.EventController;
 import org.zirco.utils.ApplicationUtils;
@@ -65,8 +66,15 @@ public class ZircoWebViewClient extends WebViewClient {
 			EventController.getInstance().fireWebEvent(EventConstants.EVT_VND_URL, url);						
 			return true;
 			
+		} else if (url.startsWith(Constants.URL_ACTION_SEARCH)) {
+			String searchTerm = url.replace(Constants.URL_ACTION_SEARCH, "");
+			
+			String searchUrl = Controller.getInstance().getPreferences().getString(Constants.PREFERENCES_GENERAL_SEARCH_URL, Constants.URL_SEARCH_GOOGLE);
+			String newUrl = String.format(searchUrl, searchTerm);
+			
+			view.loadUrl(newUrl);
+			return true;
 		} else {
-		
 			((ZircoWebView) view).resetLoadedUrl();
 			EventController.getInstance().fireWebEvent(EventConstants.EVT_WEB_ON_URL_LOADING, url);				
 			return false;

@@ -312,7 +312,12 @@ public class DbAdapter {
     	List<HistoryItem> items;
     	Cursor cursor;
     	
-    	int historyLimit = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(mContext).getString(Constants.PREFERENCES_BROWSER_HISTORY_SIZE, "5"));
+    	int historyLimit;
+    	try {
+    		historyLimit = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(mContext).getString(Constants.PREFERENCES_BROWSER_HISTORY_SIZE, "5"));
+		} catch (Exception e) {
+			historyLimit = 5;
+		}
     	
     	long id;
     	String title;
