@@ -20,7 +20,35 @@
 		<Preference
 			android:title="@string/PreferencesActivity.HomePagePreferenceTitle"
 			android:summary="@string/PreferencesActivity.HomePagePreferenceSummary"
-			android:key="GeneralHomePage" />
+			android:key="GeneralHomePage" />		
+		<Preference
+			android:title="@string/PreferencesActivity.SearchUrlPreferenceTitle"
+			android:summary="@string/PreferencesActivity.SearchUrlPreferenceSummary"
+			android:key="GeneralSearchUrl" />
+		<ListPreference
+			android:title="@string/PreferencesActivity.BarDurationPreferenceTitle"
+			android:summary="@string/PreferencesActivity.BarDurationPreferenceSummary"
+			android:key="GeneralBarsDuration"
+			android:defaultValue="3000"
+			android:entries="@array/BarDurationEntries"
+			android:entryValues="@array/BarDurationValues" />
+		<ListPreference
+			android:title="@string/PreferencesActivity.BubblePositionPreferenceTitle"
+			android:summary="@string/PreferencesActivity.BubblePositionPreferenceSummary"
+			android:key="GeneralBubblePosition"
+			android:defaultValue="right"
+			android:entries="@array/BubblePositionEntries"
+			android:entryValues="@array/BubblePositionValues" />
+		<CheckBoxPreference
+			android:title="@string/PreferencesActivity.FullScreenPreferenceTitle"
+			android:defaultValue="true"
+			android:summary="@string/PreferencesActivity.FullScreenPreferenceSummary"
+			android:key="GeneralFullScreen" />
+		<CheckBoxPreference
+			android:title="@string/PreferencesActivity.ShowToastOnTabSwitchPreferenceTitle"
+			android:defaultValue="true"
+			android:summary="@string/PreferencesActivity.ShowToastOnTabSwitchPreferenceSummary"
+			android:key="GeneralShowToastOnTabSwitch" />
 		<PreferenceScreen
 			android:key="StartPageCustomizationPreferencesScreen"
 			android:title="@string/PreferencesActivity.StartPageCustomizationPreferenceTitle"
@@ -55,34 +83,6 @@
 				android:title="@string/PreferencesActivity.StartPageHistoryLimitPreferenceTitle"
 				android:key="StartPageHistoryLimit" />
 		</PreferenceScreen>
-		<Preference
-			android:title="@string/PreferencesActivity.SearchUrlPreferenceTitle"
-			android:summary="@string/PreferencesActivity.SearchUrlPreferenceSummary"
-			android:key="GeneralSearchUrl" />
-		<ListPreference
-			android:title="@string/PreferencesActivity.BarDurationPreferenceTitle"
-			android:summary="@string/PreferencesActivity.BarDurationPreferenceSummary"
-			android:key="GeneralBarsDuration"
-			android:defaultValue="3000"
-			android:entries="@array/BarDurationEntries"
-			android:entryValues="@array/BarDurationValues" />
-		<ListPreference
-			android:title="@string/PreferencesActivity.BubblePositionPreferenceTitle"
-			android:summary="@string/PreferencesActivity.BubblePositionPreferenceSummary"
-			android:key="GeneralBubblePosition"
-			android:defaultValue="right"
-			android:entries="@array/BubblePositionEntries"
-			android:entryValues="@array/BubblePositionValues" />
-		<CheckBoxPreference
-			android:title="@string/PreferencesActivity.FullScreenPreferenceTitle"
-			android:defaultValue="true"
-			android:summary="@string/PreferencesActivity.FullScreenPreferenceSummary"
-			android:key="GeneralFullScreen" />
-		<CheckBoxPreference
-			android:title="@string/PreferencesActivity.ShowToastOnTabSwitchPreferenceTitle"
-			android:defaultValue="true"
-			android:summary="@string/PreferencesActivity.ShowToastOnTabSwitchPreferenceSummary"
-			android:key="GeneralShowToastOnTabSwitch" />
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/PreferencesActivity.BrowserSettingsCategoryTitle">
 		<ListPreference
