@@ -2,6 +2,7 @@
 - Search can be done from the url bar. The search url is customizable.
 - The start page can be customized.
 - The start page can show a search box.
+- The browser user agent can be customized.
 
 0.3.2:
 - Added start page, showing most used bookmarks and recent history.

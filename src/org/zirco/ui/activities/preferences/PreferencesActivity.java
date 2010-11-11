@@ -64,6 +64,15 @@ public class PreferencesActivity extends PreferenceActivity {
 		EditText myEditText = (EditText) historySizeEditTextPreference.getEditText();
 		myEditText.setKeyListener(DigitsKeyListener.getInstance(false, false)); 
 		
+		Preference userAgentPref = (Preference) findPreference(Constants.PREFERENCES_BROWSER_USER_AGENT);
+		userAgentPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				openUserAgentActivity();
+				return true;
+			}
+		});
+		
 		Preference searchUrlPref = (Preference) findPreference(Constants.PREFERENCES_GENERAL_SEARCH_URL);
 		searchUrlPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
@@ -166,6 +175,14 @@ public class PreferencesActivity extends PreferenceActivity {
 	 */
 	private void openSearchUrlActivity() {
 		Intent i = new Intent(this, SearchUrlPreferenceActivity.class);
+		startActivity(i);
+	}
+	
+	/**
+	 * Display the user agent preference dialog.
+	 */
+	private void openUserAgentActivity() {
+		Intent i = new Intent(this, UserAgentPreferenceActivity.class);
 		startActivity(i);
 	}
 	

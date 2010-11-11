@@ -58,7 +58,7 @@ public class SearchUrlPreferenceActivity extends BaseSpinnerCustomPreferenceActi
 			mSpinner.setSelection(2);
 			mCustomEditText.setEnabled(true);
 			mCustomEditText.setText(currentSearchUrl);					
-		}		
+		}
 	}
 	
 	@Override

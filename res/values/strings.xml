@@ -268,4 +268,20 @@
     <string name="PreferencesActivity.StartPageHistoryLimitPreferenceTitle">Number of recent history items</string>
     <string name="PreferencesActivity.StartPageHistoryLimitPreferenceSummary">The number of recent history item to show.</string>
     
+    <string name="PreferencesActivity.UserAgentPreferenceTitle">User agent</string>
+    <string name="PreferencesActivity.UserAgentPreferenceSummary">Define the user agent to use.</string>
+    
+    <string name="UserAgentPreferenceActivity.Title">User agent</string>
+    <string name="UserAgentPreferenceActivity.Prompt">User agent</string>
+    
+    <string name="PreferencesActivity.UserAgentDefault">Default</string>
+    <string name="PreferencesActivity.UserAgentDesktop">Desktop</string>
+    <string name="PreferencesActivity.UserAgentCustom">Custom</string>
+    
+    <string-array name="UserAgentValues">
+        <item>@string/PreferencesActivity.UserAgentDefault</item>
+        <item>@string/PreferencesActivity.UserAgentDesktop</item>
+        <item>@string/PreferencesActivity.UserAgentCustom</item>
+    </string-array>
+    
 </resources>

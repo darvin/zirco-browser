@@ -48,6 +48,12 @@ public class Constants {
 	public static String URL_SEARCH_WIKIPEDIA = "http://en.wikipedia.org/w/index.php?search=%s&go=Go";
 	
 	/**
+	 * User agents.
+	 */
+	public static String USER_AGENT_DEFAULT = "";
+	public static String USER_AGENT_DESKTOP = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/534.7 (KHTML, like Gecko) Chrome/7.0.517.44 Safari/534.7";
+	
+	/**
 	 * Preferences.
 	 */
 	public static final String PREFERENCES_GENERAL_HOME_PAGE = "GeneralHomePage";
@@ -65,6 +71,7 @@ public class Constants {
 	public static final String PREFERENCES_BROWSER_ENABLE_FORM_DATA = "BrowserEnableFormData";
 	public static final String PREFERENCES_BROWSER_ENABLE_PASSWORDS = "BrowserEnablePasswords";
 	public static final String PREFERENCES_BROWSER_ENABLE_COOKIES = "BrowserEnableCookies";
+	public static final String PREFERENCES_BROWSER_USER_AGENT = "BrowserUserAgent";
 	
 	public static final String PREFERENCES_ADBLOCKER_ENABLE = "AdBlockerEnable";
 	
@@ -76,7 +83,7 @@ public class Constants {
 	public static final String PREFERENCES_START_PAGE_SHOW_BOOKMARKS = "StartPageEnableBookmarks";
 	public static final String PREFERENCES_START_PAGE_SHOW_HISTORY = "StartPageEnableHistory";
 	public static final String PREFERENCES_START_PAGE_BOOKMARKS_LIMIT = "StartPageBookmarksLimit";
-	public static final String PREFERENCES_START_PAGE_HISTORY_LIMIT = "StartPageHistoryLimit";
+	public static final String PREFERENCES_START_PAGE_HISTORY_LIMIT = "StartPageHistoryLimit";	
 	
 	/**
 	 * Methods.

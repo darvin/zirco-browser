@@ -91,7 +91,11 @@
 			android:key="DefaultZoomLevel"
 			android:defaultValue="MEDIUM"
 			android:entries="@array/DefaultZoomEntries"
-			android:entryValues="@array/DefaultZoomValues" />	
+			android:entryValues="@array/DefaultZoomValues" />
+		<Preference
+			android:title="@string/PreferencesActivity.UserAgentPreferenceTitle"
+			android:summary="@string/PreferencesActivity.UserAgentPreferenceSummary"
+			android:key="BrowserUserAgent" />	
 		<CheckBoxPreference
 			android:title="@string/PreferencesActivity.EnableJavascriptPreferenceTitle"
 			android:defaultValue="true"

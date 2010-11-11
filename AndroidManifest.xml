@@ -50,6 +50,7 @@
 		<activity android:name=".ui.activities.preferences.PreferencesActivity"></activity>
 		<activity android:name=".ui.activities.preferences.HomepagePreferenceActivity" android:theme="@android:style/Theme.Dialog" android:label="@string/HomepagePreferenceActivity.Title"></activity>
 		<activity android:name=".ui.activities.preferences.SearchUrlPreferenceActivity" android:theme="@android:style/Theme.Dialog" android:label="@string/SearchUrlPreferenceActivity.Title"></activity>
+		<activity android:name=".ui.activities.preferences.UserAgentPreferenceActivity" android:theme="@android:style/Theme.Dialog" android:label="@string/UserAgentPreferenceActivity.Title"></activity>
 	</application>
 
 	<uses-sdk android:minSdkVersion="7" />
