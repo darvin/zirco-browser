@@ -26,6 +26,7 @@ import org.zirco.utils.DateUtils;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
@@ -319,6 +320,79 @@ public class DbAdapter {
     		cursor = mDb.query(HISTORY_DATABASE_TABLE, new String[] {HISTORY_ROWID, HISTORY_URL}, HISTORY_URL + " LIKE '" + pattern + "'", null, null, null, null);
     	} else {
     		cursor = mDb.query(HISTORY_DATABASE_TABLE, new String[] {HISTORY_ROWID, HISTORY_URL}, null, null, null, null, null);
+    	}
+    	
+    	return cursor;
+    }
+    
+    /**
+     * Get a cursor for suggections, given a search pattern.
+     * Search on history and bookmarks.
+     * @param pattern The pattern to search for.
+     * @return A cursor of suggections.
+     */
+    public Cursor getSuggestion(String pattern) {
+    	MatrixCursor cursor = new MatrixCursor(new String[] {UrlSuggestionCursorAdapter.URL_SUGGESTION_ID,
+    			UrlSuggestionCursorAdapter.URL_SUGGESTION_TITLE,
+    			UrlSuggestionCursorAdapter.URL_SUGGESTION_URL,
+    			UrlSuggestionCursorAdapter.URL_SUGGESTION_TYPE});
+    	
+    	if ((pattern != null) &&
+    			(pattern.length() > 0)) {
+    		
+    		pattern = "%" + pattern + "%";
+    		
+    		int idCounter = -1;
+    		
+    		Cursor historyCursor = mDb.query(HISTORY_DATABASE_TABLE, new String[] {HISTORY_ROWID, HISTORY_TITLE, HISTORY_URL}, HISTORY_URL + " LIKE '" + pattern + "'", null, null, null, null);
+    		
+    		if (historyCursor != null) {
+    			
+    			if (historyCursor.moveToFirst()) {
+    				
+    				String[] row;
+    				
+    				do {
+    					idCounter++;
+    					
+    					row = new String[4];
+    					row[0] = Integer.toString(idCounter);
+    					row[1] = historyCursor.getString(historyCursor.getColumnIndex(HISTORY_TITLE));
+    					row[2] = historyCursor.getString(historyCursor.getColumnIndex(HISTORY_URL));
+    					row[3] = "1";
+    					
+    					cursor.addRow(row);
+    					
+    				} while (historyCursor.moveToNext());
+    			}
+    			
+    			historyCursor.close();
+    		}
+    		
+    		Cursor bookmarksCursor = mDb.query(BOOKMARKS_DATABASE_TABLE, new String[] {BOOKMARKS_ROWID, BOOKMARKS_TITLE, BOOKMARKS_URL}, BOOKMARKS_TITLE + " LIKE '" + pattern + "'", null, null, null, null);
+    		
+    		if (bookmarksCursor != null) {
+    			
+    			if (bookmarksCursor.moveToFirst()) {
+    				
+    				String[] row;
+    				
+    				do {
+    					idCounter++;
+    					
+    					row = new String[4];
+    					row[0] = Integer.toString(idCounter);
+    					row[1] = bookmarksCursor.getString(bookmarksCursor.getColumnIndex(BOOKMARKS_TITLE));
+    					row[2] = bookmarksCursor.getString(bookmarksCursor.getColumnIndex(BOOKMARKS_URL));
+    					row[3] = "2";
+    					
+    					cursor.addRow(row);
+    					
+    				} while (bookmarksCursor.moveToNext());
+    			}
+    			
+    			bookmarksCursor.close();
+    		}
     	}
     	
     	return cursor;

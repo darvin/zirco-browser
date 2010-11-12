@@ -27,6 +27,7 @@ import org.zirco.events.IDownloadEventsListener;
 import org.zirco.events.IWebEventListener;
 import org.zirco.model.DbAdapter;
 import org.zirco.model.DownloadItem;
+import org.zirco.model.UrlSuggestionCursorAdapter;
 import org.zirco.ui.activities.preferences.PreferencesActivity;
 import org.zirco.ui.components.ZircoWebView;
 import org.zirco.ui.components.ZircoWebViewClient;
@@ -83,7 +84,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -309,15 +309,15 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     	mDbAdapter = new DbAdapter(this);
     	mDbAdapter.open();
 
-    	String[] from = new String[] {DbAdapter.HISTORY_URL};
-    	int[] to = new int[] {android.R.id.text1};
+    	String[] from = new String[] {UrlSuggestionCursorAdapter.URL_SUGGESTION_TITLE, UrlSuggestionCursorAdapter.URL_SUGGESTION_URL};
+    	int[] to = new int[] {R.id.AutocompleteTitle, R.id.AutocompleteUrl};
     	
-    	SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, android.R.layout.simple_dropdown_item_1line, null, from, to);
-    	
+    	UrlSuggestionCursorAdapter adapter = new UrlSuggestionCursorAdapter(this, R.layout.url_autocomplete_line, null, from, to);
+    	      	
     	adapter.setCursorToStringConverter(new CursorToStringConverter() {			
 			@Override
 			public CharSequence convertToString(Cursor cursor) {
-				String aColumnString = cursor.getString(1);
+				String aColumnString = cursor.getString(cursor.getColumnIndex(UrlSuggestionCursorAdapter.URL_SUGGESTION_URL));
                 return aColumnString;
 			}
 		});
@@ -327,9 +327,9 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			public Cursor runQuery(CharSequence constraint) {
 				if ((constraint != null) &&
 						(constraint.length() > 0)) {
-					return mDbAdapter.getSuggestionsFromHistory(constraint.toString());
+					return mDbAdapter.getSuggestion(constraint.toString());
 				} else {
-					return mDbAdapter.getSuggestionsFromHistory(null);
+					return mDbAdapter.getSuggestion(null);
 				}
 			}
 		});
