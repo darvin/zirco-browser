@@ -610,7 +610,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
      */
     private void doDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
     	    
-        if (ApplicationUtils.checkCardState(this)) {
+        if (ApplicationUtils.checkCardState(this, true)) {
         	DownloadItem item = new DownloadItem(url);
         	Controller.getInstance().addToDownload(item);
         	item.startDownload();

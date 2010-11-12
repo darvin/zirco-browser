@@ -341,7 +341,7 @@ public class BookmarksListActivity extends ListActivity {
     			this.getResources().getString(R.string.BookmarksListActivity_ImportingBookmarks));
     	
     	if (file == null) {
-    		new AndroidImporter(this);
+    		new AndroidBookmarksImporter(this);
     	} else {
     		new XmlBookmarksImporter(this, file);
     	}
@@ -400,12 +400,15 @@ public class BookmarksListActivity extends ListActivity {
      * @param fileName The export file name.
      */
     private void doExportBookmarks(String fileName) {
-    	if (ApplicationUtils.checkCardState(this)) {
-    		mProgressDialog = ProgressDialog.show(this,
-    				this.getResources().getString(R.string.Commons_PleaseWait),
-    				this.getResources().getString(R.string.BookmarksListActivity_ExportingBookmarks));
+    	
+    	mProgressDialog = ProgressDialog.show(this,
+    			this.getResources().getString(R.string.Commons_PleaseWait),
+    			this.getResources().getString(R.string.BookmarksListActivity_ExportingBookmarks));
 
+    	if (fileName != null) {
     		new XmlBookmarksExporter(fileName);
+    	} else {
+    		new AndroidBookmarksExporter(this);
     	}
     }
     
@@ -416,21 +419,43 @@ public class BookmarksListActivity extends ListActivity {
     	
     	final String fileName = DateUtils.getNowForFileName() + ".xml";
     	
-    	ApplicationUtils.showOkCancelDialog(this,
-    			android.R.drawable.ic_dialog_info,
-    			this.getString(R.string.BookmarksListActivity_ExportDialogTitle),
-    			String.format(this.getString(R.string.BookmarksListActivity_ExportDialogMessage),
-    					IOUtils.getBookmarksExportFolder().getAbsolutePath() + "/" + fileName),
-    			new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						
-						doExportBookmarks(fileName);
-						
-					}
-    		
-    	});    	    	
+    	final String[] exportTargets;
+    	
+    	if (ApplicationUtils.checkCardState(this, false)) {
+    		exportTargets = new String[2];
+    		exportTargets[0] = getResources().getString(R.string.BookmarksListActivity_AndroidExportTarget);
+    		exportTargets[1] = fileName; 
+    	} else {
+    		exportTargets = new String[1];
+    		exportTargets[0] = getResources().getString(R.string.BookmarksListActivity_AndroidExportTarget);
+    	}
+    	
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	builder.setInverseBackgroundForced(true);
+    	builder.setIcon(android.R.drawable.ic_dialog_info);
+    	builder.setTitle(getResources().getString(R.string.BookmarksListActivity_ExportDialogTitle));
+    	
+    	builder.setSingleChoiceItems(exportTargets,
+    			0,
+    			new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				
+				if (which == 0) {
+					doExportBookmarks(null);
+				} else {
+					doExportBookmarks(exportTargets[which]);
+				}
+				
+				dialog.dismiss();				
+			}    		
+    	});    	
+    	
+    	builder.setCancelable(true);
+    	builder.setNegativeButton(R.string.Commons_Cancel, null);
+    	
+    	AlertDialog alert = builder.create();
+    	alert.show();
     }
     
     /**
@@ -465,7 +490,7 @@ public class BookmarksListActivity extends ListActivity {
     /**
      * Runnable for import of Android bookmarks.
      */
-    private class AndroidImporter implements Runnable {
+    private class AndroidBookmarksImporter implements Runnable {
     	
     	private Context mContext;
 
@@ -473,7 +498,7 @@ public class BookmarksListActivity extends ListActivity {
     	 * Constructor.
     	 * @param context The current context.
     	 */
-    	public AndroidImporter(Context context) {
+    	public AndroidBookmarksImporter(Context context) {
     		mContext = context;
     		
     		new Thread(this).start();
@@ -481,7 +506,7 @@ public class BookmarksListActivity extends ListActivity {
     	
 		@Override
 		public void run() {
-			Cursor cursor = BookmarksUtils.getAllBookmarks(mContext);
+			Cursor cursor = BookmarksUtils.getAllAndroidBookmarks(mContext);
 	    	startManagingCursor(cursor);
 	    	
 	    	if (cursor != null) {
@@ -580,6 +605,7 @@ public class BookmarksListActivity extends ListActivity {
 						String title;
 						String url;
 						String creationDate;
+						int count;
 						Node item;
 						
 						for (int i = 0; i < bookmarksList.getLength(); i++) {
@@ -591,6 +617,7 @@ public class BookmarksListActivity extends ListActivity {
 								title = null;
 								url = null;
 								creationDate = null;
+								count = 0;
 								
 								bookmarkItems = bookmark.getChildNodes();
 								
@@ -606,6 +633,12 @@ public class BookmarksListActivity extends ListActivity {
 											url = URLDecoder.decode(getNodeContent(item));
 										} else if (item.getNodeName().equals("creationdate")) {
 											creationDate = getNodeContent(item);
+										} else if (item.getNodeName().equals("count")) {
+											try {
+												count = Integer.parseInt(getNodeContent(item));
+											} catch (Exception e) {
+												count = 0;
+											}
 										}
 									}
 									
@@ -616,7 +649,7 @@ public class BookmarksListActivity extends ListActivity {
 									creationDate = DateUtils.getNow(mContext);
 								}
 								
-								mDbAdapter.addBookmark(title, url, creationDate);								
+								mDbAdapter.addBookmark(title, url, creationDate, count);								
 							}
 							
 						}
@@ -645,6 +678,50 @@ public class BookmarksListActivity extends ListActivity {
 			}
 		};
     	
+    }
+    
+    /**
+     * Runnable to export bookmarks to Android bookmarks.
+     */
+    private class AndroidBookmarksExporter implements Runnable {
+
+    	private Context mContext;
+    	
+    	/**
+    	 * Constructor.
+    	 * @param context The current context.
+    	 */
+    	public AndroidBookmarksExporter(Context context) {
+    		mContext = context;
+    		new Thread(this).start();
+    	}
+    	
+		@Override
+		public void run() {
+			
+			if (mCursor.moveToFirst()) {
+				
+				String title;
+				String url;
+				
+				do {
+					
+					title = mCursor.getString(mCursor.getColumnIndex(DbAdapter.BOOKMARKS_TITLE));
+					url = mCursor.getString(mCursor.getColumnIndex(DbAdapter.BOOKMARKS_URL));
+					
+					BookmarksUtils.saveAndroidBookmark(mContext, title, url);
+					
+				} while (mCursor.moveToNext());			
+			}
+			
+			handler.sendEmptyMessage(0);
+		}
+		
+		private Handler handler = new Handler() {
+			public void handleMessage(Message msg) {
+				mProgressDialog.dismiss();
+			}
+		};
     }
     
     /**
@@ -682,6 +759,7 @@ public class BookmarksListActivity extends ListActivity {
 						writer.write(String.format("<title>%s</title>\n", mCursor.getString(mCursor.getColumnIndex(DbAdapter.BOOKMARKS_TITLE))));
 						writer.write(String.format("<url>%s</url>\n", URLEncoder.encode(mCursor.getString(mCursor.getColumnIndex(DbAdapter.BOOKMARKS_URL)))));
 						writer.write(String.format("<creationdate>%s</creationdate>\n", mCursor.getString(mCursor.getColumnIndex(DbAdapter.BOOKMARKS_CREATION_DATE))));
+						writer.write(String.format("<count>%s</count>\n", mCursor.getInt(mCursor.getColumnIndex(DbAdapter.BOOKMARKS_COUNT))));
 
 						writer.write("</bookmark>\n");
 

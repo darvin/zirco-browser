@@ -1,1 +1,0 @@
-- Fix bug when trying to export bookmarks with no SD-card available. Check if same problem with downloads.

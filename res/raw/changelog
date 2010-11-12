@@ -4,6 +4,8 @@
 - The start page can show a search box.
 - The browser user agent can be customized.
 - The ad blocker white list is now stored in database.
+- Url bar now display favicons.
+- Bookmarks can be exported to Android browser bookmarks.
 
 0.3.2:
 - Added start page, showing most used bookmarks and recent history.

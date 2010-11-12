@@ -131,9 +131,10 @@ public class ApplicationUtils {
 	/**
 	 * Check if the SD card is available. Display an alert if not.
 	 * @param context The current context.
+	 * @param showMessage If true, will display a message for the user.
 	 * @return True if the SD card is available, false otherwise.
 	 */
-	public static boolean checkCardState(Context context) {
+	public static boolean checkCardState(Context context, boolean showMessage) {
 		// Check to see if we have an SDCard
         String status = Environment.getExternalStorageState();
         if (!status.equals(Environment.MEDIA_MOUNTED)) {
@@ -147,7 +148,9 @@ public class ApplicationUtils {
                 messageId = R.string.Commons_SDCardErrorNoSDMsg;
             }
             
-            ApplicationUtils.showErrorDialog(context, R.string.Commons_SDCardErrorTitle, messageId);
+            if (showMessage) {
+            	ApplicationUtils.showErrorDialog(context, R.string.Commons_SDCardErrorTitle, messageId);
+            }
             
             return false;
         }

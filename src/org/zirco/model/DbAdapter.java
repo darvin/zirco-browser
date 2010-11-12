@@ -154,7 +154,7 @@ public class DbAdapter {
     	}
     	
     	return mDb.query(BOOKMARKS_DATABASE_TABLE,
-    			new String[] {BOOKMARKS_ROWID, BOOKMARKS_TITLE, BOOKMARKS_URL, BOOKMARKS_CREATION_DATE, BOOKMARKS_THUMBNAIL}, null, null, null, null, orderClause);
+    			new String[] {BOOKMARKS_ROWID, BOOKMARKS_TITLE, BOOKMARKS_URL, BOOKMARKS_CREATION_DATE, BOOKMARKS_THUMBNAIL, BOOKMARKS_COUNT}, null, null, null, null, orderClause);
     }
     
     /**
@@ -192,7 +192,7 @@ public class DbAdapter {
      * @return The new bookmark id.
      */
     public long addBookmark(String title, String url) {
-        return addBookmark(title, url, DateUtils.getNow(mContext));
+        return addBookmark(title, url, DateUtils.getNow(mContext), 0);
     }
     
     /**
@@ -200,13 +200,15 @@ public class DbAdapter {
      * @param title The title.
      * @param url The url.
      * @param creationDate The creation date.
+     * @param count The usage count.
      * @return The new bookmark id.
      */
-    public long addBookmark(String title, String url, String creationDate) {
+    public long addBookmark(String title, String url, String creationDate, int count) {
     	ContentValues initialValues = new ContentValues();
     	initialValues.put(BOOKMARKS_TITLE, title);
         initialValues.put(BOOKMARKS_URL, url);
         initialValues.put(BOOKMARKS_CREATION_DATE, creationDate);
+        initialValues.put(BOOKMARKS_COUNT, count);
         
         return mDb.insert(BOOKMARKS_DATABASE_TABLE, null, initialValues);
     }
