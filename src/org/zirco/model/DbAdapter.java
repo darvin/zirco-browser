@@ -17,6 +17,7 @@ package org.zirco.model;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -327,11 +328,13 @@ public class DbAdapter {
     
     /**
      * Get a cursor for suggections, given a search pattern.
-     * Search on history and bookmarks.
+     * Search on history and bookmarks, on title and url.
+     * The result list is sorted based on each result note.
+     * @see UrlSuggestionItem for how a note is computed.
      * @param pattern The pattern to search for.
      * @return A cursor of suggections.
      */
-    public Cursor getSuggestion(String pattern) {
+    public Cursor getUrlSuggestions(String pattern) {
     	MatrixCursor cursor = new MatrixCursor(new String[] {UrlSuggestionCursorAdapter.URL_SUGGESTION_ID,
     			UrlSuggestionCursorAdapter.URL_SUGGESTION_TITLE,
     			UrlSuggestionCursorAdapter.URL_SUGGESTION_URL,
@@ -340,28 +343,25 @@ public class DbAdapter {
     	if ((pattern != null) &&
     			(pattern.length() > 0)) {
     		
-    		pattern = "%" + pattern + "%";
+    		String sqlPattern = "%" + pattern + "%";
     		
-    		int idCounter = -1;
+    		List<UrlSuggestionItem> results = new ArrayList<UrlSuggestionItem>();
     		
-    		Cursor historyCursor = mDb.query(HISTORY_DATABASE_TABLE, new String[] {HISTORY_ROWID, HISTORY_TITLE, HISTORY_URL}, HISTORY_URL + " LIKE '" + pattern + "'", null, null, null, null);
+    		// Get history results.
+    		Cursor historyCursor = mDb.query(HISTORY_DATABASE_TABLE,
+    				new String[] {HISTORY_ROWID, HISTORY_TITLE, HISTORY_URL},
+    				HISTORY_TITLE + " LIKE '" + sqlPattern + "' OR " + HISTORY_URL  + " LIKE '" + sqlPattern + "'",
+    				null, null, null, null);
     		
     		if (historyCursor != null) {
     			
     			if (historyCursor.moveToFirst()) {
     				
-    				String[] row;
-    				
-    				do {
-    					idCounter++;
-    					
-    					row = new String[4];
-    					row[0] = Integer.toString(idCounter);
-    					row[1] = historyCursor.getString(historyCursor.getColumnIndex(HISTORY_TITLE));
-    					row[2] = historyCursor.getString(historyCursor.getColumnIndex(HISTORY_URL));
-    					row[3] = "1";
-    					
-    					cursor.addRow(row);
+    				do {    					
+    					results.add(new UrlSuggestionItem(pattern,
+    							historyCursor.getString(historyCursor.getColumnIndex(HISTORY_TITLE)),
+    							historyCursor.getString(historyCursor.getColumnIndex(HISTORY_URL)),
+    							1));
     					
     				} while (historyCursor.moveToNext());
     			}
@@ -369,30 +369,45 @@ public class DbAdapter {
     			historyCursor.close();
     		}
     		
-    		Cursor bookmarksCursor = mDb.query(BOOKMARKS_DATABASE_TABLE, new String[] {BOOKMARKS_ROWID, BOOKMARKS_TITLE, BOOKMARKS_URL}, BOOKMARKS_TITLE + " LIKE '" + pattern + "'", null, null, null, null);
+    		// Get bookmarks results.
+    		Cursor bookmarksCursor = mDb.query(BOOKMARKS_DATABASE_TABLE,
+    				new String[] {BOOKMARKS_ROWID, BOOKMARKS_TITLE, BOOKMARKS_URL},
+    				BOOKMARKS_TITLE + " LIKE '" + sqlPattern + "' OR " + BOOKMARKS_URL  + " LIKE '" + sqlPattern + "'",
+    				null, null, null, null);
     		
     		if (bookmarksCursor != null) {
     			
     			if (bookmarksCursor.moveToFirst()) {
     				
-    				String[] row;
-    				
     				do {
-    					idCounter++;
-    					
-    					row = new String[4];
-    					row[0] = Integer.toString(idCounter);
-    					row[1] = bookmarksCursor.getString(bookmarksCursor.getColumnIndex(BOOKMARKS_TITLE));
-    					row[2] = bookmarksCursor.getString(bookmarksCursor.getColumnIndex(BOOKMARKS_URL));
-    					row[3] = "2";
-    					
-    					cursor.addRow(row);
+    					results.add(new UrlSuggestionItem(pattern,
+    							bookmarksCursor.getString(historyCursor.getColumnIndex(BOOKMARKS_TITLE)),
+    							bookmarksCursor.getString(historyCursor.getColumnIndex(BOOKMARKS_URL)),
+    							2));
     					
     				} while (bookmarksCursor.moveToNext());
     			}
     			
     			bookmarksCursor.close();
     		}
+    		
+    		// Sort results.
+    		Collections.sort(results, new UrlSuggestionItemComparator());
+    		
+    		// Copy results to the output MatrixCursor.
+    		int idCounter = -1;
+    		for (UrlSuggestionItem item : results) {
+    			idCounter++;
+				
+				String[] row = new String[4];
+				row[0] = Integer.toString(idCounter);
+				row[1] = item.getTitle();
+				row[2] = item.getUrl();
+				row[3] = Integer.toString(item.getType());
+				
+				cursor.addRow(row);
+    		}
+    		
     	}
     	
     	return cursor;

@@ -327,9 +327,9 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			public Cursor runQuery(CharSequence constraint) {
 				if ((constraint != null) &&
 						(constraint.length() > 0)) {
-					return mDbAdapter.getSuggestion(constraint.toString());
+					return mDbAdapter.getUrlSuggestions(constraint.toString());
 				} else {
-					return mDbAdapter.getSuggestion(null);
+					return mDbAdapter.getUrlSuggestions(null);
 				}
 			}
 		});

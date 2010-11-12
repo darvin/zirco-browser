@@ -6,6 +6,7 @@
 - The ad blocker white list is now stored in database.
 - Url bar now display favicons.
 - Bookmarks can be exported to Android browser bookmarks.
+- Improved suggestions in url bar, now search in history and bookmarks; better design.
 
 0.3.2:
 - Added start page, showing most used bookmarks and recent history.

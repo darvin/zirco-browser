@@ -45,7 +45,10 @@
 					android:layout_marginTop="2dip"
 					android:layout_marginLeft="2dip"
 					android:layout_marginRight="2dip"
-					android:layout_width="fill_parent" android:layout_weight="0.75"
+					android:layout_width="fill_parent"
+					android:layout_weight="0.75"
+					android:dropDownHeight="wrap_content"
+					android:dropDownWidth="fill_parent"
 					android:inputType="textUri"  ></AutoCompleteTextView>
 
 				<ImageButton android:layout_height="wrap_content"

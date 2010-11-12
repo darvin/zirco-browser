@@ -53,11 +53,16 @@ public class UrlSuggestionCursorAdapter extends SimpleCursorAdapter {
 		
 		View superView = super.getView(position, convertView, parent);
 		
+		TextView titleView = (TextView) superView.findViewById(R.id.AutocompleteTitle);
 		TextView urlView = (TextView) superView.findViewById(R.id.AutocompleteUrl);
 		ImageView iconView = (ImageView) superView.findViewById(R.id.AutocompleteImageView);
 		
+		String title = titleView.getText().toString();		
+		title = ApplicationUtils.getTruncatedString(titleView.getPaint(), title, parent.getMeasuredWidth() - 75);		
+		titleView.setText(title);
+		
 		String url = urlView.getText().toString();		
-		url = ApplicationUtils.getTruncatedString(urlView.getPaint(), url, parent.getMeasuredWidth() - 40);		
+		url = ApplicationUtils.getTruncatedString(urlView.getPaint(), url, parent.getMeasuredWidth() - 75);		
 		urlView.setText(url);
 
 		int resultType;
