@@ -414,7 +414,7 @@ public class BookmarksListActivity extends Activity {
     			this.getResources().getString(R.string.BookmarksListActivity_ExportingBookmarks));
 
     	if (fileName != null) {
-    		new XmlBookmarksExporter(fileName);
+    		new XmlBookmarksExporter(this, fileName);
     	} else {
     		new AndroidBookmarksExporter(this);
     	}
@@ -428,14 +428,22 @@ public class BookmarksListActivity extends Activity {
     	final String fileName = DateUtils.getNowForFileName() + ".xml";
     	
     	final String[] exportTargets;
+    	final String[] exportTargetsDisplay;
     	
     	if (ApplicationUtils.checkCardState(this, false)) {
     		exportTargets = new String[2];
-    		exportTargets[0] = getResources().getString(R.string.BookmarksListActivity_AndroidExportTarget);
-    		exportTargets[1] = fileName; 
+    		exportTargets[0] = null;
+    		exportTargets[1] = fileName;
+    		
+    		exportTargetsDisplay = new String[2];
+    		exportTargetsDisplay[0] = getResources().getString(R.string.BookmarksListActivity_AndroidExportTarget);
+    		exportTargetsDisplay[1] = getResources().getString(R.string.BookmarksListActivity_SDCardExportTarget);
     	} else {
     		exportTargets = new String[1];
-    		exportTargets[0] = getResources().getString(R.string.BookmarksListActivity_AndroidExportTarget);
+    		exportTargets[0] = null;
+    		
+    		exportTargetsDisplay = new String[1];
+    		exportTargetsDisplay[0] = getResources().getString(R.string.BookmarksListActivity_AndroidExportTarget);
     	}
     	
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -443,7 +451,7 @@ public class BookmarksListActivity extends Activity {
     	builder.setIcon(android.R.drawable.ic_dialog_info);
     	builder.setTitle(getResources().getString(R.string.BookmarksListActivity_ExportDialogTitle));
     	
-    	builder.setSingleChoiceItems(exportTargets,
+    	builder.setSingleChoiceItems(exportTargetsDisplay,
     			0,
     			new OnClickListener() {
 			@Override
@@ -736,14 +744,19 @@ public class BookmarksListActivity extends Activity {
      * Runnable for bookmarks export to xml.
      */
     private class XmlBookmarksExporter implements Runnable {
-    	
+    	    	
+    	private Context mContext;
     	private String mFileName;
+    	private File mFile;
+    	private String mErrorMessage = null;
     	
     	/**
     	 * Constructor.
+    	 * @param context The current context.
     	 * @param fileName The export file name.
     	 */
-    	public XmlBookmarksExporter(String fileName) {
+    	public XmlBookmarksExporter(Context context, String fileName) {
+    		mContext = context;
     		mFileName = fileName;
     		new Thread(this).start();
     	}
@@ -753,7 +766,8 @@ public class BookmarksListActivity extends Activity {
 				
 			try {
 
-				FileWriter writer = new FileWriter(new File(IOUtils.getBookmarksExportFolder(), mFileName));
+				mFile = new File(IOUtils.getBookmarksExportFolder(), mFileName);				
+				FileWriter writer = new FileWriter(mFile);
 
 				writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 				writer.write("<bookmarkslist>\n");
@@ -781,7 +795,8 @@ public class BookmarksListActivity extends Activity {
 				writer.close();
 
 			} catch (IOException e1) {
-				Log.w("Bookmark export failed", e1.getMessage());
+				Log.w("Bookmark export failed", e1.toString());				
+				mErrorMessage = e1.toString();
 			}							
 			
 			handler.sendEmptyMessage(0);
@@ -789,6 +804,18 @@ public class BookmarksListActivity extends Activity {
 		private Handler handler = new Handler() {
 			public void handleMessage(Message msg) {
 				mProgressDialog.dismiss();
+				
+				if (mErrorMessage == null) {
+					ApplicationUtils.showOkDialog(mContext,
+							android.R.drawable.ic_dialog_info,
+							mContext.getResources().getString(R.string.BookmarksListActivity_BookmarksExportSDCardDoneTitle),
+							String.format(mContext.getResources().getString(R.string.BookmarksListActivity_BookmarksExportSDCardDoneMessage), mFile.getAbsolutePath()));
+				} else {
+					ApplicationUtils.showOkDialog(mContext,
+							android.R.drawable.ic_dialog_alert,
+							mContext.getResources().getString(R.string.BookmarksListActivity_BookmarksExportSDCardFailedTitle),
+							String.format(mContext.getResources().getString(R.string.BookmarksListActivity_BookmarksExportSDCardFailedMessage), mErrorMessage));
+				}
 			}
 		};
     	

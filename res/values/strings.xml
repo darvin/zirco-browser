@@ -59,7 +59,7 @@
     <string name="BookmarksListActivity.RecentSortMode">Most recent</string>
     <string name="BookmarksListActivity.ImportSource">Choose the import source</string>
     <string name="BookmarksListActivity.AndroidImportSource">Android browser bookmarks</string>
-    <string name="BookmarksListActivity.ExportDialogTitle">Bookmarks export</string>    
+    <string name="BookmarksListActivity.ExportDialogTitle">Choose the export target</string>
     
     <string name="EditBookmarkActivity.Title">Edit bookmark</string>
     <string name="EditBookmarkActivity.TitleAdd">Add bookmark</string>
@@ -284,5 +284,11 @@
     </string-array>
     
     <string name="BookmarksListActivity.AndroidExportTarget">Android browser bookmarks</string>
+    <string name="BookmarksListActivity.SDCardExportTarget">SD card</string>
+    
+    <string name="BookmarksListActivity.BookmarksExportSDCardDoneTitle">Export done</string>
+    <string name="BookmarksListActivity.BookmarksExportSDCardDoneMessage">Your bookmarks have been saved to %s.</string>
+    <string name="BookmarksListActivity.BookmarksExportSDCardFailedTitle">Export failed</string>
+    <string name="BookmarksListActivity.BookmarksExportSDCardFailedMessage">Error message: %s.</string>
     
 </resources>

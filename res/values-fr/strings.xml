@@ -59,7 +59,7 @@
     <string name="BookmarksListActivity.RecentSortMode">Plus récent</string>
     <string name="BookmarksListActivity.ImportSource">Choisissez la source d\'import</string>
     <string name="BookmarksListActivity.AndroidImportSource">Favoris du navigateur Android</string>
-    <string name="BookmarksListActivity.ExportDialogTitle">Export des favoris</string>
+    <string name="BookmarksListActivity.ExportDialogTitle">Choisissez la cible d\'export</string>
     
     <string name="EditBookmarkActivity.Title">Modifier le favori</string>
     <string name="EditBookmarkActivity.TitleAdd">Ajouter un favori</string>
@@ -284,5 +284,11 @@
     </string-array>
     
     <string name="BookmarksListActivity.AndroidExportTarget">Favoris du navigateur Android</string>
+    <string name="BookmarksListActivity.SDCardExportTarget">Carte SD</string>
+    
+    <string name="BookmarksListActivity.BookmarksExportSDCardDoneTitle">Export terminé</string>
+    <string name="BookmarksListActivity.BookmarksExportSDCardDoneMessage">Vos favoris ont été exportés dans le fichier %s.</string>
+    <string name="BookmarksListActivity.BookmarksExportSDCardFailedTitle">L\'export a échoué</string>
+    <string name="BookmarksListActivity.BookmarksExportSDCardFailedMessage">Message d\'erreur : %s.</string>
     
 </resources>

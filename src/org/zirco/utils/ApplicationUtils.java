@@ -102,6 +102,31 @@ public class ApplicationUtils {
 	}
 	
 	/**
+	 * Display a standard Ok dialog.
+	 * @param context The current context.
+	 * @param icon The dialog icon.
+	 * @param title The dialog title.
+	 * @param message The dialog message.
+	 */
+	public static void showOkDialog(Context context, int icon, String title, String message) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setCancelable(false);
+    	builder.setIcon(icon);
+    	builder.setTitle(title);
+    	builder.setMessage(message);
+    	
+    	builder.setInverseBackgroundForced(true);
+    	builder.setPositiveButton(context.getResources().getString(R.string.Commons_Ok), new DialogInterface.OnClickListener() {
+    		@Override
+    		public void onClick(DialogInterface dialog, int which) {
+    			dialog.dismiss();
+    		}
+    	});
+    	AlertDialog alert = builder.create();
+    	alert.show();
+	}
+	
+	/**
 	 * Display a standard Ok / Cancel dialog.
 	 * @param context The current context.
 	 * @param icon The dialog icon.
