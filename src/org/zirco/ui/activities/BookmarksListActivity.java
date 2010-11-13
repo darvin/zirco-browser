@@ -41,8 +41,8 @@ import org.zirco.utils.Constants;
 import org.zirco.utils.DateUtils;
 import org.zirco.utils.IOUtils;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -66,13 +66,15 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.LayoutAnimationController;
 import android.view.animation.TranslateAnimation;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView.OnItemClickListener;
 
 /**
  * Bookmarks list activity.
  */
-public class BookmarksListActivity extends ListActivity {
+public class BookmarksListActivity extends Activity {
 			
 	private static final int MENU_ADD_BOOKMARK = Menu.FIRST;
 	private static final int MENU_SORT_MODE = Menu.FIRST + 1;	
@@ -92,6 +94,8 @@ public class BookmarksListActivity extends ListActivity {
 	private Cursor mCursor;
 	private BookmarksCursorAdapter mCursorAdapter;
 	
+	private ListView mList;
+	
 	private ProgressDialog mProgressDialog;
 	
     @Override
@@ -101,10 +105,33 @@ public class BookmarksListActivity extends ListActivity {
         
         setTitle(R.string.BookmarksListActivity_Title);
         
+        View emptyView = findViewById(R.id.BookmarksListActivity_EmptyTextView);
+        mList = (ListView) findViewById(R.id.BookmarksListActivity_List);
+        
+        mList.setEmptyView(emptyView);
+        
+        mList.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> l, View v, int position, long id) {
+				Intent result = new Intent();
+		        result.putExtra(Constants.EXTRA_ID_NEW_TAB, false);
+		        result.putExtra(Constants.EXTRA_ID_URL,  mDbAdapter.getBookmarkById(id)[1]);
+		        
+		        if (getParent() != null) {
+		        	getParent().setResult(RESULT_OK, result);
+		        } else {
+		        	setResult(RESULT_OK, result);
+		        }
+		        
+		        finish();
+			}
+		});
+        
         mDbAdapter = new DbAdapter(this);
         mDbAdapter.open();
-        
-        registerForContextMenu(getListView());
+
+        registerForContextMenu(mList);
         
         fillData();
     }
@@ -127,11 +154,9 @@ public class BookmarksListActivity extends ListActivity {
     	int[] to = new int[] {R.id.BookmarkRow_Title, R.id.BookmarkRow_Url};
     	
     	mCursorAdapter = new BookmarksCursorAdapter(this, R.layout.bookmarkrow, mCursor, from, to);
-        setListAdapter(mCursorAdapter);
+        mList.setAdapter(mCursorAdapter);
         
         setAnimation();
-        
-        //mCursor.close();
     }
     
 	/**
@@ -153,8 +178,8 @@ public class BookmarksListActivity extends ListActivity {
 
         LayoutAnimationController controller =
                 new LayoutAnimationController(set, 0.5f);
-        ListView listView = getListView();        
-        listView.setLayoutAnimation(controller);
+
+        mList.setLayoutAnimation(controller);
     }
     
     /**
@@ -169,23 +194,6 @@ public class BookmarksListActivity extends ListActivity {
 		
 		startActivityForResult(i, ACTIVITY_ADD_BOOKMARK);
 	}
-    
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);            
-        
-        Intent result = new Intent();
-        result.putExtra(Constants.EXTRA_ID_NEW_TAB, false);
-        result.putExtra(Constants.EXTRA_ID_URL,  mDbAdapter.getBookmarkById(id)[1]);
-        
-        if (getParent() != null) {
-        	getParent().setResult(RESULT_OK, result);
-        } else {
-        	setResult(RESULT_OK, result);
-        }
-        
-        finish();
-    }
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

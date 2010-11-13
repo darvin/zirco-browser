@@ -18,12 +18,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-
-  <ListView android:id="@android:id/list"
+<!--  android:id="@android:id/list"-->
+  <ListView 
+  		android:id="@+id/BookmarksListActivity.List"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"/>
         
-  <TextView android:id="@android:id/empty"
+  <TextView android:id="@+id/BookmarksListActivity.EmptyTextView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
