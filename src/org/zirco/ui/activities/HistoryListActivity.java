@@ -254,7 +254,7 @@ public class HistoryListActivity extends ExpandableListActivity {
 		private TextView getGenericView() {
             // Layout parameters for the ExpandableListView
             AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
-                    ViewGroup.LayoutParams.FILL_PARENT, (int) (35 * getResources().getDisplayMetrics().density));
+                    ViewGroup.LayoutParams.FILL_PARENT, (int) (45 * getResources().getDisplayMetrics().density));
 
             TextView textView = new TextView(HistoryListActivity.this);
             textView.setLayoutParams(lp);
