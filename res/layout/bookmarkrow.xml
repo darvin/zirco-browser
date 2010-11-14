@@ -16,12 +16,34 @@
  -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_height="wrap_content" android:layout_width="fill_parent" android:orientation="horizontal">
+	android:layout_height="wrap_content"
+	android:layout_width="fill_parent"
+	android:orientation="horizontal">
 
-	<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/BookmarkRow.Thumbnail" android:layout_marginBottom="5dip" android:layout_marginTop="5dip" android:layout_marginRight="5dip"></ImageView><LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical"><TextView android:layout_gravity="center_vertical" android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/BookmarkRow.Title" android:text="@+id/BookmarkRow.Title" style="@style/Bookmarks.Title" /><TextView android:layout_height="wrap_content" android:id="@+id/BookmarkRow.Url" android:text="@+id/BookmarkRow.Url" android:layout_width="fill_parent" /></LinearLayout>
-
-	
-
-
+	<ImageView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/BookmarkRow.Thumbnail"
+		android:layout_marginBottom="5dip"
+		android:layout_marginTop="5dip"
+		android:layout_marginRight="5dip"></ImageView>
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="vertical" android:layout_gravity="center_vertical">
+		<TextView
+			android:layout_gravity="center_vertical"
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent"
+			android:id="@+id/BookmarkRow.Title"
+			android:text="@+id/BookmarkRow.Title"
+			style="@style/Bookmarks.Title" />
+		<TextView
+			android:layout_height="wrap_content"
+			android:id="@+id/BookmarkRow.Url"
+			android:text="@+id/BookmarkRow.Url"
+			android:layout_width="fill_parent"
+			android:textColor="#888888" />
+	</LinearLayout>
 
 </LinearLayout>

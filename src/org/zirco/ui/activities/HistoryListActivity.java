@@ -254,14 +254,14 @@ public class HistoryListActivity extends ExpandableListActivity {
 		private TextView getGenericView() {
             // Layout parameters for the ExpandableListView
             AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
-                    ViewGroup.LayoutParams.FILL_PARENT, 48);
+                    ViewGroup.LayoutParams.FILL_PARENT, (int) (35 * getResources().getDisplayMetrics().density));
 
             TextView textView = new TextView(HistoryListActivity.this);
             textView.setLayoutParams(lp);
             // Center the text vertically
             textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
             // Set the text starting position
-            textView.setPadding(36, 0, 0, 0);
+            textView.setPadding((int) (35 * getResources().getDisplayMetrics().density), 0, 0, 0);
             return textView;
         }
 		
@@ -297,7 +297,7 @@ public class HistoryListActivity extends ExpandableListActivity {
 			
 			String url = ((HistoryItem) getChild(groupPosition, childPosition)).getUrl(); 
 			
-			url = ApplicationUtils.getTruncatedString(urlView.getPaint(), url, parent.getMeasuredWidth() - 60);
+			url = ApplicationUtils.getTruncatedString(urlView.getPaint(), url, (int) (parent.getMeasuredWidth() - (60 * getResources().getDisplayMetrics().density)));
 			
 			urlView.setText(url);
             

@@ -35,7 +35,7 @@
 	
 	<style name="History.Url">
 		<item name="android:textSize">10sp</item>
-		<item name="android:textColor">@android:color/white</item>
+		<item name="android:textColor">#888888</item>
 	</style>
 
 </resources>

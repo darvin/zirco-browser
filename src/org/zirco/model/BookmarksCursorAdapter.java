@@ -85,8 +85,8 @@ public class BookmarksCursorAdapter extends SimpleCursorAdapter {
 		TextView urlView = (TextView) superView.findViewById(R.id.BookmarkRow_Url);
 		ImageView thumbnailView = (ImageView) superView.findViewById(R.id.BookmarkRow_Thumbnail);
 		
-		String url = urlView.getText().toString();		
-		url = ApplicationUtils.getTruncatedString(urlView.getPaint(), url, parent.getMeasuredWidth() - 40);		
+		String url = urlView.getText().toString();
+		url = ApplicationUtils.getTruncatedString(urlView.getPaint(), url, (int) (2 * (parent.getMeasuredWidth() - (130 * parent.getContext().getResources().getDisplayMetrics().density))));
 		urlView.setText(url);
 		
 		byte[] image = getCursor().getBlob(getCursor().getColumnIndex(DbAdapter.BOOKMARKS_THUMBNAIL)); 	
