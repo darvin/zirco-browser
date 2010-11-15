@@ -24,6 +24,7 @@ import org.zirco.utils.Constants;
 import android.graphics.Bitmap;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.webkit.WebView.HitTestResult;
 
 /**
  * Convenient extension of WebViewClient.
@@ -74,6 +75,12 @@ public class ZircoWebViewClient extends WebViewClient {
 			
 			view.loadUrl(newUrl);
 			return true;
+			
+		} else if (view.getHitTestResult().getType() == HitTestResult.EMAIL_TYPE) {
+			
+			EventController.getInstance().fireWebEvent(EventConstants.EVT_MAILTO_URL, url);
+			return true;
+			
 		} else {
 			((ZircoWebView) view).resetLoadedUrl();
 			EventController.getInstance().fireWebEvent(EventConstants.EVT_WEB_ON_URL_LOADING, url);				

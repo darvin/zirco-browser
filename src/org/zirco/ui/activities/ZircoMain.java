@@ -55,6 +55,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.text.ClipboardManager;
 import android.util.FloatMath;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
@@ -107,6 +108,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	private static final int CONTEXT_MENU_OPEN = Menu.FIRST + 10;
 	private static final int CONTEXT_MENU_OPEN_IN_NEW_TAB = Menu.FIRST + 11;
 	private static final int CONTEXT_MENU_DOWNLOAD = Menu.FIRST + 12;
+	private static final int CONTEXT_MENU_COPY = Menu.FIRST + 13;
+	private static final int CONTEXT_MENU_SEND_MAIL = Menu.FIRST + 14;
 	
 	private static final int OPEN_BOOKMARKS_HISTORY_ACTIVITY = 0;
 	private static final int OPEN_DOWNLOADS_ACTIVITY = 1;
@@ -445,6 +448,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 				
 				int resultType = result.getType();
 				if ((resultType == HitTestResult.ANCHOR_TYPE) ||
+						(resultType == HitTestResult.IMAGE_ANCHOR_TYPE) ||
 						(resultType == HitTestResult.SRC_ANCHOR_TYPE) ||
 						(resultType == HitTestResult.SRC_IMAGE_ANCHOR_TYPE)) {
 					
@@ -457,9 +461,41 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 					item = menu.add(0, CONTEXT_MENU_OPEN_IN_NEW_TAB, 0, R.string.Main_MenuOpenNewTab);					
 					item.setIntent(i);
 					
-					item = menu.add(0, CONTEXT_MENU_DOWNLOAD, 0, R.string.Main_MenuDownload);					
+					item = menu.add(0, CONTEXT_MENU_COPY, 0, R.string.Main_MenuCopyLinkUrl);					
 					item.setIntent(i);
+					
+					item = menu.add(0, CONTEXT_MENU_DOWNLOAD, 0, R.string.Main_MenuDownload);					
+					item.setIntent(i);										
 				
+					menu.setHeaderTitle(result.getExtra());					
+				} else if (resultType == HitTestResult.IMAGE_TYPE) {
+					Intent i = new Intent();
+					i.putExtra(Constants.EXTRA_ID_URL, result.getExtra());
+					
+					MenuItem item = menu.add(0, CONTEXT_MENU_OPEN, 0, R.string.Main_MenuViewImage);					
+					item.setIntent(i);
+					
+					item = menu.add(0, CONTEXT_MENU_COPY, 0, R.string.Main_MenuCopyImageUrl);					
+					item.setIntent(i);
+					
+					item = menu.add(0, CONTEXT_MENU_DOWNLOAD, 0, R.string.Main_MenuDownloadImage);					
+					item.setIntent(i);										
+					
+					menu.setHeaderTitle(result.getExtra());
+					
+				} else if (resultType == HitTestResult.EMAIL_TYPE) {
+					
+					Intent sendMail = new Intent(Intent.ACTION_VIEW, Uri.parse(WebView.SCHEME_MAILTO + result.getExtra()));
+					
+					MenuItem item = menu.add(0, CONTEXT_MENU_SEND_MAIL, 0, R.string.Main_MenuSendEmail);					
+					item.setIntent(sendMail);										
+					
+					Intent i = new Intent();
+					i.putExtra(Constants.EXTRA_ID_URL, result.getExtra());
+					
+					item = menu.add(0, CONTEXT_MENU_COPY, 0, R.string.Main_MenuCopyEmailUrl);					
+					item.setIntent(i);					
+					
 					menu.setHeaderTitle(result.getExtra());
 				}
 			}
@@ -598,6 +634,15 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			}		
 			
 		});
+    }
+    
+    /**
+     * Copy a text to the clipboard.
+     * @param text The text to copy.
+     */
+    private void copyTextToClipboard(String text) {
+    	ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE); 
+    	clipboard.setText(text);
     }
     
     /**
@@ -1277,6 +1322,9 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 				.show();
 			}
 			
+		} else if (event.equals(EventConstants.EVT_MAILTO_URL)) {
+			Intent sendMail = new Intent(Intent.ACTION_VIEW, Uri.parse((String) data));
+			startActivity(sendMail);			
 		}
 		
 	}
@@ -1303,6 +1351,11 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		case CONTEXT_MENU_DOWNLOAD:
 			if (b != null) {
 				doDownloadStart(b.getString(Constants.EXTRA_ID_URL), null, null, null, 0);
+			}
+			return true;
+		case CONTEXT_MENU_COPY:
+			if (b != null) {
+				copyTextToClipboard(b.getString(Constants.EXTRA_ID_URL));
 			}
 			return true;
 		default: return super.onContextItemSelected(item);
