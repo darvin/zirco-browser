@@ -103,7 +103,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	private static final int MENU_ADD_BOOKMARK = Menu.FIRST;
 	private static final int MENU_SHOW_BOOKMARKS = Menu.FIRST + 1;
 	private static final int MENU_SHOW_DOWNLOADS = Menu.FIRST + 2;
-	private static final int MENU_PREFERENCES = Menu.FIRST + 3;
+	private static final int MENU_SELECT_TEXT = Menu.FIRST + 3;
+	private static final int MENU_PREFERENCES = Menu.FIRST + 4;	
 	
 	private static final int CONTEXT_MENU_OPEN = Menu.FIRST + 10;
 	private static final int CONTEXT_MENU_OPEN_IN_NEW_TAB = Menu.FIRST + 11;
@@ -637,6 +638,18 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     }
     
     /**
+     * Select Text in the webview and automatically sends the selected text to the clipboard.
+     */
+    public void swithToSelectAndCopyTextMode() {
+        try {
+         KeyEvent shiftPressEvent = new KeyEvent(0, 0, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT, 0, 0);
+         shiftPressEvent.dispatch(mCurrentWebView);
+        } catch (Exception e) {
+            throw new AssertionError(e);
+        }
+    } 
+    
+    /**
      * Copy a text to the clipboard.
      * @param text The text to copy.
      */
@@ -1043,8 +1056,11 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         item = menu.add(0, MENU_SHOW_DOWNLOADS, 0, R.string.Main_MenuShowDownloads);
         item.setIcon(R.drawable.ic_menu_downloads);
         
+        item = menu.add(0, MENU_SELECT_TEXT, 0, R.string.Main_MenuSelectText);
+        item.setIcon(R.drawable.ic_menu_select);
+        
         item = menu.add(0, MENU_PREFERENCES, 0, R.string.Main_MenuPreferences);
-        item.setIcon(R.drawable.ic_menu_preferences);
+        item.setIcon(R.drawable.ic_menu_preferences);        
     	
     	return true;
 	}
@@ -1063,7 +1079,10 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
             return true;
     	case MENU_PREFERENCES:    		
     		openPreferences();
-            return true;    	
+            return true;
+    	case MENU_SELECT_TEXT:
+    		swithToSelectAndCopyTextMode();
+    		return true;
         default: return super.onMenuItemSelected(featureId, item);
     	}
     }

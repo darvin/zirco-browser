@@ -1,3 +1,7 @@
+0.3.4:
+- Context menu for images and mailto links added.
+- Text can be selected and copied to clipboard.
+
 0.3.3:
 - Search can be done from the url bar. The search url is customizable.
 - The start page can be customized.

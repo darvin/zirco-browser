@@ -299,4 +299,6 @@
     <string name="Main.MenuSendEmail">Envoyer un e-mail</string>
     <string name="Main.MenuCopyEmailUrl">Copier</string>
     
+    <string name="Main.MenuSelectText">Sélectionner le texte</string>
+    
 </resources>
