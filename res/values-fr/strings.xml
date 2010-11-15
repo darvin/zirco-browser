@@ -291,4 +291,12 @@
     <string name="BookmarksListActivity.BookmarksExportSDCardFailedTitle">L\'export a échoué</string>
     <string name="BookmarksListActivity.BookmarksExportSDCardFailedMessage">Message d\'erreur : %s.</string>
     
+    <!-- 0.3.4 -->
+    <string name="Main.MenuCopyLinkUrl">Copier l\'url du lien</string>
+    <string name="Main.MenuViewImage">Afficher l\'image</string>
+    <string name="Main.MenuCopyImageUrl">"Copier l\'url de l\'image</string>
+    <string name="Main.MenuDownloadImage">Télécharger l\'image</string>
+    <string name="Main.MenuSendEmail">Envoyer un e-mail</string>
+    <string name="Main.MenuCopyEmailUrl">Copier</string>
+    
 </resources>
