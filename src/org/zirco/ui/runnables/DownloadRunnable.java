@@ -36,6 +36,8 @@ import android.os.Message;
  */
 public class DownloadRunnable implements Runnable {
 			
+	private static final int BUFFER_SIZE = 4096;
+	
 	private DownloadItem mParent;
 	
 	private boolean mAborted;
@@ -97,28 +99,31 @@ public class DownloadRunnable implements Runnable {
 			
 			try {
 				
+				mParent.onStart();
+				
 				URL url = new URL(mParent.getUrl());
 				URLConnection conn = url.openConnection();
 				
 				InputStream is = conn.getInputStream();
 							
 				int size = conn.getContentLength();
-				mParent.onSetSize(size);
+				
+				double oldCompleted = 0;
+				double completed = 0;
 				
 				bis = new BufferedInputStream(is);
 				bos = new BufferedOutputStream(new FileOutputStream(downloadFile));
 				
 				boolean downLoading = true;
-				byte[] buffer;
+				byte[] buffer = new byte[BUFFER_SIZE];
 				int downloaded = 0;
 				int read;
 				int stepRead = 0;
 				
 				while ((downLoading) &&
 						(!mAborted)) {
-					if (size - downloaded > 1024) {
-						buffer = new byte[1024];
-					} else {
+
+					if (size - downloaded < BUFFER_SIZE) {
 						buffer = new byte[size - downloaded];
 					}
 
@@ -127,14 +132,18 @@ public class DownloadRunnable implements Runnable {
 					if (read > 0) {
 						bos.write(buffer, 0, read);
 						downloaded += read;
+						
+						completed = ((downloaded * 100f) / size);
+						
 						stepRead++;
 					} else {
 						downLoading = false;
 					}
 					
-					if (stepRead >= 100) {
-						mParent.onProgress(downloaded);
-						stepRead = 0;
+					// Notify each 5% or more.
+					if (oldCompleted + 5 < completed) {
+						mParent.onProgress((int) completed);
+						oldCompleted = completed;
 					}
 				}
 

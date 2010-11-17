@@ -65,7 +65,7 @@ public class DownloadsListActivity extends ListActivity implements IDownloadEven
 				DownloadItem item = (DownloadItem) data;
 				ProgressBar bar = mAdapter.getBarMap().get(item);
 				if (bar != null) {
-					bar.setMax(item.getTotalSize());
+					bar.setMax(100);
 					bar.setProgress(item.getProgress());
 				}				
 			}
