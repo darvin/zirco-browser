@@ -652,10 +652,16 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     /**
      * Copy a text to the clipboard.
      * @param text The text to copy.
+     * @param toastMessage The message to show in a Toast notification. If empty or null, does not display notification.
      */
-    private void copyTextToClipboard(String text) {
+    private void copyTextToClipboard(String text, String toastMessage) {
     	ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE); 
     	clipboard.setText(text);
+    	
+    	if ((toastMessage != null) &&
+    			(toastMessage.length() > 0)) {
+    		Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
+    	}
     }
     
     /**
@@ -1374,7 +1380,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			return true;
 		case CONTEXT_MENU_COPY:
 			if (b != null) {
-				copyTextToClipboard(b.getString(Constants.EXTRA_ID_URL));
+				copyTextToClipboard(b.getString(Constants.EXTRA_ID_URL), getString(R.string.Main_UrlCopyToastMessage));
 			}
 			return true;
 		default: return super.onContextItemSelected(item);

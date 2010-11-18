@@ -197,6 +197,8 @@ public class DownloadItem {
 	private void createNotification() {
 		mNotification = new Notification(R.drawable.stat_sys_download, mFileName, System.currentTimeMillis());		
 		
+		mNotification.flags = mNotification.flags | Notification.FLAG_NO_CLEAR;
+		
 		RemoteViews contentView = new RemoteViews(mContext.getPackageName(), R.layout.download_notification);
 		contentView.setTextViewText(R.id.DownloadFileNameText, mFileName);
 		contentView.setTextViewText(R.id.DownloadUrlText, mUrl);		
@@ -226,15 +228,22 @@ public class DownloadItem {
 	 */
 	private void updateNotificationOnEnd() {
 		if (mNotification != null) {
-			mNotification.contentView.setProgressBar(R.id.DownloadProgress, 100, 100, false);
-			mNotification.contentView.setTextViewText(R.id.DownloadProgressText, String.format("%s%%", 100));
-
+			mNotificationManager.cancel(mNotificationId);
+			
+			String message;
 			if (mIsAborted) {
-				mNotification.contentView.setTextViewText(R.id.DownloadFileNameText, String.format(mContext.getResources().getString(R.string.DownloadListActivity_Aborted), mFileName));
+				message = mContext.getString(R.string.DownloadNotification_DownloadCanceled);
 			} else {
-				mNotification.contentView.setTextViewText(R.id.DownloadFileNameText, String.format(mContext.getResources().getString(R.string.DownloadListActivity_Finished), mFileName));
+				message = mContext.getString(R.string.DownloadNotification_DownloadComplete);
 			}
-
+			
+			mNotification = new Notification(R.drawable.stat_sys_download, mContext.getString(R.string.DownloadNotification_DownloadComplete), System.currentTimeMillis());
+			
+			Intent notificationIntent = new Intent(mContext.getApplicationContext(), DownloadsListActivity.class);
+			PendingIntent contentIntent = PendingIntent.getActivity(mContext.getApplicationContext(), 0, notificationIntent, 0);
+			
+			mNotification.setLatestEventInfo(mContext.getApplicationContext(), mFileName, message, contentIntent);
+			
 			mNotificationManager.notify(mNotificationId, mNotification);
 		}
 	}

@@ -34,8 +34,8 @@
     <string name="Main.MenuOpen">Open</string>
     <string name="Main.MenuOpenNewTab">Open in new tab</string>
     <string name="Main.MenuDownload">Download</string>   
-    <string name="Main.DownloadStartedMsg">Download started.</string>
-    <string name="Main.DownloadFinishedMsg">Download finished.</string>
+    <string name="Main.DownloadStartedMsg">Download start.</string>
+    <string name="Main.DownloadFinishedMsg">Download complete.</string>
     <string name="Main.DownloadErrorMsg">Download error: %s</string>
     <string name="Main.ToastTabSwitchMessage">Tab %s</string>
     <string name="Main.ToastTabSwitchFullMessage">Tab %s: %s</string>
@@ -300,5 +300,11 @@
     <string name="Main.MenuCopyEmailUrl">Copy email url</string>
     
     <string name="Main.MenuSelectText">Select text</string>
+    
+    <string name="Main.UrlCopyToastMessage">Url copied to clipboard.</string>
+    
+    <string name="DownloadNotification.DownloadStart">Download start.</string>
+    <string name="DownloadNotification.DownloadComplete">Download complete.</string>
+    <string name="DownloadNotification.DownloadCanceled">Download canceled.</string>
     
 </resources>
