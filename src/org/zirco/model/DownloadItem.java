@@ -195,7 +195,7 @@ public class DownloadItem {
 	 * Create the download notification.
 	 */
 	private void createNotification() {
-		mNotification = new Notification(R.drawable.stat_sys_download, mFileName, System.currentTimeMillis());		
+		mNotification = new Notification(R.drawable.download_anim, mFileName, System.currentTimeMillis());		
 		
 		mNotification.flags = mNotification.flags | Notification.FLAG_NO_CLEAR;
 		
