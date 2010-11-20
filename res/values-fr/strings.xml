@@ -301,10 +301,12 @@
     
     <string name="Main.MenuSelectText">Sélectionner le texte</string>
     
-    <string name="Main.UrlCopyToastMessage">Url copiée dans le presse-papier.</string>
+    <string name="Commons.UrlCopyToastMessage">Url copiée dans le presse-papier.</string>
     
     <string name="DownloadNotification.DownloadStart">Téléchargement commencé.</string>
     <string name="DownloadNotification.DownloadComplete">Téléchargement terminé.</string>
     <string name="DownloadNotification.DownloadCanceled">Téléchargement annulé.</string>
+    
+    <string name="BookmarksHistoryActivity.MenuCopyLinkUrl">Copier l\'url</string>
     
 </resources>

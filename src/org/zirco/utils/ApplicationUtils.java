@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import org.zirco.R;
 import org.zirco.model.DbAdapter;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -33,7 +34,9 @@ import android.database.Cursor;
 import android.graphics.Paint;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.text.ClipboardManager;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * Application utilities.
@@ -433,5 +436,21 @@ public class ApplicationUtils {
 		
 		return result;
 	}
+	
+	/**
+     * Copy a text to the clipboard.
+     * @param context The current context.
+     * @param text The text to copy.
+     * @param toastMessage The message to show in a Toast notification. If empty or null, does not display notification.
+     */
+    public static void copyTextToClipboard(Context context, String text, String toastMessage) {
+    	ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Activity.CLIPBOARD_SERVICE); 
+    	clipboard.setText(text);
+    	
+    	if ((toastMessage != null) &&
+    			(toastMessage.length() > 0)) {
+    		Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show();
+    	}
+    }
 
 }

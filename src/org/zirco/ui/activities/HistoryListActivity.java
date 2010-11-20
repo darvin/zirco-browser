@@ -55,7 +55,8 @@ public class HistoryListActivity extends ExpandableListActivity {
 	private static final int MENU_CLEAR_HISTORY = Menu.FIRST;
 	
 	private static final int MENU_OPEN_IN_TAB = Menu.FIRST + 10;
-	private static final int MENU_DELETE_FROM_HISTORY = Menu.FIRST + 11;
+	private static final int MENU_COPY_URL = Menu.FIRST + 11;
+	private static final int MENU_DELETE_FROM_HISTORY = Menu.FIRST + 12;
 	
 	private DbAdapter mDbAdapter;	
 	private ExpandableListAdapter mAdapter;
@@ -110,6 +111,7 @@ public class HistoryListActivity extends ExpandableListActivity {
 		if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
 			menu.setHeaderTitle(mData.get(group).get(child).getTitle());
 			menu.add(0, MENU_OPEN_IN_TAB, 0, R.string.HistoryListActivity_MenuOpenInTab);
+			menu.add(0, MENU_COPY_URL, 0, R.string.BookmarksHistoryActivity_MenuCopyLinkUrl);
 			menu.add(0, MENU_DELETE_FROM_HISTORY, 0, R.string.HistoryListActivity_MenuDelete);
 		}
 	}
@@ -127,6 +129,9 @@ public class HistoryListActivity extends ExpandableListActivity {
 			switch (menuItem.getItemId()) {
 			case MENU_OPEN_IN_TAB:
 				doNavigateToUrl(mData.get(group).get(child).getUrl(), true);
+				break;
+			case MENU_COPY_URL:
+				ApplicationUtils.copyTextToClipboard(this, mData.get(group).get(child).getUrl(), getString(R.string.Commons_UrlCopyToastMessage));
 				break;
 			case MENU_DELETE_FROM_HISTORY:
 				mDbAdapter.deleteFromHistory(mData.get(group).get(child).getId());

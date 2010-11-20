@@ -301,10 +301,12 @@
     
     <string name="Main.MenuSelectText">Select text</string>
     
-    <string name="Main.UrlCopyToastMessage">Url copied to clipboard.</string>
+    <string name="Commons.UrlCopyToastMessage">Url copied to clipboard.</string>
     
     <string name="DownloadNotification.DownloadStart">Download start.</string>
     <string name="DownloadNotification.DownloadComplete">Download complete.</string>
     <string name="DownloadNotification.DownloadCanceled">Download canceled.</string>
+    
+    <string name="BookmarksHistoryActivity.MenuCopyLinkUrl">Copy url</string>
     
 </resources>

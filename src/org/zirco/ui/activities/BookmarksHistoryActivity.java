@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.TabHost;
+import android.widget.TabHost.OnTabChangeListener;
 
 /**
  * Combined bookmarks and history activity.
@@ -32,6 +33,8 @@ public class BookmarksHistoryActivity extends TabActivity {
 	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.bookmarkshistoryactivity);
+		
+		setTitle(R.string.BookmarksListActivity_Title);
 		
 		Resources res = getResources();
 		TabHost tabHost = getTabHost();
@@ -55,5 +58,18 @@ public class BookmarksHistoryActivity extends TabActivity {
 		tabHost.addTab(spec);
 		
 		tabHost.setCurrentTab(0);
+		
+		tabHost.setOnTabChangedListener(new OnTabChangeListener() {			
+			@Override
+			public void onTabChanged(String tabId) {
+				if (tabId.equals("bookmarks")) {
+					setTitle(R.string.BookmarksListActivity_Title);
+				} else if (tabId.equals("history")) {
+					setTitle(R.string.HistoryListActivity_Title);
+				} else {
+					setTitle(R.string.ApplicationName);
+				}
+			}
+		});
 	}
 }
