@@ -304,6 +304,7 @@
     <string name="Commons.UrlCopyToastMessage">Url copied to clipboard.</string>
     
     <string name="DownloadNotification.DownloadStart">Download start.</string>
+    <string name="DownloadNotification.DownloadInProgress">Download in progress.</string>
     <string name="DownloadNotification.DownloadComplete">Download complete.</string>
     <string name="DownloadNotification.DownloadCanceled">Download canceled.</string>
     

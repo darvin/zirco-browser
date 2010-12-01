@@ -28,7 +28,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.RemoteViews;
 
 /**
  * Represent a download item.
@@ -123,7 +122,7 @@ public class DownloadItem {
 	 * Trigger a start download event.
 	 */
 	public void onStart() {
-		createAndUpdateNotification();
+		createNotification();
 		
 		EventController.getInstance().fireDownloadEvent(EventConstants.EVT_DOWNLOAD_ON_START, this);
 	}
@@ -150,8 +149,6 @@ public class DownloadItem {
 		mProgress = progress;
 		
 		EventController.getInstance().fireDownloadEvent(EventConstants.EVT_DOWNLOAD_ON_PROGRESS, this);
-		
-		createAndUpdateNotification();
 	}
 	
 	/**
@@ -195,31 +192,13 @@ public class DownloadItem {
 	 * Create the download notification.
 	 */
 	private void createNotification() {
-		mNotification = new Notification(R.drawable.download_anim, mFileName, System.currentTimeMillis());		
-		
-		mNotification.flags = mNotification.flags | Notification.FLAG_NO_CLEAR;
-		
-		RemoteViews contentView = new RemoteViews(mContext.getPackageName(), R.layout.download_notification);
-		contentView.setTextViewText(R.id.DownloadFileNameText, mFileName);
-		contentView.setTextViewText(R.id.DownloadUrlText, mUrl);		
-		contentView.setTextViewText(R.id.DownloadProgressText, String.format("%s%%", 0));
-		contentView.setProgressBar(R.id.DownloadProgress, 100, 0, false);
-		
-		mNotification.contentView = contentView;
-		
+		mNotification = new Notification(R.drawable.download_anim, mContext.getString(R.string.DownloadNotification_DownloadStart), System.currentTimeMillis());		
+
 		Intent notificationIntent = new Intent(mContext.getApplicationContext(), DownloadsListActivity.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(mContext.getApplicationContext(), 0, notificationIntent, 0);
-		mNotification.contentIntent = contentIntent;
-		
-		mNotificationManager.notify(mNotificationId, mNotification);
-	}
 
-	/**
-	 * Update the download notification.
-	 */
-	private void updateNotification() {
-		mNotification.contentView.setProgressBar(R.id.DownloadProgress, 100, mProgress, false);
-		mNotification.contentView.setTextViewText(R.id.DownloadProgressText, String.format("%s%%", mProgress));
+		mNotification.setLatestEventInfo(mContext.getApplicationContext(), mContext.getString(R.string.DownloadNotification_DownloadInProgress), mFileName, contentIntent);
+
 		mNotificationManager.notify(mNotificationId, mNotification);
 	}
 	
@@ -228,34 +207,24 @@ public class DownloadItem {
 	 */
 	private void updateNotificationOnEnd() {
 		if (mNotification != null) {
-			mNotificationManager.cancel(mNotificationId);
-			
-			String message;
-			if (mIsAborted) {
-				message = mContext.getString(R.string.DownloadNotification_DownloadCanceled);
-			} else {
-				message = mContext.getString(R.string.DownloadNotification_DownloadComplete);
-			}
-			
-			mNotification = new Notification(R.drawable.stat_sys_download, mContext.getString(R.string.DownloadNotification_DownloadComplete), System.currentTimeMillis());
-			
-			Intent notificationIntent = new Intent(mContext.getApplicationContext(), DownloadsListActivity.class);
-			PendingIntent contentIntent = PendingIntent.getActivity(mContext.getApplicationContext(), 0, notificationIntent, 0);
-			
-			mNotification.setLatestEventInfo(mContext.getApplicationContext(), mFileName, message, contentIntent);
-			
-			mNotificationManager.notify(mNotificationId, mNotification);
+			mNotificationManager.cancel(mNotificationId);			
 		}
-	}
-	
-	/**
-	 * Update the download notification. Create it if it does not exists.
-	 */
-	private void createAndUpdateNotification() {
-		if (mNotification == null) {
-			createNotification();
+		
+		String message;
+		if (mIsAborted) {
+			message = mContext.getString(R.string.DownloadNotification_DownloadCanceled);
+		} else {
+			message = mContext.getString(R.string.DownloadNotification_DownloadComplete);
 		}
-		updateNotification();
+
+		mNotification = new Notification(R.drawable.stat_sys_download, mContext.getString(R.string.DownloadNotification_DownloadComplete), System.currentTimeMillis());
+
+		Intent notificationIntent = new Intent(mContext.getApplicationContext(), DownloadsListActivity.class);
+		PendingIntent contentIntent = PendingIntent.getActivity(mContext.getApplicationContext(), 0, notificationIntent, 0);
+
+		mNotification.setLatestEventInfo(mContext.getApplicationContext(), mFileName, message, contentIntent);
+
+		mNotificationManager.notify(mNotificationId, mNotification);		
 	}
 
 }
