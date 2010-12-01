@@ -131,6 +131,11 @@
 				android:defaultValue="true"
 				android:summary="@string/PreferencesActivity.EnableCookiesPreferenceSummary"
 				android:key="BrowserEnableCookies" />
+			<CheckBoxPreference
+				android:title="@string/PreferencesActivity.ClearCacheOnExitPreferenceTitle"
+				android:defaultValue="false"
+				android:summary="@string/PreferencesActivity.ClearCacheOnExitPreferenceSummary"
+				android:key="PrivacyClearCacheOnExit" />
 			<Preference
 				android:title="@string/PreferencesActivity.PrivacyClearHistoryTitle"
 				android:key="PrivacyClearHistory" />

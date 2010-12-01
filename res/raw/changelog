@@ -1,4 +1,6 @@
 0.3.4:
+- Long-press on Back key exit the application.
+- Added "Clear cache on exit" in privacy settings.
 - Context menu for images and mailto links added.
 - Text can be selected and copied to clipboard.
 

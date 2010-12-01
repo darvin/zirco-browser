@@ -244,6 +244,10 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		
 		WebIconDatabase.getInstance().close();
 		
+		if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.PREFERENCES_PRIVACY_CLEAR_CACHE_ON_EXIT, false)) {
+			mCurrentWebView.clearCache(true);
+		}
+
 		super.onDestroy();
 	}
 
@@ -885,8 +889,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	public boolean onKeyLongPress(int keyCode, KeyEvent event) {
 		
 		switch (keyCode) {
-		case KeyEvent.KEYCODE_BACK:			
-			this.moveTaskToBack(true);
+		case KeyEvent.KEYCODE_BACK:
+			this.finish();
 			return true;
 		default: return super.onKeyLongPress(keyCode, event);
 		}
@@ -899,6 +903,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		case KeyEvent.KEYCODE_BACK:
 			if (mCurrentWebView.canGoBack()) {
 				mCurrentWebView.goBack();				
+			} else {
+				this.moveTaskToBack(true);
 			}
 			return true;
 		

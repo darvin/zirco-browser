@@ -310,4 +310,7 @@
     
     <string name="BookmarksHistoryActivity.MenuCopyLinkUrl">Copier l\'url</string>
     
+    <string name="PreferencesActivity.ClearCacheOnExitPreferenceTitle">Purger le cache en quittant</string>
+    <string name="PreferencesActivity.ClearCacheOnExitPreferenceSummary">Si coché, le cache du navigateur sera purgé quand on quitte l\'application.</string>
+    
 </resources>

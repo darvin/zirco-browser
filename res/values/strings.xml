@@ -89,7 +89,7 @@
     <string name="PreferencesActivity.FullScreenPreferenceTitle">Full screen</string>
     <string name="PreferencesActivity.FullScreenPreferenceSummary">Display browser in full screen mode (need application restart).</string>
     <string name="PreferencesActivity.ShowToastOnTabSwitchPreferenceTitle">Show alert on tab switch</string>
-    <string name="PreferencesActivity.ShowToastOnTabSwitchPreferenceSummary">If enable, a small alert is briefly show when switching tabs.</string>
+    <string name="PreferencesActivity.ShowToastOnTabSwitchPreferenceSummary">If checked, a small alert is briefly show when switching tabs.</string>
     
     <string name="PreferencesActivity.BrowserSettingsCategoryTitle">Browser settings</string>
     <string name="PreferencesActivity.HistorySizePreferenceTitle">History size</string>
@@ -309,5 +309,8 @@
     <string name="DownloadNotification.DownloadCanceled">Download canceled.</string>
     
     <string name="BookmarksHistoryActivity.MenuCopyLinkUrl">Copy url</string>
+    
+    <string name="PreferencesActivity.ClearCacheOnExitPreferenceTitle">Clear cache on exit</string>
+    <string name="PreferencesActivity.ClearCacheOnExitPreferenceSummary">If checked, the browser cache will be cleared when the application exit.</string>
     
 </resources>
