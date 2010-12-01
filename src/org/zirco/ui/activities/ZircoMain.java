@@ -103,7 +103,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	private static final int MENU_SHOW_BOOKMARKS = Menu.FIRST + 1;
 	private static final int MENU_SHOW_DOWNLOADS = Menu.FIRST + 2;
 	private static final int MENU_SELECT_TEXT = Menu.FIRST + 3;
-	private static final int MENU_PREFERENCES = Menu.FIRST + 4;	
+	private static final int MENU_PREFERENCES = Menu.FIRST + 4;
+	private static final int MENU_EXIT = Menu.FIRST + 5;
 	
 	private static final int CONTEXT_MENU_OPEN = Menu.FIRST + 10;
 	private static final int CONTEXT_MENU_OPEN_IN_NEW_TAB = Menu.FIRST + 11;
@@ -911,7 +912,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_BACK:
-			this.finish();
+			this.moveTaskToBack(true);
 			return true;
 		default: return super.onKeyLongPress(keyCode, event);
 		}
@@ -1077,7 +1078,10 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         item.setIcon(R.drawable.ic_menu_select);
         
         item = menu.add(0, MENU_PREFERENCES, 0, R.string.Main_MenuPreferences);
-        item.setIcon(R.drawable.ic_menu_preferences);        
+        item.setIcon(R.drawable.ic_menu_preferences);
+        
+        item = menu.add(0, MENU_EXIT, 0, R.string.Main_MenuExit);
+        item.setIcon(R.drawable.ic_menu_exit);
     	
     	return true;
 	}
@@ -1099,6 +1103,9 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
             return true;
     	case MENU_SELECT_TEXT:
     		swithToSelectAndCopyTextMode();
+    		return true;
+    	case MENU_EXIT:
+    		this.finish();
     		return true;
         default: return super.onMenuItemSelected(featureId, item);
     	}

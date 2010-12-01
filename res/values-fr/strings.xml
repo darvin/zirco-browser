@@ -317,6 +317,8 @@
     <string name="PreferencesActivity.UIPreferenceSummary">Personalisation de l\'interface utilisateur.</string>
     
     <string name="PreferencesActivity.ShowHomeButtonPreferenceTitle">Afficher le bouton "Home"</string>
-    <string name="PreferencesActivity.ShowHomeButtonPreferenceSummary">Si coché, un bouton "Home" sera présent à coté de la bar d\'url.</string>
+    <string name="PreferencesActivity.ShowHomeButtonPreferenceSummary">Si coché, un bouton "Home" sera présent à coté de la barre d\'url.</string>
+    
+    <string name="Main.MenuExit">Quitter</string>
     
 </resources>

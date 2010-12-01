@@ -1,6 +1,7 @@
 0.3.4:
-- Long-press on Back key exit the application.
-- Added "Clear cache on exit" in privacy settings.
+- By popular demand, added a "Close" button, althought i do not see the need for it :).
+- Added "Home" button in url bar (can be hidden in preferences).
+- Added "Clear cache on exit" option in privacy settings.
 - Context menu for images and mailto links added.
 - Text can be selected and copied to clipboard.
 

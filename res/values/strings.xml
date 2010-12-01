@@ -319,4 +319,6 @@
     <string name="PreferencesActivity.ShowHomeButtonPreferenceTitle">Show home button</string>
     <string name="PreferencesActivity.ShowHomeButtonPreferenceSummary">If checked, a home button will be present next to the url bar.</string>
     
+    <string name="Main.MenuExit">Exit</string>
+    
 </resources>
