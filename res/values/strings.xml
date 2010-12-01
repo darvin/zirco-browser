@@ -313,4 +313,10 @@
     <string name="PreferencesActivity.ClearCacheOnExitPreferenceTitle">Clear cache on exit</string>
     <string name="PreferencesActivity.ClearCacheOnExitPreferenceSummary">If checked, the browser cache will be cleared when the application exit.</string>
     
+    <string name="PreferencesActivity.UIPreferenceTitle">User interface settings</string>
+    <string name="PreferencesActivity.UIPreferenceSummary">Customize the user interface.</string>
+    
+    <string name="PreferencesActivity.ShowHomeButtonPreferenceTitle">Show home button</string>
+    <string name="PreferencesActivity.ShowHomeButtonPreferenceSummary">If checked, a home button will be present next to the url bar.</string>
+    
 </resources>

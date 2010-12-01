@@ -313,4 +313,10 @@
     <string name="PreferencesActivity.ClearCacheOnExitPreferenceTitle">Purger le cache en quittant</string>
     <string name="PreferencesActivity.ClearCacheOnExitPreferenceSummary">Si coché, le cache du navigateur sera purgé quand on quitte l\'application.</string>
     
+    <string name="PreferencesActivity.UIPreferenceTitle">Paramètres de l\'interface</string>
+    <string name="PreferencesActivity.UIPreferenceSummary">Personalisation de l\'interface utilisateur.</string>
+    
+    <string name="PreferencesActivity.ShowHomeButtonPreferenceTitle">Afficher le bouton "Home"</string>
+    <string name="PreferencesActivity.ShowHomeButtonPreferenceSummary">Si coché, un bouton "Home" sera présent à coté de la bar d\'url.</string>
+    
 </resources>

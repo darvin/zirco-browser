@@ -39,7 +39,15 @@
 				android:maxHeight="5px" android:minHeight="5px"></ProgressBar>
 			
 			<LinearLayout android:layout_width="fill_parent"
-			android:layout_height="wrap_content">							
+				android:layout_height="wrap_content">
+			
+				<ImageButton android:layout_height="wrap_content"
+					android:id="@+id/HomeBtn" android:layout_width="wrap_content"
+					android:background="@drawable/buttons"
+					android:layout_marginTop="2dip"
+					android:layout_marginBottom="3dip"
+					android:layout_marginLeft="3dip"
+					android:src="@drawable/ic_btn_home"></ImageButton>
 
 				<AutoCompleteTextView android:layout_height="wrap_content" android:id="@+id/UrlText"
 					android:layout_marginTop="2dip"
@@ -57,8 +65,7 @@
 					android:layout_marginTop="2dip"
 					android:layout_marginBottom="3dip"
 					android:layout_marginRight="3dip"
-					android:src="@drawable/ic_btn_go"			
-					 ></ImageButton>							
+					android:src="@drawable/ic_btn_go"></ImageButton>							
 				
 			</LinearLayout>											
 			

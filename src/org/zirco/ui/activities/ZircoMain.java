@@ -122,6 +122,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	private LinearLayout mTopBar;
 	private LinearLayout mBottomBar;
 	
+	private ImageButton mHomeButton;
 	private AutoCompleteTextView mUrlEditText;
 	private ImageButton mGoButton;
 	private ProgressBar mProgressBar;	
@@ -167,7 +168,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);              
 
-        INSTANCE = this;
+        INSTANCE = this;                
         
         Constants.initializeConstantsFromResources(this);
         
@@ -341,6 +342,19 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			}
 		});
     	
+    	mHomeButton = (ImageButton) findViewById(R.id.HomeBtn);
+    	mHomeButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				navigateToHome();				
+			}
+		});
+    	
+    	if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.PREFERENCES_UI_SHOW_HOME_BUTTON, true)) {
+    		mHomeButton.setVisibility(View.GONE);
+    	}
+    	
     	mUrlEditText = (AutoCompleteTextView) findViewById(R.id.UrlText);
     	mUrlEditText.setThreshold(1);
     	mUrlEditText.setAdapter(adapter);    	
@@ -421,6 +435,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
             	onQuickButton();
             }          
         });
+
     }
     
     /**
@@ -429,6 +444,12 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     public void applyPreferences() {    	
     	// To update to Bubble position.
     	setToolbarsVisibility(false);
+    	
+    	if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.PREFERENCES_UI_SHOW_HOME_BUTTON, true)) {
+    		mHomeButton.setVisibility(View.VISIBLE);
+    	} else {
+    		mHomeButton.setVisibility(View.GONE);
+    	}
     	
     	Iterator<ZircoWebView> iter = mWebViews.iterator();
     	while (iter.hasNext()) {
