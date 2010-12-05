@@ -40,7 +40,9 @@ import org.zirco.utils.Constants;
 import org.zirco.utils.UrlUtils;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -270,6 +272,16 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	}
     
     /**
+     * Restart the application.
+     */
+    public void restartApplication() {
+    	PendingIntent intent = PendingIntent.getActivity(this.getBaseContext(), 0, new Intent(getIntent()), getIntent().getFlags());
+		AlarmManager mgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+		mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 2000, intent);
+		System.exit(2);
+    }
+    
+    /**
      * Create main UI.
      */
 	private void buildComponents() {
@@ -445,12 +457,6 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     public void applyPreferences() {    	
     	// To update to Bubble position.
     	setToolbarsVisibility(false);
-    	
-    	if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.PREFERENCES_UI_SHOW_HOME_BUTTON, true)) {
-    		mHomeButton.setVisibility(View.VISIBLE);
-    	} else {
-    		mHomeButton.setVisibility(View.GONE);
-    	}
     	
     	Iterator<ZircoWebView> iter = mWebViews.iterator();
     	while (iter.hasNext()) {
@@ -1106,7 +1112,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     		return true;
     	case MENU_EXIT:
     		this.finish();
-    		return true;
+    		return true;    	
         default: return super.onMenuItemSelected(featureId, item);
     	}
     }

@@ -317,8 +317,11 @@
     <string name="PreferencesActivity.UIPreferenceSummary">Personalisation de l\'interface utilisateur.</string>
     
     <string name="PreferencesActivity.ShowHomeButtonPreferenceTitle">Afficher le bouton "Home"</string>
-    <string name="PreferencesActivity.ShowHomeButtonPreferenceSummary">Si coché, un bouton "Home" sera présent à coté de la barre d\'url.</string>
+    <string name="PreferencesActivity.ShowHomeButtonPreferenceSummary">Si coché, un bouton "Home" sera présent à coté de la barre d\'url (nécessite un redémarrage de l\'application).</string>
     
     <string name="Main.MenuExit">Quitter</string>
+    
+    <string name="PreferencesActivity.RestartDialogTitle">Redémarrage nécessaire</string>
+    <string name="PreferencesActivity.RestartDialogMessage">Cette modification ne prendra effet qu\'après un redémarrage de l\'application. Voulez vous le faire maintenant ?</string>
     
 </resources>

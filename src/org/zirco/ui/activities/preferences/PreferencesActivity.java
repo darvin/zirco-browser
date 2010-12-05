@@ -73,6 +73,26 @@ public class PreferencesActivity extends PreferenceActivity {
 			}
 		});
 		
+		Preference showHomePref = (Preference) findPreference(Constants.PREFERENCES_UI_SHOW_HOME_BUTTON);
+		showHomePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				askForRestart();
+				return true;
+			}
+		});
+		
+		Preference fullScreenPref = (Preference) findPreference(Constants.PREFERENCES_SHOW_FULL_SCREEN);
+		fullScreenPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				askForRestart();
+				return true;
+			}
+		});
+		
 		Preference searchUrlPref = (Preference) findPreference(Constants.PREFERENCES_GENERAL_SEARCH_URL);
 		searchUrlPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
@@ -159,6 +179,24 @@ public class PreferencesActivity extends PreferenceActivity {
 			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 				ZircoMain.INSTANCE.applyPreferences();
 			}
+		});
+	}
+	
+	/**
+	 * Ask user to restart the app. Do it if click on "Yes".
+	 */
+	private void askForRestart() {
+		ApplicationUtils.showYesNoDialog(this,
+				android.R.drawable.ic_dialog_alert,
+				R.string.PreferencesActivity_RestartDialogTitle,
+				R.string.PreferencesActivity_RestartDialogMessage,
+				new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				ZircoMain.INSTANCE.restartApplication();				
+			}
+			
 		});
 	}
 	
