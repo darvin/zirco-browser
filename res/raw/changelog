@@ -4,6 +4,7 @@
 - Added "Clear cache on exit" option in privacy settings.
 - Context menu for images and mailto links added.
 - Text can be selected and copied to clipboard.
+- Added notifications for download start/end.
 
 0.3.3:
 - Search can be done from the url bar. The search url is customizable.
