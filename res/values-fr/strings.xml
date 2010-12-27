@@ -38,7 +38,7 @@
     <string name="Main.DownloadFinishedMsg">Téléchargement terminé.</string>
     <string name="Main.DownloadErrorMsg">Erreur de téléchargement : %s</string>
     <string name="Main.ToastTabSwitchMessage">Onglet %s</string>
-    <string name="Main.ToastTabSwitchFullMessage">Onglet %s: %s</string>
+    <string name="Main.ToastTabSwitchFullMessage">Onglet %1$s: %2$s</string>
     <string name="Main.VndErrorTitle">Impossible d\'ouvrir l\'url</string>
     <string name="Main.VndErrorMessage">Vous ne devez pas avoir d\'application capable d\'ouvrir cette url : %s.</string>
     
@@ -168,7 +168,7 @@
     <string name="Commons.NoUndoMessage">Cette opération ne peut pas être annulée. Voulez vous continuer ?</string>
     <string name="Commons.Today">Aujourd\'hui (%s)</string>
     <string name="Commons.Yesterday">Hier (%s)</string>
-    <string name="Commons.DaysAgo">Il y a %s jours (%s)</string>
+    <string name="Commons.DaysAgo">Il y a %1$s jours (%2$s)</string>
     <string name="Commons.JavaScriptDialog">Fenêtre JavaScript</string>
     <string name="Commons.ClearHistory">Purger l\'historique</string>
     <string name="Commons.ClearingHistory">Suppression de l\'historique...</string>

@@ -38,7 +38,7 @@
     <string name="Main.DownloadFinishedMsg">Download complete.</string>
     <string name="Main.DownloadErrorMsg">Download error: %s</string>
     <string name="Main.ToastTabSwitchMessage">Tab %s</string>
-    <string name="Main.ToastTabSwitchFullMessage">Tab %s: %s</string>
+    <string name="Main.ToastTabSwitchFullMessage">Tab %1$s: %2$s</string>
     <string name="Main.VndErrorTitle">Unable to open url</string>
     <string name="Main.VndErrorMessage">You may not have an application able to open this url: %s.</string>
     
@@ -168,7 +168,7 @@
     <string name="Commons.NoUndoMessage">This operation cannot be undone. Do you wish to proceed?</string>
     <string name="Commons.Today">Today (%s)</string>
     <string name="Commons.Yesterday">Yesterday (%s)</string>
-    <string name="Commons.DaysAgo">%s days ago (%s)</string>
+    <string name="Commons.DaysAgo">%1$s days ago (%2$s)</string>
     <string name="Commons.JavaScriptDialog">JavaScript dialog</string>
     <string name="Commons.ClearHistory">Clear history</string>
     <string name="Commons.ClearingHistory">Clearing history...</string>
