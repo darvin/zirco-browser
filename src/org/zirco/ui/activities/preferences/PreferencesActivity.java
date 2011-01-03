@@ -34,12 +34,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.text.method.DigitsKeyListener;
@@ -53,6 +55,8 @@ public class PreferencesActivity extends PreferenceActivity {
 	
 	private ProgressDialog mProgressDialog;
 	
+	private OnSharedPreferenceChangeListener mPreferenceChangeListener;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,6 +67,16 @@ public class PreferencesActivity extends PreferenceActivity {
 		
 		EditText myEditText = (EditText) historySizeEditTextPreference.getEditText();
 		myEditText.setKeyListener(DigitsKeyListener.getInstance(false, false)); 
+
+		PreferenceCategory browserPreferenceCategory = (PreferenceCategory) findPreference("BrowserPreferenceCategory");
+		Preference enablePluginsEclair = (Preference) findPreference(Constants.PREFERENCES_BROWSER_ENABLE_PLUGINS_ECLAIR);
+		Preference enablePlugins = (Preference) findPreference(Constants.PREFERENCES_BROWSER_ENABLE_PLUGINS);
+		
+		if (Build.VERSION.SDK_INT <= 7) {
+			browserPreferenceCategory.removePreference(enablePlugins);
+		} else {
+			browserPreferenceCategory.removePreference(enablePluginsEclair);
+		}
 		
 		Preference userAgentPref = (Preference) findPreference(Constants.PREFERENCES_BROWSER_USER_AGENT);
 		userAgentPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -71,17 +85,7 @@ public class PreferencesActivity extends PreferenceActivity {
 				openUserAgentActivity();
 				return true;
 			}
-		});
-		
-		Preference showHomePref = (Preference) findPreference(Constants.PREFERENCES_UI_SHOW_HOME_BUTTON);
-		showHomePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				askForRestart();
-				return true;
-			}
-		});
+		});				
 		
 		Preference fullScreenPref = (Preference) findPreference(Constants.PREFERENCES_SHOW_FULL_SCREEN);
 		fullScreenPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -174,12 +178,14 @@ public class PreferencesActivity extends PreferenceActivity {
 			}			
 		});
 		
-		PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener() {
+		mPreferenceChangeListener = new OnSharedPreferenceChangeListener() {			
 			@Override
 			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 				ZircoMain.INSTANCE.applyPreferences();
 			}
-		});
+		};
+		
+		PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(mPreferenceChangeListener);
 	}
 	
 	/**

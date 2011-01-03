@@ -178,7 +178,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         Controller.getInstance().setPreferences(PreferenceManager.getDefaultSharedPreferences(this));       
         
         if (Controller.getInstance().getPreferences().getBoolean(Constants.PREFERENCES_SHOW_FULL_SCREEN, true)) {
-        	requestWindowFeature(Window.FEATURE_NO_TITLE);  
+        	requestWindowFeature(Window.FEATURE_NO_TITLE);
         	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,   
         			WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
@@ -458,9 +458,14 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     	// To update to Bubble position.
     	setToolbarsVisibility(false);
     	
-    	Iterator<ZircoWebView> iter = mWebViews.iterator();
-    	while (iter.hasNext()) {
-    		iter.next().initializeOptions();
+    	if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.PREFERENCES_UI_SHOW_HOME_BUTTON, true)) {
+    		mHomeButton.setVisibility(View.GONE);
+    	} else {
+    		mHomeButton.setVisibility(View.VISIBLE);
+    	}
+    	
+    	for (ZircoWebView view : mWebViews) {
+    		view.initializeOptions();
     	}
     }
     

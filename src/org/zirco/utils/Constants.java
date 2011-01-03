@@ -74,6 +74,8 @@ public class Constants {
 	public static final String PREFERENCES_BROWSER_ENABLE_PASSWORDS = "BrowserEnablePasswords";
 	public static final String PREFERENCES_BROWSER_ENABLE_COOKIES = "BrowserEnableCookies";
 	public static final String PREFERENCES_BROWSER_USER_AGENT = "BrowserUserAgent";
+	public static final String PREFERENCES_BROWSER_ENABLE_PLUGINS_ECLAIR = "BrowserEnablePluginsEclair";
+	public static final String PREFERENCES_BROWSER_ENABLE_PLUGINS = "BrowserEnablePlugins";
 	
 	public static final String PREFERENCES_PRIVACY_CLEAR_CACHE_ON_EXIT = "PrivacyClearCacheOnExit";
 	

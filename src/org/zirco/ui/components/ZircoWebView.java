@@ -20,11 +20,13 @@ import org.zirco.utils.ApplicationUtils;
 import org.zirco.utils.Constants;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebSettings.PluginState;
 import android.webkit.WebSettings.ZoomDensity;
 
 /**
@@ -80,6 +82,12 @@ public class ZircoWebView extends WebView {
 		settings.setUserAgentString(Controller.getInstance().getPreferences().getString(Constants.PREFERENCES_BROWSER_USER_AGENT, Constants.USER_AGENT_DEFAULT));
 		
 		CookieManager.getInstance().setAcceptCookie(Controller.getInstance().getPreferences().getBoolean(Constants.PREFERENCES_BROWSER_ENABLE_COOKIES, true));
+		
+		if (Build.VERSION.SDK_INT <= 7) {
+			settings.setPluginsEnabled(Controller.getInstance().getPreferences().getBoolean(Constants.PREFERENCES_BROWSER_ENABLE_PLUGINS_ECLAIR, true));
+		} else {
+			settings.setPluginState(PluginState.valueOf(Controller.getInstance().getPreferences().getString(Constants.PREFERENCES_BROWSER_ENABLE_PLUGINS, PluginState.ON_DEMAND.toString())));
+		}
 		
 		settings.setSupportZoom(true);
 		

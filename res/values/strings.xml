@@ -317,11 +317,29 @@
     <string name="PreferencesActivity.UIPreferenceSummary">Customize the user interface.</string>
     
     <string name="PreferencesActivity.ShowHomeButtonPreferenceTitle">Show home button</string>
-    <string name="PreferencesActivity.ShowHomeButtonPreferenceSummary">If checked, a home button will be present next to the url bar (need application restart).</string>
+    <string name="PreferencesActivity.ShowHomeButtonPreferenceSummary">If checked, a home button will be present next to the url bar.</string>
     
     <string name="Main.MenuExit">Exit</string>
     
     <string name="PreferencesActivity.RestartDialogTitle">Restart required</string>
     <string name="PreferencesActivity.RestartDialogMessage">This change will not take effect until the application restart. Do you want to do it now?</string>
+    
+    <!-- 0.3.5 -->
+    <string name="PreferencesActivity.EnablePluginsTitle">Enable plug-ins</string>
+    
+    <string name="PreferencesActivity.PluginsAlwaysOff">Always off</string>
+    <string name="PreferencesActivity.PluginsOnDemand">On demand</string>
+    <string name="PreferencesActivity.PluginsAlwaysOn">Always on</string>
+    
+    <string-array name="PluginsEntries">
+		<item>@string/PreferencesActivity.PluginsAlwaysOff</item>
+		<item>@string/PreferencesActivity.PluginsOnDemand</item>
+		<item>@string/PreferencesActivity.PluginsAlwaysOn</item>
+	</string-array>
+    <string-array name="PluginsValues">
+		<item>OFF</item>
+		<item>ON_DEMAND</item>
+		<item>ON</item>
+	</string-array>
     
 </resources>

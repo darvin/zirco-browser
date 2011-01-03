@@ -317,11 +317,29 @@
     <string name="PreferencesActivity.UIPreferenceSummary">Personalisation de l\'interface utilisateur.</string>
     
     <string name="PreferencesActivity.ShowHomeButtonPreferenceTitle">Afficher le bouton "Home"</string>
-    <string name="PreferencesActivity.ShowHomeButtonPreferenceSummary">Si coché, un bouton "Home" sera présent à coté de la barre d\'url (nécessite un redémarrage de l\'application).</string>
+    <string name="PreferencesActivity.ShowHomeButtonPreferenceSummary">Si coché, un bouton "Home" sera présent à coté de la barre d\'url.</string>
     
     <string name="Main.MenuExit">Quitter</string>
     
     <string name="PreferencesActivity.RestartDialogTitle">Redémarrage nécessaire</string>
     <string name="PreferencesActivity.RestartDialogMessage">Cette modification ne prendra effet qu\'après un redémarrage de l\'application. Voulez vous le faire maintenant ?</string>
+    
+    <!-- 0.3.5 -->
+    <string name="PreferencesActivity.EnablePluginsTitle">Activer les plug-ins</string>
+    
+    <string name="PreferencesActivity.PluginsAlwaysOff">Toujours activés</string>
+    <string name="PreferencesActivity.PluginsOnDemand">A la demande</string>
+    <string name="PreferencesActivity.PluginsAlwaysOn">Désactivés</string>
+    
+    <string-array name="PluginsEntries">
+		<item>@string/PreferencesActivity.PluginsAlwaysOff</item>
+		<item>@string/PreferencesActivity.PluginsOnDemand</item>
+		<item>@string/PreferencesActivity.PluginsAlwaysOn</item>
+	</string-array>
+    <string-array name="PluginsValues">
+		<item>OFF</item>
+		<item>ON_DEMAND</item>
+		<item>ON</item>
+	</string-array>
     
 </resources>

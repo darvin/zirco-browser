@@ -94,7 +94,9 @@
 				android:key="StartPageHistoryLimit" />
 		</PreferenceScreen>
 	</PreferenceCategory>
-	<PreferenceCategory android:title="@string/PreferencesActivity.BrowserSettingsCategoryTitle">
+	<PreferenceCategory
+		android:key="BrowserPreferenceCategory"
+		android:title="@string/PreferencesActivity.BrowserSettingsCategoryTitle">
 		<ListPreference
 			android:title="@string/PreferencesActivity.DefaultZoomPreferenceTitle"
 			android:summary="@string/PreferencesActivity.DefaultZoomPreferenceSummary"
@@ -115,7 +117,17 @@
 			android:title="@string/PreferencesActivity.LoadImagesPreferenceTitle"
 			android:defaultValue="true"
 			android:summary="@string/PreferencesActivity.LoadImagesPreferenceSummary"
-			android:key="BrowserEnableImages" />		
+			android:key="BrowserEnableImages" />
+		<CheckBoxPreference
+			android:title="@string/PreferencesActivity.EnablePluginsTitle"
+			android:defaultValue="true"
+			android:key="BrowserEnablePluginsEclair" />
+		<ListPreference
+			android:title="@string/PreferencesActivity.EnablePluginsTitle"
+			android:key="BrowserEnablePlugins"
+			android:defaultValue="ON_DEMAND"
+			android:entries="@array/PluginsEntries"
+			android:entryValues="@array/PluginsValues" />		
 		<PreferenceScreen
 			android:key="PrivacyPreferencesScreen"
 			android:title="@string/PreferencesActivity.PrivacyPreferenceTitle"
