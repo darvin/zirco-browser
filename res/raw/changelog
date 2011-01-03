@@ -1,3 +1,7 @@
+0.3.5:
+- Plugins support;
+- Untrusted SSL certificates support;
+
 0.3.4:
 - By popular demand, added a "Close" button, althought i do not see the need for it :).
 - Added "Home" button in url bar (can be hidden in preferences).

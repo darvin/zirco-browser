@@ -341,5 +341,14 @@
 		<item>ON_DEMAND</item>
 		<item>ON</item>
 	</string-array>
+	
+	<string name="Commons.Continue">Continue</string>
+	
+	<string name="Commons.SslWarning">Security warning</string>
+	<string name="Commons.SslWarningsHeader">There are problems with the security certificate for this site.</string>
+	<string name="Commons.SslUntrusted">This certificate is not from a trusted authority.</string>
+	<string name="Commons.SslIDMismatch">The name of the site does not match the name on the certificate.</string>
+	<string name="Commons.SslExpired">This certificate has expired.</string>
+	<string name="Commons.SslNotYetValid">This certificate is not valid yet.</string>
     
 </resources>
