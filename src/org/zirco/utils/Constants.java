@@ -40,6 +40,7 @@ public class Constants {
 	public static final String URL_ABOUT_BLANK = "about:blank";
 	public static final String URL_ABOUT_START = "about:start";
 	public static final String URL_ACTION_SEARCH = "action:search?q=";
+	public static final String URL_GOOGLE_MOBILE_VIEW = "http://www.google.com/gwt/x?u=%s";
 	
 	/**
 	 * Search urls.

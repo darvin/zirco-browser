@@ -103,10 +103,11 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	
 	private static final int MENU_ADD_BOOKMARK = Menu.FIRST;
 	private static final int MENU_SHOW_BOOKMARKS = Menu.FIRST + 1;
-	private static final int MENU_SHOW_DOWNLOADS = Menu.FIRST + 2;
-	private static final int MENU_SELECT_TEXT = Menu.FIRST + 3;
-	private static final int MENU_PREFERENCES = Menu.FIRST + 4;
-	private static final int MENU_EXIT = Menu.FIRST + 5;
+	private static final int MENU_SHOW_DOWNLOADS = Menu.FIRST + 2;	
+	private static final int MENU_PREFERENCES = Menu.FIRST + 3;
+	private static final int MENU_EXIT = Menu.FIRST + 4;
+	private static final int MENU_SELECT_TEXT = Menu.FIRST + 5;
+	private static final int MENU_MOBILE_VIEW = Menu.FIRST + 6;
 	
 	private static final int CONTEXT_MENU_OPEN = Menu.FIRST + 10;
 	private static final int CONTEXT_MENU_OPEN_IN_NEW_TAB = Menu.FIRST + 11;
@@ -875,8 +876,16 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     			mCurrentWebView.loadDataWithBaseURL("file:///android_asset/startpage/",
     					ApplicationUtils.getStartPage(this), "text/html", "UTF-8", Constants.URL_ABOUT_START);
     			
-    		} else {    		    	
-    			mCurrentWebView.loadUrl(url);
+    		} else {
+    			
+    			// If the url is not from GWT mobile view, and is in the mobile view url list, then load it with GWT.
+    			if ((!url.startsWith(String.format(Constants.URL_GOOGLE_MOBILE_VIEW, ""))) &&
+    					(UrlUtils.checkInMobileViewUrlList(this, url))) {
+    				
+    				url = String.format(Constants.URL_GOOGLE_MOBILE_VIEW, url);    				
+    			}
+    			
+    			mCurrentWebView.loadUrl(url);    			
     		}
     	}
     }        
@@ -1083,16 +1092,18 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         item.setIcon(R.drawable.ic_menu_bookmarks);
         
         item = menu.add(0, MENU_SHOW_DOWNLOADS, 0, R.string.Main_MenuShowDownloads);
-        item.setIcon(R.drawable.ic_menu_downloads);
-        
-        item = menu.add(0, MENU_SELECT_TEXT, 0, R.string.Main_MenuSelectText);
-        item.setIcon(R.drawable.ic_menu_select);
+        item.setIcon(R.drawable.ic_menu_downloads);                
         
         item = menu.add(0, MENU_PREFERENCES, 0, R.string.Main_MenuPreferences);
         item.setIcon(R.drawable.ic_menu_preferences);
         
         item = menu.add(0, MENU_EXIT, 0, R.string.Main_MenuExit);
         item.setIcon(R.drawable.ic_menu_exit);
+        
+        item = menu.add(0, MENU_SELECT_TEXT, 0, R.string.Main_MenuSelectText);
+        item.setIcon(R.drawable.ic_menu_select);
+        
+        item = menu.add(0, MENU_MOBILE_VIEW, 0, R.string.Main_MenuMobileView);
     	
     	return true;
 	}
@@ -1117,7 +1128,11 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     		return true;
     	case MENU_EXIT:
     		this.finish();
-    		return true;    	
+    		return true;
+    	case MENU_MOBILE_VIEW:
+    		String url = String.format(Constants.URL_GOOGLE_MOBILE_VIEW, mUrlEditText.getText().toString());
+    		navigateToUrl(url);
+    		return true;
         default: return super.onMenuItemSelected(featureId, item);
     	}
     }

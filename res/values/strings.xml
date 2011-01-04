@@ -77,11 +77,8 @@
     
     <string name="AdBlockerWhiteListActivity.Title">Zirco Browser - Ad blocker white list</string>
     <string name="AdBlockerWhiteListActivity.Empty">White list is empty.</string>
-    <string name="AdBlockerWhiteListActivity.Add">Add</string>
-    <string name="AdBlockerWhiteListActivity.Clear">Clear</string>
     <string name="AdBlockerWhiteListActivity.AddMessage">Add to white list</string>
-    <string name="AdBlockerWhiteListActivity.ClearMessage">Clear white list</string>
-    <string name="AdBlockerWhiteListActivity.DeleteMenu">Delete</string>
+    <string name="AdBlockerWhiteListActivity.ClearMessage">Clear white list</string>    
     
     <string name="PreferencesActivity.GeneralSettingsCategoryTitle">General settings</string>
     <string name="PreferencesActivity.HomePagePreferenceTitle">Home page</string>
@@ -350,5 +347,20 @@
 	<string name="Commons.SslIDMismatch">The name of the site does not match the name on the certificate.</string>
 	<string name="Commons.SslExpired">This certificate has expired.</string>
 	<string name="Commons.SslNotYetValid">This certificate is not valid yet.</string>
+	
+	<string name="Main.MenuMobileView">Mobile view</string>
+	
+	<string name="MobileViewListActivity.Title">Zirco Browser - Websites list for mobile view</string>
+	<string name="MobileViewListActivity.ListEmpty">List is empty.</string>	
+    <string name="MobileViewListActivity.AddMessage">Add a website</string>
+    <string name="MobileViewListActivity.ClearMessage">Clear all sites</string>
+	
+	<string name="PreferencesActivity.MobileViewCategoryTitle">Mobile view settings</string>
+	<string name="PreferencesActivity.MobileViewListPreferenceTitle">Manage websites</string>
+	<string name="PreferencesActivity.MobileViewListPreferenceSummary">Websites in this list will be loaded using Google mobile view (GWT).</string>
+	
+	<string name="Commons.Add">Add</string>
+    <string name="Commons.Clear">Clear</string>
+    <string name="Commons.Delete">Delete</string>
     
 </resources>

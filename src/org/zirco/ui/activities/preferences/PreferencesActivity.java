@@ -23,6 +23,7 @@ import org.zirco.model.DbAdapter;
 import org.zirco.ui.activities.AboutActivity;
 import org.zirco.ui.activities.AdBlockerWhiteListActivity;
 import org.zirco.ui.activities.ChangelogActivity;
+import org.zirco.ui.activities.MobileViewListActivity;
 import org.zirco.ui.activities.ZircoMain;
 import org.zirco.ui.components.ZircoWebView;
 import org.zirco.utils.ApplicationUtils;
@@ -131,6 +132,15 @@ public class PreferencesActivity extends PreferenceActivity {
 				openChangelogActivity();
 				return true;
 			}
+		});
+		
+		Preference mobileViewPref = (Preference) findPreference("MobileViewList");
+		mobileViewPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				openMobileViewListActivity();
+				return true;
+			}			
 		});
 		
 		Preference whiteListPref = (Preference) findPreference("AdBlockerWhiteList");
@@ -243,6 +253,14 @@ public class PreferencesActivity extends PreferenceActivity {
 	 */
 	private void openChangelogActivity() {
 		Intent i = new Intent(this, ChangelogActivity.class);
+		startActivity(i);
+	}
+	
+	/**
+	 * Display the mobile view list activity.
+	 */
+	private void openMobileViewListActivity() {
+		Intent i = new Intent(this, MobileViewListActivity.class);
 		startActivity(i);
 	}
 	

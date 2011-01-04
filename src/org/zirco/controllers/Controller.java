@@ -35,6 +35,7 @@ public final class Controller {
 	private List<ZircoWebView> mWebViewList;
 	private List<DownloadItem> mDownloadList;
 	private List<String> mAdBlockWhiteList = null;
+	private List<String> mMobileViewUrlList = null;
 	
 	/**
 	 * Holder for singleton implementation.
@@ -130,6 +131,28 @@ public final class Controller {
 	 */
 	public void resetAdBlockWhiteList() {
 		mAdBlockWhiteList = null;
-	}		
+	}	
+	
+	/**
+	 * Get the list of mobile view urls.
+	 * @param context The current context.
+	 * @return A list of String url.
+	 */
+	public List<String> getMobileViewUrlList(Context context) {
+		if (mMobileViewUrlList == null) {
+			DbAdapter db = new DbAdapter(context);
+			db.open();
+			mMobileViewUrlList = db.getMobileViewUrlList();
+			db.close();
+		}
+		return mMobileViewUrlList;
+	}
+	
+	/**
+	 * Reset the mobile view url list, so that it will be reloaded.
+	 */
+	public void resetMobileViewUrlList() {
+		mMobileViewUrlList = null;
+	}
 	
 }

@@ -15,6 +15,10 @@
 
 package org.zirco.utils;
 
+import java.util.Iterator;
+
+import org.zirco.controllers.Controller;
+
 import android.content.Context;
 import android.preference.PreferenceManager;
 
@@ -66,6 +70,29 @@ public class UrlUtils {
 		}
 		
 		return url;
+	}
+	
+	/**
+	 * Check if there is an item in the mobile view url list that match a given url.
+	 * @param context The current context.
+	 * @param url The url to check.
+	 * @return True if an item in the list match the given url.
+	 */
+	public static boolean checkInMobileViewUrlList(Context context, String url) {
+		
+		if (url != null) {
+			boolean inList = false;
+			Iterator<String> iter = Controller.getInstance().getMobileViewUrlList(context).iterator();			
+			while ((iter.hasNext()) &&
+					(!inList)) {
+				if (url.contains(iter.next())) {
+					inList = true;
+				}
+			}
+			return inList;
+		} else {
+			return false;
+		}
 	}
 	
 }

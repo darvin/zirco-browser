@@ -77,11 +77,8 @@
     
     <string name="AdBlockerWhiteListActivity.Title">Zirco Browser - Ad blocker white list</string>
     <string name="AdBlockerWhiteListActivity.Empty">La liste blanche est vide.</string>
-    <string name="AdBlockerWhiteListActivity.Add">Ajouter</string>
-    <string name="AdBlockerWhiteListActivity.Clear">Tout supprimer</string>
     <string name="AdBlockerWhiteListActivity.AddMessage">Ajouter à la liste blanche</string>
     <string name="AdBlockerWhiteListActivity.ClearMessage">Supprimer la liste blanche</string>
-    <string name="AdBlockerWhiteListActivity.DeleteMenu">Supprimer</string>
     
     <string name="PreferencesActivity.GeneralSettingsCategoryTitle">Paramètres généraux</string>
     <string name="PreferencesActivity.HomePagePreferenceTitle">Page d\'accueil</string>
@@ -350,5 +347,20 @@
 	<string name="Commons.SslIDMismatch">Le nom du site ne correspond pas au nom indiqué dans le certificat.</string>
 	<string name="Commons.SslExpired">Le certificat a expiré.</string>
 	<string name="Commons.SslNotYetValid">Le certificat n\'est pas encore valide.</string>
+	
+	<string name="Main.MenuMobileView">Vue mobile</string>
+	
+	<string name="MobileViewListActivity.Title">Zirco Browser - Liste des sites pour la vue mobile</string>
+	<string name="MobileViewListActivity.ListEmpty">La liste est vide.</string>	
+    <string name="MobileViewListActivity.AddMessage">Ajouter un site</string>
+    <string name="MobileViewListActivity.ClearMessage">Supprimer tous les sites</string>
+	
+	<string name="PreferencesActivity.MobileViewCategoryTitle">Paramètres de la vue mobile</string>
+	<string name="PreferencesActivity.MobileViewListPreferenceTitle">Gérer les sites en vue mobile</string>
+	<string name="PreferencesActivity.MobileViewListPreferenceSummary">Les sites de cette liste seront chargés en utilisant Google mobile view (GWT).</string>
+	
+	<string name="Commons.Add">Ajouter</string>
+    <string name="Commons.Clear">Tout supprimer</string>
+    <string name="Commons.Delete">Supprimer</string>
     
 </resources>

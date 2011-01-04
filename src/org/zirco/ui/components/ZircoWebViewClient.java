@@ -21,6 +21,7 @@ import org.zirco.events.EventConstants;
 import org.zirco.events.EventController;
 import org.zirco.utils.ApplicationUtils;
 import org.zirco.utils.Constants;
+import org.zirco.utils.UrlUtils;
 
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -114,7 +115,7 @@ public class ZircoWebViewClient extends WebViewClient {
 						handler.cancel();
 					}
 		});
-	}
+	}		
 
 	@Override
 	public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -139,9 +140,20 @@ public class ZircoWebViewClient extends WebViewClient {
 			return true;
 			
 		} else {
-			((ZircoWebView) view).resetLoadedUrl();
-			EventController.getInstance().fireWebEvent(EventConstants.EVT_WEB_ON_URL_LOADING, url);				
-			return false;
+						
+			// If the url is not from GWT mobile view, and is in the mobile view url list, then load it with GWT.			
+			if ((!url.startsWith(String.format(Constants.URL_GOOGLE_MOBILE_VIEW, ""))) &&
+					(UrlUtils.checkInMobileViewUrlList(view.getContext(), url))) {
+				
+				String newUrl = String.format(Constants.URL_GOOGLE_MOBILE_VIEW, url);
+				view.loadUrl(newUrl);
+				return true;
+				
+			} else {			
+				((ZircoWebView) view).resetLoadedUrl();
+				EventController.getInstance().fireWebEvent(EventConstants.EVT_WEB_ON_URL_LOADING, url);				
+				return false;
+			}
 		}
 	}
 
