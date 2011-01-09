@@ -879,7 +879,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     		} else {
     			
     			// If the url is not from GWT mobile view, and is in the mobile view url list, then load it with GWT.
-    			if ((!url.startsWith(String.format(Constants.URL_GOOGLE_MOBILE_VIEW, ""))) &&
+    			if ((!url.startsWith(Constants.URL_GOOGLE_MOBILE_VIEW_NO_FORMAT)) &&
     					(UrlUtils.checkInMobileViewUrlList(this, url))) {
     				
     				url = String.format(Constants.URL_GOOGLE_MOBILE_VIEW, url);    				
@@ -1130,8 +1130,13 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     		this.finish();
     		return true;
     	case MENU_MOBILE_VIEW:
-    		String url = String.format(Constants.URL_GOOGLE_MOBILE_VIEW, mUrlEditText.getText().toString());
-    		navigateToUrl(url);
+    		String currentUrl = mUrlEditText.getText().toString();
+    		
+    		// Do not reload mobile view if already on it.
+    		if (!currentUrl.startsWith(Constants.URL_GOOGLE_MOBILE_VIEW_NO_FORMAT)) {
+    			String url = String.format(Constants.URL_GOOGLE_MOBILE_VIEW, mUrlEditText.getText().toString());
+    			navigateToUrl(url);
+    		}
     		return true;
         default: return super.onMenuItemSelected(featureId, item);
     	}

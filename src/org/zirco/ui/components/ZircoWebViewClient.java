@@ -142,7 +142,7 @@ public class ZircoWebViewClient extends WebViewClient {
 		} else {
 						
 			// If the url is not from GWT mobile view, and is in the mobile view url list, then load it with GWT.			
-			if ((!url.startsWith(String.format(Constants.URL_GOOGLE_MOBILE_VIEW, ""))) &&
+			if ((!url.startsWith(Constants.URL_GOOGLE_MOBILE_VIEW_NO_FORMAT)) &&
 					(UrlUtils.checkInMobileViewUrlList(view.getContext(), url))) {
 				
 				String newUrl = String.format(Constants.URL_GOOGLE_MOBILE_VIEW, url);

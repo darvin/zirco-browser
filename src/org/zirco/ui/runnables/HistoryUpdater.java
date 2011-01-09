@@ -16,6 +16,7 @@
 package org.zirco.ui.runnables;
 
 import org.zirco.model.DbAdapter;
+import org.zirco.utils.Constants;
 
 import android.content.Context;
 
@@ -38,6 +39,10 @@ public class HistoryUpdater implements Runnable {
 		mContext = context;
 		mTitle = title;
 		mUrl = url;
+		
+		if (mUrl.startsWith(Constants.URL_GOOGLE_MOBILE_VIEW_NO_FORMAT)) {
+			mUrl = mUrl.substring(Constants.URL_GOOGLE_MOBILE_VIEW_NO_FORMAT.length());
+		}
 	}
 	
 	@Override
