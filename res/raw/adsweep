@@ -30,7 +30,7 @@ function adsweep_core(){
 	var whitelist=[];
 	
 	// List of sites for which you don't want to hide common ad patterns 
-	var adPatternExceptions=['boulanger.fr','chess.com','docs.google.com','gamestar.de','google.com.hk/finance','google.com/calendar','hulu.com','mail.google.com','moskva.fm','picasaweb.google.com','spreadsheets.google.com','wikipedia.org','winfuture.de']; // I'm adding Hulu because it's causing a false-positive and I can't test, as I am not in the US.
+	var adPatternExceptions=['deviantart.com','boulanger.fr','chess.com','docs.google.com','gamestar.de','google.com.hk/finance','google.com/calendar','hulu.com','mail.google.com','moskva.fm','picasaweb.google.com','spreadsheets.google.com','wikipedia.org','winfuture.de']; // I'm adding Hulu because it's causing a false-positive and I can't test, as I am not in the US.
 	
 	// List custom CSS selectors that you want to hide on specific sites
 	var sites=new Array();
