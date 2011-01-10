@@ -57,7 +57,14 @@
 				android:key="GeneralBubblePosition"
 				android:defaultValue="right"
 				android:entries="@array/BubblePositionEntries"
-				android:entryValues="@array/BubblePositionValues" />			
+				android:entryValues="@array/BubblePositionValues" />
+			<ListPreference
+				android:title="@string/PreferencesActivity.VolumeKeysBehaviourPreferenceTitle"
+				android:summary="@string/PreferencesActivity.VolumeKeysBehaviourPreferenceSummary"
+				android:key="GeneralVolumeKeysBehaviour"
+				android:defaultValue="DEFAULT"
+				android:entries="@array/VolumeKeysActionEntries"
+				android:entryValues="@array/VolumeKeysActionValues" />			
 		</PreferenceScreen>
 		<PreferenceScreen
 			android:key="StartPageCustomizationPreferencesScreen"

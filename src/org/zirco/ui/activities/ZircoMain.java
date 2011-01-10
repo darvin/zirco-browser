@@ -957,14 +957,32 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		
-		switch (keyCode) {
-		case KeyEvent.KEYCODE_VOLUME_DOWN:
-			mCurrentWebView.zoomIn();
-			return true;
-		case KeyEvent.KEYCODE_VOLUME_UP:
-			mCurrentWebView.zoomOut();
-			return true;
-		default: return super.onKeyDown(keyCode, event);
+		String volumeKeysBehaviour = PreferenceManager.getDefaultSharedPreferences(this).getString(Constants.PREFERENCES_UI_VOLUME_KEYS_BEHAVIOUR, "DEFAULT");
+		
+		if (!volumeKeysBehaviour.equals("DEFAULT")) {
+			switch (keyCode) {
+			case KeyEvent.KEYCODE_VOLUME_DOWN:
+				
+				if (volumeKeysBehaviour.equals("SWITCH_TABS")) {
+					showPreviousTab();
+				} else {
+					mCurrentWebView.zoomIn();
+				}
+				
+				return true;
+			case KeyEvent.KEYCODE_VOLUME_UP:
+				
+				if (volumeKeysBehaviour.equals("SWITCH_TABS")) {
+					showNextTab();
+				} else {
+					mCurrentWebView.zoomOut();
+				}
+				
+				return true;
+			default: return super.onKeyDown(keyCode, event);
+			}
+		} else {
+			return super.onKeyDown(keyCode, event);
 		}
 	}
 
@@ -1180,6 +1198,46 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	}
 	
 	/**
+	 * Show the previous tab, if any.
+	 */
+	private void showPreviousTab() {
+		
+		if (mViewFlipper.getChildCount() > 1) {
+			
+			mViewFlipper.setInAnimation(AnimationManager.getInstance().getInFromLeftAnimation());
+			mViewFlipper.setOutAnimation(AnimationManager.getInstance().getOutToRightAnimation());
+
+			mViewFlipper.showPrevious();
+
+			mCurrentWebView = mWebViews.get(mViewFlipper.getDisplayedChild());
+
+			showToastOnTabSwitch();
+
+			updateUI();
+		}
+	}
+	
+	/**
+	 * Show the next tab, if any.
+	 */
+	private void showNextTab() {
+		
+		if (mViewFlipper.getChildCount() > 1) {
+			
+			mViewFlipper.setInAnimation(AnimationManager.getInstance().getInFromRightAnimation());
+			mViewFlipper.setOutAnimation(AnimationManager.getInstance().getOutToLeftAnimation());
+
+			mViewFlipper.showNext();
+
+			mCurrentWebView = mWebViews.get(mViewFlipper.getDisplayedChild());
+
+			showToastOnTabSwitch();
+
+			updateUI();
+		}
+	}
+	
+	/**
 	 * Compute the distance between points of a motion event.
 	 * @param event The event.
 	 * @return The distance between the two points.
@@ -1231,34 +1289,14 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 						// going backwards: pushing stuff to the right
 						if (currentX > (mDownXValue + FLIP_PIXEL_THRESHOLD)) {						
 
-							mViewFlipper.setInAnimation(AnimationManager.getInstance().getInFromLeftAnimation());
-							mViewFlipper.setOutAnimation(AnimationManager.getInstance().getOutToRightAnimation());
-
-							mViewFlipper.showPrevious();
-
-							mCurrentWebView = mWebViews.get(mViewFlipper.getDisplayedChild());
-
-							showToastOnTabSwitch();
-
-							updateUI();
-
+							showPreviousTab();
 							return false;
 						}
 
 						// going forwards: pushing stuff to the left
 						if (currentX < (mDownXValue - FLIP_PIXEL_THRESHOLD)) {					
 
-							mViewFlipper.setInAnimation(AnimationManager.getInstance().getInFromRightAnimation());
-							mViewFlipper.setOutAnimation(AnimationManager.getInstance().getOutToLeftAnimation());
-
-							mViewFlipper.showNext();
-
-							mCurrentWebView = mWebViews.get(mViewFlipper.getDisplayedChild());
-
-							showToastOnTabSwitch();
-
-							updateUI();
-
+							showNextTab();
 							return false;
 						}
 					}

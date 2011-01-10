@@ -363,4 +363,24 @@
     <string name="Commons.Clear">Clear</string>
     <string name="Commons.Delete">Delete</string>
     
+    <!-- 0.3.6 -->
+    <string name="PreferencesActivity.VolumeKeysBehaviourPreferenceTitle">Volume keys behaviour</string>
+    <string name="PreferencesActivity.VolumeKeysBehaviourPreferenceSummary">Choose the volume keys actions.</string>
+    
+    <string name="PreferencesActivity.VolumeKeysActionDefault">Default behaviour</string>
+    <string name="PreferencesActivity.VolumeKeysActionZoom">Zoom</string>
+    <string name="PreferencesActivity.VolumeKeysActionSwitchTabs">Switch tabs</string>
+    
+    <string-array name="VolumeKeysActionEntries">
+		<item>@string/PreferencesActivity.VolumeKeysActionDefault</item>
+		<item>@string/PreferencesActivity.VolumeKeysActionZoom</item>
+		<item>@string/PreferencesActivity.VolumeKeysActionSwitchTabs</item>
+	</string-array>
+	
+    <string-array name="VolumeKeysActionValues">
+		<item>DEFAULT</item>
+		<item>ZOOM</item>
+		<item>SWITCH_TABS</item>
+	</string-array>
+    
 </resources>

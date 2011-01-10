@@ -363,4 +363,24 @@
     <string name="Commons.Clear">Tout supprimer</string>
     <string name="Commons.Delete">Supprimer</string>
     
+    <!-- 0.3.6 -->
+    <string name="PreferencesActivity.VolumeKeysBehaviourPreferenceTitle">Comportement des touches de volumes</string>
+    <string name="PreferencesActivity.VolumeKeysBehaviourPreferenceSummary">Permet de définir le comportement des touches de volumes.</string>
+    
+    <string name="PreferencesActivity.VolumeKeysActionDefault">Comportement par défaut</string>
+    <string name="PreferencesActivity.VolumeKeysActionZoom">Zoom</string>
+    <string name="PreferencesActivity.VolumeKeysActionSwitchTabs">Changer d\'onglets</string>
+    
+    <string-array name="VolumeKeysActionEntries">
+		<item>@string/PreferencesActivity.VolumeKeysActionDefault</item>
+		<item>@string/PreferencesActivity.VolumeKeysActionZoom</item>
+		<item>@string/PreferencesActivity.VolumeKeysActionSwitchTabs</item>
+	</string-array>
+	
+    <string-array name="VolumeKeysActionValues">
+		<item>DEFAULT</item>
+		<item>ZOOM</item>
+		<item>SWITCH_TABS</item>
+	</string-array>
+    
 </resources>
