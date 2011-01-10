@@ -15,6 +15,9 @@
 
 package org.zirco.ui.components;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import org.zirco.controllers.Controller;
 import org.zirco.utils.ApplicationUtils;
 import org.zirco.utils.Constants;
@@ -22,6 +25,7 @@ import org.zirco.utils.Constants;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebSettings;
@@ -42,6 +46,10 @@ public class ZircoWebView extends WebView {
 	
 	private String mLoadedUrl;
 	
+	private static boolean mBoMethodsLoaded = false;
+	private static Method mOnPauseMethod = null;
+	private static Method mOnResumeMethod = null;
+	
 	/**
 	 * Constructor.
 	 * @param context The current context.
@@ -52,6 +60,7 @@ public class ZircoWebView extends WebView {
 		mContext = context;
 		
 		initializeOptions();
+		loadMethods();
 	}
 	
 	/**
@@ -65,6 +74,7 @@ public class ZircoWebView extends WebView {
         mContext = context;
         
         initializeOptions();
+        loadMethods();
 	}	
 	
 	/**
@@ -163,6 +173,70 @@ public class ZircoWebView extends WebView {
 	 */
 	public void resetLoadedUrl() {
 		mLoadedUrl = null;
+	}
+	
+	/**
+	 * Perform an 'onPause' on this WebView through reflexion.
+	 */
+	public void doOnPause() {
+		if (mOnPauseMethod != null) {
+			try {
+				
+				mOnPauseMethod.invoke(this);
+				
+			} catch (IllegalArgumentException e) {
+				Log.e("ZircoWebView", "doOnPause(): " + e.getMessage());
+			} catch (IllegalAccessException e) {
+				Log.e("ZircoWebView", "doOnPause(): " + e.getMessage());
+			} catch (InvocationTargetException e) {
+				Log.e("ZircoWebView", "doOnPause(): " + e.getMessage());
+			}
+		}
+	}
+	
+	/**
+	 * Perform an 'onResume' on this WebView through reflexion.
+	 */
+	public void doOnResume() {
+		if (mOnResumeMethod != null) {
+			try {
+				
+				mOnResumeMethod.invoke(this);
+				
+			} catch (IllegalArgumentException e) {
+				Log.e("ZircoWebView", "doOnResume(): " + e.getMessage());
+			} catch (IllegalAccessException e) {
+				Log.e("ZircoWebView", "doOnResume(): " + e.getMessage());
+			} catch (InvocationTargetException e) {
+				Log.e("ZircoWebView", "doOnResume(): " + e.getMessage());
+			}
+		}
+	}
+	
+	/**
+	 * Load static reflected methods.
+	 */
+	private void loadMethods() {
+		
+		if (!mBoMethodsLoaded) {
+		
+			try {
+
+				mOnPauseMethod = WebView.class.getMethod("onPause");
+				mOnResumeMethod = WebView.class.getMethod("onResume");
+
+			} catch (SecurityException e) {
+				Log.e("ZircoWebView", "loadMethods(): " + e.getMessage());
+				mOnPauseMethod = null;
+				mOnResumeMethod = null;
+			} catch (NoSuchMethodException e) {
+				Log.e("ZircoWebView", "loadMethods(): " + e.getMessage());
+				mOnPauseMethod = null;
+				mOnResumeMethod = null;
+			}
+
+			mBoMethodsLoaded = true;
+		}
 	}
 
 }

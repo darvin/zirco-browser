@@ -1,5 +1,6 @@
 0.3.6:
 - Volume keys behaviour can be customized to either zoom, switch tabs, or have default behaviour (e.g. change volume). Default is to change volume.
+- Plugins management bugfixes.
 
 0.3.5:
 - Websites can be displayed in a "fake" mobile view, provided by Google GWT; This can be done on-demand, or automatically through in list of websites in preferences;

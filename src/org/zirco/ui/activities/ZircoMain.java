@@ -752,6 +752,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     	
     	int removeIndex = mViewFlipper.getDisplayedChild();
     	
+    	mCurrentWebView.doOnPause();
+    	
     	synchronized (mViewFlipper) {
     		mViewFlipper.removeViewAt(removeIndex);
     		mViewFlipper.setDisplayedChild(removeIndex - 1);    		
@@ -1181,6 +1183,18 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         	}
         }
 	}
+	
+	@Override
+	protected void onPause() {
+		mCurrentWebView.doOnPause();
+		super.onPause();
+	}
+	
+	@Override
+	protected void onResume() {
+		mCurrentWebView.doOnResume();
+		super.onResume();
+	}
 
 	/**
 	 * Show a toast alert on tab switch.
@@ -1204,6 +1218,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		
 		if (mViewFlipper.getChildCount() > 1) {
 			
+			mCurrentWebView.doOnPause();
+			
 			mViewFlipper.setInAnimation(AnimationManager.getInstance().getInFromLeftAnimation());
 			mViewFlipper.setOutAnimation(AnimationManager.getInstance().getOutToRightAnimation());
 
@@ -1211,6 +1227,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 
 			mCurrentWebView = mWebViews.get(mViewFlipper.getDisplayedChild());
 
+			mCurrentWebView.doOnResume();
+			
 			showToastOnTabSwitch();
 
 			updateUI();
@@ -1224,6 +1242,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		
 		if (mViewFlipper.getChildCount() > 1) {
 			
+			mCurrentWebView.doOnPause();
+			
 			mViewFlipper.setInAnimation(AnimationManager.getInstance().getInFromRightAnimation());
 			mViewFlipper.setOutAnimation(AnimationManager.getInstance().getOutToLeftAnimation());
 
@@ -1231,6 +1251,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 
 			mCurrentWebView = mWebViews.get(mViewFlipper.getDisplayedChild());
 
+			mCurrentWebView.doOnResume();
+			
 			showToastOnTabSwitch();
 
 			updateUI();
@@ -1504,4 +1526,5 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			}
 		}			
 	}
+	
 }
