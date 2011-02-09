@@ -35,6 +35,7 @@ import android.graphics.Paint;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -52,6 +53,30 @@ public class ApplicationUtils {
 	private static String mRawStartPageHistory = null;
 	
 	private static String mRawStartPageSearch = null;
+	
+	private static int mFaviconSize = -1;
+	
+	/**
+	 * Get the required size of the favicon, depending on current screen density.
+	 * @param activity The current activity.
+	 * @return The size of the favicon, in pixels.
+	 */
+	public static int getFaviconSize(Activity activity) {
+		if (mFaviconSize == -1) {
+			DisplayMetrics metrics = new DisplayMetrics();
+			activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+			switch (metrics.densityDpi) {
+			case DisplayMetrics.DENSITY_LOW: mFaviconSize = 12; break;
+			case DisplayMetrics.DENSITY_MEDIUM: mFaviconSize = 24; break;
+			case DisplayMetrics.DENSITY_HIGH: mFaviconSize = 32; break;
+			default: mFaviconSize = 24;
+			}
+		}
+		
+		return mFaviconSize;
+	}
+	
 	
 	/**
 	 * Truncate a string to a given maximum width, relative to its paint size.

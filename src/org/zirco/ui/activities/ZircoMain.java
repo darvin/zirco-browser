@@ -172,7 +172,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);              
 
-        INSTANCE = this;                
+        INSTANCE = this;
         
         Constants.initializeConstantsFromResources(this);
         
@@ -230,6 +230,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         initializeWebIconDatabase();
         
         startToolbarsHideRunnable();
+        
     }
 
     /**
@@ -1010,16 +1011,31 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	}
 	
 	/**
+	 * Get a Drawable of the current favicon, with its size normalized relative to current screen density.
+	 * @return The normalized favicon.
+	 */
+	private BitmapDrawable getNormalizedFavicon() {		
+		BitmapDrawable favIcon = new BitmapDrawable(mCurrentWebView.getFavicon());
+		
+		if (mCurrentWebView.getFavicon() != null) {
+			int favIconSize = ApplicationUtils.getFaviconSize(this);
+			favIcon.setBounds(0, 0, favIconSize, favIconSize);
+		}
+		
+		return favIcon;
+	}
+	
+	/**
 	 * Update the "Go" button image.
 	 */
-	private void updateGoButton() {
+	private void updateGoButton() {		
 		if (mCurrentWebView.isLoading()) {
 			mGoButton.setImageResource(R.drawable.ic_btn_stop);			
-			mUrlEditText.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(mCurrentWebView.getFavicon()), null, mCircularProgress, null);
+			mUrlEditText.setCompoundDrawables(getNormalizedFavicon(), null, mCircularProgress, null);
 			((AnimationDrawable) mCircularProgress).start();
 		} else {
 			mGoButton.setImageResource(R.drawable.ic_btn_go);			
-			mUrlEditText.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(mCurrentWebView.getFavicon()), null, null, null);			
+			mUrlEditText.setCompoundDrawables(getNormalizedFavicon(), null, null, null);			
 			((AnimationDrawable) mCircularProgress).stop();
 		}
 	}
@@ -1027,8 +1043,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	/**
 	 * Update the fav icon display.
 	 */
-	private void updateFavIcon() {
-		mUrlEditText.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(mCurrentWebView.getFavicon()),
+	private void updateFavIcon() {		
+		mUrlEditText.setCompoundDrawables(getNormalizedFavicon(),
 				null,
 				mUrlEditText.getCompoundDrawables()[2],
 				null);
