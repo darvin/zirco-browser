@@ -370,17 +370,20 @@
     <string name="PreferencesActivity.VolumeKeysActionDefault">Default behaviour</string>
     <string name="PreferencesActivity.VolumeKeysActionZoom">Zoom</string>
     <string name="PreferencesActivity.VolumeKeysActionSwitchTabs">Switch tabs</string>
+    <string name="PreferencesActivity.VolumeKeysActionHistory">Back/Forward</string>
     
     <string-array name="VolumeKeysActionEntries">
 		<item>@string/PreferencesActivity.VolumeKeysActionDefault</item>
 		<item>@string/PreferencesActivity.VolumeKeysActionZoom</item>
 		<item>@string/PreferencesActivity.VolumeKeysActionSwitchTabs</item>
+		<item>@string/PreferencesActivity.VolumeKeysActionHistory</item>
 	</string-array>
 	
     <string-array name="VolumeKeysActionValues">
 		<item>DEFAULT</item>
 		<item>ZOOM</item>
 		<item>SWITCH_TABS</item>
+		<item>HISTORY</item>
 	</string-array>
     
 </resources>

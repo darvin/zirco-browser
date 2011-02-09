@@ -968,6 +968,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 				
 				if (volumeKeysBehaviour.equals("SWITCH_TABS")) {
 					showPreviousTab();
+				} else if (volumeKeysBehaviour.equals("HISTORY")) {
+					mCurrentWebView.goForward();
 				} else {
 					mCurrentWebView.zoomIn();
 				}
@@ -977,6 +979,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 				
 				if (volumeKeysBehaviour.equals("SWITCH_TABS")) {
 					showNextTab();
+				} else if (volumeKeysBehaviour.equals("HISTORY")) {
+					mCurrentWebView.goBack();
 				} else {
 					mCurrentWebView.zoomOut();
 				}

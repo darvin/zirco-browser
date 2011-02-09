@@ -1,5 +1,5 @@
 0.3.6:
-- Volume keys behaviour can be customized to either zoom, switch tabs, or have default behaviour (e.g. change volume). Default is to change volume.
+- Volume keys behaviour can be customized to either zoom, switch tabs, navigate in history, or have default behaviour (e.g. change volume). Default is to change volume.
 - Plugins management bugfixes.
 
 0.3.5:
