@@ -1438,6 +1438,10 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			
 			new Thread(new BookmarkThumbnailUpdater(this, mCurrentWebView)).start();
 			
+			if (mUrlBarVisible) {
+				startToolbarsHideRunnable();
+			}
+			
 		} else if (event.equals(EventConstants.EVT_WEB_ON_PAGE_STARTED)) {
 			
 			mUrlEditText.setText((CharSequence) data);
@@ -1525,8 +1529,6 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 				
 				if (!mCurrentWebView.isLoading()) {
 					setToolbarsVisibility(false);
-				} else {
-					startToolbarsHideRunnable();
 				}
 			}
 		}
