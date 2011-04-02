@@ -68,9 +68,9 @@ public class ApplicationUtils {
 
 			switch (metrics.densityDpi) {
 			case DisplayMetrics.DENSITY_LOW: mFaviconSize = 12; break;
-			case DisplayMetrics.DENSITY_MEDIUM: mFaviconSize = 24; break;
-			case DisplayMetrics.DENSITY_HIGH: mFaviconSize = 32; break;
-			default: mFaviconSize = 24;
+			case DisplayMetrics.DENSITY_MEDIUM: mFaviconSize = 16; break;
+			case DisplayMetrics.DENSITY_HIGH: mFaviconSize = 24; break;
+			default: mFaviconSize = 16;
 			}
 		}
 		
