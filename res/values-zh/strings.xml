@@ -384,4 +384,13 @@
 		<item>SWITCH_TABS</item>
 		<item>HISTORY</item>
 	</string-array>    
+	
+	<!-- 0.3.7 -->
+	<string name="Main.MenuSharePage">Share page</string>
+	<string name="Main.ShareChooserTitle">Share via</string>
+	
+	<string name="Main.MenuShareLinkUrl">Share link url</string>
+	<string name="Main.MenuShareImageUrl">Share image url</string>
+	<string name="Main.MenuShareEmailUrl">Share email address</string>
+	
 </resources>

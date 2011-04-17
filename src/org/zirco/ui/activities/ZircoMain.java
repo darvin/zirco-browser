@@ -109,12 +109,14 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	private static final int MENU_EXIT = Menu.FIRST + 4;
 	private static final int MENU_SELECT_TEXT = Menu.FIRST + 5;
 	private static final int MENU_MOBILE_VIEW = Menu.FIRST + 6;
+	private static final int MENU_SHARE_PAGE = Menu.FIRST + 7;
 	
 	private static final int CONTEXT_MENU_OPEN = Menu.FIRST + 10;
 	private static final int CONTEXT_MENU_OPEN_IN_NEW_TAB = Menu.FIRST + 11;
 	private static final int CONTEXT_MENU_DOWNLOAD = Menu.FIRST + 12;
 	private static final int CONTEXT_MENU_COPY = Menu.FIRST + 13;
 	private static final int CONTEXT_MENU_SEND_MAIL = Menu.FIRST + 14;
+	private static final int CONTEXT_MENU_SHARE = Menu.FIRST + 15;
 	
 	private static final int OPEN_BOOKMARKS_HISTORY_ACTIVITY = 0;
 	private static final int OPEN_DOWNLOADS_ACTIVITY = 1;
@@ -505,7 +507,10 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 					item.setIntent(i);
 					
 					item = menu.add(0, CONTEXT_MENU_DOWNLOAD, 0, R.string.Main_MenuDownload);					
-					item.setIntent(i);										
+					item.setIntent(i);
+					
+					item = menu.add(0, CONTEXT_MENU_SHARE, 0, R.string.Main_MenuShareLinkUrl);					
+					item.setIntent(i);
 				
 					menu.setHeaderTitle(result.getExtra());					
 				} else if (resultType == HitTestResult.IMAGE_TYPE) {
@@ -519,7 +524,10 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 					item.setIntent(i);
 					
 					item = menu.add(0, CONTEXT_MENU_DOWNLOAD, 0, R.string.Main_MenuDownloadImage);					
-					item.setIntent(i);										
+					item.setIntent(i);	
+					
+					item = menu.add(0, CONTEXT_MENU_SHARE, 0, R.string.Main_MenuShareImageUrl);					
+					item.setIntent(i);
 					
 					menu.setHeaderTitle(result.getExtra());
 					
@@ -534,7 +542,10 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 					i.putExtra(Constants.EXTRA_ID_URL, result.getExtra());
 					
 					item = menu.add(0, CONTEXT_MENU_COPY, 0, R.string.Main_MenuCopyEmailUrl);					
-					item.setIntent(i);					
+					item.setIntent(i);		
+					
+					item = menu.add(0, CONTEXT_MENU_SHARE, 0, R.string.Main_MenuShareEmailUrl);					
+					item.setIntent(i);
 					
 					menu.setHeaderTitle(result.getExtra());
 				}
@@ -1153,6 +1164,9 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         item.setIcon(R.drawable.ic_menu_select);
         
         item = menu.add(0, MENU_MOBILE_VIEW, 0, R.string.Main_MenuMobileView);
+        
+        item = menu.add(0, MENU_SHARE_PAGE, 0, R.string.Main_MenuSharePage);
+		item.setIcon(android.R.drawable.ic_menu_share);
     	
     	return true;
 	}
@@ -1186,6 +1200,9 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     			String url = String.format(Constants.URL_GOOGLE_MOBILE_VIEW, mUrlEditText.getText().toString());
     			navigateToUrl(url);
     		}
+    		return true;
+    	case MENU_SHARE_PAGE:
+    		sharePage(mCurrentWebView.getTitle(), mCurrentWebView.getUrl());
     		return true;
         default: return super.onMenuItemSelected(featureId, item);
     	}
@@ -1224,6 +1241,23 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		mCurrentWebView.doOnResume();
 		super.onResume();
 	}
+	
+	/**
+	 * Share a page.
+	 * @param title The page title.
+	 * @param url The page url.
+	 */
+	private void sharePage(String title, String url) {
+    	Intent shareIntent = new Intent(Intent.ACTION_SEND);
+    	shareIntent.setType("text/plain");
+    	shareIntent.putExtra(Intent.EXTRA_TEXT, url);
+    	shareIntent.putExtra(Intent.EXTRA_SUBJECT, title);
+    	try {
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.Main_ShareChooserTitle)));
+        } catch(android.content.ActivityNotFoundException ex) {
+            // if no app handles it, do nothing
+        }
+    }
 
 	/**
 	 * Show a toast alert on tab switch.
@@ -1523,6 +1557,11 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		case CONTEXT_MENU_COPY:
 			if (b != null) {
 				ApplicationUtils.copyTextToClipboard(this, b.getString(Constants.EXTRA_ID_URL), getString(R.string.Commons_UrlCopyToastMessage));
+			}
+			return true;
+		case CONTEXT_MENU_SHARE:
+			if (b != null) {
+				sharePage("", b.getString(Constants.EXTRA_ID_URL));
 			}
 			return true;
 		default: return super.onContextItemSelected(item);
