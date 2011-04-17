@@ -24,8 +24,14 @@ import android.view.animation.TranslateAnimation;
  */
 public final class AnimationManager {
 
+	private static final int BARS_ANIMATION_DURATION = 150;
 	private static final int ANIMATION_DURATION = 350;
 
+	private Animation mTopBarShowAnimation = null;
+	private Animation mTopBarHideAnimation = null;	
+	private Animation mBottomBarShowAnimation = null;
+	private Animation mBottomBarHideAnimation = null;
+	
 	private Animation mInFromRightAnimation;
 	private Animation mOutToLeftAnimation;
 	private Animation mInFromLeftAnimation;
@@ -50,6 +56,35 @@ public final class AnimationManager {
 	 * Contructor.
 	 */
 	private AnimationManager() {
+		
+		mTopBarShowAnimation = new TranslateAnimation(
+    			Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
+    			Animation.RELATIVE_TO_SELF, -1.0f, Animation.RELATIVE_TO_SELF, 0.0f
+    	);
+		
+		mTopBarShowAnimation.setDuration(BARS_ANIMATION_DURATION);
+		
+		mTopBarHideAnimation = new TranslateAnimation(
+    			Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
+    			Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, -1.0f
+    	);
+		
+		mTopBarHideAnimation.setDuration(BARS_ANIMATION_DURATION);
+		
+		mBottomBarShowAnimation = new TranslateAnimation(
+    			Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
+    			Animation.RELATIVE_TO_SELF, 1.0f, Animation.RELATIVE_TO_SELF, 0.0f
+    	);
+		
+		mBottomBarShowAnimation.setDuration(BARS_ANIMATION_DURATION);
+		
+		mBottomBarHideAnimation = new TranslateAnimation(
+    			Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
+    			Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 1.0f
+    	);
+		
+		mBottomBarHideAnimation.setDuration(BARS_ANIMATION_DURATION);
+		
 		mInFromRightAnimation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, +1.0f,
 				Animation.RELATIVE_TO_PARENT, 0.0f,
 				Animation.RELATIVE_TO_PARENT,
@@ -83,6 +118,22 @@ public final class AnimationManager {
 		mOutToRightAnimation.setInterpolator(new AccelerateInterpolator());
 	}
 
+	public Animation getTopBarShowAnimation() {
+		return mTopBarShowAnimation;
+	}
+	
+	public Animation getTopBarHideAnimation() {
+		return mTopBarHideAnimation;
+	}
+	
+	public Animation getBottomBarShowAnimation() {
+		return mBottomBarShowAnimation;
+	}
+	
+	public Animation getBottomBarHideAnimation() {
+		return mBottomBarHideAnimation;
+	}
+	
 	/**
 	 * Get the in from right animation object.
 	 * @return The animation object.

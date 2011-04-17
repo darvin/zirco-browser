@@ -1,3 +1,8 @@
+0.3.7:
+- Chinese translation.
+- Add Share page, Share link, Share image and Share email options.
+- Toolbars are now shown and hidden with a quick animation.
+
 0.3.6:
 - Volume keys behaviour can be customized to either zoom, switch tabs, navigate in history, or have default behaviour (e.g. change volume). Default is to change volume.
 - Plugins management bugfixes.
@@ -10,7 +15,7 @@
 - Untrusted SSL certificates support;
 
 0.3.4:
-- By popular demand, added a "Close" button, althought i do not see the need for it :).
+- By popular demand, added a "Close" button, although i do not see the need for it :).
 - Added "Home" button in url bar (can be hidden in preferences).
 - Added "Clear cache on exit" option in privacy settings.
 - Context menu for images and mailto links added.

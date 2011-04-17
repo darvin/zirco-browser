@@ -788,11 +788,16 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     	    	
     	if (visible) {
     		
-    		mTopBar.setVisibility(View.VISIBLE);
-    		mBottomBar.setVisibility(View.VISIBLE);
-    		
-    		mBubbleRightView.setVisibility(View.GONE);
-    		mBubbleLeftView.setVisibility(View.GONE);
+    		if (!mUrlBarVisible) {    			
+    			mTopBar.startAnimation(AnimationManager.getInstance().getTopBarShowAnimation());
+    			mBottomBar.startAnimation(AnimationManager.getInstance().getBottomBarShowAnimation());
+    			
+    			mTopBar.setVisibility(View.VISIBLE);
+    			mBottomBar.setVisibility(View.VISIBLE);
+
+    			mBubbleRightView.setVisibility(View.GONE);
+    			mBubbleLeftView.setVisibility(View.GONE);
+    		}
     		
     		startToolbarsHideRunnable();
     		
@@ -800,23 +805,28 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     		
     	} else {  	
     		
-    		mTopBar.setVisibility(View.GONE);
-    		mBottomBar.setVisibility(View.GONE);
-    		
-    		String bubblePosition = Controller.getInstance().getPreferences().getString(Constants.PREFERENCES_GENERAL_BUBBLE_POSITION, "right");
-    		
-    		if (bubblePosition.equals("right")) {
-    			mBubbleRightView.setVisibility(View.VISIBLE);
-    			mBubbleLeftView.setVisibility(View.GONE);
-    		} else if (bubblePosition.equals("left")) {
-    			mBubbleRightView.setVisibility(View.GONE);
-    			mBubbleLeftView.setVisibility(View.VISIBLE);
-    		} else if (bubblePosition.equals("both")) {
-    			mBubbleRightView.setVisibility(View.VISIBLE);
-    			mBubbleLeftView.setVisibility(View.VISIBLE);
-    		} else {
-    			mBubbleRightView.setVisibility(View.VISIBLE);
-    			mBubbleLeftView.setVisibility(View.GONE);
+    		if (mUrlBarVisible) {
+    			mTopBar.startAnimation(AnimationManager.getInstance().getTopBarHideAnimation());
+    			mBottomBar.startAnimation(AnimationManager.getInstance().getBottomBarHideAnimation());
+    			
+    			mTopBar.setVisibility(View.GONE);
+    			mBottomBar.setVisibility(View.GONE);
+
+    			String bubblePosition = Controller.getInstance().getPreferences().getString(Constants.PREFERENCES_GENERAL_BUBBLE_POSITION, "right");
+
+    			if (bubblePosition.equals("right")) {
+    				mBubbleRightView.setVisibility(View.VISIBLE);
+    				mBubbleLeftView.setVisibility(View.GONE);
+    			} else if (bubblePosition.equals("left")) {
+    				mBubbleRightView.setVisibility(View.GONE);
+    				mBubbleLeftView.setVisibility(View.VISIBLE);
+    			} else if (bubblePosition.equals("both")) {
+    				mBubbleRightView.setVisibility(View.VISIBLE);
+    				mBubbleLeftView.setVisibility(View.VISIBLE);
+    			} else {
+    				mBubbleRightView.setVisibility(View.VISIBLE);
+    				mBubbleLeftView.setVisibility(View.GONE);
+    			}
     		}
 			
 			mUrlBarVisible = false;
