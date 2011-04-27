@@ -874,7 +874,10 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
      * @param url The page url.
      */
     private void startHistoryUpdaterRunnable(String title, String url) {
-    	new Thread(new HistoryUpdater(this, title, url)).start();
+    	if ((url != null) &&
+    			(url.length() > 0)) {
+    		new Thread(new HistoryUpdater(this, title, url)).start();
+    	}
     }
     
     /**
