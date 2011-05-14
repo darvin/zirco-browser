@@ -75,6 +75,16 @@
 			android:layout_width="wrap_content" android:src="@drawable/bubbleright48"
 			android:layout_alignParentBottom="true"
 			android:layout_alignParentRight="true" android:id="@+id/BubbleRightView"></ImageView>
+			
+		<ImageView android:id="@+id/PreviousTabView"
+			android:src="@drawable/previous_tab"
+			android:layout_height="wrap_content" android:layout_width="wrap_content"
+			android:layout_alignParentLeft="true" android:layout_centerVertical="true"></ImageView>
+			
+		<ImageView android:id="@+id/NextTabView"
+			android:src="@drawable/next_tab"
+			android:layout_height="wrap_content" android:layout_width="wrap_content"
+			android:layout_alignParentRight="true" android:layout_centerVertical="true"></ImageView>		
 
 		<LinearLayout android:id="@+id/BottomBarLayout"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"

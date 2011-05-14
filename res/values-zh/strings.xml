@@ -396,5 +396,22 @@
 	<!-- 0.3.8 -->
 	<string name="PreferencesActivity.HideTitleBarPreferenceTitle">Hide title bars</string>
     <string name="PreferencesActivity.HideTitleBarPreferenceSummary">If checked, windows title bars will not be displayed (need application restart).</string>
+    
+    <string name="PreferencesActivity.SwitchTabsMethodPreferenceTitle">Switch tabs method</string>
+    <string name="PreferencesActivity.SwitchTabsMethodPreferenceSummary">Define how you can switch between open tabs.</string>
+    
+    <string name="PreferencesActivity.SwitchTabButtons">Buttons</string>
+    <string name="PreferencesActivity.SwitchTabFling">Fling</string>
+    <string name="PreferencesActivity.SwitchTabBoth">Both</string>
+    <string-array name="SwitchTabsMethodEntries">
+		<item>@string/PreferencesActivity.SwitchTabButtons</item>
+		<item>@string/PreferencesActivity.SwitchTabFling</item>
+		<item>@string/PreferencesActivity.SwitchTabBoth</item>
+	</string-array>
+    <string-array name="SwitchTabsMethodValues">
+		<item>buttons</item>
+		<item>fling</item>
+		<item>both</item>
+	</string-array>
 	
 </resources>

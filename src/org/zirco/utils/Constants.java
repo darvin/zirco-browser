@@ -60,6 +60,7 @@ public class Constants {
 	 */
 	public static final String PREFERENCES_GENERAL_HOME_PAGE = "GeneralHomePage";
 	public static final String PREFERENCES_GENERAL_SEARCH_URL = "GeneralSearchUrl";
+	public static final String PREFERENCES_GENERAL_SWITCH_TABS_METHOD = "GeneralSwitchTabMethod";
 	public static final String PREFERENCES_GENERAL_BARS_DURATION = "GeneralBarsDuration";
 	public static final String PREFERENCES_GENERAL_BUBBLE_POSITION = "GeneralBubblePosition";
 	public static final String PREFERENCES_SHOW_FULL_SCREEN = "GeneralFullScreen";

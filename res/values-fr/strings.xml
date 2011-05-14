@@ -398,4 +398,21 @@
 	<string name="PreferencesActivity.HideTitleBarPreferenceTitle">Cacher la barre de titre</string>
     <string name="PreferencesActivity.HideTitleBarPreferenceSummary">Si coché, la barre de titre de l\'application ne sera pas affichée (nécessite un redémarrage de l\'application).</string>
     
+    <string name="PreferencesActivity.SwitchTabsMethodPreferenceTitle">Méthode de changement d\'onglets</string>
+    <string name="PreferencesActivity.SwitchTabsMethodPreferenceSummary">Définit la méthode utilisée pour changer d\'onglets.</string>
+    
+    <string name="PreferencesActivity.SwitchTabButtons">Boutons</string>
+    <string name="PreferencesActivity.SwitchTabFling">Fling (geste horizontal de gauche à droite ou de droite à gauche)</string>
+    <string name="PreferencesActivity.SwitchTabBoth">Les deux</string>
+    <string-array name="SwitchTabsMethodEntries">
+		<item>@string/PreferencesActivity.SwitchTabButtons</item>
+		<item>@string/PreferencesActivity.SwitchTabFling</item>
+		<item>@string/PreferencesActivity.SwitchTabBoth</item>
+	</string-array>
+    <string-array name="SwitchTabsMethodValues">
+		<item>buttons</item>
+		<item>fling</item>
+		<item>both</item>
+	</string-array>
+    
 </resources>

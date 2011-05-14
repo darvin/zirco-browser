@@ -50,6 +50,13 @@
 				android:summary="@string/PreferencesActivity.ShowToastOnTabSwitchPreferenceSummary"
 				android:key="GeneralShowToastOnTabSwitch" />
 			<ListPreference
+				android:title="@string/PreferencesActivity.SwitchTabsMethodPreferenceTitle"
+				android:summary="@string/PreferencesActivity.SwitchTabsMethodPreferenceSummary"
+				android:key="GeneralSwitchTabMethod"
+				android:defaultValue="buttons"
+				android:entries="@array/SwitchTabsMethodEntries"
+				android:entryValues="@array/SwitchTabsMethodValues" />
+			<ListPreference
 				android:title="@string/PreferencesActivity.BarDurationPreferenceTitle"
 				android:summary="@string/PreferencesActivity.BarDurationPreferenceSummary"
 				android:key="GeneralBarsDuration"

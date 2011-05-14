@@ -32,6 +32,11 @@ public final class AnimationManager {
 	private Animation mBottomBarShowAnimation = null;
 	private Animation mBottomBarHideAnimation = null;
 	
+	private Animation mPreviousTabViewShowAnimation = null;
+	private Animation mPreviousTabViewHideAnimation = null;	
+	private Animation mNextTabViewShowAnimation = null;
+	private Animation mNextTabViewHideAnimation = null;
+	
 	private Animation mInFromRightAnimation;
 	private Animation mOutToLeftAnimation;
 	private Animation mInFromLeftAnimation;
@@ -85,6 +90,34 @@ public final class AnimationManager {
 		
 		mBottomBarHideAnimation.setDuration(BARS_ANIMATION_DURATION);
 		
+		mPreviousTabViewShowAnimation = new TranslateAnimation(
+				Animation.RELATIVE_TO_SELF, -1.0f, Animation.RELATIVE_TO_SELF, 0.0f,
+    			Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f
+    	);
+		
+		mPreviousTabViewShowAnimation.setDuration(BARS_ANIMATION_DURATION);
+		
+		mPreviousTabViewHideAnimation = new TranslateAnimation(
+				Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, -1.0f,
+    			Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f
+    	);
+		
+		mPreviousTabViewHideAnimation.setDuration(BARS_ANIMATION_DURATION);
+		
+		mNextTabViewShowAnimation = new TranslateAnimation(
+				Animation.RELATIVE_TO_SELF, 1.0f, Animation.RELATIVE_TO_SELF, 0.0f,
+    			Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f
+    	);
+		
+		mNextTabViewShowAnimation.setDuration(BARS_ANIMATION_DURATION);
+		
+		mNextTabViewHideAnimation = new TranslateAnimation(
+				Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 1.0f,
+    			Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f
+    	);
+		
+		mNextTabViewHideAnimation.setDuration(BARS_ANIMATION_DURATION);
+		
 		mInFromRightAnimation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, +1.0f,
 				Animation.RELATIVE_TO_PARENT, 0.0f,
 				Animation.RELATIVE_TO_PARENT,
@@ -132,6 +165,22 @@ public final class AnimationManager {
 	
 	public Animation getBottomBarHideAnimation() {
 		return mBottomBarHideAnimation;
+	}
+	
+	public Animation getPreviousTabViewShowAnimation() {
+		return mPreviousTabViewShowAnimation;
+	}
+	
+	public Animation getPreviousTabViewHideAnimation() {
+		return mPreviousTabViewHideAnimation;
+	}
+	
+	public Animation getNextTabViewShowAnimation() {
+		return mNextTabViewShowAnimation;
+	}
+	
+	public Animation getNextTabViewHideAnimation() {
+		return mNextTabViewHideAnimation;
 	}
 	
 	/**

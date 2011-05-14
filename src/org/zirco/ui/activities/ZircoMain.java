@@ -129,6 +129,9 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	private LinearLayout mTopBar;
 	private LinearLayout mBottomBar;
 	
+	private ImageView mPreviousTabView;
+	private ImageView mNextTabView;
+	
 	private ImageButton mHomeButton;
 	private AutoCompleteTextView mUrlEditText;
 	private ImageButton mGoButton;
@@ -163,12 +166,20 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	private GestureMode mGestureMode;
 	private long mLastDownTimeForDoubleTap = -1;
 	
+	private SwitchTabsMethod mSwitchTabsMethod = SwitchTabsMethod.BOTH;
+	
 	/**
 	 * Gesture mode.
 	 */
 	private enum GestureMode {
 		SWIP,
 		ZOOM
+	}
+	
+	private enum SwitchTabsMethod {
+		BUTTONS,
+		FLING,
+		BOTH
 	}
 	
     @Override
@@ -205,7 +216,9 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         
         EventController.getInstance().addWebListener(this);
         
-        mViewFlipper.removeAllViews();      
+        mViewFlipper.removeAllViews();   
+        
+        updateSwitchTabsMethod();
         
         Intent i = getIntent();
         if (i.getData() != null) {
@@ -332,7 +345,25 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			public void onClick(View v) {
 				// Dummy event to steel it from the WebView, in case of clicking between the buttons.				
 			}
-		});   	
+		});   
+    	
+    	mPreviousTabView = (ImageView) findViewById(R.id.PreviousTabView);
+    	mPreviousTabView.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				showPreviousTab(true);
+			}
+		});
+    	mPreviousTabView.setVisibility(View.GONE);
+    	
+    	mNextTabView = (ImageView) findViewById(R.id.NextTabView);
+    	mNextTabView.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				showNextTab(true);
+			}
+		});
+    	mNextTabView.setVisibility(View.GONE);
     	
     	mDbAdapter = new DbAdapter(this);
     	mDbAdapter.open();
@@ -457,13 +488,15 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         });
 
     }
-    
+    	
     /**
      * Apply preferences to the current UI objects.
      */
     public void applyPreferences() {    	
     	// To update to Bubble position.
     	setToolbarsVisibility(false);
+    	
+    	updateSwitchTabsMethod();
     	
     	if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.PREFERENCES_UI_SHOW_HOME_BUTTON, true)) {
     		mHomeButton.setVisibility(View.GONE);
@@ -473,6 +506,20 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     	
     	for (ZircoWebView view : mWebViews) {
     		view.initializeOptions();
+    	}
+    }
+    
+    private void updateSwitchTabsMethod() {
+    	String method = PreferenceManager.getDefaultSharedPreferences(this).getString(Constants.PREFERENCES_GENERAL_SWITCH_TABS_METHOD, "buttons");
+    	
+    	if (method.equals("buttons")) {
+    		mSwitchTabsMethod = SwitchTabsMethod.BUTTONS;
+    	} else if (method.equals("fling")) {
+    		mSwitchTabsMethod = SwitchTabsMethod.FLING;
+    	} else if (method.equals("both")) {
+    		mSwitchTabsMethod = SwitchTabsMethod.BOTH;
+    	} else {
+    		mSwitchTabsMethod = SwitchTabsMethod.BUTTONS;
     	}
     }
     
@@ -752,6 +799,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     	}
     	
     	updateUI();
+    	updatePreviousNextTabViewsVisibility();
     	
     	mUrlEditText.clearFocus();
     	
@@ -778,6 +826,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     	mCurrentWebView = mWebViews.get(mViewFlipper.getDisplayedChild());
     	
     	updateUI();
+    	updatePreviousNextTabViewsVisibility();
     	
     	mUrlEditText.clearFocus();
     }
@@ -788,15 +837,39 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
      */
     private void setToolbarsVisibility(boolean visible) {
     	    	
+    	boolean switchTabByButtons = isSwitchTabsByButtonsEnabled();
+    	boolean showPreviousTabView = mViewFlipper.getDisplayedChild() > 0;
+		boolean showNextTabView = mViewFlipper.getDisplayedChild() < mViewFlipper.getChildCount() - 1;
+    	
     	if (visible) {
     		
     		if (!mUrlBarVisible) {    			
     			mTopBar.startAnimation(AnimationManager.getInstance().getTopBarShowAnimation());
     			mBottomBar.startAnimation(AnimationManager.getInstance().getBottomBarShowAnimation());
     			
+    			if (switchTabByButtons) {
+    				if (showPreviousTabView) {
+    					mPreviousTabView.startAnimation(AnimationManager.getInstance().getPreviousTabViewShowAnimation());
+    				}
+
+    				if (showNextTabView) {
+    					mNextTabView.startAnimation(AnimationManager.getInstance().getNextTabViewShowAnimation());
+    				}
+    			}
+    			
     			mTopBar.setVisibility(View.VISIBLE);
     			mBottomBar.setVisibility(View.VISIBLE);
 
+    			if (switchTabByButtons) {
+    				if (showPreviousTabView) {
+    					mPreviousTabView.setVisibility(View.VISIBLE);
+    				}
+
+    				if (showNextTabView) {
+    					mNextTabView.setVisibility(View.VISIBLE);
+    				}
+    			}
+    			
     			mBubbleRightView.setVisibility(View.GONE);
     			mBubbleLeftView.setVisibility(View.GONE);
     		}
@@ -809,10 +882,30 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     		
     		if (mUrlBarVisible) {
     			mTopBar.startAnimation(AnimationManager.getInstance().getTopBarHideAnimation());
-    			mBottomBar.startAnimation(AnimationManager.getInstance().getBottomBarHideAnimation());
+    			mBottomBar.startAnimation(AnimationManager.getInstance().getBottomBarHideAnimation());    			    			
+    			
+    			if (switchTabByButtons) {
+    				if (showPreviousTabView) {
+    					mPreviousTabView.startAnimation(AnimationManager.getInstance().getPreviousTabViewHideAnimation());
+    				}
+
+    				if (showNextTabView) {
+    					mNextTabView.startAnimation(AnimationManager.getInstance().getNextTabViewHideAnimation());
+    				}
+    			}
     			
     			mTopBar.setVisibility(View.GONE);
     			mBottomBar.setVisibility(View.GONE);
+    			
+    			if (switchTabByButtons) {
+    				if (showPreviousTabView) {
+    					mPreviousTabView.setVisibility(View.GONE);
+    				}
+
+    				if (showNextTabView) {
+    					mNextTabView.setVisibility(View.GONE);
+    				}
+    			}
 
     			String bubblePosition = Controller.getInstance().getPreferences().getString(Constants.PREFERENCES_GENERAL_BUBBLE_POSITION, "right");
 
@@ -994,7 +1087,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			case KeyEvent.KEYCODE_VOLUME_DOWN:
 				
 				if (volumeKeysBehaviour.equals("SWITCH_TABS")) {
-					showPreviousTab();
+					showPreviousTab(false);
 				} else if (volumeKeysBehaviour.equals("HISTORY")) {
 					mCurrentWebView.goForward();
 				} else {
@@ -1005,7 +1098,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			case KeyEvent.KEYCODE_VOLUME_UP:
 				
 				if (volumeKeysBehaviour.equals("SWITCH_TABS")) {
-					showNextTab();
+					showNextTab(false);
 				} else if (volumeKeysBehaviour.equals("HISTORY")) {
 					mCurrentWebView.goBack();
 				} else {
@@ -1108,6 +1201,14 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		updateTitle();
 		
 		updateFavIcon();
+	}
+	
+	private boolean isSwitchTabsByFlingEnabled() {
+		return (mSwitchTabsMethod == SwitchTabsMethod.FLING) || (mSwitchTabsMethod == SwitchTabsMethod.BOTH);
+	}
+	
+	private boolean isSwitchTabsByButtonsEnabled() {
+		return (mSwitchTabsMethod == SwitchTabsMethod.BUTTONS) || (mSwitchTabsMethod == SwitchTabsMethod.BOTH);
 	}
 	
 	/**
@@ -1289,10 +1390,30 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		}		
 	}
 	
+	private void updatePreviousNextTabViewsVisibility() {
+    	if ((mUrlBarVisible) &&
+    			(isSwitchTabsByButtonsEnabled())) {
+    		if (mViewFlipper.getDisplayedChild() > 0) {
+    			mPreviousTabView.setVisibility(View.VISIBLE);
+    		} else {
+    			mPreviousTabView.setVisibility(View.GONE);
+    		}
+
+    		if (mViewFlipper.getDisplayedChild() < mViewFlipper.getChildCount() - 1) {
+    			mNextTabView.setVisibility(View.VISIBLE);
+    		} else {
+    			mNextTabView.setVisibility(View.GONE);
+    		}
+    	} else {
+    		mPreviousTabView.setVisibility(View.GONE);
+    		mNextTabView.setVisibility(View.GONE);
+    	}
+    }
+	
 	/**
 	 * Show the previous tab, if any.
 	 */
-	private void showPreviousTab() {
+	private void showPreviousTab(boolean resetToolbarsRunnable) {
 		
 		if (mViewFlipper.getChildCount() > 1) {
 			
@@ -1307,7 +1428,13 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 
 			mCurrentWebView.doOnResume();
 			
+			if (resetToolbarsRunnable) {
+				startToolbarsHideRunnable();
+			}
+			
 			showToastOnTabSwitch();
+			
+			updatePreviousNextTabViewsVisibility();
 
 			updateUI();
 		}
@@ -1316,7 +1443,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	/**
 	 * Show the next tab, if any.
 	 */
-	private void showNextTab() {
+	private void showNextTab(boolean resetToolbarsRunnable) {
 		
 		if (mViewFlipper.getChildCount() > 1) {
 			
@@ -1331,7 +1458,13 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 
 			mCurrentWebView.doOnResume();
 			
+			if (resetToolbarsRunnable) {
+				startToolbarsHideRunnable();
+			}
+			
 			showToastOnTabSwitch();
+			
+			updatePreviousNextTabViewsVisibility();
 
 			updateUI();
 		}
@@ -1378,7 +1511,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 
 		case MotionEvent.ACTION_UP: {
 			
-			if (mGestureMode == GestureMode.SWIP) {
+			if ((mGestureMode == GestureMode.SWIP) &&
+					(isSwitchTabsByFlingEnabled())) {
 			
 				// Get the X value when the user released his/her finger
 				float currentX = event.getX();
@@ -1389,14 +1523,14 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 						// going backwards: pushing stuff to the right
 						if (currentX > (mDownXValue + FLIP_PIXEL_THRESHOLD)) {						
 
-							showPreviousTab();
+							showPreviousTab(false);
 							return false;
 						}
 
 						// going forwards: pushing stuff to the left
 						if (currentX < (mDownXValue - FLIP_PIXEL_THRESHOLD)) {					
 
-							showNextTab();
+							showNextTab(false);
 							return false;
 						}
 					}
