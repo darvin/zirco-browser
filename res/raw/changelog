@@ -1,3 +1,6 @@
+0.3.8:
+- New options allowing to display or not the application title bar.
+
 0.3.7:
 - Chinese translation.
 - Add Share page, Share link, Share image and Share email options.

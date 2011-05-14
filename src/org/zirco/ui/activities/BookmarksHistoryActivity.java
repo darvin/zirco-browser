@@ -16,11 +16,15 @@
 package org.zirco.ui.activities;
 
 import org.zirco.R;
+import org.zirco.controllers.Controller;
+import org.zirco.utils.Constants;
 
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 
@@ -32,6 +36,15 @@ public class BookmarksHistoryActivity extends TabActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
+		
+		if (Controller.getInstance().getPreferences().getBoolean(Constants.PREFERENCES_SHOW_FULL_SCREEN, false)) {        	
+        	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+        
+        if (Controller.getInstance().getPreferences().getBoolean(Constants.PREFERENCES_GENERAL_HIDE_TITLE_BARS, true)) {
+        	requestWindowFeature(Window.FEATURE_NO_TITLE);
+        }
+		
 		setContentView(R.layout.bookmarkshistoryactivity);
 		
 		setTitle(R.string.BookmarksListActivity_Title);

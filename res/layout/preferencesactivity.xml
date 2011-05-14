@@ -31,9 +31,14 @@
 			android:summary="@string/PreferencesActivity.UIPreferenceSummary">
 			<CheckBoxPreference
 				android:title="@string/PreferencesActivity.FullScreenPreferenceTitle"
-				android:defaultValue="true"
+				android:defaultValue="false"
 				android:summary="@string/PreferencesActivity.FullScreenPreferenceSummary"
 				android:key="GeneralFullScreen" />
+			<CheckBoxPreference
+				android:title="@string/PreferencesActivity.HideTitleBarPreferenceTitle"
+				android:defaultValue="true"
+				android:summary="@string/PreferencesActivity.HideTitleBarPreferenceSummary"
+				android:key="GeneralHideTitleBars" />
 			<CheckBoxPreference
 				android:title="@string/PreferencesActivity.ShowHomeButtonPreferenceTitle"
 				android:defaultValue="true"

@@ -181,10 +181,12 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         
         Controller.getInstance().setPreferences(PreferenceManager.getDefaultSharedPreferences(this));       
         
-        if (Controller.getInstance().getPreferences().getBoolean(Constants.PREFERENCES_SHOW_FULL_SCREEN, true)) {
+        if (Controller.getInstance().getPreferences().getBoolean(Constants.PREFERENCES_SHOW_FULL_SCREEN, false)) {        	
+        	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+        
+        if (Controller.getInstance().getPreferences().getBoolean(Constants.PREFERENCES_GENERAL_HIDE_TITLE_BARS, true)) {
         	requestWindowFeature(Window.FEATURE_NO_TITLE);
-        	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,   
-        			WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 
         setProgressBarVisibility(true);

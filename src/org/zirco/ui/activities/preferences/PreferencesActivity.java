@@ -98,6 +98,16 @@ public class PreferencesActivity extends PreferenceActivity {
 			}
 		});
 		
+		Preference hideTitleBarPref = (Preference) findPreference(Constants.PREFERENCES_GENERAL_HIDE_TITLE_BARS);
+		hideTitleBarPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				askForRestart();
+				return true;
+			}
+		});
+		
 		Preference searchUrlPref = (Preference) findPreference(Constants.PREFERENCES_GENERAL_SEARCH_URL);
 		searchUrlPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override

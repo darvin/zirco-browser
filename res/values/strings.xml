@@ -394,5 +394,9 @@
 	<string name="Main.MenuShareImageUrl">Share image url</string>
 	<string name="Main.MenuShareEmailUrl">Share email address</string>
 	
+	<!-- 0.3.8 -->
+	<string name="PreferencesActivity.HideTitleBarPreferenceTitle">Hide title bars</string>
+    <string name="PreferencesActivity.HideTitleBarPreferenceSummary">If checked, windows title bars will not be displayed (need application restart).</string>
+	
     
 </resources>

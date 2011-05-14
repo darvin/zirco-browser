@@ -63,6 +63,7 @@ public class Constants {
 	public static final String PREFERENCES_GENERAL_BARS_DURATION = "GeneralBarsDuration";
 	public static final String PREFERENCES_GENERAL_BUBBLE_POSITION = "GeneralBubblePosition";
 	public static final String PREFERENCES_SHOW_FULL_SCREEN = "GeneralFullScreen";
+	public static final String PREFERENCES_GENERAL_HIDE_TITLE_BARS = "GeneralHideTitleBars";
 	public static final String PREFERENCES_SHOW_TOAST_ON_TAB_SWITCH = "GeneralShowToastOnTabSwitch";
 	
 	public static final String PREFERENCES_UI_SHOW_HOME_BUTTON = "UIShowHomeButton";

@@ -393,5 +393,9 @@
 	<string name="Main.MenuShareLinkUrl">Partager l\'url du lien</string>
 	<string name="Main.MenuShareImageUrl">Partager l\'url de l\'image</string>
 	<string name="Main.MenuShareEmailUrl">Partager l\'adresse e-mail</string>
+	
+	<!-- 0.3.8 -->
+	<string name="PreferencesActivity.HideTitleBarPreferenceTitle">Cacher la barre de titre</string>
+    <string name="PreferencesActivity.HideTitleBarPreferenceSummary">Si coché, la barre de titre de l\'application ne sera pas affichée (nécessite un redémarrage de l\'application).</string>
     
 </resources>
