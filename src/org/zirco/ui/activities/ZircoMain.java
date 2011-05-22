@@ -1556,39 +1556,44 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		
-		Bundle b = item.getIntent().getExtras();
+		if ((item != null) &&
+				(item.getIntent() != null)) {
+			Bundle b = item.getIntent().getExtras();
+
+			switch(item.getItemId()) {
+			case CONTEXT_MENU_OPEN:
+				if (b != null) {
+					navigateToUrl(b.getString(Constants.EXTRA_ID_URL));
+				}			
+				return true;
+
+			case CONTEXT_MENU_OPEN_IN_NEW_TAB:
+				if (b != null) {
+					addTab(false, mViewFlipper.getDisplayedChild());
+					navigateToUrl(b.getString(Constants.EXTRA_ID_URL));
+				}			
+				return true;
+
+			case CONTEXT_MENU_DOWNLOAD:
+				if (b != null) {
+					doDownloadStart(b.getString(Constants.EXTRA_ID_URL), null, null, null, 0);
+				}
+				return true;
+			case CONTEXT_MENU_COPY:
+				if (b != null) {
+					ApplicationUtils.copyTextToClipboard(this, b.getString(Constants.EXTRA_ID_URL), getString(R.string.Commons_UrlCopyToastMessage));
+				}
+				return true;
+			case CONTEXT_MENU_SHARE:
+				if (b != null) {
+					sharePage("", b.getString(Constants.EXTRA_ID_URL));
+				}
+				return true;
+			default: return super.onContextItemSelected(item);
+			}	
+		}
 		
-		switch(item.getItemId()) {
-		case CONTEXT_MENU_OPEN:
-			if (b != null) {
-				navigateToUrl(b.getString(Constants.EXTRA_ID_URL));
-			}			
-			return true;
-			
-		case CONTEXT_MENU_OPEN_IN_NEW_TAB:
-			if (b != null) {
-				addTab(false, mViewFlipper.getDisplayedChild());
-				navigateToUrl(b.getString(Constants.EXTRA_ID_URL));
-			}			
-			return true;
-		
-		case CONTEXT_MENU_DOWNLOAD:
-			if (b != null) {
-				doDownloadStart(b.getString(Constants.EXTRA_ID_URL), null, null, null, 0);
-			}
-			return true;
-		case CONTEXT_MENU_COPY:
-			if (b != null) {
-				ApplicationUtils.copyTextToClipboard(this, b.getString(Constants.EXTRA_ID_URL), getString(R.string.Commons_UrlCopyToastMessage));
-			}
-			return true;
-		case CONTEXT_MENU_SHARE:
-			if (b != null) {
-				sharePage("", b.getString(Constants.EXTRA_ID_URL));
-			}
-			return true;
-		default: return super.onContextItemSelected(item);
-		}		
+		return super.onContextItemSelected(item);
 	}
 	
 	/**

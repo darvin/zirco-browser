@@ -123,7 +123,8 @@ public class DownloadRunnable implements Runnable {
 				while ((downLoading) &&
 						(!mAborted)) {
 
-					if (size - downloaded < BUFFER_SIZE) {
+					if ((size - downloaded < BUFFER_SIZE) &&
+							(size - downloaded > 0)) {
 						buffer = new byte[size - downloaded];
 					}
 
