@@ -26,6 +26,7 @@ import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebSettings;
@@ -106,6 +107,37 @@ public class ZircoWebView extends WebView {
     	setLongClickable(true);
     	setScrollbarFadingEnabled(true);
     	setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+	}
+	
+	@Override
+	public boolean onTouchEvent(MotionEvent ev) {
+		
+		final int action = ev.getAction();
+		
+		// Enable / disable zoom support in case of multiple pointer, e.g. enable zoom when we have two down pointers, disable with one pointer or when pointer up.
+		// We do this to prevent the display of zoom controls, which are not useful and override over the right bubble.
+		if ((action == MotionEvent.ACTION_DOWN) ||
+				(action == MotionEvent.ACTION_POINTER_DOWN) ||
+				(action == MotionEvent.ACTION_POINTER_1_DOWN) ||
+				(action == MotionEvent.ACTION_POINTER_2_DOWN) ||
+				(action == MotionEvent.ACTION_POINTER_3_DOWN)) {
+			if (ev.getPointerCount() > 1) {
+				this.getSettings().setBuiltInZoomControls(true);
+				this.getSettings().setSupportZoom(true);				
+			} else {
+				this.getSettings().setBuiltInZoomControls(false);
+				this.getSettings().setSupportZoom(false);
+			}
+		} else if ((action == MotionEvent.ACTION_UP) ||
+				(action == MotionEvent.ACTION_POINTER_UP) ||
+				(action == MotionEvent.ACTION_POINTER_1_UP) ||
+				(action == MotionEvent.ACTION_POINTER_2_UP) ||
+				(action == MotionEvent.ACTION_POINTER_3_UP)) {
+			this.getSettings().setBuiltInZoomControls(false);
+			this.getSettings().setSupportZoom(false);			
+		}
+		
+		return super.onTouchEvent(ev);
 	}
 	
 	@Override

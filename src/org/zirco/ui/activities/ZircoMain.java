@@ -58,8 +58,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.util.FloatMath;
 import android.view.ContextMenu;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -121,9 +121,6 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	private static final int OPEN_BOOKMARKS_HISTORY_ACTIVITY = 0;
 	private static final int OPEN_DOWNLOADS_ACTIVITY = 1;
 	
-	private long mDownDateValue;
-	private float mDownXValue;
-	
 	protected LayoutInflater mInflater = null;
 	
 	private LinearLayout mTopBar;
@@ -161,20 +158,9 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	
 	private DbAdapter mDbAdapter = null;
 	
-	private float mOldDistance;
-	
-	private GestureMode mGestureMode;
-	private long mLastDownTimeForDoubleTap = -1;
+	private GestureDetector mGestureDetector;
 	
 	private SwitchTabsMethod mSwitchTabsMethod = SwitchTabsMethod.BOTH;
-	
-	/**
-	 * Gesture mode.
-	 */
-	private enum GestureMode {
-		SWIP,
-		ZOOM
-	}
 	
 	private enum SwitchTabsMethod {
 		BUTTONS,
@@ -305,6 +291,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
      * Create main UI.
      */
 	private void buildComponents() {
+		
+		mGestureDetector = new GestureDetector(this, new GestureListener());
     	
     	mUrlBarVisible = true;
     	
@@ -1470,126 +1458,12 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		}
 	}
 	
-	/**
-	 * Compute the distance between points of a motion event.
-	 * @param event The event.
-	 * @return The distance between the two points.
-	 */
-	private float computeSpacing(MotionEvent event) {
-		float x = event.getX(0) - event.getX(1);
-		float y = event.getY(0) - event.getY(1);
-		return FloatMath.sqrt(x * x + y * y);
-	}
-	
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		
 		hideKeyboard(false);
 		
-		final int action = event.getAction();
-		
-		// Get the action that was done on this touch event
-		//switch (event.getAction()) {
-		switch (action & MotionEvent.ACTION_MASK) {
-		case MotionEvent.ACTION_DOWN: {
-			
-			mGestureMode = GestureMode.SWIP;
-			
-			// store the X value when the user's finger was pressed down
-			mDownXValue = event.getX();
-			mDownDateValue = System.currentTimeMillis();
-			
-			if (mDownDateValue - mLastDownTimeForDoubleTap < 250) {
-				mCurrentWebView.zoomIn();
-				mLastDownTimeForDoubleTap = -1;
-			} else {
-				mLastDownTimeForDoubleTap = mDownDateValue;
-			}
-			
-			break;
-		}
-
-		case MotionEvent.ACTION_UP: {
-			
-			if ((mGestureMode == GestureMode.SWIP) &&
-					(isSwitchTabsByFlingEnabled())) {
-			
-				// Get the X value when the user released his/her finger
-				float currentX = event.getX();
-				long timeDelta = System.currentTimeMillis() - mDownDateValue;
-
-				if (timeDelta <= FLIP_TIME_THRESHOLD) {
-					if (mViewFlipper.getChildCount() > 1) {
-						// going backwards: pushing stuff to the right
-						if (currentX > (mDownXValue + FLIP_PIXEL_THRESHOLD)) {						
-
-							showPreviousTab(false);
-							return false;
-						}
-
-						// going forwards: pushing stuff to the left
-						if (currentX < (mDownXValue - FLIP_PIXEL_THRESHOLD)) {					
-
-							showNextTab(false);
-							return false;
-						}
-					}
-				}
-			}
-			break;
-		}
-		
-		case MotionEvent.ACTION_POINTER_DOWN: {
-			
-			mOldDistance = computeSpacing(event);
-			
-			if (mOldDistance > 10f) {
-				mGestureMode = GestureMode.ZOOM;
-			}
-			
-			break;
-		}				
-		
-		case MotionEvent.ACTION_MOVE: {
-			
-			if (mGestureMode == GestureMode.ZOOM) {
-			
-				float newDist = computeSpacing(event);
-				
-				if (newDist > 10f) {
-					
-					float scale = newDist / mOldDistance;
-					
-					if (scale > 1) {
-						
-						if (scale > 1.3f) {
-						
-							mCurrentWebView.zoomIn();							
-							mOldDistance = newDist;
-						
-						}
-						
-					} else {
-						
-						if (scale < 0.8f) {
-						
-							mCurrentWebView.zoomOut();
-							mOldDistance = newDist;
-							
-						}
-						
-					}					
-				}
-				
-			}		
-			break;
-		}
-		default: break;
-		}
-
-        // if you return false, these actions will not be recorded
-        return false;
-
+		return mGestureDetector.onTouchEvent(event);
 	}
 	
 	/**
@@ -1744,6 +1618,41 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 				Toast.makeText(this, getString(R.string.Main_DownloadErrorMsg, item.getErrorMessage()), Toast.LENGTH_SHORT).show();
 			}
 		}			
+	}
+	
+	/**
+	 * Gesture listener implementation.
+	 */
+	private class GestureListener extends GestureDetector.SimpleOnGestureListener {
+
+		@Override
+		public boolean onDoubleTap(MotionEvent e) {
+			mCurrentWebView.zoomIn();
+			return super.onDoubleTap(e);
+		}		
+
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,	float velocityY) {
+			if (isSwitchTabsByFlingEnabled()) {
+				if (e2.getEventTime() - e1.getEventTime() <= FLIP_TIME_THRESHOLD) {
+					if (e2.getX() > (e1.getX() + FLIP_PIXEL_THRESHOLD)) {						
+
+						showPreviousTab(false);
+						return false;
+					}
+
+					// going forwards: pushing stuff to the left
+					if (e2.getX() < (e1.getX() - FLIP_PIXEL_THRESHOLD)) {					
+
+						showNextTab(false);
+						return false;
+					}
+				}
+			}
+			
+			return super.onFling(e1, e2, velocityX, velocityY);
+		}
+		
 	}
 	
 }
