@@ -75,6 +75,8 @@ public class Constants {
 	public static final String PREFERENCES_BROWSER_HISTORY_SIZE = "BrowserHistorySize";
 	public static final String PREFERENCES_BROWSER_ENABLE_JAVASCRIPT = "BrowserEnableJavascript";
 	public static final String PREFERENCES_BROWSER_ENABLE_IMAGES = "BrowserEnableImages";
+	public static final String PREFERENCES_BROWSER_USE_WIDE_VIEWPORT = "BrowserUseWideViewPort";
+	public static final String PREFERENCES_BROWSER_LOAD_WITH_OVERVIEW = "BrowserLoadWithOverview";
 	public static final String PREFERENCES_BROWSER_ENABLE_FORM_DATA = "BrowserEnableFormData";
 	public static final String PREFERENCES_BROWSER_ENABLE_PASSWORDS = "BrowserEnablePasswords";
 	public static final String PREFERENCES_BROWSER_ENABLE_COOKIES = "BrowserEnableCookies";

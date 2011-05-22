@@ -398,6 +398,12 @@
 	<string name="PreferencesActivity.HideTitleBarPreferenceTitle">Cacher la barre de titre</string>
     <string name="PreferencesActivity.HideTitleBarPreferenceSummary">Si coché, la barre de titre de l\'application ne sera pas affichée (nécessite un redémarrage de l\'application).</string>
     
+    <string name="PreferencesActivity.UseWideViewPortPreferenceTitle">Utiliser une vue large</string>
+    <string name="PreferencesActivity.UseWideViewPortPreferenceSummary">Si coché, le navigateur utilisera une largeur de vue similaire à celle d\'un navigateur classique.</string>
+    
+    <string name="PreferencesActivity.LoadWithOverviewPreferenceTitle">Afficher les pages avec une vue d\'ensemble</string>
+    <string name="PreferencesActivity.LoadWithOverviewPreferenceSummary">Si coché, les pages afficheront une vue d\'ensemble au chargement.</string>
+    
     <string name="PreferencesActivity.SwitchTabsMethodPreferenceTitle">Méthode de changement d\'onglets</string>
     <string name="PreferencesActivity.SwitchTabsMethodPreferenceSummary">Définit la méthode utilisée pour changer d\'onglets.</string>
     

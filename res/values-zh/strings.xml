@@ -397,6 +397,12 @@
 	<string name="PreferencesActivity.HideTitleBarPreferenceTitle">Hide title bars</string>
     <string name="PreferencesActivity.HideTitleBarPreferenceSummary">If checked, windows title bars will not be displayed (need application restart).</string>
     
+    <string name="PreferencesActivity.UseWideViewPortPreferenceTitle">Use wide viewport</string>
+    <string name="PreferencesActivity.UseWideViewPortPreferenceSummary">If checked, browser will use a viewport similar to desktop browsers.</string>
+    
+    <string name="PreferencesActivity.LoadWithOverviewPreferenceTitle">Load pages with overview</string>
+    <string name="PreferencesActivity.LoadWithOverviewPreferenceSummary">If checked, pages will load zoomed out to show an overview of the page.</string>
+    
     <string name="PreferencesActivity.SwitchTabsMethodPreferenceTitle">Switch tabs method</string>
     <string name="PreferencesActivity.SwitchTabsMethodPreferenceSummary">Define how you can switch between open tabs.</string>
     
