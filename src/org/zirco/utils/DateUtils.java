@@ -1,7 +1,7 @@
 /*
  * Zirco Browser for Android
  * 
- * Copyright (C) 2010 J. Devauchelle and contributors.
+ * Copyright (C) 2010 - 2011 J. Devauchelle and contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,7 +96,7 @@ public class DateUtils {
 		c.set(Calendar.SECOND, 0);
 		c.set(Calendar.MILLISECOND, 0);
 		
-		c.roll(Calendar.DAY_OF_MONTH, roll);
+		c.add(Calendar.DATE, roll);
 		
 		return c.getTime();
 	}

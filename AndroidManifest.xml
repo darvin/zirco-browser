@@ -18,10 +18,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="org.zirco"
       android:installLocation="auto"
-      android:versionCode="12" android:versionName="0.3.8">
+      android:versionCode="13" android:versionName="0.3.9">
     <application
     	android:icon="@drawable/icon"
-    	android:label="@string/ApplicationName" android:debuggable="false">
+    	android:label="@string/ApplicationName" android:debuggable="true">
     
         <activity android:name=".ui.activities.ZircoMain"
                   android:label="@string/ApplicationName"

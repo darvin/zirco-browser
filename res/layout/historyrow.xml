@@ -3,7 +3,7 @@
 <!--
    Zirco Browser for Android
   
-   Copyright (C) 2010 J. Devauchelle and contributors.
+   Copyright (C) 2010 - 2011 J. Devauchelle and contributors.
  
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -17,14 +17,18 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_height="wrap_content" android:layout_width="fill_parent"
-	android:orientation="vertical" android:paddingTop="5dip" android:paddingBottom="5dip" android:paddingLeft="35dip">
+	android:orientation="vertical" android:paddingTop="5dip" android:paddingBottom="5dip" android:paddingLeft="25dip">
 
 	<TextView android:layout_gravity="center_vertical"
+		android:ellipsize="end"
+	    android:singleLine="true"
 		android:layout_height="wrap_content" android:layout_width="fill_parent"
 		android:id="@+id/HistoryRow.Title" android:text="@+id/HistoryRow.Title"
 		style="@style/History.Title" />
 
 	<TextView android:layout_height="wrap_content" android:id="@+id/HistoryRow.Url"
+		android:ellipsize="end"
+	    android:singleLine="true"
 		android:text="@+id/HistoryRow.Url" android:layout_width="fill_parent" 
 		style="@style/History.Url" />
 

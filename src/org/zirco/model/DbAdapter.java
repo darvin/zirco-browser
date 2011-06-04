@@ -1,7 +1,7 @@
 /*
  * Zirco Browser for Android
  * 
- * Copyright (C) 2010 J. Devauchelle and contributors.
+ * Copyright (C) 2010 - 2011 J. Devauchelle and contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -441,57 +441,27 @@ public class DbAdapter {
      * Get the history.
      * @return A list of lists of HistoryItem. Each top-level list represents a day of history.
      */
-    public List<List<HistoryItem>> fetchHistory() {
-    	List<List<HistoryItem>> result = new ArrayList<List<HistoryItem>>();
-    	
-    	Date lastDate = new Date();
-    	Date currentDate;
-    	List<HistoryItem> items;
-    	Cursor cursor;
+    public Cursor fetchHistory() {
     	
     	int historyLimit;
     	try {
-    		historyLimit = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(mContext).getString(Constants.PREFERENCES_BROWSER_HISTORY_SIZE, "5"));
+    		historyLimit = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(mContext).getString(Constants.PREFERENCES_BROWSER_HISTORY_SIZE, "90"));
 		} catch (Exception e) {
-			historyLimit = 5;
+			historyLimit = 90;
 		}
+		
+		Date limit = DateUtils.getDateAtMidnight(-historyLimit);
+		
+		String whereClause = "(" + HISTORY_LAST_VISITED_DATE + " <= \"" + DateUtils.getDateAsUniversalString(mContext, new Date()) + "\") AND " +
+			"(" + HISTORY_LAST_VISITED_DATE + " > \"" + DateUtils.getDateAsUniversalString(mContext, limit) + "\")";
     	
-    	long id;
-    	String title;
-    	String url;
-    	
-    	for (int i = 0; i < historyLimit; i++) {
-    		currentDate = DateUtils.getDateAtMidnight(-i);
-    		
-    		cursor = mDb.query(HISTORY_DATABASE_TABLE,
-        			new String[] {HISTORY_ROWID, HISTORY_TITLE, HISTORY_URL, HISTORY_LAST_VISITED_DATE},
-        			"(" + HISTORY_LAST_VISITED_DATE + " <= \"" + DateUtils.getDateAsUniversalString(mContext, lastDate) + "\") AND " + 
-        			"(" + HISTORY_LAST_VISITED_DATE + " > \"" + DateUtils.getDateAsUniversalString(mContext, currentDate) + "\")",
-        			null, null, null, HISTORY_LAST_VISITED_DATE + " DESC");
-    		
-    		items = new ArrayList<HistoryItem>();
-    		
-    		if (cursor.moveToFirst()) {    			    			
-    			
-    			do {
-    				
-    				id = cursor.getLong(cursor.getColumnIndex(HISTORY_ROWID));
-    				title = cursor.getString(cursor.getColumnIndex(HISTORY_TITLE));
-    				url = cursor.getString(cursor.getColumnIndex(HISTORY_URL));
-    				
-    				items.add(new HistoryItem(id, title, url));
-    				
-    			} while (cursor.moveToNext());    			    			    		    			
-    		}
-    		
-    		result.add(items);
-    		
-    		cursor.close();
-    		
-    		lastDate = currentDate;
-    	}
-    	
-    	return result;
+		return mDb.query(HISTORY_DATABASE_TABLE,
+				new String[] {HISTORY_ROWID, HISTORY_TITLE, HISTORY_URL, HISTORY_LAST_VISITED_DATE},
+				whereClause,
+				null,
+				null,
+				null,
+				HISTORY_LAST_VISITED_DATE + " DESC");
     }
     
     /**

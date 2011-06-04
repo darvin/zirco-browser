@@ -1,7 +1,7 @@
 /*
  * Zirco Browser for Android
  * 
- * Copyright (C) 2010 J. Devauchelle and contributors.
+ * Copyright (C) 2010 - 2011 J. Devauchelle and contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -15,36 +15,27 @@
 
 package org.zirco.ui.activities;
 
-import java.util.List;
-
 import org.zirco.R;
 import org.zirco.model.DbAdapter;
+import org.zirco.model.HistoryExpandableListAdapter;
 import org.zirco.model.HistoryItem;
 import org.zirco.utils.ApplicationUtils;
 import org.zirco.utils.Constants;
 
 import android.app.ExpandableListActivity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.ContextMenu;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.widget.AbsListView;
-import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
 
 /**
@@ -60,19 +51,14 @@ public class HistoryListActivity extends ExpandableListActivity {
 	
 	private DbAdapter mDbAdapter;	
 	private ExpandableListAdapter mAdapter;
-	private List<List<HistoryItem>> mData;
 	
 	private ProgressDialog mProgressDialog;
-	
-	private LayoutInflater mInflater = null;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
         setTitle(R.string.HistoryListActivity_Title);
-        
-        mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         
         mDbAdapter = new DbAdapter(this);
         mDbAdapter.open();
@@ -92,9 +78,12 @@ public class HistoryListActivity extends ExpandableListActivity {
 	 * Fill the history list.
 	 */
 	private void fillData() {
-		mData = mDbAdapter.fetchHistory();
-		mAdapter = new HistoryExpandableListAdapter();
+		mAdapter = new HistoryExpandableListAdapter(this, mDbAdapter.fetchHistory());		
         setListAdapter(mAdapter);
+        
+        if (getExpandableListAdapter().getGroupCount() > 0) {
+        	getExpandableListView().expandGroup(0);
+        }
 	}
 	
 	@Override
@@ -109,7 +98,10 @@ public class HistoryListActivity extends ExpandableListActivity {
 		int child =	ExpandableListView.getPackedPositionChild(info.packedPosition);
 		
 		if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-			menu.setHeaderTitle(mData.get(group).get(child).getTitle());
+			
+			HistoryItem item = (HistoryItem) getExpandableListAdapter().getChild(group, child);
+			menu.setHeaderTitle(item.getTitle());
+			
 			menu.add(0, MENU_OPEN_IN_TAB, 0, R.string.HistoryListActivity_MenuOpenInTab);
 			menu.add(0, MENU_COPY_URL, 0, R.string.BookmarksHistoryActivity_MenuCopyLinkUrl);
 			menu.add(0, MENU_DELETE_FROM_HISTORY, 0, R.string.HistoryListActivity_MenuDelete);
@@ -126,15 +118,17 @@ public class HistoryListActivity extends ExpandableListActivity {
 			int group = ExpandableListView.getPackedPositionGroup(info.packedPosition);
 			int child =	ExpandableListView.getPackedPositionChild(info.packedPosition);
 			
+			HistoryItem item = (HistoryItem) getExpandableListAdapter().getChild(group, child);
+			
 			switch (menuItem.getItemId()) {
 			case MENU_OPEN_IN_TAB:
-				doNavigateToUrl(mData.get(group).get(child).getUrl(), true);
+				doNavigateToUrl(item.getUrl(), true);
 				break;
 			case MENU_COPY_URL:
-				ApplicationUtils.copyTextToClipboard(this, mData.get(group).get(child).getUrl(), getString(R.string.Commons_UrlCopyToastMessage));
+				ApplicationUtils.copyTextToClipboard(this, item.getUrl(), getString(R.string.Commons_UrlCopyToastMessage));
 				break;
 			case MENU_DELETE_FROM_HISTORY:
-				mDbAdapter.deleteFromHistory(mData.get(group).get(child).getId());
+				mDbAdapter.deleteFromHistory(item.getId());
 				fillData();
 				break;
 			default:
@@ -169,8 +163,8 @@ public class HistoryListActivity extends ExpandableListActivity {
 	
 	@Override
 	public boolean onChildClick(ExpandableListView parent, View v,	int groupPosition, int childPosition, long id) {
-		
-        doNavigateToUrl(mData.get(groupPosition).get(childPosition).getUrl(), false);
+		HistoryItem item = (HistoryItem) getExpandableListAdapter().getChild(groupPosition, childPosition);
+        doNavigateToUrl(item.getUrl(), false);
         
 		return super.onChildClick(parent, v, groupPosition, childPosition, id);
 	}
@@ -247,116 +241,4 @@ public class HistoryListActivity extends ExpandableListActivity {
 		};
 	}
 	
-	/**
-	 * Custom expandable adapter for this view.
-	 */
-	private class HistoryExpandableListAdapter extends BaseExpandableListAdapter {				
-		
-		/**
-		 * Create a new view.
-		 * @return The created view.
-		 */
-		private TextView getGenericView() {
-            // Layout parameters for the ExpandableListView
-            AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
-                    ViewGroup.LayoutParams.FILL_PARENT, (int) (45 * getResources().getDisplayMetrics().density));
-
-            TextView textView = new TextView(HistoryListActivity.this);
-            textView.setLayoutParams(lp);
-            // Center the text vertically
-            textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
-            // Set the text starting position
-            textView.setPadding((int) (35 * getResources().getDisplayMetrics().density), 0, 0, 0);
-            return textView;
-        }
-		
-		/**
-		 * Create a new child view.
-		 * @return The created view.
-		 */
-		private View getChildView() {
-			LinearLayout view = (LinearLayout) mInflater.inflate(R.layout.historyrow, null, false);
-			
-			return view;
-		}
-		
-		@Override
-		public Object getChild(int groupPosition, int childPosition) {								
-			return mData.get(groupPosition).get(childPosition);
-		}
-
-		@Override
-		public long getChildId(int groupPosition, int childPosition) {
-			return childPosition;
-		}
-
-		@Override
-		public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-			
-			View view = getChildView();
-            
-			TextView titleView = (TextView) view.findViewById(R.id.HistoryRow_Title);
-			titleView.setText(((HistoryItem) getChild(groupPosition, childPosition)).getTitle());
-			
-			TextView urlView = (TextView) view.findViewById(R.id.HistoryRow_Url);
-			
-			String url = ((HistoryItem) getChild(groupPosition, childPosition)).getUrl(); 
-			
-			url = ApplicationUtils.getTruncatedString(urlView.getPaint(), url, (int) (parent.getMeasuredWidth() - (60 * getResources().getDisplayMetrics().density)));
-			
-			urlView.setText(url);
-            
-            return view;
-		}
-
-		@Override
-		public int getChildrenCount(int groupPosition) {
-			return mData.get(groupPosition).size();
-		}
-
-		@Override
-		public Object getGroup(int groupPosition) {						
-			switch (groupPosition) {
-			case 0:
-				return String.format(getResources().getString(R.string.Commons_Today), getChildrenCount(groupPosition));
-
-			case 1:
-				return String.format(getResources().getString(R.string.Commons_Yesterday), getChildrenCount(groupPosition));
-				
-			default:
-				return String.format(getResources().getString(R.string.Commons_DaysAgo, groupPosition, getChildrenCount(groupPosition)));
-			}
-		}
-
-		@Override
-		public int getGroupCount() {
-			return mData.size();
-		}
-
-		@Override
-		public long getGroupId(int groupPosition) {
-			return groupPosition;
-		}
-
-		@Override
-		public View getGroupView(int groupPosition, boolean isExpanded,
-				View convertView, ViewGroup parent) {
-			
-			TextView textView = getGenericView();
-            textView.setText(getGroup(groupPosition).toString());
-            return textView;
-		}
-
-		@Override
-		public boolean hasStableIds() {			
-			return true;
-		}
-
-		@Override
-		public boolean isChildSelectable(int groupPosition, int childPosition) {
-			return true;
-		}
-		
-	}
-
 }

@@ -3,7 +3,7 @@
 <!--
    Zirco Browser for Android
   
-   Copyright (C) 2010 J. Devauchelle and contributors.
+   Copyright (C) 2010 - 2011 J. Devauchelle and contributors.
  
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -32,6 +32,8 @@
 		android:layout_height="wrap_content"
 		android:orientation="vertical" android:layout_gravity="center_vertical">
 		<TextView
+			android:ellipsize="end"
+	    	android:singleLine="true"
 			android:layout_gravity="center_vertical"
 			android:layout_height="wrap_content"
 			android:layout_width="fill_parent"
@@ -39,6 +41,8 @@
 			android:text="@+id/BookmarkRow.Title"
 			style="@style/Bookmarks.Title" />
 		<TextView
+			android:ellipsize="end"
+	    	android:singleLine="true"
 			android:layout_height="wrap_content"
 			android:id="@+id/BookmarkRow.Url"
 			android:text="@+id/BookmarkRow.Url"

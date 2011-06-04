@@ -3,7 +3,7 @@
 <!--
    Zirco Browser for Android
   
-   Copyright (C) 2010 J. Devauchelle and contributors.
+   Copyright (C) 2010 - 2011 J. Devauchelle and contributors.
  
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -419,5 +419,12 @@
 		<item>fling</item>
 		<item>both</item>
 	</string-array>
+	
+	<!-- 0.3.9 -->
+	<string name="HistoryListActivity.Today">Today</string>
+    <string name="HistoryListActivity.Yesterday">Yesterday</string>
+    <string name="HistoryListActivity.LastSevenDays">Last 7 days</string>
+    <string name="HistoryListActivity.LastMonth">Last month</string>
+    <string name="HistoryListActivity.Older">Older</string>
 	
 </resources>
