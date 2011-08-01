@@ -70,7 +70,7 @@ public class DateUtils {
 	 * @return A string representation of the history limit date / time.
 	 */
 	public static String getHistoryLimit(Context context) {
-		int historySize = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(Constants.PREFERENCES_BROWSER_HISTORY_SIZE, "5"));
+		int historySize = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(Constants.PREFERENCES_BROWSER_HISTORY_SIZE, "90"));
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.DAY_OF_MONTH, -historySize);
 		

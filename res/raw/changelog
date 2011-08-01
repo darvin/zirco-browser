@@ -1,3 +1,7 @@
+0.3.9:
+- Bug fix in history view. Items are now displayed in differents categories (today, last week, last month...)
+- Add a button to the left of the url bar (where was the "Home" button) allowing to choose between differents actions (share, select text...)
+
 0.3.8:
 - Switching between tabs can now be made in two ways, either the previous fling gesture method, or by using dedicated buttons which are displayed and hidden along with toolbars. The method is customizable in UI preferences. Default is to use he new buttons.
 - Much better pinch zoom support.

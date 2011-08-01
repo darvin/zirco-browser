@@ -159,7 +159,8 @@
 			<EditTextPreference
 				android:name="@string/PreferencesActivity.HistorySizePreferenceTitle"
 				android:summary="@string/PreferencesActivity.HistorySizePreferenceSummary"
-				android:defaultValue="5"
+				android:defaultValue="90"
+				android:numeric="integer"
 				android:title="@string/PreferencesActivity.HistorySizePreferenceTitle"
 				android:key="BrowserHistorySize" />
 			<CheckBoxPreference

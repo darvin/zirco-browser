@@ -39,15 +39,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceClickListener;
-import android.text.method.DigitsKeyListener;
 import android.webkit.CookieManager;
-import android.widget.EditText;
 
 /**
  * Preferences activity.
@@ -62,12 +59,7 @@ public class PreferencesActivity extends PreferenceActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		addPreferencesFromResource(R.layout.preferencesactivity);	
-		
-		EditTextPreference historySizeEditTextPreference = (EditTextPreference) findPreference(Constants.PREFERENCES_BROWSER_HISTORY_SIZE);
-		
-		EditText myEditText = (EditText) historySizeEditTextPreference.getEditText();
-		myEditText.setKeyListener(DigitsKeyListener.getInstance(false, false)); 
+		addPreferencesFromResource(R.layout.preferencesactivity);
 
 		PreferenceCategory browserPreferenceCategory = (PreferenceCategory) findPreference("BrowserPreferenceCategory");
 		Preference enablePluginsEclair = (Preference) findPreference(Constants.PREFERENCES_BROWSER_ENABLE_PLUGINS_ECLAIR);
