@@ -294,9 +294,7 @@
     <string name="Main.MenuCopyImageUrl">"Copier l\'url de l\'image</string>
     <string name="Main.MenuDownloadImage">Télécharger l\'image</string>
     <string name="Main.MenuSendEmail">Envoyer un e-mail</string>
-    <string name="Main.MenuCopyEmailUrl">Copier</string>
-    
-    <string name="Main.MenuSelectText">Sélectionner le texte</string>
+    <string name="Main.MenuCopyEmailUrl">Copier</string>    
     
     <string name="Commons.UrlCopyToastMessage">Url copiée dans le presse-papier.</string>
     
@@ -312,9 +310,6 @@
     
     <string name="PreferencesActivity.UIPreferenceTitle">Paramètres de l\'interface</string>
     <string name="PreferencesActivity.UIPreferenceSummary">Personalisation de l\'interface utilisateur.</string>
-    
-    <string name="PreferencesActivity.ShowHomeButtonPreferenceTitle">Afficher le bouton "Home"</string>
-    <string name="PreferencesActivity.ShowHomeButtonPreferenceSummary">Si coché, un bouton "Home" sera présent à coté de la barre d\'url.</string>
     
     <string name="Main.MenuExit">Quitter</string>
     
@@ -346,9 +341,7 @@
 	<string name="Commons.SslUntrusted">Ce certificat provient d\'une autorité non approuvée.</string>
 	<string name="Commons.SslIDMismatch">Le nom du site ne correspond pas au nom indiqué dans le certificat.</string>
 	<string name="Commons.SslExpired">Le certificat a expiré.</string>
-	<string name="Commons.SslNotYetValid">Le certificat n\'est pas encore valide.</string>
-	
-	<string name="Main.MenuMobileView">Vue mobile</string>
+	<string name="Commons.SslNotYetValid">Le certificat n\'est pas encore valide.</string>		
 	
 	<string name="MobileViewListActivity.Title">Zirco Browser - Liste des sites pour la vue mobile</string>
 	<string name="MobileViewListActivity.ListEmpty">La liste est vide.</string>	
@@ -427,5 +420,12 @@
     <string name="HistoryListActivity.LastSevenDays">Les 7 derniers jours</string>
     <string name="HistoryListActivity.LastMonth">Le mois dernier</string>
     <string name="HistoryListActivity.Older">Précédement</string>
+    
+    <string name="QuickAction.Home">Page d\'accueil</string>
+    <string name="QuickAction.Share">Partager</string>
+    <string name="QuickAction.SelectText">Sélectionner</string>
+    <string name="QuickAction.MobileView">Vue mobile</string>
+    
+    <string name="AboutActivity.OtherLicenseText">Cette application inclue du code du projet GreenDroid (https://github.com/cyrilmottier/GreenDroid/), distribué sous license Apache, version 2.</string>
     
 </resources>

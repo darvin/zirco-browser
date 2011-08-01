@@ -40,11 +40,6 @@
 				android:summary="@string/PreferencesActivity.HideTitleBarPreferenceSummary"
 				android:key="GeneralHideTitleBars" />
 			<CheckBoxPreference
-				android:title="@string/PreferencesActivity.ShowHomeButtonPreferenceTitle"
-				android:defaultValue="true"
-				android:summary="@string/PreferencesActivity.ShowHomeButtonPreferenceSummary"
-				android:key="UIShowHomeButton" />
-			<CheckBoxPreference
 				android:title="@string/PreferencesActivity.ShowToastOnTabSwitchPreferenceTitle"
 				android:defaultValue="true"
 				android:summary="@string/PreferencesActivity.ShowToastOnTabSwitchPreferenceSummary"

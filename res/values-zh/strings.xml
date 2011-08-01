@@ -293,9 +293,7 @@
     <string name="Main.MenuCopyImageUrl">复制图片地址</string>
     <string name="Main.MenuDownloadImage">下载图片</string>
     <string name="Main.MenuSendEmail">发送邮件</string>
-    <string name="Main.MenuCopyEmailUrl">复制邮件地址</string>
-    
-    <string name="Main.MenuSelectText">选择文本</string>
+    <string name="Main.MenuCopyEmailUrl">复制邮件地址</string>        
     
     <string name="Commons.UrlCopyToastMessage">地址已经复制到粘贴板</string>
     
@@ -311,9 +309,6 @@
     
     <string name="PreferencesActivity.UIPreferenceTitle">自定义首页</string>
     <string name="PreferencesActivity.UIPreferenceSummary">自定义首页界面</string>
-    
-    <string name="PreferencesActivity.ShowHomeButtonPreferenceTitle">显示主页按钮</string>
-    <string name="PreferencesActivity.ShowHomeButtonPreferenceSummary">如果选中，主页按钮显示在地址栏上</string>
     
     <string name="Main.MenuExit">退出</string>
     
@@ -346,8 +341,6 @@
 	<string name="Commons.SslIDMismatch">站点名和证书不匹配</string>
 	<string name="Commons.SslExpired">证书已经过期</string>
 	<string name="Commons.SslNotYetValid">证书没有验证</string>
-	
-	<string name="Main.MenuMobileView">移动网关</string>
 	
 	<string name="MobileViewListActivity.Title">Zirco Browser-通过网关访问的网站列表</string>
 	<string name="MobileViewListActivity.ListEmpty">列表为空</string>	
@@ -426,5 +419,12 @@
     <string name="HistoryListActivity.LastSevenDays">Last 7 days</string>
     <string name="HistoryListActivity.LastMonth">Last month</string>
     <string name="HistoryListActivity.Older">Older</string>
+    
+    <string name="QuickAction.Home">Home page</string>
+    <string name="QuickAction.Share">Share</string>
+    <string name="QuickAction.SelectText">选择文本</string>
+    <string name="QuickAction.MobileView">移动网关</string>
+    
+    <string name="AboutActivity.OtherLicenseText">This application include code from the GreenDroid project (https://github.com/cyrilmottier/GreenDroid/), licensed under the Apache license, version 2.</string>
 	
 </resources>

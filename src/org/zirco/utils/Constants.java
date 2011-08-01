@@ -67,7 +67,6 @@ public class Constants {
 	public static final String PREFERENCES_GENERAL_HIDE_TITLE_BARS = "GeneralHideTitleBars";
 	public static final String PREFERENCES_SHOW_TOAST_ON_TAB_SWITCH = "GeneralShowToastOnTabSwitch";
 	
-	public static final String PREFERENCES_UI_SHOW_HOME_BUTTON = "UIShowHomeButton";
 	public static final String PREFERENCES_UI_VOLUME_KEYS_BEHAVIOUR = "GeneralVolumeKeysBehaviour";	
 	
 	public static final String PREFERENCES_DEFAULT_ZOOM_LEVEL = "DefaultZoomLevel";

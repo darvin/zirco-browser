@@ -39,33 +39,33 @@
 				android:maxHeight="5px" android:minHeight="5px"></ProgressBar>
 			
 			<LinearLayout android:layout_width="fill_parent"
-				android:layout_height="wrap_content">
-			
+				android:layout_height="wrap_content">							
+					
 				<ImageButton android:layout_height="wrap_content"
-					android:id="@+id/HomeBtn" android:layout_width="wrap_content"
+					android:id="@+id/ToolsBtn" android:layout_width="wrap_content"
 					android:background="@drawable/buttons"
-					android:layout_marginTop="2dip"
-					android:layout_marginBottom="3dip"
-					android:layout_marginLeft="3dip"
-					android:src="@drawable/ic_btn_home"></ImageButton>
+					android:layout_gravity="center_vertical"
+					android:layout_marginLeft="3dip"					
+					android:layout_marginRight="0dip"
+					android:src="@drawable/fav_icn_default"></ImageButton>
 
 				<AutoCompleteTextView android:layout_height="wrap_content" android:id="@+id/UrlText"
-					android:layout_marginTop="2dip"
-					android:layout_marginLeft="2dip"
-					android:layout_marginRight="2dip"
+					android:layout_marginTop="3dip"
+					android:layout_marginLeft="0dip"
+					android:layout_marginRight="0dip"
 					android:layout_width="fill_parent"
 					android:layout_weight="0.75"
 					android:dropDownHeight="wrap_content"
 					android:dropDownWidth="fill_parent"
-					android:inputType="textUri"  ></AutoCompleteTextView>
+					android:inputType="textUri"></AutoCompleteTextView>
 
 				<ImageButton android:layout_height="wrap_content"
 					android:id="@+id/GoBtn" android:layout_width="wrap_content"
 					android:background="@drawable/buttons"
-					android:layout_marginTop="2dip"
-					android:layout_marginBottom="3dip"
+					android:layout_gravity="center_vertical"
+					android:layout_marginLeft="0dip"					
 					android:layout_marginRight="3dip"
-					android:src="@drawable/ic_btn_go"></ImageButton>							
+					android:src="@drawable/ic_btn_go"></ImageButton>										
 				
 			</LinearLayout>											
 			

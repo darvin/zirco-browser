@@ -19,6 +19,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.greendroid.QuickAction;
+import org.greendroid.QuickActionGrid;
+import org.greendroid.QuickActionWidget;
+import org.greendroid.QuickActionWidget.OnQuickActionClickListener;
 import org.zirco.R;
 import org.zirco.controllers.Controller;
 import org.zirco.events.EventConstants;
@@ -39,6 +43,7 @@ import org.zirco.utils.ApplicationUtils;
 import org.zirco.utils.Constants;
 import org.zirco.utils.UrlUtils;
 
+
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -58,6 +63,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.ContextMenu;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
@@ -85,6 +92,7 @@ import android.widget.FilterQueryProvider;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -106,10 +114,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	private static final int MENU_SHOW_BOOKMARKS = Menu.FIRST + 1;
 	private static final int MENU_SHOW_DOWNLOADS = Menu.FIRST + 2;	
 	private static final int MENU_PREFERENCES = Menu.FIRST + 3;
-	private static final int MENU_EXIT = Menu.FIRST + 4;
-	private static final int MENU_SELECT_TEXT = Menu.FIRST + 5;
-	private static final int MENU_MOBILE_VIEW = Menu.FIRST + 6;
-	private static final int MENU_SHARE_PAGE = Menu.FIRST + 7;
+	private static final int MENU_EXIT = Menu.FIRST + 4;	
 	
 	private static final int CONTEXT_MENU_OPEN = Menu.FIRST + 10;
 	private static final int CONTEXT_MENU_OPEN_IN_NEW_TAB = Menu.FIRST + 11;
@@ -129,9 +134,9 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	private ImageView mPreviousTabView;
 	private ImageView mNextTabView;
 	
-	private ImageButton mHomeButton;
+	private ImageButton mToolsButton;
 	private AutoCompleteTextView mUrlEditText;
-	private ImageButton mGoButton;
+	private ImageButton mGoButton;	
 	private ProgressBar mProgressBar;	
 	
 	private ImageView mBubbleRightView;
@@ -151,6 +156,9 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	private Drawable mCircularProgress;
 	
 	private boolean mUrlBarVisible;
+	private boolean mToolsActionGridVisible = false;
+	
+	private TextWatcher mUrlTextWatcher;
 	
 	private HideToolbarsRunnable mHideToolbarsRunnable;
 	
@@ -161,6 +169,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	private GestureDetector mGestureDetector;
 	
 	private SwitchTabsMethod mSwitchTabsMethod = SwitchTabsMethod.BOTH;
+	
+	private QuickActionGrid mToolsActionGrid;
 	
 	private enum SwitchTabsMethod {
 		BUTTONS,
@@ -292,6 +302,46 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
      */
 	private void buildComponents() {
 		
+		mToolsActionGrid = new QuickActionGrid(this);
+		mToolsActionGrid.addQuickAction(new QuickAction(this, R.drawable.ic_btn_home, R.string.QuickAction_Home));
+		mToolsActionGrid.addQuickAction(new QuickAction(this, R.drawable.ic_btn_share, R.string.QuickAction_Share));
+		mToolsActionGrid.addQuickAction(new QuickAction(this, R.drawable.ic_btn_select, R.string.QuickAction_SelectText));
+		mToolsActionGrid.addQuickAction(new QuickAction(this, R.drawable.ic_btn_mobile_view, R.string.QuickAction_MobileView));
+		
+		mToolsActionGrid.setOnQuickActionClickListener(new OnQuickActionClickListener() {			
+			@Override
+			public void onQuickActionClicked(QuickActionWidget widget, int position) {
+				switch (position) {
+				case 0:
+					navigateToHome();
+					break;
+				case 1:
+					sharePage(mCurrentWebView.getTitle(), mCurrentWebView.getUrl());
+					break;
+				case 2:
+					swithToSelectAndCopyTextMode();
+					break;
+				case 3:
+					String currentUrl = mUrlEditText.getText().toString();
+		    		
+		    		// Do not reload mobile view if already on it.
+		    		if (!currentUrl.startsWith(Constants.URL_GOOGLE_MOBILE_VIEW_NO_FORMAT)) {
+		    			String url = String.format(Constants.URL_GOOGLE_MOBILE_VIEW, mUrlEditText.getText().toString());
+		    			navigateToUrl(url);
+		    		}
+		    		break;
+				}
+			}
+		});
+		
+		mToolsActionGrid.setOnDismissListener(new PopupWindow.OnDismissListener() {			
+			@Override
+			public void onDismiss() {
+				mToolsActionGridVisible = false;
+				startToolbarsHideRunnable();
+			}
+		});
+		
 		mGestureDetector = new GestureDetector(this, new GestureListener());
     	
     	mUrlBarVisible = true;
@@ -381,19 +431,6 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			}
 		});
     	
-    	mHomeButton = (ImageButton) findViewById(R.id.HomeBtn);
-    	mHomeButton.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				navigateToHome();				
-			}
-		});
-    	
-    	if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.PREFERENCES_UI_SHOW_HOME_BUTTON, true)) {
-    		mHomeButton.setVisibility(View.GONE);
-    	}
-    	
     	mUrlEditText = (AutoCompleteTextView) findViewById(R.id.UrlText);
     	mUrlEditText.setThreshold(1);
     	mUrlEditText.setAdapter(adapter);    	
@@ -401,15 +438,32 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     	mUrlEditText.setOnKeyListener(new View.OnKeyListener() {
 
 			@Override
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
+			public boolean onKey(View v, int keyCode, KeyEvent event) {												
 				if (keyCode == KeyEvent.KEYCODE_ENTER) {
 					navigateToUrl();
 					return true;
 				}
+				
 				return false;
 			}
     		
     	});
+    	
+
+    	mUrlTextWatcher = new TextWatcher() {			
+    		@Override
+    		public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) { }
+
+    		@Override
+    		public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) { }
+
+    		@Override
+    		public void afterTextChanged(Editable arg0) {
+    			updateGoButton();
+    		}
+    	};
+    	
+    	mUrlEditText.addTextChangedListener(mUrlTextWatcher);
     	
     	mUrlEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
@@ -420,7 +474,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     				mUrlEditText.setSelection(0, mUrlEditText.getText().length());
     			}
     		}
-    	});
+    	});    	
     	
     	mUrlEditText.setCompoundDrawablePadding(5);
     	    	
@@ -430,11 +484,22 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
             	
             	if (mCurrentWebView.isLoading()) {
             		mCurrentWebView.stopLoading();
-            	} else {
+            	} else if (!mCurrentWebView.isSameUrl(mUrlEditText.getText().toString())) {
             		navigateToUrl();
+            	} else {
+            		mCurrentWebView.reload();
             	}
             }          
         });
+    	
+    	mToolsButton = (ImageButton) findViewById(R.id.ToolsBtn);
+    	mToolsButton.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				mToolsActionGridVisible = true;
+				mToolsActionGrid.show(v);				
+			}
+		});
     	
     	mProgressBar = (ProgressBar) findViewById(R.id.WebViewProgress);
     	mProgressBar.setMax(100);
@@ -485,12 +550,6 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     	setToolbarsVisibility(false);
     	
     	updateSwitchTabsMethod();
-    	
-    	if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.PREFERENCES_UI_SHOW_HOME_BUTTON, true)) {
-    		mHomeButton.setVisibility(View.GONE);
-    	} else {
-    		mHomeButton.setVisibility(View.VISIBLE);
-    	}
     	
     	for (ZircoWebView view : mWebViews) {
     		view.initializeOptions();
@@ -605,9 +664,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		mCurrentWebView.setWebChromeClient(new WebChromeClient() {
 			@Override
 			public void onProgressChanged(WebView view, int newProgress) {
-				((ZircoWebView) view).setProgress(newProgress);
-				
-				//activity.setProgress(mCurrentWebView.getProgress() * 100);
+				((ZircoWebView) view).setProgress(newProgress);				
 				mProgressBar.setProgress(mCurrentWebView.getProgress());
 			}
 						
@@ -969,7 +1026,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
      */
     private void navigateToUrl(String url) {
     	// Needed to hide toolbars properly.
-    	mUrlEditText.clearFocus();    	
+    	mUrlEditText.clearFocus();
     	
     	if ((url != null) &&
     			(url.length() > 0)) {
@@ -1131,12 +1188,13 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		BitmapDrawable favIcon = new BitmapDrawable(getResources(), mCurrentWebView.getFavicon());
 		
 		if (mCurrentWebView.getFavicon() != null) {
+			int imageButtonSize = ApplicationUtils.getImageButtonSize(this);
 			int favIconSize = ApplicationUtils.getFaviconSize(this);
 			
-			Bitmap bm = Bitmap.createBitmap(favIconSize, favIconSize, Bitmap.Config.ARGB_4444);
+			Bitmap bm = Bitmap.createBitmap(imageButtonSize, imageButtonSize, Bitmap.Config.ARGB_4444);
 			Canvas canvas = new Canvas(bm);
 			
-			favIcon.setBounds(0, 0, favIconSize, favIconSize);			
+			favIcon.setBounds((imageButtonSize / 2) - (favIconSize / 2), (imageButtonSize / 2) - (favIconSize / 2), (imageButtonSize / 2) + (favIconSize / 2), (imageButtonSize / 2) + (favIconSize / 2));
 			favIcon.draw(canvas);
 			
 			favIcon = new BitmapDrawable(getResources(), bm);
@@ -1151,11 +1209,16 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	private void updateGoButton() {		
 		if (mCurrentWebView.isLoading()) {
 			mGoButton.setImageResource(R.drawable.ic_btn_stop);			
-			mUrlEditText.setCompoundDrawablesWithIntrinsicBounds(getNormalizedFavicon(), null, mCircularProgress, null);
+			mUrlEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, mCircularProgress, null);
 			((AnimationDrawable) mCircularProgress).start();
 		} else {
-			mGoButton.setImageResource(R.drawable.ic_btn_go);			
-			mUrlEditText.setCompoundDrawablesWithIntrinsicBounds(getNormalizedFavicon(), null, null, null);			
+			if (!mCurrentWebView.isSameUrl(mUrlEditText.getText().toString())) {
+				mGoButton.setImageResource(R.drawable.ic_btn_go);
+			} else {
+				mGoButton.setImageResource(R.drawable.ic_btn_reload);
+			}			
+			
+			mUrlEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);			
 			((AnimationDrawable) mCircularProgress).stop();
 		}
 	}
@@ -1163,25 +1226,29 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	/**
 	 * Update the fav icon display.
 	 */
-	private void updateFavIcon() {		
-		mUrlEditText.setCompoundDrawablesWithIntrinsicBounds(getNormalizedFavicon(),
-				null,
-				mUrlEditText.getCompoundDrawables()[2],
-				null);
+	private void updateFavIcon() {
+		BitmapDrawable favicon = getNormalizedFavicon();
+		
+		if (mCurrentWebView.getFavicon() != null) {
+			mToolsButton.setImageDrawable(favicon);
+		} else {
+			mToolsButton.setImageResource(R.drawable.fav_icn_default);
+		}
 	}
 	
 	/**
 	 * Update the UI: Url edit text, previous/next button state,...
 	 */
 	private void updateUI() {
+		mUrlEditText.removeTextChangedListener(mUrlTextWatcher);
 		mUrlEditText.setText(mCurrentWebView.getUrl());
+		mUrlEditText.addTextChangedListener(mUrlTextWatcher);
 		
 		mPreviousButton.setEnabled(mCurrentWebView.canGoBack());
 		mNextButton.setEnabled(mCurrentWebView.canGoForward());
 		
 		mRemoveTabButton.setEnabled(mViewFlipper.getChildCount() > 1);
 		
-		//setProgress(mCurrentWebView.getProgress() * 100);
 		mProgressBar.setProgress(mCurrentWebView.getProgress());
 		
 		updateGoButton();
@@ -1263,14 +1330,6 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         
         item = menu.add(0, MENU_EXIT, 0, R.string.Main_MenuExit);
         item.setIcon(R.drawable.ic_menu_exit);
-        
-        item = menu.add(0, MENU_SELECT_TEXT, 0, R.string.Main_MenuSelectText);
-        item.setIcon(R.drawable.ic_menu_select);
-        
-        item = menu.add(0, MENU_MOBILE_VIEW, 0, R.string.Main_MenuMobileView);
-        
-        item = menu.add(0, MENU_SHARE_PAGE, 0, R.string.Main_MenuSharePage);
-		item.setIcon(android.R.drawable.ic_menu_share);
     	
     	return true;
 	}
@@ -1289,24 +1348,9 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
             return true;
     	case MENU_PREFERENCES:    		
     		openPreferences();
-            return true;
-    	case MENU_SELECT_TEXT:
-    		swithToSelectAndCopyTextMode();
-    		return true;
+            return true;    	
     	case MENU_EXIT:
     		this.finish();
-    		return true;
-    	case MENU_MOBILE_VIEW:
-    		String currentUrl = mUrlEditText.getText().toString();
-    		
-    		// Do not reload mobile view if already on it.
-    		if (!currentUrl.startsWith(Constants.URL_GOOGLE_MOBILE_VIEW_NO_FORMAT)) {
-    			String url = String.format(Constants.URL_GOOGLE_MOBILE_VIEW, mUrlEditText.getText().toString());
-    			navigateToUrl(url);
-    		}
-    		return true;
-    	case MENU_SHARE_PAGE:
-    		sharePage(mCurrentWebView.getTitle(), mCurrentWebView.getUrl());
     		return true;
         default: return super.onMenuItemSelected(featureId, item);
     	}
@@ -1509,8 +1553,9 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 			}
 			
 		} else if (event.equals(EventConstants.EVT_WEB_ON_PAGE_STARTED)) {
-			
+			mUrlEditText.removeTextChangedListener(mUrlTextWatcher);
 			mUrlEditText.setText((CharSequence) data);
+			mUrlEditText.addTextChangedListener(mUrlTextWatcher);
 			
 			mPreviousButton.setEnabled(false);
 			mNextButton.setEnabled(false);
@@ -1601,7 +1646,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 	 */
 	public void hideToolbars() {
 		if (mUrlBarVisible) {			
-			if (!mUrlEditText.hasFocus()) {
+			if ((!mUrlEditText.hasFocus()) &&
+					(!mToolsActionGridVisible)) {
 				
 				if (!mCurrentWebView.isLoading()) {
 					setToolbarsVisibility(false);

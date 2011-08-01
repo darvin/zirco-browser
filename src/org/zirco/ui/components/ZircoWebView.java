@@ -214,6 +214,14 @@ public class ZircoWebView extends WebView {
 		mLoadedUrl = null;
 	}
 	
+	public boolean isSameUrl(String url) {
+		if (url != null) {
+			return url.equalsIgnoreCase(this.getUrl());
+		}
+		
+		return false;
+	}
+	
 	/**
 	 * Perform an 'onPause' on this WebView through reflexion.
 	 */

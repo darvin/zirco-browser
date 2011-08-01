@@ -56,6 +56,24 @@ public class ApplicationUtils {
 	
 	private static int mFaviconSize = -1;
 	
+	private static int mImageButtonSize = -1;
+	
+	public static int getImageButtonSize(Activity activity) {
+		if (mImageButtonSize == -1) {
+			DisplayMetrics metrics = new DisplayMetrics();
+			activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+			switch (metrics.densityDpi) {
+			case DisplayMetrics.DENSITY_LOW: mImageButtonSize = 16; break;
+			case DisplayMetrics.DENSITY_MEDIUM: mImageButtonSize = 32; break;
+			case DisplayMetrics.DENSITY_HIGH: mImageButtonSize = 48; break;
+			default: mImageButtonSize = 32;
+			}
+		}
+		
+		return mImageButtonSize;
+	}
+	
 	/**
 	 * Get the required size of the favicon, depending on current screen density.
 	 * @param activity The current activity.
@@ -66,11 +84,19 @@ public class ApplicationUtils {
 			DisplayMetrics metrics = new DisplayMetrics();
 			activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
+			/*
 			switch (metrics.densityDpi) {
 			case DisplayMetrics.DENSITY_LOW: mFaviconSize = 12; break;
 			case DisplayMetrics.DENSITY_MEDIUM: mFaviconSize = 16; break;
 			case DisplayMetrics.DENSITY_HIGH: mFaviconSize = 24; break;
 			default: mFaviconSize = 16;
+			}
+			*/
+			switch (metrics.densityDpi) {
+			case DisplayMetrics.DENSITY_LOW: mFaviconSize = 12; break;
+			case DisplayMetrics.DENSITY_MEDIUM: mFaviconSize = 24; break;
+			case DisplayMetrics.DENSITY_HIGH: mFaviconSize = 32; break;
+			default: mFaviconSize = 24;
 			}
 		}
 		

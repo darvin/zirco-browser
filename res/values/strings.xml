@@ -313,9 +313,6 @@
     <string name="PreferencesActivity.UIPreferenceTitle">User interface settings</string>
     <string name="PreferencesActivity.UIPreferenceSummary">Customize the user interface.</string>
     
-    <string name="PreferencesActivity.ShowHomeButtonPreferenceTitle">Show home button</string>
-    <string name="PreferencesActivity.ShowHomeButtonPreferenceSummary">If checked, a home button will be present next to the url bar.</string>
-    
     <string name="Main.MenuExit">Exit</string>
     
     <string name="PreferencesActivity.RestartDialogTitle">Restart required</string>
@@ -427,6 +424,12 @@
     <string name="HistoryListActivity.LastSevenDays">Last 7 days</string>
     <string name="HistoryListActivity.LastMonth">Last month</string>
     <string name="HistoryListActivity.Older">Older</string>
-	
+    
+    <string name="QuickAction.Home">Home page</string>
+    <string name="QuickAction.Share">Share</string>
+    <string name="QuickAction.SelectText">Select text</string>
+    <string name="QuickAction.MobileView">Mobile view</string>
+    
+    <string name="AboutActivity.OtherLicenseText">This application include code from the GreenDroid project (https://github.com/cyrilmottier/GreenDroid/), licensed under the Apache license, version 2.</string>	
     
 </resources>
