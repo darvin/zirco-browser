@@ -42,7 +42,7 @@ public class DbAdapter {
 	private static final String TAG = "DbAdapter";
 
 	private static final String DATABASE_NAME = "ZIRCO";
-	private static final int DATABASE_VERSION = 5;
+	private static final int DATABASE_VERSION = 6;
 	
 	/**
 	 * Bookmarks table.
@@ -104,6 +104,26 @@ public class DbAdapter {
 		MOBILE_VIEW_URL_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 		MOBILE_VIEW_URL_URL + " TEXT NOT NULL);";
 	
+	/**
+	 * Weave bookmarks table.
+	 */
+	public static final String WEAVE_BOOKMARKS_ID = "_id";
+	public static final String WEAVE_BOOKMARKS_WEAVE_ID = "weave_id";
+	public static final String WEAVE_BOOKMARKS_WEAVE_PARENT_ID = "weave_parent_id";
+	public static final String WEAVE_BOOKMARKS_TITLE = "title";
+	public static final String WEAVE_BOOKMARKS_URL = "url";
+	public static final String WEAVE_BOOKMARKS_FOLDER = "folder";	
+	
+	public static final String WEAVE_BOOKMARKS_TABLE = "WEAVE_BOOKMARKS";
+	
+	private static final String WEAVE_BOOKMARKS_TABLE_CREATE = "CREATE TABLE " + WEAVE_BOOKMARKS_TABLE + " (" + 
+		WEAVE_BOOKMARKS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+		WEAVE_BOOKMARKS_WEAVE_ID + " TEXT, " +
+		WEAVE_BOOKMARKS_WEAVE_PARENT_ID + " TEXT, " +
+		WEAVE_BOOKMARKS_TITLE + " TEXT, " +
+		WEAVE_BOOKMARKS_URL + " TEXT, " +
+		WEAVE_BOOKMARKS_FOLDER + " BOOLEAN);";
+	
 	protected boolean mAdBlockListNeedPopulate = false;
 	
 	private DatabaseHelper mDbHelper;
@@ -141,6 +161,10 @@ public class DbAdapter {
     public void close() {
         mDbHelper.close();
     }
+    
+    public SQLiteDatabase getDatabase() {
+		return mDb;
+	}
     
     /*******************************************************************************************************************************************************    
      * Bookmarks.
@@ -707,6 +731,55 @@ public class DbAdapter {
     	insertInWhiteList("google.com/reader");    	
     }
     
+    /*******************************************************************************************************************************************************    
+     * Weave bookmarks.
+     */
+    
+    public Cursor getWeaveBookmarks() {
+    	String orderClause = WEAVE_BOOKMARKS_TITLE + " COLLATE NOCASE";
+    	String[] columns = { WEAVE_BOOKMARKS_ID, WEAVE_BOOKMARKS_WEAVE_ID, WEAVE_BOOKMARKS_WEAVE_PARENT_ID, WEAVE_BOOKMARKS_TITLE, WEAVE_BOOKMARKS_URL, WEAVE_BOOKMARKS_FOLDER };
+    	
+    	return mDb.query(WEAVE_BOOKMARKS_TABLE, columns, null, null, null, null, orderClause);
+    }
+    
+    public Cursor getWeaveBookmarksByParentId(String parentId) {
+    	String whereClause = WEAVE_BOOKMARKS_WEAVE_PARENT_ID + " = \"" + parentId + "\"";
+    	String orderClause = WEAVE_BOOKMARKS_FOLDER + " DESC, " + WEAVE_BOOKMARKS_TITLE + " COLLATE NOCASE";
+    	String[] columns = { WEAVE_BOOKMARKS_ID, WEAVE_BOOKMARKS_WEAVE_ID, WEAVE_BOOKMARKS_WEAVE_PARENT_ID, WEAVE_BOOKMARKS_TITLE, WEAVE_BOOKMARKS_URL, WEAVE_BOOKMARKS_FOLDER };
+    	
+    	return mDb.query(WEAVE_BOOKMARKS_TABLE, columns, whereClause, null, null, null, orderClause);
+    }
+    
+    public WeaveBookmarkItem getWeaveBookmarkById(long id) {
+		WeaveBookmarkItem result = null;
+		
+		String whereClause = WEAVE_BOOKMARKS_ID + " = " + id;				
+		
+		Cursor cursor = mDb.query(WEAVE_BOOKMARKS_TABLE,
+    			new String[] { WEAVE_BOOKMARKS_ID, WEAVE_BOOKMARKS_TITLE, WEAVE_BOOKMARKS_URL, WEAVE_BOOKMARKS_WEAVE_ID, WEAVE_BOOKMARKS_FOLDER  },
+    			whereClause,
+    			null, null, null, null);
+	
+		if (cursor != null) {
+			if (cursor.moveToFirst()) {
+				String title = cursor.getString(cursor.getColumnIndex(WEAVE_BOOKMARKS_TITLE));
+				String url = cursor.getString(cursor.getColumnIndex(WEAVE_BOOKMARKS_URL));
+				String weaveId = cursor.getString(cursor.getColumnIndex(WEAVE_BOOKMARKS_WEAVE_ID));
+				boolean isFolder = cursor.getInt(cursor.getColumnIndex(WEAVE_BOOKMARKS_FOLDER)) > 0 ? true : false;
+				
+				result = new WeaveBookmarkItem(title, url, weaveId, isFolder);
+			}
+			
+			cursor.close();
+		}
+		
+		return result;
+	}
+    
+    public void clearWeaveBookmarks() {
+    	mDb.execSQL("DELETE FROM " + WEAVE_BOOKMARKS_TABLE);
+    }
+    
     /**
      * DatabaseHelper.
      */
@@ -730,6 +803,7 @@ public class DbAdapter {
 			db.execSQL(HISTORY_DATABASE_CREATE);
 			db.execSQL(ADBLOCK_WHITELIST_DATABASE_CREATE);
 			db.execSQL(MOBILE_VIEW_DATABASE_CREATE);
+			db.execSQL(WEAVE_BOOKMARKS_TABLE_CREATE);
 			mParent.mAdBlockListNeedPopulate = true;
 		}
 
@@ -745,6 +819,7 @@ public class DbAdapter {
 				db.execSQL(ADBLOCK_WHITELIST_DATABASE_CREATE);
 				mParent.mAdBlockListNeedPopulate = true;
 			case 4: db.execSQL(MOBILE_VIEW_DATABASE_CREATE);
+			case 5: db.execSQL(WEAVE_BOOKMARKS_TABLE_CREATE);
 			default: break;
 			}
 		}

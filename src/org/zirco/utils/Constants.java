@@ -97,6 +97,12 @@ public class Constants {
 	public static final String PREFERENCES_START_PAGE_BOOKMARKS_LIMIT = "StartPageBookmarksLimit";
 	public static final String PREFERENCES_START_PAGE_HISTORY_LIMIT = "StartPageHistoryLimit";	
 	
+	public static final String PREFERENCE_WEAVE_USERNAME = "PREFERENCE_WEAVE_USERNAME";
+	public static final String PREFERENCE_WEAVE_PASSWORD = "PREFERENCE_WEAVE_PASSWORD";
+	public static final String PREFERENCE_WEAVE_KEY = "PREFERENCE_WEAVE_KEY";
+	
+	public static final String WEAVE_AUTH_TOKEN_SCHEME = "{\"secret\":\"%s\",\"password\":\"%s\",\"username\":\"%s\",\"server\":\"https://auth.services.mozilla.com/\"}";
+	
 	/**
 	 * Methods.
 	 */

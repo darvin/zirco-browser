@@ -70,6 +70,14 @@ public class BookmarksHistoryActivity extends TabActivity {
                 .setContent(intent);
 		tabHost.addTab(spec);
 		
+		// Weave bookmarks
+		intent = new Intent().setClass(this, WeaveBookmarksListActivity.class);
+
+		spec = tabHost.newTabSpec("weave").setIndicator(res.getString(R.string.WeaveBookmarksListActivity_Title),
+                res.getDrawable(R.drawable.ic_tab_history))
+                .setContent(intent);
+		tabHost.addTab(spec);
+		
 		tabHost.setCurrentTab(0);
 		
 		tabHost.setOnTabChangedListener(new OnTabChangeListener() {			
@@ -79,6 +87,8 @@ public class BookmarksHistoryActivity extends TabActivity {
 					setTitle(R.string.BookmarksListActivity_Title);
 				} else if (tabId.equals("history")) {
 					setTitle(R.string.HistoryListActivity_Title);
+				} else if (tabId.equals("weave")) {
+					setTitle(R.string.WeaveBookmarksListActivity_Title);
 				} else {
 					setTitle(R.string.ApplicationName);
 				}

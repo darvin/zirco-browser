@@ -430,6 +430,28 @@
     <string name="QuickAction.SelectText">Select text</string>
     <string name="QuickAction.MobileView">Mobile view</string>
     
-    <string name="AboutActivity.OtherLicenseText">This application include code from the GreenDroid project (https://github.com/cyrilmottier/GreenDroid/), licensed under the Apache license, version 2.</string>	
+    <string name="AboutActivity.OtherLicenseText">This application include code from the GreenDroid project (https://github.com/cyrilmottier/GreenDroid/), licensed under the Apache license, version 2.</string>
+    
+    <!-- 0.4.0 -->
+     <string name="PreferencesActivity.WeaveSyncCategoryTitle">Weave sync. parameters</string>
+    <string name="PreferencesActivity.WeaveUsernameTitle">Weave user name</string>
+    <string name="PreferencesActivity.WeaveUsernameSummary">Enter your Weave user name.</string>
+    <string name="PreferencesActivity.WeavePasswordTitle">Weave password</string>
+    <string name="PreferencesActivity.WeavePasswordSummary">Enter your Weave password.</string>
+    <string name="PreferencesActivity.WeaveKeyTitle">Weave key</string>
+    <string name="PreferencesActivity.WeaveKeySummary">Enter your Weave key.</string>
+    
+    <string name="WeaveBookmarksListActivity.Title">Firefox bookmarks</string>	
+    <string name="WeaveBookmarksListActivity.MenuSync">Synchronize</string>
+    <string name="WeaveBookmarksListActivity.WeaveRootFolder">Places</string>
+    
+    <string name="WeaveSync.SyncTitle">Weave Synchronization</string>
+    <string name="WeaveSync.GenericSync">Synchronization in progress...</string>
+    <string name="WeaveSync.SyncInProgress">Synchronization in progress: %1$s / %2$s</string>
+    
+    <string name="Errors.WeaveSyncFailedTitle">Synchronization failed.</string>
+    <string name="Errors.WeaveSyncFailedMessage">Synchronization failed: %s</string>
+    <string name="Errors.WeaveAuthFailedTitle">Authentication failed.</string>
+    <string name="Errors.WeaveAuthFailedMessage">Invalid authentication token. Check your settings.</string>
     
 </resources>

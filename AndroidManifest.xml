@@ -18,10 +18,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="org.zirco"
       android:installLocation="auto"
-      android:versionCode="13" android:versionName="0.3.9">
+      android:versionName="0.4.0" android:versionCode="14">
     <application
     	android:icon="@drawable/icon"
-    	android:label="@string/ApplicationName" android:debuggable="false">
+    	android:label="@string/ApplicationName" android:debuggable="true">
     
         <activity android:name=".ui.activities.ZircoMain"
                   android:label="@string/ApplicationName"
@@ -53,6 +53,7 @@
 		<activity android:name=".ui.activities.preferences.SearchUrlPreferenceActivity" android:theme="@android:style/Theme.Dialog" android:label="@string/SearchUrlPreferenceActivity.Title"></activity>
 		<activity android:name=".ui.activities.preferences.UserAgentPreferenceActivity" android:theme="@android:style/Theme.Dialog" android:label="@string/UserAgentPreferenceActivity.Title"></activity>
 		<activity android:name=".ui.activities.MobileViewListActivity"></activity>
+		<activity android:name=".ui.activities.WeaveBookmarksListActivity"></activity>
 	</application>
 
 	<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="8" />

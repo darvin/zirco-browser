@@ -58,6 +58,22 @@ public class ApplicationUtils {
 	
 	private static int mImageButtonSize = -1;
 	
+	public static String getWeaveAuthToken(Context context) {
+    	String userName = PreferenceManager.getDefaultSharedPreferences(context).getString(Constants.PREFERENCE_WEAVE_USERNAME, null);
+    	String password = PreferenceManager.getDefaultSharedPreferences(context).getString(Constants.PREFERENCE_WEAVE_PASSWORD, null);
+    	String key = PreferenceManager.getDefaultSharedPreferences(context).getString(Constants.PREFERENCE_WEAVE_KEY, null);
+    	
+    	boolean ok = (userName != null) && (userName.length() > 0) &&
+    		(password != null) && (password.length() > 0) &&
+    		(key != null) && (key.length() > 0);
+    	
+    	if (ok) {
+    		return String.format(Constants.WEAVE_AUTH_TOKEN_SCHEME, key, password, userName);
+    	} else {
+    		return null;
+    	}
+    }
+	
 	public static int getImageButtonSize(Activity activity) {
 		if (mImageButtonSize == -1) {
 			DisplayMetrics metrics = new DisplayMetrics();
@@ -267,6 +283,15 @@ public class ApplicationUtils {
 	 * @param message The message string id.
 	 */
 	public static void showErrorDialog(Context context, int title, int message) {
+		new AlertDialog.Builder(context)
+        .setTitle(title)
+        .setIcon(android.R.drawable.ic_dialog_alert)
+        .setMessage(message)
+        .setPositiveButton(R.string.Commons_Ok, null)
+        .show();
+	}
+	
+	public static void showErrorDialog(Context context, int title, String message) {
 		new AlertDialog.Builder(context)
         .setTitle(title)
         .setIcon(android.R.drawable.ic_dialog_alert)
