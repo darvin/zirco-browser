@@ -59,10 +59,10 @@ public class WeaveSyncTask extends AsyncTask<WeaveAccountInfo, Integer, Throwabl
 		
 		SQLiteDatabase db = mDbAdapter.getDatabase();
 		
+		mDbAdapter.clearWeaveBookmarks();
+		
 		try {
-			db.beginTransaction();
-			
-			mDbAdapter.clearWeaveBookmarks();
+			db.beginTransaction();			
 			
 			WeaveAccountInfo accountInfo = arg0[0];
 			UserWeave userWeave = getWeaveFactory().createUserWeave(accountInfo.getServer(), accountInfo.getUsername(), accountInfo.getPassword());

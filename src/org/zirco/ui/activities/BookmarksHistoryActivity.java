@@ -21,8 +21,10 @@ import org.zirco.utils.Constants;
 
 import android.app.TabActivity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TabHost;
@@ -69,14 +71,16 @@ public class BookmarksHistoryActivity extends TabActivity {
                 res.getDrawable(R.drawable.ic_tab_history))
                 .setContent(intent);
 		tabHost.addTab(spec);
-		
-		// Weave bookmarks
-		intent = new Intent().setClass(this, WeaveBookmarksListActivity.class);
 
-		spec = tabHost.newTabSpec("weave").setIndicator(res.getString(R.string.WeaveBookmarksListActivity_Title),
-                res.getDrawable(R.drawable.ic_tab_history))
-                .setContent(intent);
-		tabHost.addTab(spec);
+		if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.PREFERENCE_USE_WEAVE, false)) {
+			// Weave bookmarks
+			intent = new Intent().setClass(this, WeaveBookmarksListActivity.class);
+
+			spec = tabHost.newTabSpec("weave").setIndicator(res.getString(R.string.WeaveBookmarksListActivity_Title),
+					res.getDrawable(R.drawable.ic_tab_weave))
+					.setContent(intent);
+			tabHost.addTab(spec);
+		}
 		
 		tabHost.setCurrentTab(0);
 		
@@ -94,5 +98,10 @@ public class BookmarksHistoryActivity extends TabActivity {
 				}
 			}
 		});
+	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
 	}
 }

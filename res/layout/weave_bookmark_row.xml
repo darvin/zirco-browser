@@ -28,7 +28,7 @@
 		android:layout_marginTop="5dip"
 		android:layout_marginRight="5dip"></ImageView>
 	<LinearLayout
-		android:layout_width="wrap_content"
+		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:padding="5dip"
 		android:orientation="vertical" android:layout_gravity="center_vertical">

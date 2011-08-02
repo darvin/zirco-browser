@@ -169,18 +169,21 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 			WeaveAccountInfo info = WeaveAccountInfo.createWeaveAccountInfo(authToken);
 			mSyncTask = new WeaveSyncTask(this, this);
 			
-			mSyncProgressDialog = ProgressDialog.show(this,
-					getString(R.string.WeaveSync_SyncTitle),
-					getString(R.string.WeaveSync_GenericSync),
-					false,
-					true,
-					new OnCancelListener() {
-				@Override
-				public void onCancel(DialogInterface arg0) {
-					mSyncTask.cancel(true);			
-				}
+			mSyncProgressDialog = new ProgressDialog(this);
+			mSyncProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			mSyncProgressDialog.setIndeterminate(true);
+			mSyncProgressDialog.setTitle(R.string.WeaveSync_SyncTitle);
+			mSyncProgressDialog.setMessage(getString(R.string.WeaveSync_GenericSync));
+			mSyncProgressDialog.setCancelable(true);
+			mSyncProgressDialog.setOnCancelListener(new OnCancelListener() {
 				
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					mSyncTask.cancel(true);
+				}
 			});
+			
+			mSyncProgressDialog.show();
 			
 			boolean retVal = mSyncThread.compareAndSet(null, mSyncTask);
 			if (retVal) {
@@ -234,7 +237,7 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 
 	@Override
 	public void onSyncCancelled() {
-		mSyncProgressDialog.dismiss();
+		mSyncProgressDialog.dismiss();	
 		fillData();
 	}
 
@@ -254,9 +257,9 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 
 	@Override
 	public void onSyncProgress(int done, int total) {
+		mSyncProgressDialog.setIndeterminate(false);
 		mSyncProgressDialog.setMax(total);
 		mSyncProgressDialog.setProgress(done);
-		mSyncProgressDialog.setMessage(String.format(getResources().getString(R.string.WeaveSync_SyncInProgress), done, total));
 	}
 
 }

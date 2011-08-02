@@ -59,7 +59,7 @@ public class PreferencesActivity extends PreferenceActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		addPreferencesFromResource(R.layout.preferencesactivity);
+		addPreferencesFromResource(R.layout.preferences_activity);
 
 		PreferenceCategory browserPreferenceCategory = (PreferenceCategory) findPreference("BrowserPreferenceCategory");
 		Preference enablePluginsEclair = (Preference) findPreference(Constants.PREFERENCES_BROWSER_ENABLE_PLUGINS_ECLAIR);

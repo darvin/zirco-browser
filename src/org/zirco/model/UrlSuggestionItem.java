@@ -23,7 +23,8 @@ public class UrlSuggestionItem {
 	private static final float TITLE_COEFFICIENT = 2;
 	private static final float URL_COEFFICIENT = 1;
 	
-	private static final float BOOKMARK_COEFFICIENT = 2;
+	private static final float BOOKMARK_COEFFICIENT = 3;
+	private static final float WEAVE_COEFFICIENT = 1;
 	private static final float HISTORY_COEFFICIENT = 1;
 	
 	private String mPattern;
@@ -109,6 +110,7 @@ public class UrlSuggestionItem {
 		switch(mType) {
 		case 1: mNote = mNote * HISTORY_COEFFICIENT; break;
 		case 2: mNote = mNote * BOOKMARK_COEFFICIENT; break;
+		case 3: mNote = mNote * WEAVE_COEFFICIENT; break;
 		default: break;
 		}
 		

@@ -107,6 +107,27 @@
 				android:title="@string/PreferencesActivity.StartPageHistoryLimitPreferenceTitle"
 				android:key="StartPageHistoryLimit" />
 		</PreferenceScreen>
+		<PreferenceScreen android:key="WeavePreferencesScreen"
+			android:title="@string/PreferencesActivity.WeavePreferenceTitle"
+			android:summary="@string/PreferencesActivity.WeavePreferenceSummary">
+			<CheckBoxPreference
+				android:title="@string/PreferencesActivity.UseWeavePreferenceTitle"
+				android:summary="@string/PreferencesActivity.UseWeavePreferenceSummary"
+				android:defaultValue="false"				
+				android:key="PREFERENCE_USE_WEAVE" />
+			<EditTextPreference android:name="@string/PreferencesActivity.WeaveUsernameTitle"
+				android:summary="@string/PreferencesActivity.WeaveUsernameSummary"
+				android:title="@string/PreferencesActivity.WeaveUsernameTitle"
+				android:defaultValue="" android:key="PREFERENCE_WEAVE_USERNAME" />
+			<EditTextPreference android:name="@string/PreferencesActivity.WeavePasswordTitle"
+				android:summary="@string/PreferencesActivity.WeavePasswordSummary"
+				android:title="@string/PreferencesActivity.WeavePasswordTitle"
+				android:defaultValue="" android:password="true" android:key="PREFERENCE_WEAVE_PASSWORD" />
+			<EditTextPreference android:name="@string/PreferencesActivity.WeaveKeyTitle"
+				android:summary="@string/PreferencesActivity.WeaveKeySummary"
+				android:title="@string/PreferencesActivity.WeaveKeyTitle"
+				android:defaultValue="" android:key="PREFERENCE_WEAVE_KEY" />
+		</PreferenceScreen>
 	</PreferenceCategory>
 	<PreferenceCategory
 		android:key="BrowserPreferenceCategory"
@@ -196,27 +217,6 @@
 				android:title="@string/PreferencesActivity.PrivacyClearCookiesTitle"
 				android:key="PrivacyClearCookies" />
 		</PreferenceScreen>		
-	</PreferenceCategory>
-	<PreferenceCategory android:title="@string/PreferencesActivity.WeaveSyncCategoryTitle">
-		<EditTextPreference
-				android:name="@string/PreferencesActivity.WeaveUsernameTitle"
-				android:summary="@string/PreferencesActivity.WeaveUsernameSummary"
-				android:title="@string/PreferencesActivity.WeaveUsernameTitle"
-				android:defaultValue=""
-				android:key="PREFERENCE_WEAVE_USERNAME" />
-		<EditTextPreference
-				android:name="@string/PreferencesActivity.WeavePasswordTitle"
-				android:summary="@string/PreferencesActivity.WeavePasswordSummary"
-				android:title="@string/PreferencesActivity.WeavePasswordTitle"
-				android:defaultValue=""
-				android:password="true"
-				android:key="PREFERENCE_WEAVE_PASSWORD" />
-		<EditTextPreference
-				android:name="@string/PreferencesActivity.WeaveKeyTitle"
-				android:summary="@string/PreferencesActivity.WeaveKeySummary"
-				android:title="@string/PreferencesActivity.WeaveKeyTitle"
-				android:defaultValue=""
-				android:key="PREFERENCE_WEAVE_KEY" />
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/PreferencesActivity.MobileViewCategoryTitle">
 		<Preference

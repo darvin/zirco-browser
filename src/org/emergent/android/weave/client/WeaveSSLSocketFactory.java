@@ -44,7 +44,7 @@ class WeaveSSLSocketFactory implements SocketFactory, LayeredSocketFactory {
 
   private static final boolean DISABLE_SERVER_CERT_CHECK = true; // todo look into this
 
-  private static final boolean ENUMERATE_TRUSTED_CAS = false;
+//  private static final boolean ENUMERATE_TRUSTED_CAS = false;
 
   private SSLContext m_sslcontext = null;
 
@@ -128,7 +128,7 @@ class WeaveSSLSocketFactory implements SocketFactory, LayeredSocketFactory {
 
     private X509TrustManager m_standardTrustManager = null;
 
-    private static boolean sm_issued = false;
+//    private static boolean sm_issued = false;
 
     public WeaveX509TrustManager(KeyStore keystore) throws NoSuchAlgorithmException, KeyStoreException {
       super();
@@ -152,25 +152,25 @@ class WeaveSSLSocketFactory implements SocketFactory, LayeredSocketFactory {
      * @see X509TrustManager#checkServerTrusted(X509Certificate[],String)
      */
 	public void checkServerTrusted(X509Certificate[] certificates, String authType) throws CertificateException {
-      if (ENUMERATE_TRUSTED_CAS && !sm_issued) {
-        Dbg.d("CA certs:");
-        X509Certificate[] cas = getAcceptedIssuers();
-        for (X509Certificate ca : cas) {
-          Dbg.d("  " + ca.getSubjectDN());
-        }
-        sm_issued = true;
-      }
+//      if (ENUMERATE_TRUSTED_CAS && !sm_issued) {
+//        Dbg.d("CA certs:");
+//        X509Certificate[] cas = getAcceptedIssuers();
+//        for (X509Certificate ca : cas) {
+//          Dbg.d("  " + ca.getSubjectDN());
+//        }
+//        sm_issued = true;
+//      }
 
       if (DISABLE_SERVER_CERT_CHECK)
         return;
 
-      if ((certificates != null) && (certificates.length == 1)) {
-        // self-signed check
-        certificates[0].checkValidity();
-      } else {
-        // normal check
-        m_standardTrustManager.checkServerTrusted(certificates, authType);
-      }
+//      if ((certificates != null) && (certificates.length == 1)) {
+//        // self-signed check
+//        certificates[0].checkValidity();
+//      } else {
+//        // normal check
+//        m_standardTrustManager.checkServerTrusted(certificates, authType);
+//      }
     }
 
     /**

@@ -16,15 +16,12 @@
 package org.zirco.model;
 
 import org.zirco.R;
-import org.zirco.utils.ApplicationUtils;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 /**
  * Adapter for suggestions.
@@ -53,17 +50,7 @@ public class UrlSuggestionCursorAdapter extends SimpleCursorAdapter {
 		
 		View superView = super.getView(position, convertView, parent);
 		
-		TextView titleView = (TextView) superView.findViewById(R.id.AutocompleteTitle);
-		TextView urlView = (TextView) superView.findViewById(R.id.AutocompleteUrl);
 		ImageView iconView = (ImageView) superView.findViewById(R.id.AutocompleteImageView);
-		
-		String title = titleView.getText().toString();		
-		title = ApplicationUtils.getTruncatedString(titleView.getPaint(), title, (int) (parent.getMeasuredWidth() - (75 * parent.getContext().getResources().getDisplayMetrics().density)));		
-		titleView.setText(title);
-		
-		String url = urlView.getText().toString();		
-		url = ApplicationUtils.getTruncatedString(urlView.getPaint(), url, (int) (parent.getMeasuredWidth() - (75 * parent.getContext().getResources().getDisplayMetrics().density)));		
-		urlView.setText(url);
 
 		int resultType;
 		try {			
@@ -75,6 +62,7 @@ public class UrlSuggestionCursorAdapter extends SimpleCursorAdapter {
 		switch (resultType) {
 		case 1: iconView.setImageResource(R.drawable.ic_tab_history_unselected); break;
 		case 2: iconView.setImageResource(R.drawable.ic_tab_bookmarks_unselected); break;
+		case 3: iconView.setImageResource(R.drawable.ic_tab_weave_unselected); break;
 		default: break;
 		}
 		

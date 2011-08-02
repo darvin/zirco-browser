@@ -393,10 +393,13 @@ public class DbAdapter {
     			
     			if (historyCursor.moveToFirst()) {
     				
+    				int historyTitleId = historyCursor.getColumnIndex(HISTORY_TITLE);
+    				int historyUrlId = historyCursor.getColumnIndex(HISTORY_URL);
+    				
     				do {    					
     					results.add(new UrlSuggestionItem(pattern,
-    							historyCursor.getString(historyCursor.getColumnIndex(HISTORY_TITLE)),
-    							historyCursor.getString(historyCursor.getColumnIndex(HISTORY_URL)),
+    							historyCursor.getString(historyTitleId),
+    							historyCursor.getString(historyUrlId),
     							1));
     					
     				} while (historyCursor.moveToNext());
@@ -415,10 +418,13 @@ public class DbAdapter {
     			
     			if (bookmarksCursor.moveToFirst()) {
     				
+    				int bookmarksTitleId = bookmarksCursor.getColumnIndex(BOOKMARKS_TITLE);
+    				int boomarksUrlId = bookmarksCursor.getColumnIndex(BOOKMARKS_URL);
+    				
     				do {
     					results.add(new UrlSuggestionItem(pattern,
-    							bookmarksCursor.getString(historyCursor.getColumnIndex(BOOKMARKS_TITLE)),
-    							bookmarksCursor.getString(historyCursor.getColumnIndex(BOOKMARKS_URL)),
+    							bookmarksCursor.getString(bookmarksTitleId),
+    							bookmarksCursor.getString(boomarksUrlId),
     							2));
     					
     				} while (bookmarksCursor.moveToNext());
@@ -427,8 +433,34 @@ public class DbAdapter {
     			bookmarksCursor.close();
     		}
     		
+    		if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(Constants.PREFERENCE_USE_WEAVE, false)) {
+    			Cursor weaveCursor = mDb.query(WEAVE_BOOKMARKS_TABLE,
+    					new String[] { WEAVE_BOOKMARKS_ID, WEAVE_BOOKMARKS_TITLE, WEAVE_BOOKMARKS_URL, WEAVE_BOOKMARKS_FOLDER },
+    					WEAVE_BOOKMARKS_FOLDER + " = 0 AND (" +  WEAVE_BOOKMARKS_TITLE + " LIKE '" + sqlPattern + "' OR " + WEAVE_BOOKMARKS_URL  + " LIKE '" + sqlPattern + "')",
+    					null, null, null, null);
+
+    			if (weaveCursor != null) {
+    				if (weaveCursor.moveToFirst()) {
+    					
+    					int weaveTitleId = weaveCursor.getColumnIndex(WEAVE_BOOKMARKS_TITLE);
+        				int weaveUrlId = weaveCursor.getColumnIndex(WEAVE_BOOKMARKS_URL);
+    					
+    					do {
+    						results.add(new UrlSuggestionItem(pattern,
+    								weaveCursor.getString(weaveTitleId),
+    								weaveCursor.getString(weaveUrlId),
+    								3));
+    					} while (weaveCursor.moveToNext());
+    				}
+
+    				weaveCursor.close();
+    			}
+    		}
+    		
     		// Sort results.
     		Collections.sort(results, new UrlSuggestionItemComparator());
+    		
+    		Log.d("Results", Integer.toString(results.size()));
     		
     		// Copy results to the output MatrixCursor.
     		int idCounter = -1;
