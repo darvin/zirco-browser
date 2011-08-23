@@ -106,7 +106,7 @@
 				android:numeric="integer"
 				android:title="@string/PreferencesActivity.StartPageHistoryLimitPreferenceTitle"
 				android:key="StartPageHistoryLimit" />
-		</PreferenceScreen>
+		</PreferenceScreen> 
 		<PreferenceScreen android:key="WeavePreferencesScreen"
 			android:title="@string/PreferencesActivity.WeavePreferenceTitle"
 			android:summary="@string/PreferencesActivity.WeavePreferenceSummary">

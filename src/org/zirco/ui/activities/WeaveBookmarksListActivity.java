@@ -42,7 +42,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -55,9 +57,13 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 	
 	private static final String ROOT_FOLDER = "places";
 	
-	private TextView mNavigationView;
+	private LinearLayout mNavigationView;
+	private TextView mNavigationText;
 	private ImageButton mNavigationBack;
 	private ListView mListView;
+	
+	private Button mSetupButton;
+	private Button mSyncButton;	
 	
 	private List<WeaveBookmarkItem> mNavigationList;
 	
@@ -76,8 +82,9 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.weave_bookmarks_list_activity);
         
-        mNavigationView = (TextView) findViewById(R.id.WeaveBookmarksBreadcumb);
-        mNavigationBack = (ImageButton) findViewById(R.id.WeaveBookmarksBack);
+        mNavigationView = (LinearLayout) findViewById(R.id.WeaveBookmarksNavigationView);
+        mNavigationText = (TextView) findViewById(R.id.WeaveBookmarksNavigationText);
+        mNavigationBack = (ImageButton) findViewById(R.id.WeaveBookmarksNavigationBack);
         mListView = (ListView) findViewById(R.id.WeaveBookmarksList);
         
         mNavigationBack.setOnClickListener(new OnClickListener() {		
@@ -122,6 +129,24 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 				}
 			}
         });
+        
+        mListView.setEmptyView(findViewById(R.id.WeaveBookmarksEmptyView));
+        
+        mSetupButton = (Button) findViewById(R.id.WeaveBookmarksEmptyViewSetupButton);
+        mSetupButton.setOnClickListener(new OnClickListener() {			
+			@Override
+			public void onClick(View arg0) {
+				
+			}
+		});
+        
+        mSyncButton = (Button) findViewById(R.id.WeaveBookmarksEmptyViewSyncButton);
+        mSyncButton.setOnClickListener(new OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				doSync();
+			}
+		});
         
         mNavigationList = new ArrayList<WeaveBookmarkItem>();
         mNavigationList.add(new WeaveBookmarkItem(getResources().getString(R.string.WeaveBookmarksListActivity_WeaveRootFolder), null, ROOT_FOLDER, true));
@@ -212,7 +237,13 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 		
 		mListView.setAdapter(adapter);
 		
-		mNavigationView.setText(getNavigationText());
+		if (adapter.isEmpty()) {
+			mNavigationView.setVisibility(View.GONE);
+		} else {
+			mNavigationView.setVisibility(View.VISIBLE);
+		}
+		
+		mNavigationText.setText(getNavigationText());
 		
 		if (mNavigationList.size() > 1) {
 			mNavigationBack.setEnabled(true);
