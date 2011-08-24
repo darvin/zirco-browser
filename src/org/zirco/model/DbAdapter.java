@@ -460,7 +460,7 @@ public class DbAdapter {
     		// Sort results.
     		Collections.sort(results, new UrlSuggestionItemComparator());
     		
-    		Log.d("Results", Integer.toString(results.size()));
+    		//Log.d("Results", Integer.toString(results.size()));
     		
     		// Copy results to the output MatrixCursor.
     		int idCounter = -1;

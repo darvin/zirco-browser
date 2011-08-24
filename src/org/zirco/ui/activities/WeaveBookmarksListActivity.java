@@ -24,6 +24,7 @@ import org.emergent.android.weave.client.WeaveAccountInfo;
 import org.zirco.R;
 import org.zirco.model.DbAdapter;
 import org.zirco.model.WeaveBookmarkItem;
+import org.zirco.model.WeaveBookmarksCursorAdapter;
 import org.zirco.sync.ISyncListener;
 import org.zirco.sync.WeaveSyncTask;
 import org.zirco.ui.activities.preferences.WeavePreferencesActivity;
@@ -53,7 +54,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -186,7 +186,7 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
     	MenuItem item = menu.add(0, MENU_SYNC, 0, R.string.WeaveBookmarksListActivity_MenuSync);
     	item.setIcon(R.drawable.ic_menu_sync);
     	
-    	item = menu.add(0, MENU_CLEAR, 0, R.string.WeaveBookmarksListActivity_MenuSync);
+    	item = menu.add(0, MENU_CLEAR, 0, R.string.WeaveBookmarksListActivity_MenuClear);
     	item.setIcon(R.drawable.ic_menu_delete);
     	
     	return true;
@@ -261,7 +261,7 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 		
 		mCursor = mDbAdapter.getWeaveBookmarksByParentId(mNavigationList.get(mNavigationList.size() - 1).getWeaveId());
 		
-		ListAdapter adapter = new SimpleCursorAdapter(this,
+		ListAdapter adapter = new WeaveBookmarksCursorAdapter(this,
 				R.layout.weave_bookmark_row,
 				mCursor,
 				from,
@@ -274,10 +274,6 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 			mNavigationView.setVisibility(View.VISIBLE);			
 		}		
 		
-		mListView.setAdapter(adapter);		
-		
-		mNavigationText.setText(getNavigationText());
-		
 		if (mNavigationList.size() > 1) {
 			mNavigationBack.setEnabled(true);
 			mListView.setEmptyView(mEmptyFolderView);
@@ -285,6 +281,10 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 			mNavigationBack.setEnabled(false);
 			mListView.setEmptyView(mEmptyView);
 		}
+		
+		mListView.setAdapter(adapter);		
+		
+		mNavigationText.setText(getNavigationText());				
 	}
 	
 	private String getNavigationText() {
@@ -303,8 +303,14 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 
 	@Override
 	public void onSyncCancelled() {
+		mSyncThread.compareAndSet(mSyncTask, null);
 		mProgressDialog.dismiss();	
 		fillData();
+		
+		// Reset last sync date.
+		Editor lastSyncDateEditor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+		lastSyncDateEditor.putLong(Constants.PREFERENCE_WEAVE_LAST_SYNC_DATE, -1);
+		lastSyncDateEditor.commit();
 	}
 
 	@Override
