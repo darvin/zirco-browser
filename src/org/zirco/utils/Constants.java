@@ -101,6 +101,7 @@ public class Constants {
 	public static final String PREFERENCE_WEAVE_USERNAME = "PREFERENCE_WEAVE_USERNAME";
 	public static final String PREFERENCE_WEAVE_PASSWORD = "PREFERENCE_WEAVE_PASSWORD";
 	public static final String PREFERENCE_WEAVE_KEY = "PREFERENCE_WEAVE_KEY";
+	public static final String PREFERENCE_WEAVE_LAST_SYNC_DATE = "PREFERENCE_WEAVE_LAST_SYNC_DATE";
 	
 	public static final String WEAVE_AUTH_TOKEN_SCHEME = "{\"secret\":\"%s\",\"password\":\"%s\",\"username\":\"%s\",\"server\":\"https://auth.services.mozilla.com/\"}";
 	

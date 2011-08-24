@@ -16,6 +16,7 @@
 package org.zirco.ui.activities;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -34,11 +35,13 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnCancelListener;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -68,6 +71,9 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 	
 	private Button mSetupButton;
 	private Button mSyncButton;	
+	
+	private View mEmptyView;
+	private View mEmptyFolderView;
 	
 	private List<WeaveBookmarkItem> mNavigationList;
 	
@@ -134,7 +140,10 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 			}
         });
         
-        mListView.setEmptyView(findViewById(R.id.WeaveBookmarksEmptyView));
+        mEmptyView = findViewById(R.id.WeaveBookmarksEmptyView);
+        mEmptyFolderView = findViewById(R.id.WeaveBookmarksEmptyFolderView);
+        
+        //mListView.setEmptyView(mEmptyView);
         
         mSetupButton = (Button) findViewById(R.id.WeaveBookmarksEmptyViewSetupButton);
         mSetupButton.setOnClickListener(new OnClickListener() {			
@@ -238,6 +247,11 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
     			this.getResources().getString(R.string.BookmarksListActivity_ClearingBookmarks));
 		
 		new Clearer();
+		
+		// Reset last sync date.
+		Editor lastSyncDateEditor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+		lastSyncDateEditor.putLong(Constants.PREFERENCE_WEAVE_LAST_SYNC_DATE, -1);
+		lastSyncDateEditor.commit();
 	}
 	
 	private void fillData() {
@@ -253,20 +267,23 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 				from,
 				to);	
 		
-		mListView.setAdapter(adapter);
-		
-		if (adapter.isEmpty()) {
-			mNavigationView.setVisibility(View.GONE);
+		if (adapter.isEmpty() &&
+				(mNavigationList.size() <= 1)) {
+			mNavigationView.setVisibility(View.GONE);			
 		} else {
-			mNavigationView.setVisibility(View.VISIBLE);
-		}
+			mNavigationView.setVisibility(View.VISIBLE);			
+		}		
+		
+		mListView.setAdapter(adapter);		
 		
 		mNavigationText.setText(getNavigationText());
 		
 		if (mNavigationList.size() > 1) {
 			mNavigationBack.setEnabled(true);
+			mListView.setEmptyView(mEmptyFolderView);
 		} else {
 			mNavigationBack.setEnabled(false);
+			mListView.setEmptyView(mEmptyView);
 		}
 	}
 	
@@ -298,6 +315,10 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 			Log.e("MainActivity: Sync failed.", msg);
 			
 			ApplicationUtils.showErrorDialog(this, R.string.Errors_WeaveSyncFailedTitle, msg);
+		} else {
+			Editor lastSyncDateEditor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+			lastSyncDateEditor.putLong(Constants.PREFERENCE_WEAVE_LAST_SYNC_DATE, new Date().getTime());
+			lastSyncDateEditor.commit();
 		}
 		
 		mProgressDialog.dismiss();

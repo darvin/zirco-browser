@@ -448,6 +448,7 @@
     <string name="WeaveBookmarksListActivity.MenuSync">Synchronize</string>
     <string name="WeaveBookmarksListActivity.WeaveRootFolder">Places</string>
     <string name="WeaveBookmarksListActivity.EmptyText">Firefox bookmarks are not synchronized. Setup your account informations and do a synchronization.</string>
+    <string name="WeaveBookmarksListActivity.EmptyFolderText">No bookmarks in this folder.</string>
     <string name="WeaveBookmarksListActivity.SetupButton">Setup</string>
     <string name="WeaveBookmarksListActivity.SyncButton">Synchronize</string>
     

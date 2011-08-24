@@ -808,6 +808,50 @@ public class DbAdapter {
 		return result;
 	}
     
+    public long getIdByWeaveId(String weaveId) {
+    	long result = -1;
+    	String whereClause = WEAVE_BOOKMARKS_WEAVE_ID + " = \"" + weaveId + "\"";
+    	
+    	Cursor cursor = mDb.query(WEAVE_BOOKMARKS_TABLE,
+    			new String[] { WEAVE_BOOKMARKS_ID, WEAVE_BOOKMARKS_WEAVE_ID },
+    			whereClause,
+    			null, null, null, null);
+    	
+    	if (cursor != null) {
+			if (cursor.moveToFirst()) {
+				result = cursor.getLong(cursor.getColumnIndex(WEAVE_BOOKMARKS_ID));
+			}
+			
+			cursor.close();
+    	}
+    	
+    	return result;
+    }
+    
+    public boolean doesWeaveItemExistsByWeaveId(String weaveId) {
+    	boolean result = false;
+    	String whereClause = WEAVE_BOOKMARKS_WEAVE_ID + " = \"" + weaveId + "\"";
+    	
+    	Cursor cursor = mDb.query(WEAVE_BOOKMARKS_TABLE,
+    			new String[] { WEAVE_BOOKMARKS_ID, WEAVE_BOOKMARKS_WEAVE_ID },
+    			whereClause,
+    			null, null, null, null);
+    	
+    	if (cursor != null) {
+			if (cursor.moveToFirst()) {
+				result = true;
+			}
+			
+			cursor.close();
+    	}
+    	
+    	return result;
+    }
+    
+    public void deleteWeaveBookmarkByWeaveId(String weaveId) {
+    	mDb.execSQL("DELETE FROM " + WEAVE_BOOKMARKS_TABLE + " WHERE " + WEAVE_BOOKMARKS_WEAVE_ID + " = \"" + weaveId + "\"");
+    }
+    
     public void clearWeaveBookmarks() {
     	mDb.execSQL("DELETE FROM " + WEAVE_BOOKMARKS_TABLE);
     }
