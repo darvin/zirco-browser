@@ -25,6 +25,7 @@ import org.zirco.model.DbAdapter;
 import org.zirco.model.WeaveBookmarkItem;
 import org.zirco.sync.ISyncListener;
 import org.zirco.sync.WeaveSyncTask;
+import org.zirco.ui.activities.preferences.WeavePreferencesActivity;
 import org.zirco.utils.ApplicationUtils;
 import org.zirco.utils.Constants;
 
@@ -36,6 +37,8 @@ import android.content.DialogInterface.OnCancelListener;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,6 +57,7 @@ import android.widget.AdapterView.OnItemClickListener;
 public class WeaveBookmarksListActivity extends Activity implements ISyncListener {
 	
 	private static final int MENU_SYNC = Menu.FIRST;
+	private static final int MENU_CLEAR = Menu.FIRST + 1;
 	
 	private static final String ROOT_FOLDER = "places";
 	
@@ -67,7 +71,7 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 	
 	private List<WeaveBookmarkItem> mNavigationList;
 	
-	private ProgressDialog mSyncProgressDialog;
+	private ProgressDialog mProgressDialog;
 	
 	private DbAdapter mDbAdapter;
 	private Cursor mCursor = null;
@@ -136,7 +140,7 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
         mSetupButton.setOnClickListener(new OnClickListener() {			
 			@Override
 			public void onClick(View arg0) {
-				
+				startActivity(new Intent(WeaveBookmarksListActivity.this, WeavePreferencesActivity.class));
 			}
 		});
         
@@ -173,6 +177,9 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
     	MenuItem item = menu.add(0, MENU_SYNC, 0, R.string.WeaveBookmarksListActivity_MenuSync);
     	item.setIcon(R.drawable.ic_menu_sync);
     	
+    	item = menu.add(0, MENU_CLEAR, 0, R.string.WeaveBookmarksListActivity_MenuSync);
+    	item.setIcon(R.drawable.ic_menu_delete);
+    	
     	return true;
 	}
 
@@ -182,6 +189,9 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 		switch(item.getItemId()) {
 		case MENU_SYNC:
 			doSync();
+			return true;
+		case MENU_CLEAR:
+			doClear();
 			return true;
 		default: return super.onMenuItemSelected(featureId, item);
 		}
@@ -194,13 +204,13 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 			WeaveAccountInfo info = WeaveAccountInfo.createWeaveAccountInfo(authToken);
 			mSyncTask = new WeaveSyncTask(this, this);
 			
-			mSyncProgressDialog = new ProgressDialog(this);
-			mSyncProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			mSyncProgressDialog.setIndeterminate(true);
-			mSyncProgressDialog.setTitle(R.string.WeaveSync_SyncTitle);
-			mSyncProgressDialog.setMessage(getString(R.string.WeaveSync_GenericSync));
-			mSyncProgressDialog.setCancelable(true);
-			mSyncProgressDialog.setOnCancelListener(new OnCancelListener() {
+			mProgressDialog = new ProgressDialog(this);
+			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			mProgressDialog.setIndeterminate(true);
+			mProgressDialog.setTitle(R.string.WeaveSync_SyncTitle);
+			mProgressDialog.setMessage(getString(R.string.WeaveSync_GenericSync));
+			mProgressDialog.setCancelable(true);
+			mProgressDialog.setOnCancelListener(new OnCancelListener() {
 				
 				@Override
 				public void onCancel(DialogInterface dialog) {
@@ -208,7 +218,7 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 				}
 			});
 			
-			mSyncProgressDialog.show();
+			mProgressDialog.show();
 			
 			boolean retVal = mSyncThread.compareAndSet(null, mSyncTask);
 			if (retVal) {
@@ -220,6 +230,14 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 			ApplicationUtils.showErrorDialog(this, R.string.Errors_WeaveSyncFailedTitle, R.string.Errors_WeaveAuthFailedMessage);
 		}
 		
+	}
+	
+	private void doClear() {
+		mProgressDialog = ProgressDialog.show(this,
+    			this.getResources().getString(R.string.Commons_PleaseWait),
+    			this.getResources().getString(R.string.BookmarksListActivity_ClearingBookmarks));
+		
+		new Clearer();
 	}
 	
 	private void fillData() {
@@ -268,7 +286,7 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 
 	@Override
 	public void onSyncCancelled() {
-		mSyncProgressDialog.dismiss();	
+		mProgressDialog.dismiss();	
 		fillData();
 	}
 
@@ -282,15 +300,37 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 			ApplicationUtils.showErrorDialog(this, R.string.Errors_WeaveSyncFailedTitle, msg);
 		}
 		
-		mSyncProgressDialog.dismiss();
+		mProgressDialog.dismiss();
 		fillData();
 	}
 
 	@Override
 	public void onSyncProgress(int done, int total) {
-		mSyncProgressDialog.setIndeterminate(false);
-		mSyncProgressDialog.setMax(total);
-		mSyncProgressDialog.setProgress(done);
+		mProgressDialog.setIndeterminate(false);
+		mProgressDialog.setMax(total);
+		mProgressDialog.setProgress(done);
+	}
+	
+	private class Clearer implements Runnable {
+
+		public Clearer() {
+			new Thread(this).start();
+		}
+		
+		@Override
+		public void run() {
+			mDbAdapter.clearWeaveBookmarks();			
+			
+			mHandler.sendEmptyMessage(0);
+		}
+		
+		private Handler mHandler = new Handler() {
+			public void handleMessage(Message msg) {				
+				mProgressDialog.dismiss();
+				fillData();
+			}
+		};
+		
 	}
 
 }

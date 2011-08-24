@@ -451,7 +451,7 @@
     <string name="WeaveBookmarksListActivity.SetupButton">Setup</string>
     <string name="WeaveBookmarksListActivity.SyncButton">Synchronize</string>
     
-    <string name="WeaveSync.SyncTitle">Weave Synchronization</string>
+    <string name="WeaveSync.SyncTitle">Firefox bookmarks</string>
     <string name="WeaveSync.GenericSync">Synchronization in progress...</string>
     <string name="WeaveSync.SyncInProgress">Synchronization in progress: %1$s / %2$s</string>
     

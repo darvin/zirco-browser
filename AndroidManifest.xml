@@ -54,6 +54,7 @@
 		<activity android:name=".ui.activities.preferences.UserAgentPreferenceActivity" android:theme="@android:style/Theme.Dialog" android:label="@string/UserAgentPreferenceActivity.Title"></activity>
 		<activity android:name=".ui.activities.MobileViewListActivity"></activity>
 		<activity android:name=".ui.activities.WeaveBookmarksListActivity"></activity>
+		<activity android:name=".ui.activities.preferences.WeavePreferencesActivity"></activity>
 	</application>
 
 	<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="8" />
