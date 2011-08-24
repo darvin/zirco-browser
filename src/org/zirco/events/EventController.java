@@ -24,8 +24,6 @@ import java.util.List;
  */
 public final class EventController {
 	
-	private List<IWebEventListener> mWebListeners;
-	
 	private List<IDownloadEventsListener> mDownloadListeners;
 	
 	/**
@@ -47,38 +45,7 @@ public final class EventController {
 	 * Private Constructor.
 	 */
 	private EventController() {
-		mWebListeners = new ArrayList<IWebEventListener>();
 		mDownloadListeners = new ArrayList<IDownloadEventsListener>();
-	}
-	
-	/**
-	 * Add a listener for web events.
-	 * @param listener The listener to add.
-	 */
-	public synchronized void addWebListener(IWebEventListener listener) {
-		if (!mWebListeners.contains(listener)) {
-			mWebListeners.add(listener);
-		}
-	}
-	
-	/**
-	 * Remove a listener for web events.
-	 * @param listener The listener to remove.
-	 */
-	public synchronized void removeWebListener(IWebEventListener listener) {
-		mWebListeners.remove(listener);
-	}
-	
-	/**
-	 * Trigger a web event.
-	 * @param event The event.
-	 * @param data Additional data.
-	 */
-	public synchronized void fireWebEvent(String event, Object data) {
-		Iterator<IWebEventListener> iter = mWebListeners.iterator();
-		while (iter.hasNext()) {
-			iter.next().onWebEvent(event, data);
-		}
 	}
 	
 	/**

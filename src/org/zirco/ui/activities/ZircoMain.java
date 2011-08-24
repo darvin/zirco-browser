@@ -28,7 +28,6 @@ import org.zirco.controllers.Controller;
 import org.zirco.events.EventConstants;
 import org.zirco.events.EventController;
 import org.zirco.events.IDownloadEventsListener;
-import org.zirco.events.IWebEventListener;
 import org.zirco.model.DbAdapter;
 import org.zirco.model.DownloadItem;
 import org.zirco.model.UrlSuggestionCursorAdapter;
@@ -103,7 +102,7 @@ import android.widget.SimpleCursorAdapter.CursorToStringConverter;
 /**
  * The application main activity.
  */
-public class ZircoMain extends Activity implements IWebEventListener, IToolbarsContainer, OnTouchListener, IDownloadEventsListener {
+public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchListener, IDownloadEventsListener {
 	
 	public static ZircoMain INSTANCE = null;
 	
@@ -208,9 +207,7 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
         
         mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         
-        buildComponents();
-        
-        EventController.getInstance().addWebListener(this);
+        buildComponents();                
         
         mViewFlipper.removeAllViews();   
         
@@ -575,8 +572,8 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
      */
     private void initializeCurrentWebView() {
     	
-    	mCurrentWebView.setWebViewClient(new ZircoWebViewClient());
-    	mCurrentWebView.setOnTouchListener((OnTouchListener) this);
+    	mCurrentWebView.setWebViewClient(new ZircoWebViewClient(this));
+    	mCurrentWebView.setOnTouchListener(this);
     	
     	mCurrentWebView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
 
@@ -1007,6 +1004,22 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
     	mHideToolbarsRunnable = new HideToolbarsRunnable(this, delay);    	
     	new Thread(mHideToolbarsRunnable).start();
     }
+    
+    /**
+	 * Hide the tool bars.
+	 */
+	public void hideToolbars() {
+		if (mUrlBarVisible) {			
+			if ((!mUrlEditText.hasFocus()) &&
+					(!mToolsActionGridVisible)) {
+				
+				if (!mCurrentWebView.isLoading()) {
+					setToolbarsVisibility(false);
+				}
+			}
+		}
+		mHideToolbarsRunnable = null;
+	}
     
     /**
      * Start a runnable to update history.
@@ -1532,70 +1545,66 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		}
 	}
 	
-	@Override
-	public void onWebEvent(String event, Object data) {
+	public void onPageFinished(String url) {
+		updateUI();			
 		
-		if (event.equals(EventConstants.EVT_WEB_ON_PAGE_FINISHED)) {
-			
-			updateUI();			
-						
-			if ((Controller.getInstance().getPreferences().getBoolean(Constants.PREFERENCES_ADBLOCKER_ENABLE, true)) &&
-					(!checkInAdBlockWhiteList(mCurrentWebView.getUrl()))) {
-				mCurrentWebView.loadAdSweep();
-			}
-			
-			WebIconDatabase.getInstance().retainIconForPageUrl(mCurrentWebView.getUrl());
-			
-			new Thread(new BookmarkThumbnailUpdater(this, mCurrentWebView)).start();
-			
-			if (mUrlBarVisible) {
-				startToolbarsHideRunnable();
-			}
-			
-		} else if (event.equals(EventConstants.EVT_WEB_ON_PAGE_STARTED)) {
-			mUrlEditText.removeTextChangedListener(mUrlTextWatcher);
-			mUrlEditText.setText((CharSequence) data);
-			mUrlEditText.addTextChangedListener(mUrlTextWatcher);
-			
-			mPreviousButton.setEnabled(false);
-			mNextButton.setEnabled(false);
-			
-			updateGoButton();
-			
-			setToolbarsVisibility(true);
-			
-		} else if (event.equals(EventConstants.EVT_WEB_ON_URL_LOADING)) {
-			
-			setToolbarsVisibility(true);
-			
-		} else if (event.equals(EventConstants.EVT_VND_URL)) {
-			
-			try {
-				
-				Intent i  = new Intent(Intent.ACTION_VIEW, Uri.parse((String) data));
-				startActivity(i);
-				
-			} catch (Exception e) {
-				
-				// Notify user that the vnd url cannot be viewed.
-				new AlertDialog.Builder(this)
-				.setTitle(R.string.Main_VndErrorTitle)
-				.setMessage(String.format(getString(R.string.Main_VndErrorMessage), (String) data))
-				.setPositiveButton(android.R.string.ok,
-						new AlertDialog.OnClickListener()
-				{
-					public void onClick(DialogInterface dialog, int which) { }
-				})
-				.setCancelable(true)
-				.create()
-				.show();
-			}
-			
-		} else if (event.equals(EventConstants.EVT_MAILTO_URL)) {
-			Intent sendMail = new Intent(Intent.ACTION_VIEW, Uri.parse((String) data));
-			startActivity(sendMail);			
+		if ((Controller.getInstance().getPreferences().getBoolean(Constants.PREFERENCES_ADBLOCKER_ENABLE, true)) &&
+				(!checkInAdBlockWhiteList(mCurrentWebView.getUrl()))) {
+			mCurrentWebView.loadAdSweep();
 		}
 		
+		WebIconDatabase.getInstance().retainIconForPageUrl(mCurrentWebView.getUrl());
+		
+		new Thread(new BookmarkThumbnailUpdater(this, mCurrentWebView)).start();
+		
+		if (mUrlBarVisible) {
+			startToolbarsHideRunnable();
+		}
+	}
+	
+	public void onPageStarted(String url) {
+		mUrlEditText.removeTextChangedListener(mUrlTextWatcher);
+		mUrlEditText.setText(url);
+		mUrlEditText.addTextChangedListener(mUrlTextWatcher);
+		
+		mPreviousButton.setEnabled(false);
+		mNextButton.setEnabled(false);
+		
+		updateGoButton();
+		
+		setToolbarsVisibility(true);
+	}
+	
+	public void onUrlLoading(String url) {
+		setToolbarsVisibility(true);
+	}
+	
+	public void onMailTo(String url) {
+		Intent sendMail = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+		startActivity(sendMail);
+	}
+	
+	public void onVndUrl(String url) {
+		try {
+			
+			Intent i  = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+			startActivity(i);
+			
+		} catch (Exception e) {
+			
+			// Notify user that the vnd url cannot be viewed.
+			new AlertDialog.Builder(this)
+			.setTitle(R.string.Main_VndErrorTitle)
+			.setMessage(String.format(getString(R.string.Main_VndErrorMessage), url))
+			.setPositiveButton(android.R.string.ok,
+					new AlertDialog.OnClickListener()
+			{
+				public void onClick(DialogInterface dialog, int which) { }
+			})
+			.setCancelable(true)
+			.create()
+			.show();
+		}
 	}
 	
 	@Override
@@ -1639,22 +1648,6 @@ public class ZircoMain extends Activity implements IWebEventListener, IToolbarsC
 		}
 		
 		return super.onContextItemSelected(item);
-	}
-	
-	/**
-	 * Hide the tool bars.
-	 */
-	public void hideToolbars() {
-		if (mUrlBarVisible) {			
-			if ((!mUrlEditText.hasFocus()) &&
-					(!mToolsActionGridVisible)) {
-				
-				if (!mCurrentWebView.isLoading()) {
-					setToolbarsVisibility(false);
-				}
-			}
-		}
-		mHideToolbarsRunnable = null;
 	}
 
 	@Override

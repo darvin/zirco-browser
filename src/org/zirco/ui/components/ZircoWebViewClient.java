@@ -17,8 +17,7 @@ package org.zirco.ui.components;
 
 import org.zirco.R;
 import org.zirco.controllers.Controller;
-import org.zirco.events.EventConstants;
-import org.zirco.events.EventController;
+import org.zirco.ui.activities.ZircoMain;
 import org.zirco.utils.ApplicationUtils;
 import org.zirco.utils.Constants;
 import org.zirco.utils.UrlUtils;
@@ -36,12 +35,17 @@ import android.webkit.WebView.HitTestResult;
  */
 public class ZircoWebViewClient extends WebViewClient {
 	
+	private ZircoMain mMainActivity;
+	
+	public ZircoWebViewClient(ZircoMain mainActivity) {
+		super();
+		mMainActivity = mainActivity;
+	}
+	
 	@Override
-	public void onPageFinished(WebView view, String url) {
-			
+	public void onPageFinished(WebView view, String url) {			
 		((ZircoWebView) view).notifyPageFinished();
-		
-		EventController.getInstance().fireWebEvent(EventConstants.EVT_WEB_ON_PAGE_FINISHED, url);		
+		mMainActivity.onPageFinished(url);
 		
 		super.onPageFinished(view, url);
 	}
@@ -58,8 +62,7 @@ public class ZircoWebViewClient extends WebViewClient {
 		}
 		
 		((ZircoWebView) view).notifyPageStarted();
-		
-		EventController.getInstance().fireWebEvent(EventConstants.EVT_WEB_ON_PAGE_STARTED, url);
+		mMainActivity.onPageStarted(url);
 		
 		super.onPageStarted(view, url, favicon);
 	}
@@ -121,8 +124,7 @@ public class ZircoWebViewClient extends WebViewClient {
 	public boolean shouldOverrideUrlLoading(WebView view, String url) {
 		
 		if (url.startsWith("vnd.")) {
-			
-			EventController.getInstance().fireWebEvent(EventConstants.EVT_VND_URL, url);						
+			mMainActivity.onVndUrl(url);
 			return true;
 			
 		} else if (url.startsWith(Constants.URL_ACTION_SEARCH)) {
@@ -135,8 +137,7 @@ public class ZircoWebViewClient extends WebViewClient {
 			return true;
 			
 		} else if (view.getHitTestResult().getType() == HitTestResult.EMAIL_TYPE) {
-			
-			EventController.getInstance().fireWebEvent(EventConstants.EVT_MAILTO_URL, url);
+			mMainActivity.onMailTo(url);
 			return true;
 			
 		} else {
@@ -151,7 +152,7 @@ public class ZircoWebViewClient extends WebViewClient {
 				
 			} else {			
 				((ZircoWebView) view).resetLoadedUrl();
-				EventController.getInstance().fireWebEvent(EventConstants.EVT_WEB_ON_URL_LOADING, url);				
+				mMainActivity.onUrlLoading(url);
 				return false;
 			}
 		}
