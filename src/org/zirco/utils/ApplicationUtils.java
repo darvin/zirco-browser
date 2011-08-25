@@ -27,6 +27,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -57,6 +58,26 @@ public class ApplicationUtils {
 	private static int mFaviconSize = -1;
 	
 	private static int mImageButtonSize = -1;
+	
+	/**
+	 * Share a page.
+	 * @param activity The parent activity.
+	 * @param title The page title.
+	 * @param url The page url.
+	 */
+	public static void sharePage(Activity activity, String title, String url) {
+    	Intent shareIntent = new Intent(Intent.ACTION_SEND);
+    	
+    	shareIntent.setType("text/plain");
+    	shareIntent.putExtra(Intent.EXTRA_TEXT, url);
+    	shareIntent.putExtra(Intent.EXTRA_SUBJECT, title);
+    	
+    	try {
+    		activity.startActivity(Intent.createChooser(shareIntent, activity.getString(R.string.Main_ShareChooserTitle)));
+        } catch(android.content.ActivityNotFoundException ex) {
+            // if no app handles it, do nothing
+        }
+    }
 	
 	public static String getWeaveAuthToken(Context context) {
 		String server = PreferenceManager.getDefaultSharedPreferences(context).getString(Constants.PREFERENCE_WEAVE_SERVER, Constants.WEAVE_DEFAULT_SERVER);

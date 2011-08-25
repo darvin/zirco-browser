@@ -313,7 +313,7 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
 					navigateToHome();
 					break;
 				case 1:
-					sharePage(mCurrentWebView.getTitle(), mCurrentWebView.getUrl());
+					ApplicationUtils.sharePage(ZircoMain.this, mCurrentWebView.getTitle(), mCurrentWebView.getUrl());
 					break;
 				case 2:
 					swithToSelectAndCopyTextMode();
@@ -1402,23 +1402,6 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
 		mCurrentWebView.doOnResume();
 		super.onResume();
 	}
-	
-	/**
-	 * Share a page.
-	 * @param title The page title.
-	 * @param url The page url.
-	 */
-	private void sharePage(String title, String url) {
-    	Intent shareIntent = new Intent(Intent.ACTION_SEND);
-    	shareIntent.setType("text/plain");
-    	shareIntent.putExtra(Intent.EXTRA_TEXT, url);
-    	shareIntent.putExtra(Intent.EXTRA_SUBJECT, title);
-    	try {
-            startActivity(Intent.createChooser(shareIntent, getString(R.string.Main_ShareChooserTitle)));
-        } catch(android.content.ActivityNotFoundException ex) {
-            // if no app handles it, do nothing
-        }
-    }
 
 	/**
 	 * Show a toast alert on tab switch.
@@ -1640,7 +1623,7 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
 				return true;
 			case CONTEXT_MENU_SHARE:
 				if (b != null) {
-					sharePage("", b.getString(Constants.EXTRA_ID_URL));
+					ApplicationUtils.sharePage(this, "", b.getString(Constants.EXTRA_ID_URL));
 				}
 				return true;
 			default: return super.onContextItemSelected(item);

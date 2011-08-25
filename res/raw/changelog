@@ -1,3 +1,7 @@
+0.4.0:
+- Add "Share" context menu to bookmarks and history view.
+- Feature: Zirco can now retrieve your bookmarks from Firefox Sync. Go to preferences to start using it!
+
 0.3.9:
 - Bug fix in history view. Items are now displayed in differents categories (today, last week, last month...)
 - Add a button to the left of the url bar (where was the "Home" button) allowing to choose between differents actions (share, select text...)

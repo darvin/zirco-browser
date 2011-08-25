@@ -387,9 +387,9 @@
 	<string name="Main.MenuSharePage">Share page</string>
 	<string name="Main.ShareChooserTitle">Share via</string>
 	
-	<string name="Main.MenuShareLinkUrl">Share link url</string>
-	<string name="Main.MenuShareImageUrl">Share image url</string>
-	<string name="Main.MenuShareEmailUrl">Share email address</string>
+	<string name="Main.MenuShareLinkUrl">Share link</string>
+	<string name="Main.MenuShareImageUrl">Share image</string>
+	<string name="Main.MenuShareEmailUrl">Share email</string>
 	
 	<!-- 0.3.8 -->
 	<string name="PreferencesActivity.HideTitleBarPreferenceTitle">Hide title bars</string>

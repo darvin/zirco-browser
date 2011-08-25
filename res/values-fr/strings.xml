@@ -383,8 +383,8 @@
 	<string name="Main.MenuSharePage">Partager la page</string>
 	<string name="Main.ShareChooserTitle">Partager via</string>
 	
-	<string name="Main.MenuShareLinkUrl">Partager l\'url du lien</string>
-	<string name="Main.MenuShareImageUrl">Partager l\'url de l\'image</string>
+	<string name="Main.MenuShareLinkUrl">Partager le lien</string>
+	<string name="Main.MenuShareImageUrl">Partager le l\'image</string>
 	<string name="Main.MenuShareEmailUrl">Partager l\'adresse e-mail</string>
 	
 	<!-- 0.3.8 -->

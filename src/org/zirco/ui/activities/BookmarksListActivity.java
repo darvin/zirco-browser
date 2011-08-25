@@ -82,10 +82,11 @@ public class BookmarksListActivity extends Activity {
 	private static final int MENU_EXPORT_BOOKMARKS = Menu.FIRST + 3;
 	private static final int MENU_CLEAR_BOOKMARKS = Menu.FIRST + 4;
 	
-	private static final int MENU_OPEN_IN_TAB = Menu.FIRST + 10;
-    private static final int MENU_EDIT_BOOKMARK = Menu.FIRST + 11;
-    private static final int MENU_COPY_URL = Menu.FIRST + 12;
-    private static final int MENU_DELETE_BOOKMARK = Menu.FIRST + 13;
+	private static final int MENU_OPEN_IN_TAB = Menu.FIRST + 10;    
+    private static final int MENU_COPY_URL = Menu.FIRST + 11;
+    private static final int MENU_SHARE = Menu.FIRST + 12;
+    private static final int MENU_EDIT_BOOKMARK = Menu.FIRST + 13;
+    private static final int MENU_DELETE_BOOKMARK = Menu.FIRST + 14;
     
     private static final int ACTIVITY_ADD_BOOKMARK = 0;
     private static final int ACTIVITY_EDIT_BOOKMARK = 1;    
@@ -255,9 +256,10 @@ public class BookmarksListActivity extends Activity {
 			menu.setHeaderTitle(mDbAdapter.getBookmarkById(id)[0]);
 		}
 		
-		menu.add(0, MENU_OPEN_IN_TAB, 0, R.string.BookmarksListActivity_MenuOpenInTab);
-        menu.add(0, MENU_EDIT_BOOKMARK, 0, R.string.BookmarksListActivity_MenuEditBookmark);
+		menu.add(0, MENU_OPEN_IN_TAB, 0, R.string.BookmarksListActivity_MenuOpenInTab);        
         menu.add(0, MENU_COPY_URL, 0, R.string.BookmarksHistoryActivity_MenuCopyLinkUrl);
+        menu.add(0, MENU_SHARE, 0, R.string.Main_MenuShareLinkUrl);
+        menu.add(0, MENU_EDIT_BOOKMARK, 0, R.string.BookmarksListActivity_MenuEditBookmark);
         menu.add(0, MENU_DELETE_BOOKMARK, 0, R.string.BookmarksListActivity_MenuDeleteBookmark);
     }
     
@@ -293,6 +295,11 @@ public class BookmarksListActivity extends Activity {
             
     	case MENU_COPY_URL:
     		ApplicationUtils.copyTextToClipboard(this,  mDbAdapter.getBookmarkById(info.id)[1], getString(R.string.Commons_UrlCopyToastMessage));
+    		return true;
+    		
+    	case MENU_SHARE:
+    		String[] data = mDbAdapter.getBookmarkById(info.id);
+    		ApplicationUtils.sharePage(this, data[0], data[1]);
     		return true;
     		
     	case MENU_DELETE_BOOKMARK:

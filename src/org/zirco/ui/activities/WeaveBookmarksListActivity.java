@@ -44,9 +44,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -55,12 +57,17 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class WeaveBookmarksListActivity extends Activity implements ISyncListener {
 	
 	private static final int MENU_SYNC = Menu.FIRST;
 	private static final int MENU_CLEAR = Menu.FIRST + 1;
+	
+	private static final int MENU_OPEN_IN_TAB = Menu.FIRST + 10;
+    private static final int MENU_COPY_URL = Menu.FIRST + 11;
+    private static final int MENU_SHARE = Menu.FIRST + 12;
 	
 	private static final String ROOT_FOLDER = "places";
 	
@@ -167,6 +174,8 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
         mDbAdapter = new DbAdapter(this);
         mDbAdapter.open();
         
+        registerForContextMenu(mListView);
+        
         fillData();
 	}
 	
@@ -203,6 +212,55 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 			doClear();
 			return true;
 		default: return super.onMenuItemSelected(featureId, item);
+		}
+	}
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		
+		long id = ((AdapterContextMenuInfo) menuInfo).id;
+		if (id != -1) {
+			WeaveBookmarkItem item = mDbAdapter.getWeaveBookmarkById(id);
+			if (!item.isFolder()) {
+				menu.setHeaderTitle(item.getTitle());
+				
+				menu.add(0, MENU_OPEN_IN_TAB, 0, R.string.BookmarksListActivity_MenuOpenInTab);
+				menu.add(0, MENU_COPY_URL, 0, R.string.BookmarksHistoryActivity_MenuCopyLinkUrl);
+				menu.add(0, MENU_SHARE, 0, R.string.Main_MenuShareLinkUrl);
+			}
+		}				
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+		
+		switch (item.getItemId()) {
+		case MENU_OPEN_IN_TAB:    	
+            Intent i = new Intent();
+            i.putExtra(Constants.EXTRA_ID_NEW_TAB, true);
+            i.putExtra(Constants.EXTRA_ID_URL, mDbAdapter.getWeaveBookmarkById(info.id).getUrl());
+            
+            if (getParent() != null) {
+            	getParent().setResult(RESULT_OK, i);
+            } else {
+            	setResult(RESULT_OK, i);            
+            }
+            
+            finish();
+            return true;
+            
+		case MENU_COPY_URL:
+    		ApplicationUtils.copyTextToClipboard(this,  mDbAdapter.getWeaveBookmarkById(info.id).getUrl(), getString(R.string.Commons_UrlCopyToastMessage));
+    		return true;
+    		
+		case MENU_SHARE:
+			WeaveBookmarkItem bookmarkItem = mDbAdapter.getWeaveBookmarkById(info.id);
+			ApplicationUtils.sharePage(this, bookmarkItem.getTitle(), bookmarkItem.getUrl());
+			return true;
+    		
+		default: return super.onContextItemSelected(item);
 		}
 	}
 	
