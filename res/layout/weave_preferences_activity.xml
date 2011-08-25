@@ -11,6 +11,10 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
 	android:key="WeavePreferencesScreen" android:title="@string/PreferencesActivity.WeavePreferenceTitle"
 	android:summary="@string/PreferencesActivity.WeavePreferenceSummary">
+	<Preference
+		android:title="@string/PreferencesActivity.WeaveServerPreferenceTitle"
+		android:summary="@string/PreferencesActivity.WeaveServerPreferenceSummary"
+		android:key="PREFERENCE_WEAVE_SERVER" />
 	<EditTextPreference android:name="@string/PreferencesActivity.WeaveUsernameTitle"
 		android:summary="@string/PreferencesActivity.WeaveUsernameSummary"
 		android:title="@string/PreferencesActivity.WeaveUsernameTitle"

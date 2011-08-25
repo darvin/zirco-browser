@@ -28,6 +28,7 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * @author Patrick Woodworth
@@ -60,7 +61,7 @@ public class WeaveUtil {
   public static String toModifiedTimeString(Date modified) {
     long time = modified.getTime();
     double timed = time / 1000.0;
-    String retval = String.format("%.2f", timed);
+    String retval = String.format(Locale.ENGLISH, "%.2f", timed);      
 //    Dbg.debug("TIME: " + retval);
     return retval;
   }

@@ -59,16 +59,18 @@ public class ApplicationUtils {
 	private static int mImageButtonSize = -1;
 	
 	public static String getWeaveAuthToken(Context context) {
+		String server = PreferenceManager.getDefaultSharedPreferences(context).getString(Constants.PREFERENCE_WEAVE_SERVER, Constants.WEAVE_DEFAULT_SERVER);
     	String userName = PreferenceManager.getDefaultSharedPreferences(context).getString(Constants.PREFERENCE_WEAVE_USERNAME, null);
     	String password = PreferenceManager.getDefaultSharedPreferences(context).getString(Constants.PREFERENCE_WEAVE_PASSWORD, null);
     	String key = PreferenceManager.getDefaultSharedPreferences(context).getString(Constants.PREFERENCE_WEAVE_KEY, null);
     	
-    	boolean ok = (userName != null) && (userName.length() > 0) &&
+    	boolean ok = (server != null) && (server.length() > 0) && (UrlUtils.isUrl(server)) && 
+    		(userName != null) && (userName.length() > 0) &&
     		(password != null) && (password.length() > 0) &&
     		(key != null) && (key.length() > 0);
     	
     	if (ok) {
-    		return String.format(Constants.WEAVE_AUTH_TOKEN_SCHEME, key, password, userName);
+    		return String.format(Constants.WEAVE_AUTH_TOKEN_SCHEME, key, password, userName, server);
     	} else {
     		return null;
     	}

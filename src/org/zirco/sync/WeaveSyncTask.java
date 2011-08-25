@@ -85,6 +85,7 @@ public class WeaveSyncTask extends AsyncTask<WeaveAccountInfo, Integer, Throwabl
 				QueryParams parms = null;
 				if (syncByDelta) {
 					parms = new QueryParams();
+					parms.setFull(false);
 					parms.setNewer(new Date(lastSyncDate));
 				} else {
 					mDbAdapter.clearWeaveBookmarks();

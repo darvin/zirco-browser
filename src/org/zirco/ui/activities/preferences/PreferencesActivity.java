@@ -118,6 +118,15 @@ public class PreferencesActivity extends PreferenceActivity {
 			}
 		});
 		
+		Preference weaveServerPref = (Preference) findPreference(Constants.PREFERENCE_WEAVE_SERVER);
+		weaveServerPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				openWeaveServerActivity();
+				return true;
+			}
+		});
+		
 		Preference aboutPref = (Preference) findPreference("About");
 		aboutPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
@@ -223,6 +232,11 @@ public class PreferencesActivity extends PreferenceActivity {
 	 */
 	private void openHomepageActivity() {
 		Intent i = new Intent(this, HomepagePreferenceActivity.class);
+		startActivity(i);
+	}
+	
+	private void openWeaveServerActivity() {
+		Intent i = new Intent(this, WeaveServerPreferenceActivity.class);
 		startActivity(i);
 	}
 	

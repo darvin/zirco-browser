@@ -115,6 +115,10 @@
 				android:summary="@string/PreferencesActivity.UseWeavePreferenceSummary"
 				android:defaultValue="false"				
 				android:key="PREFERENCE_USE_WEAVE" />
+			<Preference
+				android:title="@string/PreferencesActivity.WeaveServerPreferenceTitle"
+				android:summary="@string/PreferencesActivity.WeaveServerPreferenceSummary"
+				android:key="PREFERENCE_WEAVE_SERVER" />
 			<EditTextPreference android:name="@string/PreferencesActivity.WeaveUsernameTitle"
 				android:summary="@string/PreferencesActivity.WeaveUsernameSummary"
 				android:title="@string/PreferencesActivity.WeaveUsernameTitle"
