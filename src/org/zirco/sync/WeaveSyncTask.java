@@ -54,6 +54,8 @@ public class WeaveSyncTask extends AsyncTask<WeaveAccountInfo, Integer, Throwabl
 	private ISyncListener mListener;
 	private DbAdapter mDbAdapter;
 	
+	private boolean mFullSync = false;
+	
 	public WeaveSyncTask(Context context, ISyncListener listener) {
 		mContext = context;
 		mListener = listener;
@@ -78,12 +80,12 @@ public class WeaveSyncTask extends AsyncTask<WeaveAccountInfo, Integer, Throwabl
 			
 			if (lastModifiedDate > lastSyncDate) {		
 				
-				boolean syncByDelta = lastSyncDate > 0;								
+				mFullSync = lastSyncDate <= 0;
 				
 				QueryResult<List<WeaveBasicObject>> queryResult;
 				
 				QueryParams parms = null;
-				if (syncByDelta) {
+				if (!mFullSync) {
 					parms = new QueryParams();
 					parms.setFull(false);
 					parms.setNewer(new Date(lastSyncDate));
@@ -94,10 +96,10 @@ public class WeaveSyncTask extends AsyncTask<WeaveAccountInfo, Integer, Throwabl
 				queryResult = getCollection(userWeave, WEAVE_PATH, parms);
 				List<WeaveBasicObject> wboList = queryResult.getValue();
 
-				if (syncByDelta) {
-					doSyncByDelta(accountInfo, userWeave, wboList, db);
-				} else {
+				if (mFullSync) {
 					doSync(accountInfo, userWeave, wboList, db);
+				} else {
+					doSyncByDelta(accountInfo, userWeave, wboList, db);
 				}
 			}
 			
@@ -294,6 +296,10 @@ public class WeaveSyncTask extends AsyncTask<WeaveAccountInfo, Integer, Throwabl
 		} catch (JSONException e) {
 			throw new WeaveException(e);
 		}
+	}
+	
+	public boolean isFullSync() {
+		return mFullSync;
 	}
 
 }

@@ -365,10 +365,12 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 		mProgressDialog.dismiss();	
 		fillData();
 		
-		// Reset last sync date.
-		Editor lastSyncDateEditor = PreferenceManager.getDefaultSharedPreferences(this).edit();
-		lastSyncDateEditor.putLong(Constants.PREFERENCE_WEAVE_LAST_SYNC_DATE, -1);
-		lastSyncDateEditor.commit();
+		if (mSyncTask.isFullSync()) {
+			// Reset last sync date is this was a full sync.
+			Editor lastSyncDateEditor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+			lastSyncDateEditor.putLong(Constants.PREFERENCE_WEAVE_LAST_SYNC_DATE, -1);
+			lastSyncDateEditor.commit();
+		}
 	}
 
 	@Override
