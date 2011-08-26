@@ -474,4 +474,6 @@
         <item>@string/WeaveServerPreferenceActivity.CustomServer</item>        
     </string-array>
     
+    <string name="Main.FileChooserPrompt">Choose file for upload</string>
+    
 </resources>

@@ -81,6 +81,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.webkit.DownloadListener;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebIconDatabase;
 import android.webkit.WebView;
@@ -124,6 +125,7 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
 	
 	private static final int OPEN_BOOKMARKS_HISTORY_ACTIVITY = 0;
 	private static final int OPEN_DOWNLOADS_ACTIVITY = 1;
+	private static final int OPEN_FILE_CHOOSER_ACTIVITY = 2;
 	
 	protected LayoutInflater mInflater = null;
 	
@@ -170,6 +172,8 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
 	private SwitchTabsMethod mSwitchTabsMethod = SwitchTabsMethod.BOTH;
 	
 	private QuickActionGrid mToolsActionGrid;
+	
+	private ValueCallback<Uri> mUploadMessage;
 	
 	private enum SwitchTabsMethod {
 		BUTTONS,
@@ -659,6 +663,20 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
     	
 		final Activity activity = this;
 		mCurrentWebView.setWebChromeClient(new WebChromeClient() {
+			
+			@SuppressWarnings("unused")
+			// This is an undocumented method, it _is_ used, whatever Eclipse may think :)
+			// Used to show a file chooser dialog.
+			public void openFileChooser(ValueCallback<Uri> uploadMsg) {
+				mUploadMessage = uploadMsg;
+				Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+				i.addCategory(Intent.CATEGORY_OPENABLE);
+				i.setType("*/*");
+				ZircoMain.this.startActivityForResult(
+						Intent.createChooser(i, ZircoMain.this.getString(R.string.Main_FileChooserPrompt)),
+						OPEN_FILE_CHOOSER_ACTIVITY);
+			}
+			
 			@Override
 			public void onProgressChanged(WebView view, int newProgress) {
 				((ZircoWebView) view).setProgress(newProgress);				
@@ -1388,6 +1406,14 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
         			navigateToUrl(b.getString(Constants.EXTRA_ID_URL));
         		}
         	}
+        } else if (requestCode == OPEN_FILE_CHOOSER_ACTIVITY) {
+        	if (mUploadMessage == null) {
+        		return;
+        	}
+        	
+        	Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
+            mUploadMessage.onReceiveValue(result);
+            mUploadMessage = null;
         }
 	}
 	
