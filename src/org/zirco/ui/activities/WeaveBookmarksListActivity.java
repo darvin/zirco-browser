@@ -45,6 +45,7 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -107,12 +108,7 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
         mNavigationBack.setOnClickListener(new OnClickListener() {		
 			@Override
 			public void onClick(View v) {
-				mNavigationList.remove(mNavigationList.size() - 1);
-				if (mNavigationList.size() == 0) {
-					mNavigationList.add(new WeaveBookmarkItem(getResources().getString(R.string.WeaveBookmarksListActivity_WeaveRootFolder), null, ROOT_FOLDER, true));
-				}
-				
-				fillData();	
+				doNavigationBack();	
 			}
 		});
         
@@ -264,6 +260,20 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 		}
 	}
 	
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_BACK:
+			if (mNavigationList.size() > 1) {
+				doNavigationBack();
+				return true;
+			} else {
+				return super.onKeyUp(keyCode, event);
+			}
+		default: return super.onKeyUp(keyCode, event);
+		}
+	}
+	
 	private void doSync() {
 		String authToken = ApplicationUtils.getWeaveAuthToken(this);
 		
@@ -310,6 +320,15 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 		Editor lastSyncDateEditor = PreferenceManager.getDefaultSharedPreferences(this).edit();
 		lastSyncDateEditor.putLong(Constants.PREFERENCE_WEAVE_LAST_SYNC_DATE, -1);
 		lastSyncDateEditor.commit();
+	}
+	
+	private void doNavigationBack() {
+		mNavigationList.remove(mNavigationList.size() - 1);
+		if (mNavigationList.size() == 0) {
+			mNavigationList.add(new WeaveBookmarkItem(getResources().getString(R.string.WeaveBookmarksListActivity_WeaveRootFolder), null, ROOT_FOLDER, true));
+		}
+		
+		fillData();
 	}
 	
 	private void fillData() {
