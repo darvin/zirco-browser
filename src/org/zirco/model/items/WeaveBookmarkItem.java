@@ -1,4 +1,4 @@
-package org.zirco.model;
+package org.zirco.model.items;
 
 public class WeaveBookmarkItem {
 	

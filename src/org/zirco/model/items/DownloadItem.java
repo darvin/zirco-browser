@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  */
 
-package org.zirco.model;
+package org.zirco.model.items;
 
 import java.util.Random;
 

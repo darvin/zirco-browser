@@ -25,7 +25,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
-import org.zirco.model.DownloadItem;
+import org.zirco.model.items.DownloadItem;
 import org.zirco.utils.IOUtils;
 
 import android.os.Handler;

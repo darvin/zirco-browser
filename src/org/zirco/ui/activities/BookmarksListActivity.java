@@ -33,8 +33,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import org.zirco.R;
-import org.zirco.model.BookmarksCursorAdapter;
 import org.zirco.model.DbAdapter;
+import org.zirco.model.adapters.BookmarksCursorAdapter;
+import org.zirco.model.items.BookmarkItem;
+import org.zirco.providers.BookmarksProviderWrapper;
 import org.zirco.utils.ApplicationUtils;
 import org.zirco.utils.BookmarksUtils;
 import org.zirco.utils.Constants;
@@ -54,6 +56,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.provider.Browser;
 import android.provider.Browser.BookmarkColumns;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -91,7 +94,7 @@ public class BookmarksListActivity extends Activity {
     private static final int ACTIVITY_ADD_BOOKMARK = 0;
     private static final int ACTIVITY_EDIT_BOOKMARK = 1;    
 	
-	private DbAdapter mDbAdapter;
+	//private DbAdapter mDbAdapter;
 	
 	private Cursor mCursor;
 	private BookmarksCursorAdapter mCursorAdapter;
@@ -118,7 +121,15 @@ public class BookmarksListActivity extends Activity {
 			public void onItemClick(AdapterView<?> l, View v, int position, long id) {
 				Intent result = new Intent();
 		        result.putExtra(Constants.EXTRA_ID_NEW_TAB, false);
-		        result.putExtra(Constants.EXTRA_ID_URL,  mDbAdapter.getBookmarkById(id)[1]);
+		        
+		        BookmarkItem item = BookmarksProviderWrapper.getStockBookmarkById(getContentResolver(), id);
+		        if (item != null) {
+		        	result.putExtra(Constants.EXTRA_ID_URL,  item.getUrl());
+		        } else {
+		        	result.putExtra(Constants.EXTRA_ID_URL,
+		        			PreferenceManager.getDefaultSharedPreferences(BookmarksListActivity.this).getString(Constants.PREFERENCES_GENERAL_HOME_PAGE, Constants.URL_ABOUT_START));
+		        }
+		        //result.putExtra(Constants.EXTRA_ID_URL,  mDbAdapter.getBookmarkById(id)[1]);
 		        
 		        if (getParent() != null) {
 		        	getParent().setResult(RESULT_OK, result);
@@ -130,8 +141,8 @@ public class BookmarksListActivity extends Activity {
 			}
 		});
         
-        mDbAdapter = new DbAdapter(this);
-        mDbAdapter.open();
+        //mDbAdapter = new DbAdapter(this);
+        //mDbAdapter.open();
 
         registerForContextMenu(mList);
         
@@ -140,7 +151,7 @@ public class BookmarksListActivity extends Activity {
     
     @Override
 	protected void onDestroy() {
-		mDbAdapter.close();
+		//mDbAdapter.close();
 		mCursor.close();
 		super.onDestroy();
 	}
@@ -149,10 +160,13 @@ public class BookmarksListActivity extends Activity {
      * Fill the bookmark to the list UI. 
      */
 	private void fillData() {
-    	mCursor = mDbAdapter.fetchBookmarks();
+    	//mCursor = mDbAdapter.fetchBookmarks();
+		mCursor = BookmarksProviderWrapper.getStockBookmarks(getContentResolver(),
+				PreferenceManager.getDefaultSharedPreferences(this).getInt(Constants.PREFERENCES_BOOKMARKS_SORT_MODE, 0));
     	startManagingCursor(mCursor);
     	
-    	String[] from = new String[] {DbAdapter.BOOKMARKS_TITLE, DbAdapter.BOOKMARKS_URL};
+    	//String[] from = new String[] {DbAdapter.BOOKMARKS_TITLE, DbAdapter.BOOKMARKS_URL};
+    	String[] from = new String[] { Browser.BookmarkColumns.TITLE, Browser.BookmarkColumns.URL};
     	int[] to = new int[] {R.id.BookmarkRow_Title, R.id.BookmarkRow_Url};
     	
     	mCursorAdapter = new BookmarksCursorAdapter(this, R.layout.bookmarkrow, mCursor, from, to);
@@ -253,7 +267,11 @@ public class BookmarksListActivity extends Activity {
 		
 		long id = ((AdapterContextMenuInfo) menuInfo).id;
 		if (id != -1) {
-			menu.setHeaderTitle(mDbAdapter.getBookmarkById(id)[0]);
+			BookmarkItem item = BookmarksProviderWrapper.getStockBookmarkById(getContentResolver(), id);
+			if (item != null) {
+				menu.setHeaderTitle(item.getTitle());
+			}
+			//menu.setHeaderTitle(mDbAdapter.getBookmarkById(id)[0]);
 		}
 		
 		menu.add(0, MENU_OPEN_IN_TAB, 0, R.string.BookmarksListActivity_MenuOpenInTab);        
@@ -268,12 +286,20 @@ public class BookmarksListActivity extends Activity {
     	AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
     	    	
     	Intent i;
+    	BookmarkItem bookmarkItem = BookmarksProviderWrapper.getStockBookmarkById(getContentResolver(), info.id);
     	
     	switch (item.getItemId()) {
     	case MENU_OPEN_IN_TAB:    	
             i = new Intent();
             i.putExtra(Constants.EXTRA_ID_NEW_TAB, true);
-            i.putExtra(Constants.EXTRA_ID_URL, mDbAdapter.getBookmarkById(info.id)[1]);
+            //i.putExtra(Constants.EXTRA_ID_URL, mDbAdapter.getBookmarkById(info.id)[1]);
+            
+	        if (bookmarkItem != null) {
+	        	i.putExtra(Constants.EXTRA_ID_URL,  bookmarkItem.getUrl());
+	        } else {
+	        	i.putExtra(Constants.EXTRA_ID_URL,
+	        			PreferenceManager.getDefaultSharedPreferences(BookmarksListActivity.this).getString(Constants.PREFERENCES_GENERAL_HOME_PAGE, Constants.URL_ABOUT_START));
+	        }
             
             if (getParent() != null) {
             	getParent().setResult(RESULT_OK, i);
@@ -285,25 +311,33 @@ public class BookmarksListActivity extends Activity {
             return true;
             
     	case MENU_EDIT_BOOKMARK:    		
-    		i = new Intent(this, EditBookmarkActivity.class);
-    		i.putExtra(Constants.EXTRA_ID_BOOKMARK_ID, info.id);
-            i.putExtra(Constants.EXTRA_ID_BOOKMARK_TITLE, mDbAdapter.getBookmarkById(info.id)[0]);
-            i.putExtra(Constants.EXTRA_ID_BOOKMARK_URL, mDbAdapter.getBookmarkById(info.id)[1]);
-            
-            startActivityForResult(i, ACTIVITY_EDIT_BOOKMARK);
+    		if (bookmarkItem != null) {
+    			i = new Intent(this, EditBookmarkActivity.class);
+    			i.putExtra(Constants.EXTRA_ID_BOOKMARK_ID, info.id);
+    			//i.putExtra(Constants.EXTRA_ID_BOOKMARK_TITLE, mDbAdapter.getBookmarkById(info.id)[0]);
+    			//i.putExtra(Constants.EXTRA_ID_BOOKMARK_URL, mDbAdapter.getBookmarkById(info.id)[1]);
+    			i.putExtra(Constants.EXTRA_ID_BOOKMARK_TITLE, bookmarkItem.getTitle());
+    			i.putExtra(Constants.EXTRA_ID_BOOKMARK_URL, bookmarkItem.getUrl());
+
+    			startActivityForResult(i, ACTIVITY_EDIT_BOOKMARK);
+    		}
             return true;
             
     	case MENU_COPY_URL:
-    		ApplicationUtils.copyTextToClipboard(this,  mDbAdapter.getBookmarkById(info.id)[1], getString(R.string.Commons_UrlCopyToastMessage));
+    		if (bookmarkItem != null) {
+    			ApplicationUtils.copyTextToClipboard(this,  bookmarkItem.getUrl(), getString(R.string.Commons_UrlCopyToastMessage));
+    		}
     		return true;
     		
     	case MENU_SHARE:
-    		String[] data = mDbAdapter.getBookmarkById(info.id);
-    		ApplicationUtils.sharePage(this, data[0], data[1]);
+    		if (bookmarkItem != null) {
+    			ApplicationUtils.sharePage(this, bookmarkItem.getTitle(), bookmarkItem.getUrl());
+    		}
     		return true;
     		
     	case MENU_DELETE_BOOKMARK:
-    		mDbAdapter.deleteBookmark(info.id);
+    		//mDbAdapter.deleteBookmark(info.id);
+    		BookmarksProviderWrapper.deleteStockBookmark(getContentResolver(), info.id);
     		fillData();
     		return true;
     	default: return super.onContextItemSelected(item);
@@ -549,7 +583,8 @@ public class BookmarksListActivity extends Activity {
 	    				title = cursor.getString(cursor.getColumnIndex(BookmarkColumns.TITLE));
 	    				url = cursor.getString(cursor.getColumnIndex(BookmarkColumns.URL));
 	    				
-	    				mDbAdapter.addBookmark(title, url);
+	    				// TODO: implement this
+	    				//mDbAdapter.addBookmark(title, url);
 	    				
 	    			} while (cursor.moveToNext());	    				    			
 	    		}
@@ -678,7 +713,8 @@ public class BookmarksListActivity extends Activity {
 									creationDate = DateUtils.getNow(mContext);
 								}
 								
-								mDbAdapter.addBookmark(title, url, creationDate, count);								
+								// TODO: implement this.
+								//mDbAdapter.addBookmark(title, url, creationDate, count);								
 							}
 							
 						}
@@ -848,7 +884,8 @@ public class BookmarksListActivity extends Activity {
     	
 		@Override
 		public void run() {
-			mDbAdapter.clearBookmarks();
+			// TODO: check this
+			//mDbAdapter.clearBookmarks();
 	    	handler.sendEmptyMessage(0);
 		}
 		

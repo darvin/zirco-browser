@@ -23,10 +23,10 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.emergent.android.weave.client.WeaveAccountInfo;
 import org.zirco.R;
 import org.zirco.model.DbAdapter;
-import org.zirco.model.WeaveBookmarkItem;
-import org.zirco.model.WeaveBookmarksCursorAdapter;
-import org.zirco.providers.WeaveContentProviderWrapper;
-import org.zirco.providers.WeaveColumn.WeaveColumns;
+import org.zirco.model.adapters.WeaveBookmarksCursorAdapter;
+import org.zirco.model.items.WeaveBookmarkItem;
+import org.zirco.providers.BookmarksProviderWrapper;
+import org.zirco.providers.WeaveColumns;
 import org.zirco.sync.ISyncListener;
 import org.zirco.sync.WeaveSyncTask;
 import org.zirco.ui.activities.preferences.WeavePreferencesActivity;
@@ -118,7 +118,7 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-				WeaveBookmarkItem selectedItem = WeaveContentProviderWrapper.getWeaveBookmarkById(getContentResolver(), id);
+				WeaveBookmarkItem selectedItem = BookmarksProviderWrapper.getWeaveBookmarkById(getContentResolver(), id);
 
 				if (selectedItem != null) {
 					if (selectedItem.isFolder()) {		
@@ -219,7 +219,7 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 		
 		long id = ((AdapterContextMenuInfo) menuInfo).id;
 		if (id != -1) {
-			WeaveBookmarkItem item = WeaveContentProviderWrapper.getWeaveBookmarkById(getContentResolver(), id);
+			WeaveBookmarkItem item = BookmarksProviderWrapper.getWeaveBookmarkById(getContentResolver(), id);
 			if (!item.isFolder()) {
 				menu.setHeaderTitle(item.getTitle());
 				
@@ -234,7 +234,7 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 		
-		WeaveBookmarkItem bookmarkItem = WeaveContentProviderWrapper.getWeaveBookmarkById(getContentResolver(), info.id);
+		WeaveBookmarkItem bookmarkItem = BookmarksProviderWrapper.getWeaveBookmarkById(getContentResolver(), info.id);
 		
 		switch (item.getItemId()) {
 		case MENU_OPEN_IN_TAB:    	
@@ -339,7 +339,7 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 		String[] from = { WeaveColumns.WEAVE_BOOKMARKS_TITLE, WeaveColumns.WEAVE_BOOKMARKS_URL };
 		int[] to = { R.id.BookmarkRow_Title, R.id.BookmarkRow_Url };
 		
-		mCursor = WeaveContentProviderWrapper.getWeaveBookmarksByParentId(getContentResolver(), mNavigationList.get(mNavigationList.size() - 1).getWeaveId());
+		mCursor = BookmarksProviderWrapper.getWeaveBookmarksByParentId(getContentResolver(), mNavigationList.get(mNavigationList.size() - 1).getWeaveId());
 		
 		ListAdapter adapter = new WeaveBookmarksCursorAdapter(this,
 				R.layout.weave_bookmark_row,
@@ -428,7 +428,7 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 		
 		@Override
 		public void run() {
-			WeaveContentProviderWrapper.clearWeaveBookmarks(getContentResolver());
+			BookmarksProviderWrapper.clearWeaveBookmarks(getContentResolver());
 			
 			mHandler.sendEmptyMessage(0);
 		}

@@ -20,8 +20,8 @@ import org.zirco.controllers.Controller;
 import org.zirco.events.EventConstants;
 import org.zirco.events.EventController;
 import org.zirco.events.IDownloadEventsListener;
-import org.zirco.model.DownloadItem;
-import org.zirco.model.DownloadListAdapter;
+import org.zirco.model.adapters.DownloadListAdapter;
+import org.zirco.model.items.DownloadItem;
 
 import android.app.ListActivity;
 import android.os.Bundle;

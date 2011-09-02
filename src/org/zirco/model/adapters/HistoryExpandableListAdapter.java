@@ -1,25 +1,13 @@
-/*
- * Zirco Browser for Android
- * 
- * Copyright (C) 2010 - 2011 J. Devauchelle and contributors.
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 3 as published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- */
-
-package org.zirco.model;
+package org.zirco.model.adapters;
 
 import org.zirco.R;
-import org.zirco.utils.DateUtils;
+import org.zirco.model.items.HistoryItem;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.provider.BaseColumns;
+import android.provider.Browser;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +15,7 @@ import android.view.ViewGroup;
 import android.webkit.DateSorter;
 import android.widget.AbsListView;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -37,7 +26,7 @@ import android.widget.TextView;
  * http://grepcode.com/file/repository.grepcode.com/java/ext/com.google.android/android-apps/2.2_r1.1/com/android/browser/DateSortedExpandableListAdapter.java/?v=source
  */
 public class HistoryExpandableListAdapter extends BaseExpandableListAdapter {
-	
+
 	private LayoutInflater mInflater = null;
 	
 	private int[] mItemMap;
@@ -53,14 +42,15 @@ public class HistoryExpandableListAdapter extends BaseExpandableListAdapter {
 	 * Constructor.
 	 * @param context The current context.
 	 * @param cursor The data cursor.
+	 * @param dateIndex The date index ?
 	 */
-	public HistoryExpandableListAdapter(Context context, Cursor cursor) {
+	public HistoryExpandableListAdapter(Context context, Cursor cursor, int dateIndex) {
 		mContext = context;
 		mCursor = cursor;
-		mDateIndex = cursor.getColumnIndexOrThrow(DbAdapter.HISTORY_LAST_VISITED_DATE);
+		mDateIndex = dateIndex;
 		
 		mDateSorter = new DateSorter(mContext);
-		mIdIndex = cursor.getColumnIndexOrThrow(DbAdapter.HISTORY_ROWID);
+		mIdIndex = cursor.getColumnIndexOrThrow(BaseColumns._ID);
 		
 		mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
@@ -81,9 +71,7 @@ public class HistoryExpandableListAdapter extends BaseExpandableListAdapter {
         int dateIndex = -1;
         if (mCursor.moveToFirst() && mCursor.getCount() > 0) {
             while (!mCursor.isAfterLast()) {
-            	
-                long date = DateUtils.convertFromDatabase(mContext, mCursor.getString(mDateIndex)).getTime();
-                
+                long date = getLong(mDateIndex);
                 int index = mDateSorter.getIndex(date);
                 if (index > dateIndex) {
                     mNumberOfBins++;
@@ -111,7 +99,7 @@ public class HistoryExpandableListAdapter extends BaseExpandableListAdapter {
 	 */
 	private long getLong(int cursorIndex) {
         return mCursor.getLong(cursorIndex);
-    }
+    }	
 	
 	/**
      * Translates from a group position in the ExpandableList to a bin.  This is
@@ -184,18 +172,19 @@ public class HistoryExpandableListAdapter extends BaseExpandableListAdapter {
 	 * @return The created view.
 	 */
 	private View getCustomChildView() {
-		LinearLayout view = (LinearLayout) mInflater.inflate(R.layout.historyrow, null, false);
+		LinearLayout view = (LinearLayout) mInflater.inflate(R.layout.history_row, null, false);
 		
 		return view;
 	}
-
+	
 	@Override
 	public Object getChild(int groupPosition, int childPosition) {
 		moveCursorToChildPosition(groupPosition, childPosition);
-		
-		return new HistoryItem(mCursor.getLong(mCursor.getColumnIndex(DbAdapter.HISTORY_ROWID)),
-				mCursor.getString(mCursor.getColumnIndex(DbAdapter.HISTORY_TITLE)),
-				mCursor.getString(mCursor.getColumnIndex(DbAdapter.HISTORY_URL)));
+
+		return new HistoryItem(mCursor.getLong(Browser.HISTORY_PROJECTION_ID_INDEX),
+				mCursor.getString(Browser.HISTORY_PROJECTION_TITLE_INDEX),
+				mCursor.getString(Browser.HISTORY_PROJECTION_URL_INDEX),
+				mCursor.getBlob(Browser.HISTORY_PROJECTION_FAVICON_INDEX));
 	}
 
 	@Override
@@ -217,6 +206,14 @@ public class HistoryExpandableListAdapter extends BaseExpandableListAdapter {
 		
 		TextView urlView = (TextView) view.findViewById(R.id.HistoryRow_Url);		 					
 		urlView.setText(item.getUrl());
+		
+		ImageView faviconView = (ImageView) view.findViewById(R.id.HistoryRow_Thumbnail);
+		Bitmap favicon = item.getFavicon();
+		if (favicon != null) {
+			faviconView.setImageBitmap(item.getFavicon());
+		} else {
+			faviconView.setImageResource(R.drawable.fav_icn_unknown);
+		}
         
         return view;
 	}
@@ -228,6 +225,7 @@ public class HistoryExpandableListAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public Object getGroup(int groupPosition) {
+		
 		int binIndex = groupPositionToBin(groupPosition);
 		
 		switch (binIndex) {
@@ -265,5 +263,44 @@ public class HistoryExpandableListAdapter extends BaseExpandableListAdapter {
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
 		return true;
 	}
+	
+	/**
+     * Determine which group an item belongs to.
+     * @param childId ID of the child view in question.
+     * @return int Group position of the containing group.
+     */
+	/*
+	private int groupFromChildId(long childId) {
+        int group = -1;
+        for (mCursor.moveToFirst(); !mCursor.isAfterLast();
+                mCursor.moveToNext()) {
+            if (getLong(mIdIndex) == childId) {
+                int bin = mDateSorter.getIndex(getLong(mDateIndex));
+                // bin is the same as the group if the number of bins is the
+                // same as DateSorter
+                if (DateSorter.DAY_COUNT == mNumberOfBins) return bin;
+                // There are some empty bins.  Find the corresponding group.
+                group = 0;
+                for (int i = 0; i < bin; i++) {
+                    if (mItemMap[i] != 0) group++;
+                }
+                break;
+            }
+        }
+        return group;
+    }
+
+	private boolean moveCursorToPackedChildPosition(long packedPosition) {
+    	if (ExpandableListView.getPackedPositionType(packedPosition) !=
+    		ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+    		return false;
+    	}
+    	int groupPosition = ExpandableListView.getPackedPositionGroup(
+    			packedPosition);
+    	int childPosition = ExpandableListView.getPackedPositionChild(
+    			packedPosition);
+    	return moveCursorToChildPosition(groupPosition, childPosition);
+    }
+	*/
 
 }

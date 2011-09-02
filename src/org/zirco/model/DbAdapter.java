@@ -21,7 +21,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import org.zirco.providers.WeaveColumn.WeaveColumns;
+import org.zirco.model.adapters.UrlSuggestionCursorAdapter;
+import org.zirco.model.items.UrlSuggestionItem;
+import org.zirco.providers.WeaveColumns;
 import org.zirco.utils.Constants;
 import org.zirco.utils.DateUtils;
 

@@ -17,8 +17,9 @@ package org.zirco.ui.activities;
 
 import org.zirco.R;
 import org.zirco.model.DbAdapter;
-import org.zirco.model.HistoryExpandableListAdapter;
-import org.zirco.model.HistoryItem;
+import org.zirco.model.adapters.HistoryExpandableListAdapter;
+import org.zirco.model.items.HistoryItem;
+import org.zirco.providers.BookmarksProviderWrapper;
 import org.zirco.utils.ApplicationUtils;
 import org.zirco.utils.Constants;
 
@@ -26,9 +27,11 @@ import android.app.ExpandableListActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Browser;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,7 +53,6 @@ public class HistoryListActivity extends ExpandableListActivity {
 	private static final int MENU_SHARE = Menu.FIRST + 12;
 	private static final int MENU_DELETE_FROM_HISTORY = Menu.FIRST + 13;
 	
-	private DbAdapter mDbAdapter;	
 	private ExpandableListAdapter mAdapter;
 	
 	private ProgressDialog mProgressDialog;
@@ -61,25 +63,18 @@ public class HistoryListActivity extends ExpandableListActivity {
         
         setTitle(R.string.HistoryListActivity_Title);
         
-        mDbAdapter = new DbAdapter(this);
-        mDbAdapter.open();
-        
         registerForContextMenu(getExpandableListView());
         
         fillData();
-	}	
-	
-	@Override
-	protected void onDestroy() {
-		mDbAdapter.close();
-		super.onDestroy();
 	}
 
 	/**
 	 * Fill the history list.
 	 */
 	private void fillData() {
-		mAdapter = new HistoryExpandableListAdapter(this, mDbAdapter.fetchHistory());		
+		Cursor c = BookmarksProviderWrapper.getStockHistory(getContentResolver());
+		//mAdapter = new HistoryExpandableListAdapter(this, mDbAdapter.fetchHistory());
+		mAdapter = new HistoryExpandableListAdapter(this, c, Browser.HISTORY_PROJECTION_DATE_INDEX);	
         setListAdapter(mAdapter);
         
         if (getExpandableListAdapter().getGroupCount() > 0) {
@@ -133,7 +128,7 @@ public class HistoryListActivity extends ExpandableListActivity {
 				ApplicationUtils.sharePage(this, item.getTitle(), item.getUrl());
 				break;
 			case MENU_DELETE_FROM_HISTORY:
-				mDbAdapter.deleteFromHistory(item.getId());
+				BookmarksProviderWrapper.deleteHistoryRecord(getContentResolver(), item.getId());
 				fillData();
 				break;
 			default:
@@ -234,7 +229,8 @@ public class HistoryListActivity extends ExpandableListActivity {
 
 		@Override
 		public void run() {
-			mDbAdapter.clearHistory();
+			// TODO: check this
+			//mDbAdapter.clearHistory();
 			handler.sendEmptyMessage(0);
 		}
 

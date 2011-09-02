@@ -32,7 +32,10 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
@@ -140,6 +143,51 @@ public class ApplicationUtils {
 		}
 		
 		return mFaviconSize;
+	}
+	
+	/**
+	 * Get the required size of the favicon, depending on current screen density.
+	 * @param activity The current activity.
+	 * @return The size of the favicon, in pixels.
+	 */
+	public static int getFaviconSizeForBookmarks(Activity activity) {
+		if (mFaviconSize == -1) {
+			DisplayMetrics metrics = new DisplayMetrics();
+			activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+			switch (metrics.densityDpi) {
+			case DisplayMetrics.DENSITY_LOW: mFaviconSize = 12; break;
+			case DisplayMetrics.DENSITY_MEDIUM: mFaviconSize = 16; break;
+			case DisplayMetrics.DENSITY_HIGH: mFaviconSize = 24; break;
+			default: mFaviconSize = 16;
+			}
+		}
+		
+		return mFaviconSize;
+	}
+	
+	/**
+	 * Get a Drawable of the current favicon, with its size normalized relative to current screen density.
+	 * @param activity The parent Activity
+	 * @param icon The icon to normalize.
+	 * @return The normalized favicon.
+	 */
+	public static BitmapDrawable getNormalizedFaviconForBookmarks(Activity activity, Bitmap icon) {
+		BitmapDrawable favIcon = new BitmapDrawable(activity.getResources(), icon);
+		
+		if (icon != null) {
+			int favIconSize = getFaviconSize(activity);
+			
+			Bitmap bm = Bitmap.createBitmap(favIconSize, favIconSize, Bitmap.Config.ARGB_4444);
+			Canvas canvas = new Canvas(bm);
+			
+			favIcon.setBounds(0, 0, favIconSize, favIconSize);			
+			favIcon.draw(canvas);
+			
+			favIcon = new BitmapDrawable(activity.getResources(), bm);
+		}
+		
+		return favIcon;
 	}
 	
 	

@@ -15,7 +15,7 @@
 
 package org.zirco.providers;
 
-import org.zirco.providers.WeaveColumn.WeaveColumns;
+import org.zirco.providers.WeaveColumns;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;

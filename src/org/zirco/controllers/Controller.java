@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.zirco.model.DbAdapter;
-import org.zirco.model.DownloadItem;
+import org.zirco.model.items.DownloadItem;
 import org.zirco.ui.components.ZircoWebView;
 
 import android.content.Context;

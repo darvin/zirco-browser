@@ -17,6 +17,8 @@ package org.zirco.model;
 
 import java.util.Comparator;
 
+import org.zirco.model.items.UrlSuggestionItem;
+
 /**
  * Comparator for UrlSuggestionItem.
  */

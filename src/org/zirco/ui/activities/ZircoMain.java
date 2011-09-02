@@ -29,12 +29,13 @@ import org.zirco.events.EventConstants;
 import org.zirco.events.EventController;
 import org.zirco.events.IDownloadEventsListener;
 import org.zirco.model.DbAdapter;
-import org.zirco.model.DownloadItem;
-import org.zirco.model.UrlSuggestionCursorAdapter;
+import org.zirco.model.adapters.UrlSuggestionCursorAdapter;
+import org.zirco.model.items.DownloadItem;
 import org.zirco.ui.activities.preferences.PreferencesActivity;
 import org.zirco.ui.components.ZircoWebView;
 import org.zirco.ui.components.ZircoWebViewClient;
 import org.zirco.ui.runnables.BookmarkThumbnailUpdater;
+import org.zirco.ui.runnables.FaviconUpdaterRunnable;
 import org.zirco.ui.runnables.HideToolbarsRunnable;
 import org.zirco.ui.runnables.HistoryUpdater;
 import org.zirco.utils.AnimationManager;
@@ -684,7 +685,8 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
 			}
 						
 			@Override
-			public void onReceivedIcon(WebView view, Bitmap icon) {				
+			public void onReceivedIcon(WebView view, Bitmap icon) {
+				new Thread(new FaviconUpdaterRunnable(ZircoMain.this, view.getUrl(), view.getOriginalUrl(), icon)).start();
 				updateFavIcon();
 				
 				super.onReceivedIcon(view, icon);
@@ -707,7 +709,7 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
 			public void onReceivedTitle(WebView view, String title) {
 				setTitle(String.format(getResources().getString(R.string.ApplicationNameUrl), title)); 
 				
-				startHistoryUpdaterRunnable(title, mCurrentWebView.getUrl());
+				startHistoryUpdaterRunnable(title, mCurrentWebView.getUrl(), mCurrentWebView.getOriginalUrl());
 				
 				super.onReceivedTitle(view, title);
 			}
@@ -1044,10 +1046,10 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
      * @param title The page title.
      * @param url The page url.
      */
-    private void startHistoryUpdaterRunnable(String title, String url) {
+    private void startHistoryUpdaterRunnable(String title, String url, String originalUrl) {
     	if ((url != null) &&
     			(url.length() > 0)) {
-    		new Thread(new HistoryUpdater(this, title, url)).start();
+    		new Thread(new HistoryUpdater(this, title, url, originalUrl)).start();
     	}
     }
     

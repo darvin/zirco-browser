@@ -13,10 +13,10 @@
  * GNU General Public License for more details.
  */
 
-package org.zirco.model;
+package org.zirco.model.adapters;
 
 import org.zirco.R;
-import org.zirco.providers.WeaveColumn.WeaveColumns;
+import org.zirco.providers.WeaveColumns;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -48,7 +48,6 @@ public class WeaveBookmarksCursorAdapter extends SimpleCursorAdapter {
 			iconView.setImageResource(R.drawable.folder_icon);
 		} else {						
 			urlView.setVisibility(View.VISIBLE);
-			//urlView.setText(c.getString(c.getColumnIndex(DbAdapter.WEAVE_BOOKMARKS_URL)));
 			iconView.setImageResource(R.drawable.fav_icn_default);
 		}
 		

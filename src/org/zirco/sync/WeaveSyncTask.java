@@ -16,8 +16,8 @@ import org.emergent.android.weave.client.WeaveException;
 import org.emergent.android.weave.client.WeaveFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.zirco.providers.WeaveContentProviderWrapper;
-import org.zirco.providers.WeaveColumn.WeaveColumns;
+import org.zirco.providers.BookmarksProviderWrapper;
+import org.zirco.providers.WeaveColumns;
 import org.zirco.utils.Constants;
 
 import android.content.ContentResolver;
@@ -86,7 +86,7 @@ public class WeaveSyncTask extends AsyncTask<WeaveAccountInfo, Integer, Throwabl
 					parms.setFull(false);
 					parms.setNewer(new Date(lastSyncDate));
 				} else {
-					WeaveContentProviderWrapper.clearWeaveBookmarks(mContentResolver);
+					BookmarksProviderWrapper.clearWeaveBookmarks(mContentResolver);
 				}
 				
 				queryResult = getCollection(userWeave, WEAVE_PATH, parms);
@@ -268,7 +268,7 @@ public class WeaveSyncTask extends AsyncTask<WeaveAccountInfo, Integer, Throwabl
 					if ((weaveId != null) &&
 							(weaveId.length() > 0)) {
 						//mDbAdapter.deleteWeaveBookmarkByWeaveId(weaveId);
-						WeaveContentProviderWrapper.deleteByWeaveId(mContentResolver, weaveId);
+						BookmarksProviderWrapper.deleteWeaveBookmarkByWeaveId(mContentResolver, weaveId);
 					}
 				} else if (decryptedPayload.getString(WEAVE_HEADER_TYPE).equals(WEAVE_VALUE_BOOKMARK) ||
 						decryptedPayload.getString(WEAVE_HEADER_TYPE).equals(WEAVE_VALUE_FOLDER)) {
@@ -296,13 +296,13 @@ public class WeaveSyncTask extends AsyncTask<WeaveAccountInfo, Integer, Throwabl
 							values.put(WeaveColumns.WEAVE_BOOKMARKS_URL, url);
 						}
 						
-						long id = WeaveContentProviderWrapper.getIdByWeaveId(mContentResolver, weaveId);//mDbAdapter.getIdByWeaveId(weaveId);
+						long id = BookmarksProviderWrapper.getWeaveBookmarkIdByWeaveId(mContentResolver, weaveId);//mDbAdapter.getIdByWeaveId(weaveId);
 						if (id == -1) {
 							// Insert.
-							WeaveContentProviderWrapper.insert(mContentResolver, values);
+							BookmarksProviderWrapper.insertWeaveBookmark(mContentResolver, values);
 						} else {
 							// Update.
-							WeaveContentProviderWrapper.update(mContentResolver, id, values);
+							BookmarksProviderWrapper.updateWeaveBookmark(mContentResolver, id, values);
 						}						
 						
 					}

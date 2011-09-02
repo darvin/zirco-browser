@@ -16,7 +16,7 @@
 package org.zirco.ui.activities;
 
 import org.zirco.R;
-import org.zirco.model.DbAdapter;
+import org.zirco.providers.BookmarksProviderWrapper;
 import org.zirco.utils.Constants;
 
 import android.app.Activity;
@@ -58,12 +58,8 @@ public class EditBookmarkActivity extends Activity {
         
         mOkButton.setOnClickListener(new View.OnClickListener() {			
 			@Override
-			public void onClick(View v) {
-				if (mRowId != -1) {
-					updateBookmark();
-				} else {
-					saveBookmark();
-				}
+			public void onClick(View v) {				
+				setAsBookmark();
 				setResult(RESULT_OK);
 				finish();
 			}
@@ -104,31 +100,10 @@ public class EditBookmarkActivity extends Activity {
 	}
 	
 	/**
-	 * Update an existing bookmark in database.
+	 * Set the current title and url values as a bookmark, e.g. adding a record if necessary or set only the bookmark flag.
 	 */
-	private void updateBookmark() {
-		if (mUrlEditText.getText().toString() != null) {
-			DbAdapter dbAdapter = new DbAdapter(this);
-			dbAdapter.open();
-
-			dbAdapter.updateBookmark(mRowId, mTitleEditText.getText().toString(), mUrlEditText.getText().toString());
-
-			dbAdapter.close();
-		}
-	}
-	
-	/**
-	 * Save a new bookmark to database.
-	 */
-	private void saveBookmark() {		
-		if (mUrlEditText.getText().toString() != null) {
-			DbAdapter dbAdapter = new DbAdapter(this);
-			dbAdapter.open();
-
-			dbAdapter.addBookmark(mTitleEditText.getText().toString(), mUrlEditText.getText().toString());
-
-			dbAdapter.close();
-		}
+	private void setAsBookmark() {
+		BookmarksProviderWrapper.setAsBookmark(getContentResolver(), mRowId, mTitleEditText.getText().toString(), mUrlEditText.getText().toString(), true);
 	}
 
 }

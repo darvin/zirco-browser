@@ -13,25 +13,22 @@
  * GNU General Public License for more details.
  */
 
-package org.zirco.model;
+package org.zirco.model.adapters;
 
 import org.zirco.R;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.provider.Browser;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 
 /**
- * Adapter for suggestions.
+ * Cursor adapter for bookmarks.
  */
-public class UrlSuggestionCursorAdapter extends SimpleCursorAdapter {
-
-	public static final String URL_SUGGESTION_ID = "_id";
-	public static final String URL_SUGGESTION_TITLE = "URL_SUGGESTION_TITLE";
-	public static final String URL_SUGGESTION_URL = "URL_SUGGESTION_URL";
-	public static final String URL_SUGGESTION_TYPE = "URL_SUGGESTION_TYPE";
+public class BookmarksCursorAdapter extends SimpleCursorAdapter {
 	
 	/**
 	 * Constructor.
@@ -41,34 +38,24 @@ public class UrlSuggestionCursorAdapter extends SimpleCursorAdapter {
 	 * @param from Input array.
 	 * @param to Output array.
 	 */
-	public UrlSuggestionCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to) {		
-		super(context, layout, c, from, to);		
+	public BookmarksCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to) {
+		super(context, layout, c, from, to);
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		
 		View superView = super.getView(position, convertView, parent);
-		
-		ImageView iconView = (ImageView) superView.findViewById(R.id.AutocompleteImageView);
 
-		int resultType;
-		try {			
-			resultType = Integer.parseInt(getCursor().getString(getCursor().getColumnIndex(URL_SUGGESTION_TYPE)));
-		} catch (Exception e) {
-			resultType = 0;
-		}
+		ImageView thumbnailView = (ImageView) superView.findViewById(R.id.BookmarkRow_Thumbnail);
 		
-		switch (resultType) {
-		case 1: iconView.setImageResource(R.drawable.ic_tab_history_unselected); break;
-		case 2: iconView.setImageResource(R.drawable.ic_tab_bookmarks_unselected); break;
-		case 3: iconView.setImageResource(R.drawable.ic_tab_weave_unselected); break;
-		default: break;
+		byte[] favicon = getCursor().getBlob(getCursor().getColumnIndex(Browser.BookmarkColumns.FAVICON));
+		if (favicon != null) {
+			thumbnailView.setImageBitmap(BitmapFactory.decodeByteArray(favicon, 0, favicon.length));
+		} else {
+			thumbnailView.setImageResource(R.drawable.fav_icn_unknown);
 		}
 		
 		return superView;
-	}
-	
-	
+	}	
 
 }
