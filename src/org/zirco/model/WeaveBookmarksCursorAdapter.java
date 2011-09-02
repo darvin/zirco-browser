@@ -16,6 +16,7 @@
 package org.zirco.model;
 
 import org.zirco.R;
+import org.zirco.providers.WeaveColumn.WeaveColumns;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -37,7 +38,7 @@ public class WeaveBookmarksCursorAdapter extends SimpleCursorAdapter {
 		
 		Cursor c = getCursor();
 		
-		boolean isFolder = c.getInt(c.getColumnIndex(DbAdapter.WEAVE_BOOKMARKS_FOLDER)) > 0 ? true : false;
+		boolean isFolder = c.getInt(c.getColumnIndex(WeaveColumns.WEAVE_BOOKMARKS_FOLDER)) > 0 ? true : false;
 		
 		ImageView iconView = (ImageView) superView.findViewById(R.id.BookmarkRow_Thumbnail);
 		TextView urlView = (TextView) superView.findViewById(R.id.BookmarkRow_Url);

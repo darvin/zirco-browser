@@ -3,6 +3,7 @@ package org.zirco.sync;
 import java.io.IOException;
 import java.net.URI;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,13 +16,13 @@ import org.emergent.android.weave.client.WeaveException;
 import org.emergent.android.weave.client.WeaveFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.zirco.model.DbAdapter;
+import org.zirco.providers.WeaveContentProviderWrapper;
+import org.zirco.providers.WeaveColumn.WeaveColumns;
 import org.zirco.utils.Constants;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.DatabaseUtils.InsertHelper;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
@@ -51,27 +52,22 @@ public class WeaveSyncTask extends AsyncTask<WeaveAccountInfo, Integer, Throwabl
 	}
 	
 	private Context mContext;
+	private ContentResolver mContentResolver;
 	private ISyncListener mListener;
-	private DbAdapter mDbAdapter;
 	
 	private boolean mFullSync = false;
 	
 	public WeaveSyncTask(Context context, ISyncListener listener) {
 		mContext = context;
+		mContentResolver = context.getContentResolver();
 		mListener = listener;
-		mDbAdapter = new DbAdapter(context);
-		mDbAdapter.open();
 	}
 	
 	@Override
 	protected Throwable doInBackground(WeaveAccountInfo... arg0) {
-		Throwable result = null;
+		Throwable result = null;		
 		
-		SQLiteDatabase db = mDbAdapter.getDatabase();		
-		
-		try {
-			db.beginTransaction();			
-			
+		try {			
 			WeaveAccountInfo accountInfo = arg0[0];
 			UserWeave userWeave = getWeaveFactory().createUserWeave(accountInfo.getServer(), accountInfo.getUsername(), accountInfo.getPassword());						
 			
@@ -90,20 +86,18 @@ public class WeaveSyncTask extends AsyncTask<WeaveAccountInfo, Integer, Throwabl
 					parms.setFull(false);
 					parms.setNewer(new Date(lastSyncDate));
 				} else {
-					mDbAdapter.clearWeaveBookmarks();
+					WeaveContentProviderWrapper.clearWeaveBookmarks(mContentResolver);
 				}
 				
 				queryResult = getCollection(userWeave, WEAVE_PATH, parms);
 				List<WeaveBasicObject> wboList = queryResult.getValue();
 
 				if (mFullSync) {
-					doSync(accountInfo, userWeave, wboList, db);
+					doSync(accountInfo, userWeave, wboList);
 				} else {
-					doSyncByDelta(accountInfo, userWeave, wboList, db);
+					doSyncByDelta(accountInfo, userWeave, wboList);
 				}
 			}
-			
-			db.setTransactionSuccessful();
 			
 		} catch (WeaveException e) {
 			e.printStackTrace();
@@ -117,13 +111,78 @@ public class WeaveSyncTask extends AsyncTask<WeaveAccountInfo, Integer, Throwabl
 		} catch (GeneralSecurityException e) {
 			e.printStackTrace();
 			result = e;
-		} finally {
-			db.endTransaction();
 		}
 		
 		return result;
 	}
 	
+	private void doSync(WeaveAccountInfo accountInfo, UserWeave userWeave, List<WeaveBasicObject> wboList)
+		throws WeaveException, JSONException, IOException, GeneralSecurityException {
+		
+		int i = 0;
+		int count = wboList.size();
+		
+		List<ContentValues> values = new ArrayList<ContentValues>();
+		
+		mContext.getContentResolver().delete(WeaveColumns.CONTENT_URI, null, null);
+		
+		for (WeaveBasicObject wbo : wboList) {
+			JSONObject decryptedPayload = wbo.getEncryptedPayload(userWeave, accountInfo.getSecret());
+			
+			i++;
+			
+			//Log.d("Decrypted:", decryptedPayload.toString());
+
+			if (decryptedPayload.has(WEAVE_HEADER_TYPE) &&
+					((decryptedPayload.getString(WEAVE_HEADER_TYPE).equals(WEAVE_VALUE_BOOKMARK)) ||
+							(decryptedPayload.getString(WEAVE_HEADER_TYPE).equals(WEAVE_VALUE_FOLDER)))) {
+
+				if (decryptedPayload.has(WEAVE_VALUE_TITLE)) {					
+					
+					boolean isFolder = decryptedPayload.getString(WEAVE_HEADER_TYPE).equals(WEAVE_VALUE_FOLDER);
+
+					String title = decryptedPayload.getString(WEAVE_VALUE_TITLE);    					
+					String weaveId = decryptedPayload.has(WEAVE_VALUE_ID) ? decryptedPayload.getString(WEAVE_VALUE_ID) : null;
+					String parentId = decryptedPayload.has(WEAVE_VALUE_PARENT_ID) ? decryptedPayload.getString(WEAVE_VALUE_PARENT_ID) : null;
+
+					if ((title != null) && (title.length() > 0)) {
+
+						ContentValues value = new ContentValues();
+						value.put(WeaveColumns.WEAVE_BOOKMARKS_TITLE, title);
+						value.put(WeaveColumns.WEAVE_BOOKMARKS_WEAVE_ID, weaveId);
+						value.put(WeaveColumns.WEAVE_BOOKMARKS_WEAVE_PARENT_ID, parentId);
+
+						if (isFolder) {
+							value.put(WeaveColumns.WEAVE_BOOKMARKS_FOLDER, true);
+						} else {
+							String url = decryptedPayload.getString(WEAVE_VALUE_URI);
+
+							value.put(WeaveColumns.WEAVE_BOOKMARKS_FOLDER, false);
+							value.put(WeaveColumns.WEAVE_BOOKMARKS_URL, url);
+						}
+
+						values.add(value);    						
+					}
+				}
+			}
+
+			publishProgress(i, count);
+
+			if (isCancelled()) {
+				break;
+			}
+		}
+		
+		int j = 0;
+		ContentValues[] valuesArray = new ContentValues[values.size()];
+		for (ContentValues value : values) {
+			valuesArray[j++] = value;
+		}
+		
+		mContext.getContentResolver().bulkInsert(WeaveColumns.CONTENT_URI, valuesArray);
+	}
+	
+	/*
 	private void doSync(WeaveAccountInfo accountInfo, UserWeave userWeave, List<WeaveBasicObject> wboList, SQLiteDatabase db)
 		throws WeaveException, JSONException, IOException, GeneralSecurityException {
 		
@@ -186,8 +245,9 @@ public class WeaveSyncTask extends AsyncTask<WeaveAccountInfo, Integer, Throwabl
 			}
 		}
 	}
+	*/
 	
-	private void doSyncByDelta(WeaveAccountInfo accountInfo, UserWeave userWeave, List<WeaveBasicObject> wboList, SQLiteDatabase db)
+	private void doSyncByDelta(WeaveAccountInfo accountInfo, UserWeave userWeave, List<WeaveBasicObject> wboList)
 		throws WeaveException, JSONException, IOException, GeneralSecurityException {
 		
 		int i = 0;
@@ -207,7 +267,8 @@ public class WeaveSyncTask extends AsyncTask<WeaveAccountInfo, Integer, Throwabl
 					String weaveId = decryptedPayload.has(WEAVE_VALUE_ID) ? decryptedPayload.getString(WEAVE_VALUE_ID) : null;
 					if ((weaveId != null) &&
 							(weaveId.length() > 0)) {
-						mDbAdapter.deleteWeaveBookmarkByWeaveId(weaveId);
+						//mDbAdapter.deleteWeaveBookmarkByWeaveId(weaveId);
+						WeaveContentProviderWrapper.deleteByWeaveId(mContentResolver, weaveId);
 					}
 				} else if (decryptedPayload.getString(WEAVE_HEADER_TYPE).equals(WEAVE_VALUE_BOOKMARK) ||
 						decryptedPayload.getString(WEAVE_HEADER_TYPE).equals(WEAVE_VALUE_FOLDER)) {
@@ -222,26 +283,26 @@ public class WeaveSyncTask extends AsyncTask<WeaveAccountInfo, Integer, Throwabl
 						String parentId = decryptedPayload.has(WEAVE_VALUE_PARENT_ID) ? decryptedPayload.getString(WEAVE_VALUE_PARENT_ID) : null;
 						
 						ContentValues values = new ContentValues();
-						values.put(DbAdapter.WEAVE_BOOKMARKS_WEAVE_ID, weaveId);
-						values.put(DbAdapter.WEAVE_BOOKMARKS_WEAVE_PARENT_ID, parentId);
-						values.put(DbAdapter.WEAVE_BOOKMARKS_TITLE, title);						
+						values.put(WeaveColumns.WEAVE_BOOKMARKS_WEAVE_ID, weaveId);
+						values.put(WeaveColumns.WEAVE_BOOKMARKS_WEAVE_PARENT_ID, parentId);
+						values.put(WeaveColumns.WEAVE_BOOKMARKS_TITLE, title);						
 						
 						if (isFolder) {
-							values.put(DbAdapter.WEAVE_BOOKMARKS_FOLDER, true);
+							values.put(WeaveColumns.WEAVE_BOOKMARKS_FOLDER, true);
 						} else {
 							String url = decryptedPayload.getString(WEAVE_VALUE_URI);
 							
-							values.put(DbAdapter.WEAVE_BOOKMARKS_FOLDER, false);
-							values.put(DbAdapter.WEAVE_BOOKMARKS_URL, url);
+							values.put(WeaveColumns.WEAVE_BOOKMARKS_FOLDER, false);
+							values.put(WeaveColumns.WEAVE_BOOKMARKS_URL, url);
 						}
 						
-						long id = mDbAdapter.getIdByWeaveId(weaveId);
+						long id = WeaveContentProviderWrapper.getIdByWeaveId(mContentResolver, weaveId);//mDbAdapter.getIdByWeaveId(weaveId);
 						if (id == -1) {
 							// Insert.
-							db.insert(DbAdapter.WEAVE_BOOKMARKS_TABLE, null, values);
+							WeaveContentProviderWrapper.insert(mContentResolver, values);
 						} else {
 							// Update.
-							db.update(DbAdapter.WEAVE_BOOKMARKS_TABLE, values, DbAdapter.WEAVE_BOOKMARKS_ID + " = " + id, null);
+							WeaveContentProviderWrapper.update(mContentResolver, id, values);
 						}						
 						
 					}
@@ -260,7 +321,6 @@ public class WeaveSyncTask extends AsyncTask<WeaveAccountInfo, Integer, Throwabl
 	
 	@Override
 	protected void onCancelled() {
-		mDbAdapter.close();
 		mListener.onSyncCancelled();
 		super.onCancelled();
 	}
@@ -272,7 +332,6 @@ public class WeaveSyncTask extends AsyncTask<WeaveAccountInfo, Integer, Throwabl
 
 	@Override
 	protected void onPostExecute(Throwable result) {
-		mDbAdapter.close();
 		mListener.onSyncEnd(result);
 	}
 
