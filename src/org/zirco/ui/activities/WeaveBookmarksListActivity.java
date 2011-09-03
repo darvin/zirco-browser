@@ -53,6 +53,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.LayoutAnimationController;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -277,6 +282,29 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 		}
 	}
 	
+	/**
+	 * Set the list loading animation.
+	 */
+    private void setAnimation() {
+    	AnimationSet set = new AnimationSet(true);
+
+        Animation animation = new AlphaAnimation(0.0f, 1.0f);
+        animation.setDuration(75);
+        set.addAnimation(animation);
+
+        animation = new TranslateAnimation(
+            Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
+            Animation.RELATIVE_TO_SELF, -1.0f, Animation.RELATIVE_TO_SELF, 0.0f
+        );
+        animation.setDuration(50);
+        set.addAnimation(animation);
+
+        LayoutAnimationController controller =
+                new LayoutAnimationController(set, 0.5f);
+
+        mListView.setLayoutAnimation(controller);
+    }
+	
 	private void doSync() {
 		String authToken = ApplicationUtils.getWeaveAuthToken(this);
 		
@@ -363,6 +391,8 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 		}
 		
 		mListView.setAdapter(adapter);		
+		
+		setAnimation();
 		
 		mNavigationText.setText(getNavigationText());				
 	}

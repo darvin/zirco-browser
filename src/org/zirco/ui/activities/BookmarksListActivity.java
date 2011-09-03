@@ -169,7 +169,13 @@ public class BookmarksListActivity extends Activity {
     	String[] from = new String[] { Browser.BookmarkColumns.TITLE, Browser.BookmarkColumns.URL};
     	int[] to = new int[] {R.id.BookmarkRow_Title, R.id.BookmarkRow_Url};
     	
-    	mCursorAdapter = new BookmarksCursorAdapter(this, R.layout.bookmarkrow, mCursor, from, to);
+    	mCursorAdapter = new BookmarksCursorAdapter(this,
+    			R.layout.bookmarkrow,
+    			mCursor,
+    			from,
+    			to,
+    			ApplicationUtils.getFaviconSizeForBookmarks(this));
+    	
         mList.setAdapter(mCursorAdapter);
         
         setAnimation();

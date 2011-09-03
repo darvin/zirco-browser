@@ -1265,7 +1265,7 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
 		if (mCurrentWebView.getFavicon() != null) {
 			mToolsButton.setImageDrawable(favicon);
 		} else {
-			mToolsButton.setImageResource(R.drawable.fav_icn_default);
+			mToolsButton.setImageResource(R.drawable.fav_icn_default_toolbar);
 		}
 	}
 	

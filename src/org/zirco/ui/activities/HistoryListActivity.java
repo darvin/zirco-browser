@@ -16,7 +16,6 @@
 package org.zirco.ui.activities;
 
 import org.zirco.R;
-import org.zirco.model.DbAdapter;
 import org.zirco.model.adapters.HistoryExpandableListAdapter;
 import org.zirco.model.items.HistoryItem;
 import org.zirco.providers.BookmarksProviderWrapper;
@@ -73,8 +72,12 @@ public class HistoryListActivity extends ExpandableListActivity {
 	 */
 	private void fillData() {
 		Cursor c = BookmarksProviderWrapper.getStockHistory(getContentResolver());
-		//mAdapter = new HistoryExpandableListAdapter(this, mDbAdapter.fetchHistory());
-		mAdapter = new HistoryExpandableListAdapter(this, c, Browser.HISTORY_PROJECTION_DATE_INDEX);	
+
+		mAdapter = new HistoryExpandableListAdapter(this,
+				c,
+				Browser.HISTORY_PROJECTION_DATE_INDEX,
+				ApplicationUtils.getFaviconSizeForBookmarks(this));
+		
         setListAdapter(mAdapter);
         
         if (getExpandableListAdapter().getGroupCount() > 0) {

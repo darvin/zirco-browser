@@ -22,8 +22,6 @@ import java.util.Date;
 import org.zirco.model.items.BookmarkItem;
 import org.zirco.model.items.WeaveBookmarkItem;
 import org.zirco.providers.WeaveColumns;
-import org.zirco.utils.ApplicationUtils;
-
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -285,7 +283,8 @@ public class BookmarksProviderWrapper {
 	public static void updateFavicon(Activity currentActivity, String url, String originalUrl, Bitmap favicon) {
 		String whereClause = Browser.BookmarkColumns.URL + " = \"" + url + "\" OR " + Browser.BookmarkColumns.URL + " = \"" + originalUrl + "\"";
 
-		BitmapDrawable icon = ApplicationUtils.getNormalizedFaviconForBookmarks(currentActivity, favicon);          
+		//BitmapDrawable icon = ApplicationUtils.getNormalizedFaviconForBookmarks(currentActivity, favicon);
+		BitmapDrawable icon = new BitmapDrawable(favicon);
 
 		ByteArrayOutputStream os = new ByteArrayOutputStream();         
 		icon.getBitmap().compress(Bitmap.CompressFormat.PNG, 100, os);

@@ -1,3 +1,18 @@
+/*
+ * Zirco Browser for Android
+ * 
+ * Copyright (C) 2010 - 2011 J. Devauchelle and contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * version 3 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
 package org.zirco.model.adapters;
 
 import org.zirco.R;
@@ -6,6 +21,8 @@ import org.zirco.model.items.HistoryItem;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
 import android.provider.BaseColumns;
 import android.provider.Browser;
 import android.view.Gravity;
@@ -38,16 +55,19 @@ public class HistoryExpandableListAdapter extends BaseExpandableListAdapter {
 	private Cursor mCursor;
 	private int mDateIndex;
 	
+	private int mFaviconSize;
+	
 	/**
 	 * Constructor.
 	 * @param context The current context.
 	 * @param cursor The data cursor.
 	 * @param dateIndex The date index ?
 	 */
-	public HistoryExpandableListAdapter(Context context, Cursor cursor, int dateIndex) {
+	public HistoryExpandableListAdapter(Context context, Cursor cursor, int dateIndex, int faviconSize) {
 		mContext = context;
 		mCursor = cursor;
 		mDateIndex = dateIndex;
+		mFaviconSize = faviconSize;
 		
 		mDateSorter = new DateSorter(mContext);
 		mIdIndex = cursor.getColumnIndexOrThrow(BaseColumns._ID);
@@ -210,7 +230,16 @@ public class HistoryExpandableListAdapter extends BaseExpandableListAdapter {
 		ImageView faviconView = (ImageView) view.findViewById(R.id.HistoryRow_Thumbnail);
 		Bitmap favicon = item.getFavicon();
 		if (favicon != null) {
-			faviconView.setImageBitmap(item.getFavicon());
+			BitmapDrawable icon = new BitmapDrawable(favicon);
+			
+			Bitmap bm = Bitmap.createBitmap(mFaviconSize, mFaviconSize, Bitmap.Config.ARGB_4444);
+			Canvas canvas = new Canvas(bm);
+			
+			icon.setBounds(0, 0, mFaviconSize, mFaviconSize);
+			icon.draw(canvas);
+			
+			faviconView.setImageBitmap(bm);
+			//faviconView.setImageBitmap(item.getFavicon());
 		} else {
 			faviconView.setImageResource(R.drawable.fav_icn_unknown);
 		}
