@@ -28,9 +28,9 @@ import org.zirco.controllers.Controller;
 import org.zirco.events.EventConstants;
 import org.zirco.events.EventController;
 import org.zirco.events.IDownloadEventsListener;
-import org.zirco.model.DbAdapter;
 import org.zirco.model.adapters.UrlSuggestionCursorAdapter;
 import org.zirco.model.items.DownloadItem;
+import org.zirco.providers.BookmarksProviderWrapper;
 import org.zirco.ui.activities.preferences.PreferencesActivity;
 import org.zirco.ui.components.ZircoWebView;
 import org.zirco.ui.components.ZircoWebViewClient;
@@ -166,8 +166,6 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
 	
 	private ViewFlipper mViewFlipper;
 	
-	private DbAdapter mDbAdapter = null;
-	
 	private GestureDetector mGestureDetector;
 	
 	private SwitchTabsMethod mSwitchTabsMethod = SwitchTabsMethod.BOTH;
@@ -260,10 +258,6 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
 
     @Override
 	protected void onDestroy() {
-		if (mDbAdapter != null) {
-			mDbAdapter.close();
-		}
-		
 		WebIconDatabase.getInstance().close();
 		
 		if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.PREFERENCES_PRIVACY_CLEAR_CACHE_ON_EXIT, false)) {
@@ -405,9 +399,6 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
 		});
     	mNextTabView.setVisibility(View.GONE);
     	
-    	mDbAdapter = new DbAdapter(this);
-    	mDbAdapter.open();
-
     	String[] from = new String[] {UrlSuggestionCursorAdapter.URL_SUGGESTION_TITLE, UrlSuggestionCursorAdapter.URL_SUGGESTION_URL};
     	int[] to = new int[] {R.id.AutocompleteTitle, R.id.AutocompleteUrl};
     	
@@ -426,9 +417,13 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
 			public Cursor runQuery(CharSequence constraint) {
 				if ((constraint != null) &&
 						(constraint.length() > 0)) {
-					return mDbAdapter.getUrlSuggestions(constraint.toString());
+					return BookmarksProviderWrapper.getUrlSuggestions(getContentResolver(),
+							constraint.toString(),
+							PreferenceManager.getDefaultSharedPreferences(ZircoMain.this).getBoolean(Constants.PREFERENCE_USE_WEAVE, false));
 				} else {
-					return mDbAdapter.getUrlSuggestions(null);
+					return BookmarksProviderWrapper.getUrlSuggestions(getContentResolver(),
+							null,
+							PreferenceManager.getDefaultSharedPreferences(ZircoMain.this).getBoolean(Constants.PREFERENCE_USE_WEAVE, false));
 				}
 			}
 		});

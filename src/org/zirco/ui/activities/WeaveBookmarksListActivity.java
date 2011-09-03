@@ -313,10 +313,9 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 			mSyncTask = new WeaveSyncTask(this, this);
 			
 			mProgressDialog = new ProgressDialog(this);
-			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 			mProgressDialog.setIndeterminate(true);
 			mProgressDialog.setTitle(R.string.WeaveSync_SyncTitle);
-			mProgressDialog.setMessage(getString(R.string.WeaveSync_GenericSync));
+			mProgressDialog.setMessage(getString(R.string.WeaveSync_Connecting));
 			mProgressDialog.setCancelable(true);
 			mProgressDialog.setOnCancelListener(new OnCancelListener() {
 				
@@ -444,10 +443,21 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 	}
 
 	@Override
-	public void onSyncProgress(int done, int total) {
-		mProgressDialog.setIndeterminate(false);
-		mProgressDialog.setMax(total);
-		mProgressDialog.setProgress(done);
+	public void onSyncProgress(int step, int done, int total) {
+		switch (step) {
+		case 0:
+			mProgressDialog.setMessage(getString(R.string.WeaveSync_Connecting));
+			break;
+		case 1:
+			mProgressDialog.setMessage(getString(R.string.WeaveSync_GettingData));
+			break;
+		case 2:
+			mProgressDialog.setMessage(String.format(getString(R.string.WeaveSync_ReadingData), done, total));
+			break;
+		case 3:
+			mProgressDialog.setMessage(getString(R.string.WeaveSync_WrittingData));
+			break;
+		}
 	}
 	
 	private class Clearer implements Runnable {

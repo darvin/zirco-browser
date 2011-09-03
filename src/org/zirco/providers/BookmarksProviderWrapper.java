@@ -16,10 +16,16 @@
 package org.zirco.providers;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
+import org.zirco.model.UrlSuggestionItemComparator;
+import org.zirco.model.adapters.UrlSuggestionCursorAdapter;
 import org.zirco.model.items.BookmarkItem;
+import org.zirco.model.items.UrlSuggestionItem;
 import org.zirco.model.items.WeaveBookmarkItem;
 import org.zirco.providers.WeaveColumns;
 import android.app.Activity;
@@ -27,6 +33,7 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -433,5 +440,103 @@ public class BookmarksProviderWrapper {
 	public static void clearWeaveBookmarks(ContentResolver contentResolver) {
 		contentResolver.delete(WeaveColumns.CONTENT_URI, null, null);
 	}
+	
+	/**
+	 * Suggestions.
+	 */
+	/**
+     * Get a cursor for suggestions, given a search pattern.
+     * Search on history and bookmarks, on title and url.
+     * The result list is sorted based on each result note.
+     * @see UrlSuggestionItem for how a note is computed.
+     * @param contentResolver The content resolver.
+     * @param pattern The pattern to search for.
+     * @param lookInWeaveBookmarks If true, suggestions will include bookmarks from weave.
+     * @return A cursor of suggections.
+     */
+    public static Cursor getUrlSuggestions(ContentResolver contentResolver, String pattern, boolean lookInWeaveBookmarks) {
+    	MatrixCursor cursor = new MatrixCursor(new String[] {UrlSuggestionCursorAdapter.URL_SUGGESTION_ID,
+    			UrlSuggestionCursorAdapter.URL_SUGGESTION_TITLE,
+    			UrlSuggestionCursorAdapter.URL_SUGGESTION_URL,
+    			UrlSuggestionCursorAdapter.URL_SUGGESTION_TYPE});
+    	
+    	if ((pattern != null) &&
+    			(pattern.length() > 0)) {
+    		
+    		String sqlPattern = "%" + pattern + "%";
+    		
+    		List<UrlSuggestionItem> results = new ArrayList<UrlSuggestionItem>();
+    		
+    		Cursor stockCursor = contentResolver.query(Browser.BOOKMARKS_URI,
+    				sHistoryBookmarksProjection,
+    				Browser.BookmarkColumns.TITLE + " LIKE '" + sqlPattern + "' OR " + Browser.BookmarkColumns.URL  + " LIKE '" + sqlPattern + "'",
+    				null,
+    				null);
+    		
+    		if (stockCursor != null) {
+    			if (stockCursor.moveToFirst()) {
+    				int titleId = stockCursor.getColumnIndex(Browser.BookmarkColumns.TITLE);
+    				int urlId = stockCursor.getColumnIndex(Browser.BookmarkColumns.URL);
+    				int bookmarkId = stockCursor.getColumnIndex(Browser.BookmarkColumns.BOOKMARK);
+    				
+    				do {
+    					boolean isFolder = stockCursor.getInt(bookmarkId) > 0 ? true : false;
+    					results.add(new UrlSuggestionItem(pattern,
+    							stockCursor.getString(titleId),
+    							stockCursor.getString(urlId),
+    							isFolder ? 2 : 1));
+    					
+    				} while (stockCursor.moveToNext());
+    			}
+    			
+    			stockCursor.close();
+    		}
+    		
+    		if (lookInWeaveBookmarks) {
+    			Cursor weaveCursor = contentResolver.query(WeaveColumns.CONTENT_URI,
+    					null,
+    					WeaveColumns.WEAVE_BOOKMARKS_FOLDER + " = 0 AND (" +  WeaveColumns.WEAVE_BOOKMARKS_TITLE + " LIKE '" + sqlPattern + "' OR " + WeaveColumns.WEAVE_BOOKMARKS_URL  + " LIKE '" + sqlPattern + "')",
+    					null, null);
+
+    			if (weaveCursor != null) {
+    				if (weaveCursor.moveToFirst()) {
+    					
+    					int weaveTitleId = weaveCursor.getColumnIndex(WeaveColumns.WEAVE_BOOKMARKS_TITLE);
+        				int weaveUrlId = weaveCursor.getColumnIndex(WeaveColumns.WEAVE_BOOKMARKS_URL);
+    					
+    					do {
+    						results.add(new UrlSuggestionItem(pattern,
+    								weaveCursor.getString(weaveTitleId),
+    								weaveCursor.getString(weaveUrlId),
+    								3));
+    					} while (weaveCursor.moveToNext());
+    				}
+
+    				weaveCursor.close();
+    			}
+    		}
+    		
+    		// Sort results.
+    		Collections.sort(results, new UrlSuggestionItemComparator());
+    		
+    		//Log.d("Results", Integer.toString(results.size()));
+    		
+    		// Copy results to the output MatrixCursor.
+    		int idCounter = -1;
+    		for (UrlSuggestionItem item : results) {
+    			idCounter++;
+				
+				String[] row = new String[4];
+				row[0] = Integer.toString(idCounter);
+				row[1] = item.getTitle();
+				row[2] = item.getUrl();
+				row[3] = Integer.toString(item.getType());
+				
+				cursor.addRow(row);
+    		}
+    	}
+    	
+    	return cursor;
+    }
 
 }

@@ -455,9 +455,11 @@
     <string name="WeaveBookmarksListActivity.SetupButton">Setup</string>
     <string name="WeaveBookmarksListActivity.SyncButton">Synchronize</string>
     
-    <string name="WeaveSync.SyncTitle">Firefox bookmarks</string>
-    <string name="WeaveSync.GenericSync">Synchronization in progress...</string>
-    <string name="WeaveSync.SyncInProgress">Synchronization in progress: %1$s / %2$s</string>
+    <string name="WeaveSync.SyncTitle">Synchronization</string>
+    <string name="WeaveSync.Connecting">Connecting to server...</string>
+    <string name="WeaveSync.GettingData">Getting data...</string>
+    <string name="WeaveSync.ReadingData">Reading data: %1$s / %2$s</string>
+    <string name="WeaveSync.WrittingData">Writting data...</string>
     
     <string name="Errors.WeaveSyncFailedTitle">Synchronization failed.</string>
     <string name="Errors.WeaveSyncFailedMessage">Synchronization failed: %s</string>

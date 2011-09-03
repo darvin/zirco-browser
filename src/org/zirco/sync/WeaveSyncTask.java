@@ -68,6 +68,8 @@ public class WeaveSyncTask extends AsyncTask<WeaveAccountInfo, Integer, Throwabl
 		Throwable result = null;		
 		
 		try {			
+			publishProgress(0, 0, 0);
+			
 			WeaveAccountInfo accountInfo = arg0[0];
 			UserWeave userWeave = getWeaveFactory().createUserWeave(accountInfo.getServer(), accountInfo.getUsername(), accountInfo.getPassword());						
 			
@@ -75,6 +77,8 @@ public class WeaveSyncTask extends AsyncTask<WeaveAccountInfo, Integer, Throwabl
 			long lastSyncDate = PreferenceManager.getDefaultSharedPreferences(mContext).getLong(Constants.PREFERENCE_WEAVE_LAST_SYNC_DATE, -1);
 			
 			if (lastModifiedDate > lastSyncDate) {		
+			
+				publishProgress(1, 0, 0);
 				
 				mFullSync = lastSyncDate <= 0;
 				
@@ -131,6 +135,7 @@ public class WeaveSyncTask extends AsyncTask<WeaveAccountInfo, Integer, Throwabl
 			
 			i++;
 			
+			//if (i > 30) break;
 			//Log.d("Decrypted:", decryptedPayload.toString());
 
 			if (decryptedPayload.has(WEAVE_HEADER_TYPE) &&
@@ -166,7 +171,7 @@ public class WeaveSyncTask extends AsyncTask<WeaveAccountInfo, Integer, Throwabl
 				}
 			}
 
-			publishProgress(i, count);
+			publishProgress(2, i, count);
 
 			if (isCancelled()) {
 				break;
@@ -179,73 +184,9 @@ public class WeaveSyncTask extends AsyncTask<WeaveAccountInfo, Integer, Throwabl
 			valuesArray[j++] = value;
 		}
 		
+		publishProgress(3, 0, 0);
 		mContext.getContentResolver().bulkInsert(WeaveColumns.CONTENT_URI, valuesArray);
 	}
-	
-	/*
-	private void doSync(WeaveAccountInfo accountInfo, UserWeave userWeave, List<WeaveBasicObject> wboList, SQLiteDatabase db)
-		throws WeaveException, JSONException, IOException, GeneralSecurityException {
-		
-		int i = 0;
-		int count = wboList.size();						
-
-		InsertHelper ih = new InsertHelper(db, DbAdapter.WEAVE_BOOKMARKS_TABLE);
-
-		int titleColumn = ih.getColumnIndex(DbAdapter.WEAVE_BOOKMARKS_TITLE);
-		int urlColumn = ih.getColumnIndex(DbAdapter.WEAVE_BOOKMARKS_URL);
-		int isFolderColumn = ih.getColumnIndex(DbAdapter.WEAVE_BOOKMARKS_FOLDER);
-		int weaveIdColumn = ih.getColumnIndex(DbAdapter.WEAVE_BOOKMARKS_WEAVE_ID);
-		int parentWeaveIdColumn = ih.getColumnIndex(DbAdapter.WEAVE_BOOKMARKS_WEAVE_PARENT_ID);
-
-		for (WeaveBasicObject wbo : wboList) {
-			JSONObject decryptedPayload = wbo.getEncryptedPayload(userWeave, accountInfo.getSecret());
-
-			i++;
-
-			//Log.d("Decrypted:", decryptedPayload.toString());
-
-			if (decryptedPayload.has(WEAVE_HEADER_TYPE) &&
-					((decryptedPayload.getString(WEAVE_HEADER_TYPE).equals(WEAVE_VALUE_BOOKMARK)) ||
-							(decryptedPayload.getString(WEAVE_HEADER_TYPE).equals(WEAVE_VALUE_FOLDER)))) {
-
-				if (decryptedPayload.has(WEAVE_VALUE_TITLE)) {
-
-					boolean isFolder = decryptedPayload.getString(WEAVE_HEADER_TYPE).equals(WEAVE_VALUE_FOLDER);
-
-					String title = decryptedPayload.getString(WEAVE_VALUE_TITLE);    					
-					String weaveId = decryptedPayload.has(WEAVE_VALUE_ID) ? decryptedPayload.getString(WEAVE_VALUE_ID) : null;
-					String parentId = decryptedPayload.has(WEAVE_VALUE_PARENT_ID) ? decryptedPayload.getString(WEAVE_VALUE_PARENT_ID) : null;
-
-					if ((title != null) && (title.length() > 0)) {
-
-						ih.prepareForInsert();
-
-						ih.bind(titleColumn, title);
-						ih.bind(weaveIdColumn, weaveId);
-						ih.bind(parentWeaveIdColumn, parentId);
-
-						if (isFolder) {
-							ih.bind(isFolderColumn, true);
-						} else {
-							String url = decryptedPayload.getString(WEAVE_VALUE_URI);
-
-							ih.bind(isFolderColumn, false);
-							ih.bind(urlColumn, url);
-						}
-
-						ih.execute();    						
-					}
-				}
-			}
-
-			publishProgress(i, count);
-
-			if (isCancelled()) {
-				break;
-			}
-		}
-	}
-	*/
 	
 	private void doSyncByDelta(WeaveAccountInfo accountInfo, UserWeave userWeave, List<WeaveBasicObject> wboList)
 		throws WeaveException, JSONException, IOException, GeneralSecurityException {
@@ -311,7 +252,7 @@ public class WeaveSyncTask extends AsyncTask<WeaveAccountInfo, Integer, Throwabl
 			
 			//Log.d("Decrypted:", decryptedPayload.toString());
 			
-			publishProgress(i, count);
+			publishProgress(2, i, count);
 
 			if (isCancelled()) {
 				break;
@@ -327,7 +268,7 @@ public class WeaveSyncTask extends AsyncTask<WeaveAccountInfo, Integer, Throwabl
 
 	@Override
 	protected void onProgressUpdate(Integer... values) {
-		mListener.onSyncProgress(values[0], values[1]);
+		mListener.onSyncProgress(values[0], values[1], values[2]);
 	}
 
 	@Override

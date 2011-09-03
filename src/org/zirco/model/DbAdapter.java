@@ -327,25 +327,6 @@ public class DbAdapter {
      */
     
     /**
-     * Get a cursor to suggestions from history..
-     * @param pattern The pattern to match.
-     * @return A Cursor to suggestions.
-     */    
-    public Cursor getSuggestionsFromHistory(String pattern) {
-    	Cursor cursor;
-    	
-    	if ((pattern != null) &&
-    			(pattern.length() > 0)) {	
-    		pattern = "%" + pattern + "%";    	
-    		cursor = mDb.query(HISTORY_DATABASE_TABLE, new String[] {HISTORY_ROWID, HISTORY_URL}, HISTORY_URL + " LIKE '" + pattern + "'", null, null, null, null);
-    	} else {
-    		cursor = mDb.query(HISTORY_DATABASE_TABLE, new String[] {HISTORY_ROWID, HISTORY_URL}, null, null, null, null, null);
-    	}
-    	
-    	return cursor;
-    }
-    
-    /**
      * Get a cursor for suggections, given a search pattern.
      * Search on history and bookmarks, on title and url.
      * The result list is sorted based on each result note.
