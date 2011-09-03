@@ -19,7 +19,7 @@ import java.util.Iterator;
 
 import org.zirco.R;
 import org.zirco.controllers.Controller;
-import org.zirco.model.DbAdapter;
+import org.zirco.providers.BookmarksProviderWrapper;
 import org.zirco.ui.activities.AboutActivity;
 import org.zirco.ui.activities.AdBlockerWhiteListActivity;
 import org.zirco.ui.activities.ChangelogActivity;
@@ -30,7 +30,6 @@ import org.zirco.utils.ApplicationUtils;
 import org.zirco.utils.Constants;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -296,7 +295,7 @@ public class PreferencesActivity extends PreferenceActivity {
     			this.getResources().getString(R.string.Commons_PleaseWait),
     			this.getResources().getString(R.string.Commons_ClearingHistory));
     	
-    	new HistoryClearer(this);
+    	new HistoryClearer();
     }
 	
 	/**
@@ -404,25 +403,18 @@ public class PreferencesActivity extends PreferenceActivity {
 	 * History clearer thread.
 	 */
 	private class HistoryClearer implements Runnable {
-
-		private Context mContext;
 		
 		/**
 		 * Constructor.
-		 * @param context The current context.
 		 */
-		public HistoryClearer(Context context) {
-			mContext = context;
+		public HistoryClearer() {
 			new Thread(this).start();
 		}
 
 		@Override
 		public void run() {
 			// Clear DB History
-			DbAdapter dbAdapter = new DbAdapter(mContext);
-			dbAdapter.open();
-			dbAdapter.clearHistory();
-			dbAdapter.close();
+			BookmarksProviderWrapper.clearHistoryAndOrBookmarks(getContentResolver(), true, false);
 			
 			// Clear WebViews history
 			Iterator<ZircoWebView> iter = Controller.getInstance().getWebViewList().iterator();

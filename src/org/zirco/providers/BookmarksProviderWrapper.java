@@ -46,6 +46,15 @@ public class BookmarksProviderWrapper {
 	/**
 	 * Stock History/Bookmarks management.
 	 */
+	/**
+	 * Get a Cursor on the whole content of the history/bookmarks database.
+	 * @param contentResolver The content resolver.
+	 * @return A Cursor.
+	 * @see Cursor
+	 */
+	public static Cursor getAllStockRecords(ContentResolver contentResolver) {
+		return contentResolver.query(Browser.BOOKMARKS_URI, sHistoryBookmarksProjection, null, null, null);
+	}
 	
 	public static Cursor getStockBookmarks(ContentResolver contentResolver, int sortMode) {
 		String whereClause = Browser.BookmarkColumns.BOOKMARK + " = 1";
@@ -293,6 +302,67 @@ public class BookmarksProviderWrapper {
 		values.put(Browser.BookmarkColumns.FAVICON, os.toByteArray());
 
 		currentActivity.getContentResolver().update(android.provider.Browser.BOOKMARKS_URI, values, whereClause, null);
+	}
+	
+	/**
+	 * Clear the history/bookmarks table.
+	 * @param contentResolver The content resolver.
+	 * @param clearHistory If true, history items will be cleared.
+	 * @param clearBookmarks If true, bookmarked items will be cleared.
+	 */
+	public static void clearHistoryAndOrBookmarks(ContentResolver contentResolver, boolean clearHistory, boolean clearBookmarks) {
+		
+		if (!clearHistory && !clearBookmarks) {
+			return;
+		}
+		
+		String whereClause = null;
+		if (clearHistory && clearBookmarks) {
+			whereClause = null;
+		} else if (clearHistory) {
+			whereClause = Browser.BookmarkColumns.BOOKMARK + " = 0";
+		} else if (clearBookmarks) {
+			whereClause = Browser.BookmarkColumns.BOOKMARK + " = 1";
+		}
+		
+		contentResolver.delete(Browser.BOOKMARKS_URI, whereClause, null);		
+	}
+	
+	/**
+	 * Insert a full record in history/bookmarks database.
+	 * @param contentResolver The content resolver.
+	 * @param title The record title.
+	 * @param url The record url.
+	 * @param visits The record visit count.
+	 * @param date The record last visit date.
+	 * @param created The record bookmark creation date.
+	 * @param bookmark The bookmark flag.
+	 */
+	public static void insertRawRecord(ContentResolver contentResolver, String title, String url, int visits, long date, long created, int bookmark) {
+		ContentValues values = new ContentValues();
+		values.put(Browser.BookmarkColumns.TITLE, title);
+		values.put(Browser.BookmarkColumns.URL, url);
+		values.put(Browser.BookmarkColumns.VISITS, visits);
+		
+		if (date > 0) {
+			values.put(Browser.BookmarkColumns.DATE, date);
+		} else {
+			values.putNull(Browser.BookmarkColumns.DATE);
+		}
+		
+		if (created > 0) {
+			values.put(Browser.BookmarkColumns.CREATED, created);
+		} else {
+			values.putNull(Browser.BookmarkColumns.CREATED);
+		}
+		
+		if (bookmark > 0) {
+			values.put(Browser.BookmarkColumns.BOOKMARK, 1);
+		} else {
+			values.put(Browser.BookmarkColumns.BOOKMARK, 0);
+		}
+		
+		contentResolver.insert(Browser.BOOKMARKS_URI, values);
 	}
 
 	

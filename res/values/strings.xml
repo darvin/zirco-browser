@@ -476,4 +476,13 @@
     
     <string name="Main.FileChooserPrompt">Choose file for upload</string>
     
+    <string name="Commons.HistoryBookmarksExportSDCardConfirmation">Export history and bookmarks</string>
+    <string name="Commons.HistoryBookmarksExportSDCardDoneTitle">Export done</string>
+    <string name="Commons.HistoryBookmarksExportSDCardDoneMessage">Your history and bookmarks have been saved to %s.</string>
+    <string name="Commons.HistoryBookmarksExportSDCardFailedTitle">Export failed</string>
+    <string name="Commons.HistoryBookmarksFailedMessage">Error message: %s.</string>
+    <string name="Commons.HistoryBookmarksImportSDCardFailedTitle">Import failed</string>
+    
+    <string name="Commons.OperationCanBeLongMessage">This operation can take some times. Do you wish to proceed?</string>
+    
 </resources>

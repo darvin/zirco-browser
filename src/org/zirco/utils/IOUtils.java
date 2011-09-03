@@ -18,6 +18,8 @@ package org.zirco.utils;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import android.os.Environment;
@@ -123,9 +125,16 @@ public class IOUtils {
 			
 			for (File file : files) {
 				result.add(file.getName());
-			}
-			
+			}			
 		}
+		
+		Collections.sort(result, new Comparator<String>() {
+
+			@Override
+			public int compare(String arg0, String arg1) {				
+				return arg1.compareTo(arg0);
+			}    		
+    	});
 		
 		return result;
 	}

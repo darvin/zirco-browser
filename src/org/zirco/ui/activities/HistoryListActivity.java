@@ -232,8 +232,7 @@ public class HistoryListActivity extends ExpandableListActivity {
 
 		@Override
 		public void run() {
-			// TODO: check this
-			//mDbAdapter.clearHistory();
+			BookmarksProviderWrapper.clearHistoryAndOrBookmarks(getContentResolver(), true, false);
 			handler.sendEmptyMessage(0);
 		}
 

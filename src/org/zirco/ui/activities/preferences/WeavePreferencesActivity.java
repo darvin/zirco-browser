@@ -16,9 +16,13 @@
 package org.zirco.ui.activities.preferences;
 
 import org.zirco.R;
+import org.zirco.utils.Constants;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.Preference.OnPreferenceClickListener;
 
 public class WeavePreferencesActivity extends PreferenceActivity {
 	
@@ -27,6 +31,20 @@ public class WeavePreferencesActivity extends PreferenceActivity {
 		super.onCreate(savedInstanceState);
 		
 		addPreferencesFromResource(R.layout.weave_preferences_activity);
+		
+		Preference weaveServerPref = (Preference) findPreference(Constants.PREFERENCE_WEAVE_SERVER);
+		weaveServerPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				openWeaveServerActivity();
+				return true;
+			}
+		});
+	}
+	
+	private void openWeaveServerActivity() {
+		Intent i = new Intent(this, WeaveServerPreferenceActivity.class);
+		startActivity(i);
 	}
 
 }
