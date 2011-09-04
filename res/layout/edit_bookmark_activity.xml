@@ -23,8 +23,7 @@
 	<LinearLayout android:layout_height="wrap_content"
 		android:layout_width="fill_parent" android:orientation="vertical">
 		
-		<TextView android:id="@+id/EditBookmarkActivity.TitleLabel"
-			android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/EditBookmarkActivity.TitleLabel"></TextView>
+		<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/EditBookmarkActivity.TitleLabel"></TextView>
 		<EditText android:id="@+id/EditBookmarkActivity.TitleValue"
 			android:layout_height="wrap_content" android:layout_width="fill_parent" android:inputType="text"></EditText>
 			
@@ -33,8 +32,7 @@
 	<LinearLayout android:layout_height="wrap_content"
 		android:layout_width="fill_parent" android:orientation="vertical">
 		
-		<TextView android:id="@+id/EditBookmarkActivity.UrlLabel"
-			android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/EditBookmarkActivity.UrlLabel"></TextView>
+		<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/EditBookmarkActivity.UrlLabel"></TextView>
 		<EditText android:id="@+id/EditBookmarkActivity.UrlValue"
 			android:layout_height="wrap_content" android:layout_width="fill_parent" android:inputType="textUri"></EditText>
 			

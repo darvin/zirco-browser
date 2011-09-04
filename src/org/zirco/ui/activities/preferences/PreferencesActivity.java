@@ -16,6 +16,7 @@
 package org.zirco.ui.activities.preferences;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.zirco.R;
 import org.zirco.controllers.Controller;
@@ -26,13 +27,19 @@ import org.zirco.ui.activities.ChangelogActivity;
 import org.zirco.ui.activities.MobileViewListActivity;
 import org.zirco.ui.activities.ZircoMain;
 import org.zirco.ui.components.ZircoWebView;
+import org.zirco.ui.runnables.XmlHistoryBookmarksExporter;
+import org.zirco.ui.runnables.XmlHistoryBookmarksImporter;
 import org.zirco.utils.ApplicationUtils;
 import org.zirco.utils.Constants;
+import org.zirco.utils.DateUtils;
+import org.zirco.utils.IOUtils;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Build;
 import android.os.Bundle;
@@ -194,6 +201,33 @@ public class PreferencesActivity extends PreferenceActivity {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				clearCookies();
+				return true;
+			}			
+		});
+		
+		Preference exportHistoryBookmarksPref = (Preference) findPreference("ExportHistoryBookmarks");
+		exportHistoryBookmarksPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				exportHistoryBookmarks();
+				return true;
+			}			
+		});
+		
+		Preference importHistoryBookmarksPref = (Preference) findPreference("ImportHistoryBookmarks");
+		importHistoryBookmarksPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				importHistoryBookmarks();
+				return true;
+			}			
+		});
+		
+		Preference clearHistoryBookmarksPref = (Preference) findPreference("ClearHistoryBookmarks");
+		clearHistoryBookmarksPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				clearHistoryBookmarks();
 				return true;
 			}			
 		});
@@ -397,6 +431,170 @@ public class PreferencesActivity extends PreferenceActivity {
 						doClearCookies();
 					}			
 		});
+	}
+	
+	private void doClearHistoryBookmarks(int choice) {
+		mProgressDialog = ProgressDialog.show(this,
+    			this.getResources().getString(R.string.Commons_PleaseWait),
+    			this.getResources().getString(R.string.Commons_ClearingHistoryBookmarks));
+		
+		new HistoryBookmarksClearer(choice);
+	}
+	
+	/**
+	 * Clear the history.
+	 */
+	private void clearHistoryBookmarks() {
+		
+		final String[] choices = new String[] { getString(R.string.Commons_History), getString(R.string.Commons_Bookmarks), getString(R.string.Commons_All) };
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	builder.setInverseBackgroundForced(true);
+    	builder.setIcon(android.R.drawable.ic_dialog_info);
+    	builder.setTitle(R.string.Commons_ClearHistoryBookmarks);
+    	builder.setSingleChoiceItems(choices, 0, new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {												
+				doClearHistoryBookmarks(which);
+				dialog.dismiss();				
+			}    		
+    	});
+    	
+    	builder.setCancelable(true);
+    	builder.setNegativeButton(R.string.Commons_Cancel, null);
+    	
+    	AlertDialog alert = builder.create();
+    	alert.show();
+	}
+	
+	/**
+	 * Import the given file to bookmarks and history.
+	 * @param fileName The file to import.
+	 */
+	private void doImportHistoryBookmarks(String fileName) {
+		
+		if (ApplicationUtils.checkCardState(this, true)) {
+			mProgressDialog = ProgressDialog.show(this,
+	    			this.getResources().getString(R.string.Commons_PleaseWait),
+	    			this.getResources().getString(R.string.Commons_ImportingHistoryBookmarks));
+			
+			XmlHistoryBookmarksImporter importer = new XmlHistoryBookmarksImporter(this, fileName, mProgressDialog);
+			new Thread(importer).start();
+		}
+		
+	}
+	
+	/**
+	 * Ask the user the file to import to bookmarks and history, and launch the import. 
+	 */
+	private void importHistoryBookmarks() {
+		List<String> exportedFiles = IOUtils.getExportedBookmarksFileList();    	
+    	
+    	final String[] choices = exportedFiles.toArray(new String[exportedFiles.size()]);
+    	
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	builder.setInverseBackgroundForced(true);
+    	builder.setIcon(android.R.drawable.ic_dialog_info);
+    	builder.setTitle(getResources().getString(R.string.Commons_ImportHistoryBookmarksSource));
+    	builder.setSingleChoiceItems(choices,
+    			0,
+    			new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+								
+				doImportHistoryBookmarks(choices[which]);				
+				
+				dialog.dismiss();				
+			}    		
+    	});    	
+    	
+    	builder.setCancelable(true);
+    	builder.setNegativeButton(R.string.Commons_Cancel, null);
+    	
+    	AlertDialog alert = builder.create();
+    	alert.show();
+	}
+	
+	/**
+	 * Export the bookmarks and history.
+	 */
+	private void doExportHistoryBookmarks() {
+		if (ApplicationUtils.checkCardState(this, true)) {
+			mProgressDialog = ProgressDialog.show(this,
+	    			this.getResources().getString(R.string.Commons_PleaseWait),
+	    			this.getResources().getString(R.string.Commons_ExportingHistoryBookmarks));
+			
+			XmlHistoryBookmarksExporter exporter = new XmlHistoryBookmarksExporter(this,
+					DateUtils.getNowForFileName() + ".xml",
+					BookmarksProviderWrapper.getAllStockRecords(this.getContentResolver()),
+					mProgressDialog);
+			
+			new Thread(exporter).start();
+		}
+	}
+	
+	/**
+	 * Ask the user to confirm the export. Launch it if confirmed.
+	 */
+	private void exportHistoryBookmarks() {
+		ApplicationUtils.showYesNoDialog(this,
+				android.R.drawable.ic_dialog_info,
+				R.string.Commons_HistoryBookmarksExportSDCardConfirmation,
+				R.string.Commons_OperationCanBeLongMessage,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+						doExportHistoryBookmarks();
+					}			
+		});
+	}
+	
+	/**
+	 * Base class for all clear operations launched as Runnable.
+	 */
+	private abstract class AbstractClearer implements Runnable {
+
+		/**
+		 * Constructor. Launch itself as a Thread.
+		 */
+		public AbstractClearer() {
+			new Thread(this).start();
+		}
+		
+		protected Handler mHandler = new Handler() {
+			public void handleMessage(Message msg) {
+				mProgressDialog.dismiss();
+			}
+		};
+	}
+	
+	private class HistoryBookmarksClearer extends AbstractClearer {
+
+		private int mChoice;
+		
+		public HistoryBookmarksClearer(int choice) {
+			mChoice = choice;
+		}
+		
+		@Override
+		public void run() {
+			
+			switch (mChoice) {
+			case 0:
+				BookmarksProviderWrapper.clearHistoryAndOrBookmarks(PreferencesActivity.this.getContentResolver(), true, false);
+				break;
+			case 1:
+				BookmarksProviderWrapper.clearHistoryAndOrBookmarks(PreferencesActivity.this.getContentResolver(), false, true);
+				break;
+			case 2:
+				BookmarksProviderWrapper.clearHistoryAndOrBookmarks(PreferencesActivity.this.getContentResolver(), true, true);
+				break;
+			default: break;
+			}
+			
+			mHandler.sendEmptyMessage(0);
+		}		
 	}
 	
 	/**

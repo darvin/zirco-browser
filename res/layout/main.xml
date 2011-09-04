@@ -16,11 +16,10 @@
  -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/MainLayout" android:orientation="vertical"
+	android:orientation="vertical"
 	android:layout_width="fill_parent" android:layout_height="fill_parent">
 
-	<RelativeLayout android:id="@+id/MainContainer"
-		android:layout_width="fill_parent" android:layout_height="fill_parent">
+	<RelativeLayout android:layout_width="fill_parent" android:layout_height="fill_parent">
 
 		<ViewFlipper android:id="@+id/ViewFlipper"
 			android:layout_width="fill_parent" android:layout_height="fill_parent">

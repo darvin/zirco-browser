@@ -49,17 +49,8 @@
     <string name="BookmarksListActivity.MenuOpenInTab">Open in new tab</string>
     <string name="BookmarksListActivity.MenuEditBookmark">Edit bookmark</string>
     <string name="BookmarksListActivity.MenuDeleteBookmark">Delete bookmark</string>
-    <string name="BookmarksListActivity.ImportBookmarks">Import bookmarks</string>
-    <string name="BookmarksListActivity.ExportBookmarks">Export bookmarks</string>
-    <string name="BookmarksListActivity.ClearBookmarks">Clear bookmarks</string>
-    <string name="BookmarksListActivity.ImportingBookmarks">Importing bookmarks...</string>
-    <string name="BookmarksListActivity.ExportingBookmarks">Exporting bookmarks...</string>
-    <string name="BookmarksListActivity.ClearingBookmarks">Clearing bookmarks...</string>
     <string name="BookmarksListActivity.AlphaSortMode">Alphabetical</string>
     <string name="BookmarksListActivity.RecentSortMode">Most recent</string>
-    <string name="BookmarksListActivity.ImportSource">Choose the import source</string>
-    <string name="BookmarksListActivity.AndroidImportSource">Android browser bookmarks</string>
-    <string name="BookmarksListActivity.ExportDialogTitle">Choose the export target</string>
     
     <string name="EditBookmarkActivity.Title">Edit bookmark</string>
     <string name="EditBookmarkActivity.TitleAdd">Add bookmark</string>
@@ -163,9 +154,6 @@
     <string name="Commons.Yes">Yes</string>
     <string name="Commons.No">No</string>
     <string name="Commons.NoUndoMessage">This operation cannot be undone. Do you wish to proceed?</string>
-    <string name="Commons.Today">Today (%s)</string>
-    <string name="Commons.Yesterday">Yesterday (%s)</string>
-    <string name="Commons.DaysAgo">%1$s days ago (%2$s)</string>
     <string name="Commons.JavaScriptDialog">JavaScript dialog</string>
     <string name="Commons.ClearHistory">Clear history</string>
     <string name="Commons.ClearingHistory">Clearing history...</string>
@@ -280,14 +268,6 @@
         <item>@string/PreferencesActivity.UserAgentCustom</item>
     </string-array>
     
-    <string name="BookmarksListActivity.AndroidExportTarget">Android browser bookmarks</string>
-    <string name="BookmarksListActivity.SDCardExportTarget">SD card</string>
-    
-    <string name="BookmarksListActivity.BookmarksExportSDCardDoneTitle">Export done</string>
-    <string name="BookmarksListActivity.BookmarksExportSDCardDoneMessage">Your bookmarks have been saved to %s.</string>
-    <string name="BookmarksListActivity.BookmarksExportSDCardFailedTitle">Export failed</string>
-    <string name="BookmarksListActivity.BookmarksExportSDCardFailedMessage">Error message: %s.</string>
-    
     <!-- 0.3.4 -->
     <string name="Main.MenuCopyLinkUrl">Copy link url</string>
     <string name="Main.MenuViewImage">View image</string>
@@ -295,8 +275,6 @@
     <string name="Main.MenuDownloadImage">Download image</string>
     <string name="Main.MenuSendEmail">Send email</string>
     <string name="Main.MenuCopyEmailUrl">Copy email url</string>
-    
-    <string name="Main.MenuSelectText">Select text</string>
     
     <string name="Commons.UrlCopyToastMessage">Url copied to clipboard.</string>
     
@@ -345,8 +323,6 @@
 	<string name="Commons.SslExpired">This certificate has expired.</string>
 	<string name="Commons.SslNotYetValid">This certificate is not valid yet.</string>
 	
-	<string name="Main.MenuMobileView">Mobile view</string>
-	
 	<string name="MobileViewListActivity.Title">Zirco Browser - Websites list for mobile view</string>
 	<string name="MobileViewListActivity.ListEmpty">List is empty.</string>	
     <string name="MobileViewListActivity.AddMessage">Add a website</string>
@@ -384,7 +360,6 @@
 	</string-array>
 	
 	<!-- 0.3.7 -->
-	<string name="Main.MenuSharePage">Share page</string>
 	<string name="Main.ShareChooserTitle">Share via</string>
 	
 	<string name="Main.MenuShareLinkUrl">Share link</string>
@@ -430,11 +405,11 @@
     <string name="QuickAction.SelectText">Select text</string>
     <string name="QuickAction.MobileView">Mobile view</string>
     
-    <string name="AboutActivity.OtherLicenseText">This application include code from the GreenDroid project (https://github.com/cyrilmottier/GreenDroid/), licensed under the Apache license, version 2.</string>
+    <string name="AboutActivity.OtherLicenseText">This application include code from the GreenDroid project (https://github.com/cyrilmottier/GreenDroid), and from the Shaman project (https://github.com/emergentdotorg/shaman), both licensed under the Apache license, version 2.</string>
     
     <!-- 0.4.0 -->
-    <string name="PreferencesActivity.WeavePreferenceTitle">Firefox Sync</string>
-    <string name="PreferencesActivity.WeavePreferenceSummary">Manage Firefox Sync settings.</string>
+    <string name="PreferencesActivity.WeavePreferenceTitle">Firefox bookmarks synchronization</string>
+    <string name="PreferencesActivity.WeavePreferenceSummary">Manage the settings of the bookmarks synchronization with Firefox.</string>
     <string name="PreferencesActivity.UseWeavePreferenceTitle">Use Firefox Sync</string>
     <string name="PreferencesActivity.UseWeavePreferenceSummary">If checked, you can retrieve your bookmarks from Firefox Sync.</string>
     <string name="PreferencesActivity.WeaveServerPreferenceTitle">Server</string>
@@ -463,7 +438,6 @@
     
     <string name="Errors.WeaveSyncFailedTitle">Synchronization failed.</string>
     <string name="Errors.WeaveSyncFailedMessage">Synchronization failed: %s</string>
-    <string name="Errors.WeaveAuthFailedTitle">Authentication failed.</string>
     <string name="Errors.WeaveAuthFailedMessage">Invalid authentication token. Check your settings.</string>
     
     <string name="WeaveServerPreferenceActivity.Prompt">Server</string>    
@@ -486,5 +460,28 @@
     <string name="Commons.HistoryBookmarksImportSDCardFailedTitle">Import failed</string>
     
     <string name="Commons.OperationCanBeLongMessage">This operation can take some times. Do you wish to proceed?</string>
+    
+    <string name="PreferencesActivity.ToolsCategoryTitle">Tools</string>
+    <string name="PreferencesActivity.ToolsHistoryBookmarksPreferenceTitle">Manage bookmarks and history</string>
+    <string name="PreferencesActivity.ToolsHistoryBookmarksPreferenceSummary">Import, export, clear history and bookmarks.</string>
+    <string name="PreferencesActivity.ExportHistoryBookmarksPreferenceTitle">Export bookmarks and history</string>
+    <string name="PreferencesActivity.ExportHistoryBookmarksPreferenceSummary">Export bookmarks and history to the SD card.</string>
+    <string name="PreferencesActivity.ImportHistoryBookmarksPreferenceTitle">Import bookmarks and history</string>
+    <string name="PreferencesActivity.ImportHistoryBookmarksPreferenceSummary">Import bookmarks and history from the SD card.</string>
+    <string name="PreferencesActivity.PrivacyClearHistoryBookmarksTitle">Clear history and/or bookmarks</string>
+    <string name="PreferencesActivity.SummaryCannotBeUndone">Use with caution, this operation cannot be undone.</string>
+    
+    <string name="Commons.ClearingHistoryBookmarks">Clearing history and/or bookmarks...</string>
+    <string name="Commons.ClearHistoryBookmarks">Clear history and/or bookmarks</string>
+    
+    <string name="Commons.Bookmarks">Bookmarks</string>
+    <string name="Commons.History">History</string>
+    <string name="Commons.All">All</string>
+    
+    <string name="Commons.ExportingHistoryBookmarks">Exporting history and bookmarks...</string>
+    <string name="Commons.ImportingHistoryBookmarks">Importing history and bookmarks...</string>
+    <string name="Commons.ImportHistoryBookmarksSource">Choose the import source</string>
+    
+    <string name="Commons.ClearingBookmarks">Clearing bookmarks...</string>
     
 </resources>

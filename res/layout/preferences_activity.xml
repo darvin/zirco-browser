@@ -222,6 +222,25 @@
 				android:key="PrivacyClearCookies" />
 		</PreferenceScreen>		
 	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/PreferencesActivity.ToolsCategoryTitle">
+    	<PreferenceScreen
+            android:key="ToolsHistoryBookmarksPreferencesScreen"
+            android:title="@string/PreferencesActivity.ToolsHistoryBookmarksPreferenceTitle"
+            android:summary="@string/PreferencesActivity.ToolsHistoryBookmarksPreferenceSummary">        
+    		<Preference
+				android:title="@string/PreferencesActivity.ExportHistoryBookmarksPreferenceTitle"
+				android:summary="@string/PreferencesActivity.ExportHistoryBookmarksPreferenceSummary"
+				android:key="ExportHistoryBookmarks" />
+			<Preference
+				android:title="@string/PreferencesActivity.ImportHistoryBookmarksPreferenceTitle"
+				android:summary="@string/PreferencesActivity.ImportHistoryBookmarksPreferenceSummary"
+				android:key="ImportHistoryBookmarks" />
+			<Preference
+                android:title="@string/PreferencesActivity.PrivacyClearHistoryBookmarksTitle"
+                android:summary="@string/PreferencesActivity.SummaryCannotBeUndone"
+                android:key="ClearHistoryBookmarks" />
+        </PreferenceScreen>
+    </PreferenceCategory>
 	<PreferenceCategory android:title="@string/PreferencesActivity.MobileViewCategoryTitle">
 		<Preference
 			android:title="@string/PreferencesActivity.MobileViewListPreferenceTitle"

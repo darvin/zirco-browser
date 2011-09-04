@@ -342,7 +342,7 @@ public class WeaveBookmarksListActivity extends Activity implements ISyncListene
 	private void doClear() {
 		mProgressDialog = ProgressDialog.show(this,
     			this.getResources().getString(R.string.Commons_PleaseWait),
-    			this.getResources().getString(R.string.BookmarksListActivity_ClearingBookmarks));
+    			this.getResources().getString(R.string.Commons_ClearingBookmarks));
 		
 		new Clearer();
 		

@@ -15,30 +15,20 @@
 
 package org.zirco.ui.activities;
 
-import java.util.List;
-
 import org.zirco.R;
 import org.zirco.model.adapters.BookmarksCursorAdapter;
 import org.zirco.model.items.BookmarkItem;
 import org.zirco.providers.BookmarksProviderWrapper;
-import org.zirco.ui.runnables.XmlHistoryBookmarksExporter;
-import org.zirco.ui.runnables.XmlHistoryBookmarksImporter;
 import org.zirco.utils.ApplicationUtils;
 import org.zirco.utils.Constants;
-import org.zirco.utils.DateUtils;
-import org.zirco.utils.IOUtils;
-
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.Browser;
 import android.view.ContextMenu;
@@ -62,10 +52,7 @@ import android.widget.AdapterView.OnItemClickListener;
 public class BookmarksListActivity extends Activity {
 			
 	private static final int MENU_ADD_BOOKMARK = Menu.FIRST;
-	private static final int MENU_SORT_MODE = Menu.FIRST + 1;	
-	private static final int MENU_IMPORT_BOOKMARKS = Menu.FIRST + 2;
-	private static final int MENU_EXPORT_BOOKMARKS = Menu.FIRST + 3;
-	private static final int MENU_CLEAR_BOOKMARKS = Menu.FIRST + 4;
+	private static final int MENU_SORT_MODE = Menu.FIRST + 1;
 	
 	private static final int MENU_OPEN_IN_TAB = Menu.FIRST + 10;    
     private static final int MENU_COPY_URL = Menu.FIRST + 11;
@@ -80,8 +67,6 @@ public class BookmarksListActivity extends Activity {
 	private BookmarksCursorAdapter mCursorAdapter;
 	
 	private ListView mList;
-	
-	private ProgressDialog mProgressDialog;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -199,16 +184,7 @@ public class BookmarksListActivity extends Activity {
         item.setIcon(R.drawable.ic_menu_add_bookmark);
     	
     	item = menu.add(0, MENU_SORT_MODE, 0, R.string.BookmarksListActivity_MenuSortMode);
-        item.setIcon(R.drawable.ic_menu_sort);    	    	
-        
-        item = menu.add(0, MENU_IMPORT_BOOKMARKS, 0, R.string.BookmarksListActivity_ImportBookmarks);
-        item.setIcon(R.drawable.ic_menu_import);
-        
-        item = menu.add(0, MENU_EXPORT_BOOKMARKS, 0, R.string.BookmarksListActivity_ExportBookmarks);
-        item.setIcon(R.drawable.ic_menu_export);
-        
-        item = menu.add(0, MENU_CLEAR_BOOKMARKS, 0, R.string.BookmarksListActivity_ClearBookmarks);
-        item.setIcon(R.drawable.ic_menu_delete);
+        item.setIcon(R.drawable.ic_menu_sort);                
     	
     	return true;
     }
@@ -225,17 +201,6 @@ public class BookmarksListActivity extends Activity {
     		openAddBookmarkDialog();
             return true;
             
-        case MENU_IMPORT_BOOKMARKS:
-        	importHistoryBookmarks();
-            return true;
-            
-        case MENU_EXPORT_BOOKMARKS:
-        	exportBookmarks();
-        	return true;
-            
-        case MENU_CLEAR_BOOKMARKS:
-        	clearBookmarks();
-        	return true;
         default: return super.onMenuItemSelected(featureId, item);
     	}
     }
@@ -359,145 +324,6 @@ public class BookmarksListActivity extends Activity {
     	
     	AlertDialog alert = builder.create();
     	alert.show();
-    }
-    
-    /**
-	 * Import the given file to bookmarks and history.
-	 * @param fileName The file to import.
-	 */
-	private void doImportHistoryBookmarks(String fileName) {
-		
-		if (ApplicationUtils.checkCardState(this, true)) {
-			mProgressDialog = ProgressDialog.show(this,
-	    			this.getResources().getString(R.string.Commons_PleaseWait),
-	    			this.getResources().getString(R.string.BookmarksListActivity_ImportingBookmarks));
-			
-			XmlHistoryBookmarksImporter importer = new XmlHistoryBookmarksImporter(this, fileName, mProgressDialog);
-			new Thread(importer).start();
-		}
-		
-	}
-    
-    /**
-	 * Ask the user the file to import to bookmarks and history, and launch the import. 
-	 */
-	private void importHistoryBookmarks() {
-		List<String> exportedFiles = IOUtils.getExportedBookmarksFileList();    	
-    	
-    	final String[] choices = exportedFiles.toArray(new String[exportedFiles.size()]);
-    	
-    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setInverseBackgroundForced(true);
-    	builder.setIcon(android.R.drawable.ic_dialog_info);
-    	builder.setTitle(getResources().getString(R.string.BookmarksListActivity_AndroidImportSource));
-    	builder.setSingleChoiceItems(choices,
-    			0,
-    			new OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-								
-				doImportHistoryBookmarks(choices[which]);				
-				
-				dialog.dismiss();				
-			}    		
-    	});    	
-    	
-    	builder.setCancelable(true);
-    	builder.setNegativeButton(R.string.Commons_Cancel, null);
-    	
-    	AlertDialog alert = builder.create();
-    	alert.show();
-	}
-    
-    private void doExportHistoryBookmarks() {
-    	final String fileName = DateUtils.getNowForFileName() + ".xml";
-    
-    	mProgressDialog = ProgressDialog.show(this,
-    			this.getResources().getString(R.string.Commons_PleaseWait),
-    			this.getResources().getString(R.string.BookmarksListActivity_ExportingBookmarks));
-    	
-    	XmlHistoryBookmarksExporter exporter = new XmlHistoryBookmarksExporter(this,
-    			fileName,
-    			BookmarksProviderWrapper.getAllStockRecords(getContentResolver()),
-    			mProgressDialog);
-    	
-    	new Thread(exporter).start();
-    }
-    
-    /**
-     * Display a confirmation dialog and perform the bookmarks export.
-     */
-    private void exportBookmarks() {
-    	
-    	if (ApplicationUtils.checkCardState(this, true)) {
-    		ApplicationUtils.showOkCancelDialog(this,
-    				android.R.drawable.ic_dialog_info,
-    				getString(R.string.Commons_HistoryBookmarksExportSDCardConfirmation),
-    				getString(R.string.Commons_OperationCanBeLongMessage),
-    				new DialogInterface.OnClickListener() {
-    					@Override
-    					public void onClick(DialogInterface dialog, int which) {
-    						dialog.dismiss();
-    						doExportHistoryBookmarks();
-    					}
-    		});
-    		
-    	}
-    }
-    
-    /**
-     * Clear all the bookmarks.
-     */
-    private void doClearBookmarks() {
-    	mProgressDialog = ProgressDialog.show(this,
-    			this.getResources().getString(R.string.Commons_PleaseWait),
-    			this.getResources().getString(R.string.BookmarksListActivity_ClearingBookmarks));
-    	
-    	new BookmarksCleaner();
-    }
-    
-    /**
-     * Show a confirmation dialog for bookmarks clearing.
-     * Perform the clear if required.
-     */
-    private void clearBookmarks() {
-    	ApplicationUtils.showYesNoDialog(this,
-				android.R.drawable.ic_dialog_alert,
-				R.string.BookmarksListActivity_ClearBookmarks,
-				R.string.Commons_NoUndoMessage,
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-						doClearBookmarks();
-					}			
-		}); 
-    }
-    
-    /**
-     * Runnable for bookmark clearing.
-     */
-    private class BookmarksCleaner implements Runnable {
-    	
-    	/**
-    	 * Constructor.
-    	 */
-    	public BookmarksCleaner() {	
-    		new Thread(this).start();
-    	}
-    	
-		@Override
-		public void run() {
-			BookmarksProviderWrapper.clearHistoryAndOrBookmarks(getContentResolver(), false, true);
-	    	handler.sendEmptyMessage(0);
-		}
-		
-		private Handler handler = new Handler() {
-			public void handleMessage(Message msg) {
-				mProgressDialog.dismiss();
-				fillData();
-			}
-		};
     }
     
     @Override

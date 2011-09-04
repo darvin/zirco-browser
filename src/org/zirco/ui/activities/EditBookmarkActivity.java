@@ -46,7 +46,7 @@ public class EditBookmarkActivity extends Activity {
         Window w = getWindow();
 		 w.requestFeature(Window.FEATURE_LEFT_ICON);
         
-        setContentView(R.layout.editbookmarkactivity);
+        setContentView(R.layout.edit_bookmark_activity);
         
         w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON,	android.R.drawable.ic_input_add);
         

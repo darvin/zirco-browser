@@ -49,17 +49,8 @@
     <string name="BookmarksListActivity.MenuOpenInTab">Ouvrir dans un nouvel onglet</string>
     <string name="BookmarksListActivity.MenuEditBookmark">Modifier le favori</string>
     <string name="BookmarksListActivity.MenuDeleteBookmark">Supprimer le favori</string>
-    <string name="BookmarksListActivity.ImportBookmarks">Importer les favoris</string>
-    <string name="BookmarksListActivity.ExportBookmarks">Exporter les favoris</string>
-    <string name="BookmarksListActivity.ClearBookmarks">Effacer les favoris</string>
-    <string name="BookmarksListActivity.ImportingBookmarks">Import en cours...</string>
-    <string name="BookmarksListActivity.ExportingBookmarks">Export en cours...</string>
-    <string name="BookmarksListActivity.ClearingBookmarks">Suppression en cours...</string>
     <string name="BookmarksListActivity.AlphaSortMode">Alphabétique</string>
     <string name="BookmarksListActivity.RecentSortMode">Plus récent</string>
-    <string name="BookmarksListActivity.ImportSource">Choisissez la source d\'import</string>
-    <string name="BookmarksListActivity.AndroidImportSource">Favoris du navigateur Android</string>
-    <string name="BookmarksListActivity.ExportDialogTitle">Choisissez la cible d\'export</string>
     
     <string name="EditBookmarkActivity.Title">Modifier le favori</string>
     <string name="EditBookmarkActivity.TitleAdd">Ajouter un favori</string>
@@ -163,9 +154,6 @@
     <string name="Commons.Yes">Oui</string>
     <string name="Commons.No">Non</string>
     <string name="Commons.NoUndoMessage">Cette opération ne peut pas être annulée. Voulez vous continuer ?</string>
-    <string name="Commons.Today">Aujourd\'hui (%s)</string>
-    <string name="Commons.Yesterday">Hier (%s)</string>
-    <string name="Commons.DaysAgo">Il y a %1$s jours (%2$s)</string>
     <string name="Commons.JavaScriptDialog">Fenêtre JavaScript</string>
     <string name="Commons.ClearHistory">Purger l\'historique</string>
     <string name="Commons.ClearingHistory">Suppression de l\'historique...</string>
@@ -280,14 +268,6 @@
         <item>@string/PreferencesActivity.UserAgentCustom</item>
     </string-array>
     
-    <string name="BookmarksListActivity.AndroidExportTarget">Favoris du navigateur Android</string>
-    <string name="BookmarksListActivity.SDCardExportTarget">Carte SD</string>
-    
-    <string name="BookmarksListActivity.BookmarksExportSDCardDoneTitle">Export terminé</string>
-    <string name="BookmarksListActivity.BookmarksExportSDCardDoneMessage">Vos favoris ont été exportés dans le fichier %s.</string>
-    <string name="BookmarksListActivity.BookmarksExportSDCardFailedTitle">L\'export a échoué</string>
-    <string name="BookmarksListActivity.BookmarksExportSDCardFailedMessage">Message d\'erreur : %s.</string>
-    
     <!-- 0.3.4 -->
     <string name="Main.MenuCopyLinkUrl">Copier l\'url du lien</string>
     <string name="Main.MenuViewImage">Afficher l\'image</string>
@@ -380,7 +360,6 @@
 	</string-array>
 	
 	<!-- 0.3.7 -->
-	<string name="Main.MenuSharePage">Partager la page</string>
 	<string name="Main.ShareChooserTitle">Partager via</string>
 	
 	<string name="Main.MenuShareLinkUrl">Partager le lien</string>
@@ -426,6 +405,6 @@
     <string name="QuickAction.SelectText">Sélectionner</string>
     <string name="QuickAction.MobileView">Vue mobile</string>
     
-    <string name="AboutActivity.OtherLicenseText">Cette application inclue du code du projet GreenDroid (https://github.com/cyrilmottier/GreenDroid/), distribué sous license Apache, version 2.</string>
+    <string name="AboutActivity.OtherLicenseText">Cette application inclue du code du projet GreenDroid (https://github.com/cyrilmottier/GreenDroid/), et du projet Shaman (https://github.com/emergentdotorg/shaman), tous les deux distribués sous license Apache, version 2.</string>
     
 </resources>

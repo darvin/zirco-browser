@@ -100,7 +100,7 @@ public class DownloadListAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
 			LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			convertView = inflater.inflate(R.layout.downloadrow, null);
+			convertView = inflater.inflate(R.layout.download_row, null);
 		}
 		
 		final DownloadItem item = mDownloads.get(position);

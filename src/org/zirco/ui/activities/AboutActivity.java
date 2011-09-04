@@ -40,7 +40,7 @@ public class AboutActivity extends Activity {
 		 Window w = getWindow();
 		 w.requestFeature(Window.FEATURE_LEFT_ICON);
 		 
-		 setContentView(R.layout.aboutactivity);
+		 setContentView(R.layout.about_activity);
 		 
 		 w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON,	android.R.drawable.ic_dialog_info);
 		 		 

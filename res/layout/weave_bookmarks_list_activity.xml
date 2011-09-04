@@ -34,8 +34,7 @@
 		android:orientation="vertical" android:layout_marginTop="10dip"
 		android:layout_width="match_parent" android:layout_height="match_parent">
 		
-		<TextView android:id="@+id/WeaveBookmarksEmptyViewText"
-			android:text="@string/WeaveBookmarksListActivity.EmptyText"
+		<TextView android:text="@string/WeaveBookmarksListActivity.EmptyText"
 			android:gravity="center_horizontal" android:layout_gravity="center_vertical"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"></TextView>
 
