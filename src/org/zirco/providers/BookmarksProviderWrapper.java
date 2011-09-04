@@ -25,6 +25,7 @@ import java.util.List;
 import org.zirco.model.UrlSuggestionItemComparator;
 import org.zirco.model.adapters.UrlSuggestionCursorAdapter;
 import org.zirco.model.items.BookmarkItem;
+import org.zirco.model.items.HistoryItem;
 import org.zirco.model.items.UrlSuggestionItem;
 import org.zirco.model.items.WeaveBookmarkItem;
 import org.zirco.providers.WeaveColumns;
@@ -83,6 +84,92 @@ public class BookmarksProviderWrapper {
     	}
 
 		return contentResolver.query(Browser.BOOKMARKS_URI, sHistoryBookmarksProjection, whereClause, null, orderClause);
+	}
+	
+	/**
+	 * Get a list of most visited bookmarks items, limited in size.
+	 * @param contentResolver The content resolver.
+	 * @param limit The size limit.
+	 * @return A list of BookmarkItem.
+	 */
+	public static List<BookmarkItem> getStockBookmarksWithLimit(ContentResolver contentResolver, int limit) {
+		List<BookmarkItem> result = new ArrayList<BookmarkItem>();
+		
+		String whereClause = Browser.BookmarkColumns.BOOKMARK + " = 1";
+		String orderClause = Browser.BookmarkColumns.VISITS + " DESC";
+		String[] colums = new String[] { Browser.BookmarkColumns._ID, Browser.BookmarkColumns.TITLE, Browser.BookmarkColumns.URL, Browser.BookmarkColumns.FAVICON };
+				
+		Cursor cursor = contentResolver.query(android.provider.Browser.BOOKMARKS_URI, colums, whereClause, null, orderClause);
+		
+		if (cursor != null) {
+			if (cursor.moveToFirst()) {
+				
+				int columnTitle = cursor.getColumnIndex(Browser.BookmarkColumns.TITLE);
+				int columnUrl = cursor.getColumnIndex(Browser.BookmarkColumns.URL);
+				
+				int count = 0;
+				while (!cursor.isAfterLast() &&
+						(count < limit)) {
+					
+					BookmarkItem item = new BookmarkItem(
+							cursor.getString(columnTitle),
+							cursor.getString(columnUrl));
+					
+					result.add(item);
+					
+					count++;
+					cursor.moveToNext();
+				}
+			}
+			
+			cursor.close();
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Get a list of most recent history items, limited in size.
+	 * @param contentResolver The content resolver.
+	 * @param limit The size limit.
+	 * @return A list of HistoryItem.
+	 */
+	public static List<HistoryItem> getStockHistoryWithLimit(ContentResolver contentResolver, int limit) {
+		List<HistoryItem> result = new ArrayList<HistoryItem>();
+		
+		String whereClause = Browser.BookmarkColumns.VISITS + " > 0";
+		String orderClause = Browser.BookmarkColumns.DATE + " DESC";
+		
+		Cursor cursor = contentResolver.query(android.provider.Browser.BOOKMARKS_URI, Browser.HISTORY_PROJECTION, whereClause, null, orderClause);
+		
+		if (cursor != null) {
+			if (cursor.moveToFirst()) {
+				
+				int columnId = cursor.getColumnIndex(Browser.BookmarkColumns._ID);
+				int columnTitle = cursor.getColumnIndex(Browser.BookmarkColumns.TITLE);
+				int columnUrl = cursor.getColumnIndex(Browser.BookmarkColumns.URL);
+				
+				int count = 0;
+				while (!cursor.isAfterLast() &&
+						(count < limit)) {
+					
+					HistoryItem item = new HistoryItem(
+							cursor.getLong(columnId),
+							cursor.getString(columnTitle),
+							cursor.getString(columnUrl),
+							null);
+					
+					result.add(item);
+					
+					count++;
+					cursor.moveToNext();
+				}
+			}
+			
+			cursor.close();
+		}
+		
+		return result;
 	}
 	
 	public static BookmarkItem getStockBookmarkById(ContentResolver contentResolver, long id) {

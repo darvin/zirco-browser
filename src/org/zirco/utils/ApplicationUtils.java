@@ -19,9 +19,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import org.zirco.R;
-import org.zirco.model.DbAdapter;
+import org.zirco.model.items.BookmarkItem;
+import org.zirco.model.items.HistoryItem;
+import org.zirco.providers.BookmarksProviderWrapper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -31,7 +34,6 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.database.Cursor;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
@@ -395,10 +397,9 @@ public class ApplicationUtils {
 	/**
 	 * Build the html result of the most recent bookmarks.
 	 * @param context The current context.
-	 * @param db The database adapter.
 	 * @return The html result of the most recent bookmarks.
 	 */
-	private static String getBookmarksHtml(Context context, DbAdapter db) {
+	private static String getBookmarksHtml(Context context) {
 		String result = "";
 		StringBuilder bookmarksSb = new StringBuilder();
 		
@@ -410,22 +411,14 @@ public class ApplicationUtils {
 			} catch (Exception e) {
 				limit = 5;
 			}
+
+			List<BookmarkItem> results = BookmarksProviderWrapper.getStockBookmarksWithLimit(context.getContentResolver(), limit);
 			
-			Cursor cursor = db.fetchBookmarksWithLimitForStartPage(limit);
-
-			if ((cursor != null) &&
-					(cursor.moveToFirst())) {			
-
-				do {
-
-					bookmarksSb.append(String.format("<li><a href=\"%s\">%s</a></li>",
-							cursor.getString(cursor.getColumnIndex(DbAdapter.BOOKMARKS_URL)),
-							cursor.getString(cursor.getColumnIndex(DbAdapter.BOOKMARKS_TITLE))));
-
-				} while (cursor.moveToNext());
+			for (BookmarkItem item : results) {
+				bookmarksSb.append(String.format("<li><a href=\"%s\">%s</a></li>",
+						item.getUrl(),
+						item.getTitle()));
 			}
-
-			cursor.close();
 		}
 		
 		result = String.format(mRawStartPageBookmarks,
@@ -438,10 +431,9 @@ public class ApplicationUtils {
 	/**
 	 * Build the html result of the most recent history.
 	 * @param context The current context.
-	 * @param db The database adapter.
 	 * @return The html result of the most recent history.
 	 */
-	private static String getHistoryHtml(Context context, DbAdapter db) {
+	private static String getHistoryHtml(Context context) {
 		String result = "";
 		StringBuilder historySb = new StringBuilder();
 		
@@ -454,21 +446,13 @@ public class ApplicationUtils {
 				limit = 5;
 			}
 			
-			Cursor cursor = db.fetchHistoryWithLimitForStartPage(limit);
-
-			if ((cursor != null) &&
-					(cursor.moveToFirst())) {			
-
-				do {
-
-					historySb.append(String.format("<li><a href=\"%s\">%s</a></li>",
-							cursor.getString(cursor.getColumnIndex(DbAdapter.HISTORY_URL)),
-							cursor.getString(cursor.getColumnIndex(DbAdapter.HISTORY_TITLE))));
-
-				} while (cursor.moveToNext());				
+			List<HistoryItem> results = BookmarksProviderWrapper.getStockHistoryWithLimit(context.getContentResolver(), limit);
+			
+			for (HistoryItem item : results) {
+				historySb.append(String.format("<li><a href=\"%s\">%s</a></li>",
+						item.getUrl(),
+						item.getTitle()));
 			}
-
-			cursor.close();
 		}
 		
 		result = String.format(mRawStartPageHistory,
@@ -497,14 +481,9 @@ public class ApplicationUtils {
 		}
 		
 		String result = mRawStartPage;
-		
-		DbAdapter db = new DbAdapter(context);
-		db.open();			
 	
-		String bookmarksHtml = getBookmarksHtml(context, db);
-		String historyHtml = getHistoryHtml(context, db);				
-		
-		db.close();
+		String bookmarksHtml = getBookmarksHtml(context);
+		String historyHtml = getHistoryHtml(context);
 		
 		String searchHtml = "";
 		if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Constants.PREFERENCES_START_PAGE_SHOW_SEARCH, true)) {
