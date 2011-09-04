@@ -50,7 +50,6 @@ public class ApplicationUtils {
 	
 	private static String mRawStartPage = null;
 	private static String mRawStartPageStyles = null;
-	private static String mRawStartPageJs = null;
 	private static String mRawStartPageBookmarks = null;
 	private static String mRawStartPageHistory = null;
 	
@@ -473,7 +472,6 @@ public class ApplicationUtils {
 			
 			mRawStartPage = getStringFromRawResource(context, R.raw.start);
 			mRawStartPageStyles = getStringFromRawResource(context, R.raw.start_style);
-			mRawStartPageJs = getStringFromRawResource(context, R.raw.start_js);
 			mRawStartPageBookmarks = getStringFromRawResource(context, R.raw.start_bookmarks);
 			mRawStartPageHistory = getStringFromRawResource(context, R.raw.start_history);
 			
@@ -494,7 +492,6 @@ public class ApplicationUtils {
 		
 		result = String.format(mRawStartPage,
 				mRawStartPageStyles,
-				mRawStartPageJs,
 				context.getResources().getString(R.string.StartPage_Welcome),
 				bodyHtml);		
 		
