@@ -343,6 +343,7 @@ public class BookmarksProviderWrapper {
 				values.put(Browser.BookmarkColumns.URL, url);
 				values.put(Browser.BookmarkColumns.DATE, new Date().getTime());
 				values.put(Browser.BookmarkColumns.VISITS, 1);
+				values.put(Browser.BookmarkColumns.BOOKMARK, 0);
 
 				contentResolver.insert(android.provider.Browser.BOOKMARKS_URI, values);
 			}               
@@ -372,7 +373,8 @@ public class BookmarksProviderWrapper {
 		c.set(Calendar.MILLISECOND, 0);
 		c.add(Calendar.DAY_OF_YEAR, - historySize);
 
-		String whereClause = Browser.BookmarkColumns.BOOKMARK + " = 0 AND " + Browser.BookmarkColumns.DATE + " < " + c.getTimeInMillis();
+		String whereClause = "(" + Browser.BookmarkColumns.BOOKMARK + " = 0 OR " + Browser.BookmarkColumns.BOOKMARK + " IS NULL) AND " + Browser.BookmarkColumns.DATE + " < " + c.getTimeInMillis();
+		
 		contentResolver.delete(Browser.BOOKMARKS_URI, whereClause, null);
 	}
     
@@ -414,7 +416,7 @@ public class BookmarksProviderWrapper {
 		if (clearHistory && clearBookmarks) {
 			whereClause = null;
 		} else if (clearHistory) {
-			whereClause = Browser.BookmarkColumns.BOOKMARK + " = 0";
+			whereClause = "(" + Browser.BookmarkColumns.BOOKMARK + " = 0) OR (" + Browser.BookmarkColumns.BOOKMARK + " IS NULL)";
 		} else if (clearBookmarks) {
 			whereClause = Browser.BookmarkColumns.BOOKMARK + " = 1";
 		}
