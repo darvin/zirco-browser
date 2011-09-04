@@ -209,11 +209,6 @@ public class XmlHistoryBookmarksImporter implements Runnable {
 								
 							}
 							
-							if ((creationDate == null) ||
-									(creationDate.length() == 0)) {
-								creationDate = DateUtils.getNow(mContext);
-							}
-							
 							BookmarksProviderWrapper.insertRawRecord(mContext.getContentResolver(), title, url, count, date, created, 1);								
 						}
 					}

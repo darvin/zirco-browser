@@ -15,7 +15,6 @@
 
 package org.zirco.utils;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -24,7 +23,6 @@ import java.util.Date;
 import org.zirco.R;
 
 import android.content.Context;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 /**
@@ -42,18 +40,6 @@ public class DateUtils {
 	}
 	
 	/**
-	 * Get a string representation in default format of the current date / time.
-	 * @param context The current context.
-	 * @return A string representation of the current date / time.
-	 */
-	public static String getNow(Context context) {
-		Calendar c = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat(getDefaultFormat(context));				
-		
-		return sdf.format(c.getTime());
-	}
-	
-	/**
 	 * Get a string representation of the current date / time in a format suitable for a file name.
 	 * @return A string representation of the current date / time.
 	 */
@@ -62,68 +48,6 @@ public class DateUtils {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss");
 		
 		return sdf.format(c.getTime());
-	}
-	
-	/**
-	 * Get a string representation in default format of the history limit.
-	 * @param context The current context.
-	 * @return A string representation of the history limit date / time.
-	 */
-	public static String getHistoryLimit(Context context) {
-		int historySize = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(Constants.PREFERENCES_BROWSER_HISTORY_SIZE, "90"));
-		Calendar c = Calendar.getInstance();
-		c.add(Calendar.DAY_OF_MONTH, -historySize);
-		
-		c.set(Calendar.HOUR_OF_DAY, 23);
-		c.set(Calendar.MINUTE, 59);
-		c.set(Calendar.SECOND, 59);
-		c.set(Calendar.MILLISECOND, 0);
-		
-		SimpleDateFormat sdf = new SimpleDateFormat(getDefaultFormat(context));
-		
-		return sdf.format(c.getTime());		
-	}
-	
-	/**
-	 * Get the current date at midnight minus "roll" days.
-	 * @param roll The number of days to substract to current date.
-	 * @return The current date minus "roll" days, at midnight.
-	 */
-	public static Date getDateAtMidnight(int roll) {
-		Calendar c = Calendar.getInstance();
-		c.set(Calendar.HOUR_OF_DAY, 0);
-		c.set(Calendar.MINUTE, 0);
-		c.set(Calendar.SECOND, 0);
-		c.set(Calendar.MILLISECOND, 0);
-		
-		c.add(Calendar.DATE, roll);
-		
-		return c.getTime();
-	}
-	
-	/**
-	 * Convert the given date to a string in default format.
-	 * @param context The current context.
-	 * @param date The date to convert.
-	 * @return A string representation in default format of the given date.
-	 */
-	public static String getDateAsUniversalString(Context context, Date date) {
-		Calendar c = Calendar.getInstance();
-		c.setTime(date);
-		
-		SimpleDateFormat sdf = new SimpleDateFormat(getDefaultFormat(context));				
-		
-		return sdf.format(c.getTime());
-	}
-	
-	/**
-	 * Convert the given date to its string representation using user locale information.
-	 * @param context The current context.
-	 * @param date The date to convert.
-	 * @return The converted date.
-	 */
-	public static String getDisplayDate(Context context, Date date) {
-		return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(date);
 	}
 	
 	/**

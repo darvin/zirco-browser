@@ -34,7 +34,6 @@ import org.zirco.providers.BookmarksProviderWrapper;
 import org.zirco.ui.activities.preferences.PreferencesActivity;
 import org.zirco.ui.components.ZircoWebView;
 import org.zirco.ui.components.ZircoWebViewClient;
-import org.zirco.ui.runnables.BookmarkThumbnailUpdater;
 import org.zirco.ui.runnables.FaviconUpdaterRunnable;
 import org.zirco.ui.runnables.HideToolbarsRunnable;
 import org.zirco.ui.runnables.HistoryUpdater;
@@ -1560,8 +1559,6 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
 		}
 		
 		WebIconDatabase.getInstance().retainIconForPageUrl(mCurrentWebView.getUrl());
-		
-		new Thread(new BookmarkThumbnailUpdater(this, mCurrentWebView)).start();
 		
 		if (mUrlBarVisible) {
 			startToolbarsHideRunnable();
