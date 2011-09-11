@@ -17,7 +17,7 @@ package org.zirco.ui.components;
 
 import org.zirco.R;
 import org.zirco.controllers.Controller;
-import org.zirco.ui.activities.ZircoMain;
+import org.zirco.ui.activities.MainActivity;
 import org.zirco.utils.ApplicationUtils;
 import org.zirco.utils.Constants;
 import org.zirco.utils.UrlUtils;
@@ -33,18 +33,18 @@ import android.webkit.WebView.HitTestResult;
 /**
  * Convenient extension of WebViewClient.
  */
-public class ZircoWebViewClient extends WebViewClient {
+public class CustomWebViewClient extends WebViewClient {
 	
-	private ZircoMain mMainActivity;
+	private MainActivity mMainActivity;
 	
-	public ZircoWebViewClient(ZircoMain mainActivity) {
+	public CustomWebViewClient(MainActivity mainActivity) {
 		super();
 		mMainActivity = mainActivity;
 	}
 	
 	@Override
 	public void onPageFinished(WebView view, String url) {			
-		((ZircoWebView) view).notifyPageFinished();
+		((CustomWebView) view).notifyPageFinished();
 		mMainActivity.onPageFinished(url);
 		
 		super.onPageFinished(view, url);
@@ -61,7 +61,7 @@ public class ZircoWebViewClient extends WebViewClient {
 					ApplicationUtils.getStartPage(view.getContext()), "text/html", "UTF-8", "about:start");
 		}
 		
-		((ZircoWebView) view).notifyPageStarted();
+		((CustomWebView) view).notifyPageStarted();
 		mMainActivity.onPageStarted(url);
 		
 		super.onPageStarted(view, url, favicon);
@@ -151,7 +151,7 @@ public class ZircoWebViewClient extends WebViewClient {
 				return true;
 				
 			} else {			
-				((ZircoWebView) view).resetLoadedUrl();
+				((CustomWebView) view).resetLoadedUrl();
 				mMainActivity.onUrlLoading(url);
 				return false;
 			}

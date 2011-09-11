@@ -47,7 +47,7 @@ public class BookmarksHistoryActivity extends TabActivity {
         	requestWindowFeature(Window.FEATURE_NO_TITLE);
         }
 		
-		setContentView(R.layout.bookmarkshistoryactivity);
+		setContentView(R.layout.bookmarks_history_activity);
 		
 		setTitle(R.string.BookmarksListActivity_Title);
 		

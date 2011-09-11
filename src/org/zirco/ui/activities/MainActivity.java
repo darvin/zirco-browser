@@ -32,8 +32,8 @@ import org.zirco.model.adapters.UrlSuggestionCursorAdapter;
 import org.zirco.model.items.DownloadItem;
 import org.zirco.providers.BookmarksProviderWrapper;
 import org.zirco.ui.activities.preferences.PreferencesActivity;
-import org.zirco.ui.components.ZircoWebView;
-import org.zirco.ui.components.ZircoWebViewClient;
+import org.zirco.ui.components.CustomWebView;
+import org.zirco.ui.components.CustomWebViewClient;
 import org.zirco.ui.runnables.FaviconUpdaterRunnable;
 import org.zirco.ui.runnables.HideToolbarsRunnable;
 import org.zirco.ui.runnables.HistoryUpdater;
@@ -103,9 +103,9 @@ import android.widget.SimpleCursorAdapter.CursorToStringConverter;
 /**
  * The application main activity.
  */
-public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchListener, IDownloadEventsListener {
+public class MainActivity extends Activity implements IToolbarsContainer, OnTouchListener, IDownloadEventsListener {
 	
-	public static ZircoMain INSTANCE = null;
+	public static MainActivity INSTANCE = null;
 	
 	private static final int FLIP_PIXEL_THRESHOLD = 200;
 	private static final int FLIP_TIME_THRESHOLD = 400;
@@ -143,8 +143,8 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
 	private ImageView mBubbleRightView;
 	private ImageView mBubbleLeftView;
 	
-	private ZircoWebView mCurrentWebView;
-	private List<ZircoWebView> mWebViews;
+	private CustomWebView mCurrentWebView;
+	private List<CustomWebView> mWebViews;
 	
 	private ImageButton mPreviousButton;
 	private ImageButton mNextButton;
@@ -313,7 +313,7 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
 					navigateToHome();
 					break;
 				case 1:
-					ApplicationUtils.sharePage(ZircoMain.this, mCurrentWebView.getTitle(), mCurrentWebView.getUrl());
+					ApplicationUtils.sharePage(MainActivity.this, mCurrentWebView.getTitle(), mCurrentWebView.getUrl());
 					break;
 				case 2:
 					swithToSelectAndCopyTextMode();
@@ -343,7 +343,7 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
     	
     	mUrlBarVisible = true;
     	
-    	mWebViews = new ArrayList<ZircoWebView>();
+    	mWebViews = new ArrayList<CustomWebView>();
     	Controller.getInstance().setWebViewList(mWebViews);
     	
     	mBubbleRightView = (ImageView) findViewById(R.id.BubbleRightView);
@@ -420,11 +420,11 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
 						(constraint.length() > 0)) {
 					return BookmarksProviderWrapper.getUrlSuggestions(getContentResolver(),
 							constraint.toString(),
-							PreferenceManager.getDefaultSharedPreferences(ZircoMain.this).getBoolean(Constants.PREFERENCE_USE_WEAVE, false));
+							PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getBoolean(Constants.PREFERENCE_USE_WEAVE, false));
 				} else {
 					return BookmarksProviderWrapper.getUrlSuggestions(getContentResolver(),
 							null,
-							PreferenceManager.getDefaultSharedPreferences(ZircoMain.this).getBoolean(Constants.PREFERENCE_USE_WEAVE, false));
+							PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getBoolean(Constants.PREFERENCE_USE_WEAVE, false));
 				}
 			}
 		});
@@ -549,7 +549,7 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
     	
     	updateSwitchTabsMethod();
     	
-    	for (ZircoWebView view : mWebViews) {
+    	for (CustomWebView view : mWebViews) {
     		view.initializeOptions();
     	}
     }
@@ -573,7 +573,7 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
      */
     private void initializeCurrentWebView() {
     	
-    	mCurrentWebView.setWebViewClient(new ZircoWebViewClient(this));
+    	mCurrentWebView.setWebViewClient(new CustomWebViewClient(this));
     	mCurrentWebView.setOnTouchListener(this);
     	
     	mCurrentWebView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
@@ -669,20 +669,20 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
 				Intent i = new Intent(Intent.ACTION_GET_CONTENT);
 				i.addCategory(Intent.CATEGORY_OPENABLE);
 				i.setType("*/*");
-				ZircoMain.this.startActivityForResult(
-						Intent.createChooser(i, ZircoMain.this.getString(R.string.Main_FileChooserPrompt)),
+				MainActivity.this.startActivityForResult(
+						Intent.createChooser(i, MainActivity.this.getString(R.string.Main_FileChooserPrompt)),
 						OPEN_FILE_CHOOSER_ACTIVITY);
 			}
 			
 			@Override
 			public void onProgressChanged(WebView view, int newProgress) {
-				((ZircoWebView) view).setProgress(newProgress);				
+				((CustomWebView) view).setProgress(newProgress);				
 				mProgressBar.setProgress(mCurrentWebView.getProgress());
 			}
 						
 			@Override
 			public void onReceivedIcon(WebView view, Bitmap icon) {
-				new Thread(new FaviconUpdaterRunnable(ZircoMain.this, view.getUrl(), view.getOriginalUrl(), icon)).start();
+				new Thread(new FaviconUpdaterRunnable(MainActivity.this, view.getUrl(), view.getOriginalUrl(), icon)).start();
 				updateFavIcon();
 				
 				super.onReceivedIcon(view, icon);
@@ -731,7 +731,7 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
 
 			@Override
 			public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
-				new AlertDialog.Builder(ZircoMain.this)
+				new AlertDialog.Builder(MainActivity.this)
 				.setTitle(R.string.Commons_JavaScriptDialog)
 				.setMessage(message)
 				.setPositiveButton(android.R.string.ok, 
@@ -757,12 +757,12 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
 			@Override
 			public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, final JsPromptResult result) {
 				
-				final LayoutInflater factory = LayoutInflater.from(ZircoMain.this);
-                final View v = factory.inflate(R.layout.javascriptpromptdialog, null);
+				final LayoutInflater factory = LayoutInflater.from(MainActivity.this);
+                final View v = factory.inflate(R.layout.javascript_prompt_dialog, null);
                 ((TextView) v.findViewById(R.id.JavaScriptPromptMessage)).setText(message);
                 ((EditText) v.findViewById(R.id.JavaScriptPromptInput)).setText(defaultValue);
 
-                new AlertDialog.Builder(ZircoMain.this)
+                new AlertDialog.Builder(MainActivity.this)
                     .setTitle(R.string.Commons_JavaScriptDialog)
                     .setView(v)
                     .setPositiveButton(android.R.string.ok,
@@ -841,7 +841,7 @@ public class ZircoMain extends Activity implements IToolbarsContainer, OnTouchLi
     private void addTab(boolean navigateToHome, int parentIndex) {
     	RelativeLayout view = (RelativeLayout) mInflater.inflate(R.layout.webview, mViewFlipper, false);
     	
-    	mCurrentWebView = (ZircoWebView) view.findViewById(R.id.webview);
+    	mCurrentWebView = (CustomWebView) view.findViewById(R.id.webview);
     	
     	initializeCurrentWebView();    			
 		

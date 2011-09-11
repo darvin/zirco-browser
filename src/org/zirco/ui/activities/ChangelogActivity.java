@@ -37,7 +37,7 @@ public class ChangelogActivity extends Activity {
 		Window w = getWindow();
 		w.requestFeature(Window.FEATURE_LEFT_ICON);
 		
-		setContentView(R.layout.changelogactivity);
+		setContentView(R.layout.changelog_activity);
 		
 		w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, android.R.drawable.ic_dialog_info);
 		

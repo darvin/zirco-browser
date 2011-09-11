@@ -43,7 +43,7 @@ public class DownloadsListActivity extends ListActivity implements IDownloadEven
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.downloadslistactivity);
+        setContentView(R.layout.downloads_list_activity);
         
         setTitle(R.string.DownloadListActivity_Title);
         

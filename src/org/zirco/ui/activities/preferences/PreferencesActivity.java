@@ -25,8 +25,8 @@ import org.zirco.ui.activities.AboutActivity;
 import org.zirco.ui.activities.AdBlockerWhiteListActivity;
 import org.zirco.ui.activities.ChangelogActivity;
 import org.zirco.ui.activities.MobileViewListActivity;
-import org.zirco.ui.activities.ZircoMain;
-import org.zirco.ui.components.ZircoWebView;
+import org.zirco.ui.activities.MainActivity;
+import org.zirco.ui.components.CustomWebView;
 import org.zirco.ui.runnables.XmlHistoryBookmarksExporter;
 import org.zirco.ui.runnables.XmlHistoryBookmarksImporter;
 import org.zirco.utils.ApplicationUtils;
@@ -235,7 +235,7 @@ public class PreferencesActivity extends PreferenceActivity {
 		mPreferenceChangeListener = new OnSharedPreferenceChangeListener() {			
 			@Override
 			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-				ZircoMain.INSTANCE.applyPreferences();
+				MainActivity.INSTANCE.applyPreferences();
 			}
 		};
 		
@@ -254,7 +254,7 @@ public class PreferencesActivity extends PreferenceActivity {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				ZircoMain.INSTANCE.restartApplication();				
+				MainActivity.INSTANCE.restartApplication();				
 			}
 			
 		});
@@ -615,7 +615,7 @@ public class PreferencesActivity extends PreferenceActivity {
 			BookmarksProviderWrapper.clearHistoryAndOrBookmarks(getContentResolver(), true, false);
 			
 			// Clear WebViews history
-			Iterator<ZircoWebView> iter = Controller.getInstance().getWebViewList().iterator();
+			Iterator<CustomWebView> iter = Controller.getInstance().getWebViewList().iterator();
 			while (iter.hasNext()) {
 				iter.next().clearHistory();
 			}
@@ -642,7 +642,7 @@ public class PreferencesActivity extends PreferenceActivity {
 		}
 		@Override
 		public void run() {
-			Iterator<ZircoWebView> iter = Controller.getInstance().getWebViewList().iterator();
+			Iterator<CustomWebView> iter = Controller.getInstance().getWebViewList().iterator();
 			while (iter.hasNext()) {
 				iter.next().clearFormData();
 			}
@@ -669,7 +669,7 @@ public class PreferencesActivity extends PreferenceActivity {
 		@Override
 		public void run() {
 			// Only need to clear the cache from one WebView, as it is application-based.
-			ZircoWebView webView = Controller.getInstance().getWebViewList().get(0);
+			CustomWebView webView = Controller.getInstance().getWebViewList().get(0);
 			webView.clearCache(true);
 
 			handler.sendEmptyMessage(0);

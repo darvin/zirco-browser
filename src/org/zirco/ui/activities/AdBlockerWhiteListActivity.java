@@ -58,7 +58,7 @@ public class AdBlockerWhiteListActivity extends ListActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.adblockerwhitelistactivity);
+        setContentView(R.layout.adblocker_whitelist_activity);
         
         setTitle(R.string.AdBlockerWhiteListActivity_Title);
         
@@ -87,7 +87,7 @@ public class AdBlockerWhiteListActivity extends ListActivity {
 		String[] from = new String[] {DbAdapter.ADBLOCK_URL};
     	int[] to = new int[] {R.id.AdBlockerWhiteListRow_Title};
 		
-    	mCursorAdapter = new SimpleCursorAdapter(this, R.layout.adblockerwhitelistrow, mCursor, from, to);
+    	mCursorAdapter = new SimpleCursorAdapter(this, R.layout.adblocker_whitelist_row, mCursor, from, to);
 		setListAdapter(mCursorAdapter);
 		
 		setAnimation();

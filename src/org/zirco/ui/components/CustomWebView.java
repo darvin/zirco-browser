@@ -37,7 +37,7 @@ import android.webkit.WebSettings.ZoomDensity;
 /**
  * A convenient extension of WebView.
  */
-public class ZircoWebView extends WebView {
+public class CustomWebView extends WebView {
 	
 	private Context mContext;
 	
@@ -55,7 +55,7 @@ public class ZircoWebView extends WebView {
 	 * Constructor.
 	 * @param context The current context.
 	 */
-	public ZircoWebView(Context context) {
+	public CustomWebView(Context context) {
 		super(context);
 		
 		mContext = context;
@@ -69,7 +69,7 @@ public class ZircoWebView extends WebView {
 	 * @param context The current context.
 	 * @param attrs The attribute set.
 	 */
-	public ZircoWebView(Context context, AttributeSet attrs) {
+	public CustomWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
         
         mContext = context;

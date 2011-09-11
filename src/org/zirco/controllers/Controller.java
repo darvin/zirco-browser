@@ -20,7 +20,7 @@ import java.util.List;
 
 import org.zirco.model.DbAdapter;
 import org.zirco.model.items.DownloadItem;
-import org.zirco.ui.components.ZircoWebView;
+import org.zirco.ui.components.CustomWebView;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -32,7 +32,7 @@ public final class Controller {
 	
 	private SharedPreferences mPreferences;
 
-	private List<ZircoWebView> mWebViewList;
+	private List<CustomWebView> mWebViewList;
 	private List<DownloadItem> mDownloadList;
 	private List<String> mAdBlockWhiteList = null;
 	private List<String> mMobileViewUrlList = null;
@@ -67,7 +67,7 @@ public final class Controller {
 	 * Get the list of current WebViews.
 	 * @return The list of current WebViews.
 	 */
-	public List<ZircoWebView> getWebViewList() {
+	public List<CustomWebView> getWebViewList() {
 		return mWebViewList;
 	}
 	
@@ -75,7 +75,7 @@ public final class Controller {
 	 * Set the list of current WebViews.
 	 * @param list The list of current WebViews.
 	 */
-	public void setWebViewList(List<ZircoWebView> list) {
+	public void setWebViewList(List<CustomWebView> list) {
 		mWebViewList = list;
 	}
 	
