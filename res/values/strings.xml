@@ -484,4 +484,6 @@
     
     <string name="Commons.ClearingBookmarks">Clearing bookmarks...</string>
     
+    <string name="DownloadListActivity.RemoveCompletedDownloads">Remove completed downloads</string>
+    
 </resources>

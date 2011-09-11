@@ -1,6 +1,8 @@
 0.4.0:
 - Add "Share" context menu to bookmarks and history view.
 - Feature: Zirco can now retrieve your bookmarks from Firefox Sync. Go to preferences to start using it!
+- Remove completed download from download list.
+- Notification for completed downloads are removed when clicking on it.
 
 0.3.9:
 - Bug fix in history view. Items are now displayed in differents categories (today, last week, last month...)

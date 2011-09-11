@@ -482,5 +482,7 @@
     <string name="Commons.ImportHistoryBookmarksSource">Choose the import source</string>
     
     <string name="Commons.ClearingBookmarks">正在清空书签中...</string>
+    
+    <string name="DownloadListActivity.RemoveCompletedDownloads">Remove completed downloads</string>
 	
 </resources>

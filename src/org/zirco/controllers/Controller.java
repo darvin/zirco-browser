@@ -111,6 +111,19 @@ public final class Controller {
 		mDownloadList.add(item);
 	}
 	
+	public synchronized void clearCompletedDownloads() {
+		List<DownloadItem> newList = new ArrayList<DownloadItem>();
+		
+		for (DownloadItem item : mDownloadList) {
+			if (!item.isFinished()) {
+				newList.add(item);
+			}
+		}
+		
+		mDownloadList.clear();
+		mDownloadList = newList;
+	}
+	
 	/**
 	 * Get the list of white-listed url for the AdBlocker.
 	 * @param context The current context.

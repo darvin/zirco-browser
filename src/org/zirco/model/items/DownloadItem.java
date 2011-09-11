@@ -218,6 +218,7 @@ public class DownloadItem {
 		}
 
 		mNotification = new Notification(R.drawable.stat_sys_download, mContext.getString(R.string.DownloadNotification_DownloadComplete), System.currentTimeMillis());
+		mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
 
 		Intent notificationIntent = new Intent(mContext.getApplicationContext(), DownloadsListActivity.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(mContext.getApplicationContext(), 0, notificationIntent, 0);
