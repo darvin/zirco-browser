@@ -484,5 +484,8 @@
     <string name="Commons.ClearingBookmarks">正在清空书签中...</string>
     
     <string name="DownloadListActivity.RemoveCompletedDownloads">Remove completed downloads</string>
+    
+    <string name="QuickAction.Find">Find on page</string>
+    <string name="SearchDialog.Hint">Find on page</string>
 	
 </resources>

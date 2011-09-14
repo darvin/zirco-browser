@@ -486,4 +486,7 @@
     
     <string name="DownloadListActivity.RemoveCompletedDownloads">Remove completed downloads</string>
     
+    <string name="QuickAction.Find">Find on page</string>
+    <string name="SearchDialog.Hint">Find on page</string>
+    
 </resources>

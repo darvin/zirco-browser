@@ -60,6 +60,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.Editable;
@@ -132,6 +133,14 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 	private LinearLayout mTopBar;
 	private LinearLayout mBottomBar;
 	
+	private LinearLayout mFindBar;
+	
+	private ImageButton mFindPreviousButton;
+	private ImageButton mFindNextButton;
+	private ImageButton mFindCloseButton;
+	
+	private EditText mFindText;
+	
 	private ImageView mPreviousTabView;
 	private ImageView mNextTabView;
 	
@@ -158,6 +167,7 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 	
 	private boolean mUrlBarVisible;
 	private boolean mToolsActionGridVisible = false;
+	private boolean mFindDialogVisible = false;
 	
 	private TextWatcher mUrlTextWatcher;
 	
@@ -302,6 +312,7 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 		mToolsActionGrid = new QuickActionGrid(this);
 		mToolsActionGrid.addQuickAction(new QuickAction(this, R.drawable.ic_btn_home, R.string.QuickAction_Home));
 		mToolsActionGrid.addQuickAction(new QuickAction(this, R.drawable.ic_btn_share, R.string.QuickAction_Share));
+		mToolsActionGrid.addQuickAction(new QuickAction(this, R.drawable.ic_btn_find, R.string.QuickAction_Find));
 		mToolsActionGrid.addQuickAction(new QuickAction(this, R.drawable.ic_btn_select, R.string.QuickAction_SelectText));
 		mToolsActionGrid.addQuickAction(new QuickAction(this, R.drawable.ic_btn_mobile_view, R.string.QuickAction_MobileView));
 		
@@ -315,10 +326,16 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 				case 1:
 					ApplicationUtils.sharePage(MainActivity.this, mCurrentWebView.getTitle(), mCurrentWebView.getUrl());
 					break;
-				case 2:
-					swithToSelectAndCopyTextMode();
+				case 2:					
+					// Somewhat dirty hack: when the find dialog was shown from a QuickAction,
+					// the soft keyboard did not show... Hack is to wait a little before showing
+					// the file dialog through a thread.
+					startShowFindDialogRunnable();
 					break;
 				case 3:
+					swithToSelectAndCopyTextMode();
+					break;
+				case 4:
 					String currentUrl = mUrlEditText.getText().toString();
 		    		
 		    		// Do not reload mobile view if already on it.
@@ -330,7 +347,7 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 				}
 			}
 		});
-		
+				
 		mToolsActionGrid.setOnDismissListener(new PopupWindow.OnDismissListener() {			
 			@Override
 			public void onDismiss() {
@@ -380,7 +397,10 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 			public void onClick(View v) {
 				// Dummy event to steel it from the WebView, in case of clicking between the buttons.				
 			}
-		});   
+		});
+    	
+    	mFindBar = (LinearLayout) findViewById(R.id.findControls);
+    	mFindBar.setVisibility(View.GONE);
     	
     	mPreviousTabView = (ImageView) findViewById(R.id.PreviousTabView);
     	mPreviousTabView.setOnClickListener(new View.OnClickListener() {			
@@ -537,6 +557,50 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
             	onQuickButton();
             }          
         });
+		
+		mFindPreviousButton = (ImageButton) findViewById(R.id.find_previous);
+		mFindPreviousButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				mCurrentWebView.findNext(false);
+				hideKeyboardFromFindDialog();
+			}
+		});
+		
+		mFindNextButton = (ImageButton) findViewById(R.id.find_next);
+		mFindNextButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				mCurrentWebView.findNext(true);
+				hideKeyboardFromFindDialog();
+			}
+		});
+		
+		mFindCloseButton = (ImageButton) findViewById(R.id.find_close);
+		mFindCloseButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				closeFindDialog();
+			}
+		});
+		
+		mFindText = (EditText) findViewById(R.id.find_value);
+		mFindText.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				doFind();
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+			
+			@Override
+			public void afterTextChanged(Editable s) { }
+		});
 
     }
     	
@@ -839,6 +903,10 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
      * @param parentIndex The index of the new tab.
      */
     private void addTab(boolean navigateToHome, int parentIndex) {
+    	if (mFindDialogVisible) {
+    		closeFindDialog();
+    	}
+    	
     	RelativeLayout view = (RelativeLayout) mInflater.inflate(R.layout.webview, mViewFlipper, false);
     	
     	mCurrentWebView = (CustomWebView) view.findViewById(R.id.webview);
@@ -871,6 +939,10 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
      */
     private void removeCurrentTab() {
     	
+    	if (mFindDialogVisible) {
+    		closeFindDialog();
+    	}
+    	
     	int removeIndex = mViewFlipper.getDisplayedChild();
     	
     	mCurrentWebView.doOnPause();
@@ -887,6 +959,58 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
     	updatePreviousNextTabViewsVisibility();
     	
     	mUrlEditText.clearFocus();
+    }
+    
+    private void doFind() {
+		CharSequence find = mFindText.getText();
+		if (find.length() == 0) {
+			mFindPreviousButton.setEnabled(false);
+			mFindNextButton.setEnabled(false);
+			mCurrentWebView.clearMatches();
+		} else {
+			int found = mCurrentWebView.findAll(find.toString());
+			if (found < 2) {
+				mFindPreviousButton.setEnabled(false);
+				mFindNextButton.setEnabled(false);
+			} else {
+				mFindPreviousButton.setEnabled(true);
+				mFindNextButton.setEnabled(true);
+			}
+		}
+	}
+	
+	private void showFindDialog() {	
+		mCurrentWebView.doSetFindIsUp(true);
+		CharSequence text = mFindText.getText();
+		if (text.length() > 0) {
+			mFindText.setSelection(0, text.length());
+			doFind();
+		} else {
+			mFindPreviousButton.setEnabled(false);
+			mFindNextButton.setEnabled(false);
+		}
+		
+		setFindBarVisibility(true);
+		mFindText.requestFocus();
+		showKeyboardForFindDialog();		
+	}
+	
+	private void closeFindDialog() {
+		hideKeyboardFromFindDialog();
+		mCurrentWebView.doNotifyFindDialogDismissed();
+		setFindBarVisibility(false);
+	}
+    
+    private void setFindBarVisibility(boolean visible) {
+    	if (visible) {
+    		mFindBar.startAnimation(AnimationManager.getInstance().getTopBarShowAnimation());
+    		mFindBar.setVisibility(View.VISIBLE);    		
+    		mFindDialogVisible = true;
+    	} else {
+    		mFindBar.startAnimation(AnimationManager.getInstance().getTopBarHideAnimation());
+    		mFindBar.setVisibility(View.GONE);
+    		mFindDialogVisible = false;
+    	}
     }
     
     /**
@@ -986,6 +1110,16 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
     	}
     }
     
+    private void showKeyboardForFindDialog() {
+    	InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+    	imm.showSoftInput(mFindText, InputMethodManager.SHOW_IMPLICIT);
+    }
+    
+    private void hideKeyboardFromFindDialog() {
+    	InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+    	imm.hideSoftInputFromWindow(mFindText.getWindowToken(), 0);
+    }
+    
     /**
      * Hide the keyboard.
      * @param delayedHideToolbars If True, will start a runnable to delay tool bars hiding. If False, tool bars are hidden immediatly.
@@ -1001,6 +1135,33 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
     			setToolbarsVisibility(false);
     		}
     	}
+    }
+    
+    /**
+     * Thread to delay the show of the find dialog. This seems to be necessary when shown from
+     * a QuickAction. If not, the keyboard does not show. 50ms seems to be enough on
+     * a Nexus One and on the (rather) slow emulator. Dirty hack :(
+     */
+    private void startShowFindDialogRunnable() {
+    	new Thread(new Runnable() {
+			
+    		private Handler mHandler = new Handler() {
+    			public void handleMessage(Message msg) {
+    				showFindDialog();
+    			}
+    		};
+    		
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(50);
+					mHandler.sendEmptyMessage(0);					
+				} catch (InterruptedException e) {
+					mHandler.sendEmptyMessage(0);
+				}
+				
+			}
+		}).start();
     }
     
     /**
@@ -1146,7 +1307,11 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 				this.moveTaskToBack(true);
 			}
 			return true;
-		
+		case KeyEvent.KEYCODE_SEARCH:
+			if (!mFindDialogVisible) {
+				showFindDialog();
+			}
+			return true;
 		default: return super.onKeyUp(keyCode, event);
 		}
 	}
@@ -1469,6 +1634,10 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 		
 		if (mViewFlipper.getChildCount() > 1) {
 			
+			if (mFindDialogVisible) {
+				closeFindDialog();
+			}
+			
 			mCurrentWebView.doOnPause();
 			
 			mViewFlipper.setInAnimation(AnimationManager.getInstance().getInFromLeftAnimation());
@@ -1498,6 +1667,10 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 	private void showNextTab(boolean resetToolbarsRunnable) {
 		
 		if (mViewFlipper.getChildCount() > 1) {
+			
+			if (mFindDialogVisible) {
+				closeFindDialog();
+			}
 			
 			mCurrentWebView.doOnPause();
 			
@@ -1679,6 +1852,30 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 			mCurrentWebView.zoomIn();
 			return super.onDoubleTap(e);
 		}		
+
+		@Override
+		public boolean onSingleTapConfirmed(MotionEvent e) {
+			
+//			WebView.HitTestResult hr = mCurrentWebView.getHitTestResult();
+//			if (hr != null) {
+//				String str = hr.getExtra();				
+//				if (str != null) {
+//					Log.d("onTouch", str);
+//					if (str.startsWith("http://i.ytimg.com/vi/")) {
+//
+//						String videoId = str.split("\\/")[4];
+//						Log.d("onTouch", str + " --> " + videoId);
+//						
+//						//Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" +videoId));
+//						//v.getContext().startActivity(i);
+//						
+//						onVndUrl("vnd.youtube:" + videoId);
+//
+//					}
+//				}
+//			}
+			return super.onSingleTapConfirmed(e);
+		}
 
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,	float velocityY) {

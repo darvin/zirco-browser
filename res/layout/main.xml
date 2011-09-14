@@ -69,6 +69,36 @@
 			</LinearLayout>											
 			
 		</LinearLayout>
+		
+		<LinearLayout android:id="@+id/findControls" android:layout_width="match_parent"
+			android:layout_alignParentTop="true"
+			android:layout_height="wrap_content" android:paddingTop="5dip"
+			android:paddingLeft="4dip" android:paddingRight="4dip"
+			android:paddingBottom="1dip" android:background="@android:drawable/bottom_bar">
+
+			<ImageButton android:src="@drawable/ic_btn_find_prev"
+				android:id="@+id/find_previous" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" />
+
+			<ImageButton android:src="@drawable/ic_btn_find_next"
+				android:id="@+id/find_next" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" />
+
+			<LinearLayout android:layout_height="wrap_content"
+				android:layout_width="0dip" android:layout_weight="1"
+				android:orientation="vertical" android:layout_marginRight="6dip">
+
+					<EditText android:id="@+id/find_value" android:layout_width="match_parent"
+						android:layout_height="wrap_content" android:scrollHorizontally="true"
+						android:inputType="text" android:hint="@string/SearchDialog.Hint" />
+
+			</LinearLayout>
+
+			<ImageButton android:id="@+id/find_close"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:src="@drawable/ic_btn_close_panel" />
+
+		</LinearLayout>
 
 		<ImageView android:layout_height="wrap_content"
 			android:layout_width="wrap_content" android:src="@drawable/bubbleright48"
