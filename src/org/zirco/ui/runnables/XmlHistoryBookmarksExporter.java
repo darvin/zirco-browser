@@ -104,16 +104,18 @@ public class XmlHistoryBookmarksExporter implements Runnable {
 				mProgressDialog.dismiss();
 			}
 			
-			if (mErrorMessage == null) {
-				ApplicationUtils.showOkDialog(mContext,
-						android.R.drawable.ic_dialog_info,
-						mContext.getResources().getString(R.string.Commons_HistoryBookmarksExportSDCardDoneTitle),
-						String.format(mContext.getResources().getString(R.string.Commons_HistoryBookmarksExportSDCardDoneMessage), mFile.getAbsolutePath()));
-			} else {
-				ApplicationUtils.showOkDialog(mContext,
-						android.R.drawable.ic_dialog_alert,
-						mContext.getResources().getString(R.string.Commons_HistoryBookmarksExportSDCardFailedTitle),
-						String.format(mContext.getResources().getString(R.string.Commons_HistoryBookmarksFailedMessage), mErrorMessage));
+			if (mContext != null) {
+				if (mErrorMessage == null) {
+					ApplicationUtils.showOkDialog(mContext,
+							android.R.drawable.ic_dialog_info,
+							mContext.getResources().getString(R.string.Commons_HistoryBookmarksExportSDCardDoneTitle),
+							String.format(mContext.getResources().getString(R.string.Commons_HistoryBookmarksExportSDCardDoneMessage), mFile.getAbsolutePath()));
+				} else {
+					ApplicationUtils.showOkDialog(mContext,
+							android.R.drawable.ic_dialog_alert,
+							mContext.getResources().getString(R.string.Commons_HistoryBookmarksExportSDCardFailedTitle),
+							String.format(mContext.getResources().getString(R.string.Commons_HistoryBookmarksFailedMessage), mErrorMessage));
+				}
 			}
 		}
 	};

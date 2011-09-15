@@ -16,13 +16,20 @@
 package org.zirco.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import org.zirco.ui.runnables.XmlHistoryBookmarksExporter;
+import org.zirco.utils.ApplicationUtils;
+import org.zirco.utils.DateUtils;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.Browser;
 import android.util.Log;
 
 /**
@@ -300,7 +307,7 @@ public class DbAdapter {
 			db.execSQL(ADBLOCK_WHITELIST_DATABASE_CREATE);
 			db.execSQL(MOBILE_VIEW_DATABASE_CREATE);
 			mParent.mAdBlockListNeedPopulate = true;
-		}
+		}		
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {			
@@ -315,10 +322,92 @@ public class DbAdapter {
 				mParent.mAdBlockListNeedPopulate = true;
 			case 4: db.execSQL(MOBILE_VIEW_DATABASE_CREATE);
 			case 5:
+				// Export old bookmarks before dropping table.
+				exportOldBookmarks(db);
 				db.execSQL("DROP TABLE IF EXISTS BOOKMARKS;");
 				db.execSQL("DROP TABLE IF EXISTS HISTORY;");
 			default: break;
 			}
+		}
+		
+		/**
+		 * Export bookmarks from the old database. Transform the query result
+		 * into a MatrixCursor following the stock bookmarks database, so it 
+		 * can be exported with the XmlHistoryBookmarksExporter without any
+		 * change on it.
+		 * @param db The database.
+		 */
+		private void exportOldBookmarks(SQLiteDatabase db) {
+			
+			Log.i("DbAdapter", "Start export of old bookmarks.");
+			
+			try {
+				if (ApplicationUtils.checkCardState(mParent.mContext, false)) {
+
+					Log.i("DbAdapter", "Export of old bookmarks: SDCard checked.");
+
+					MatrixCursor cursor = null;
+
+					Cursor c = db.query( "BOOKMARKS",
+							new String[] { "_id",
+								"title",
+								"url",
+								"creation_date",
+								"count" },
+							null,
+							null,
+							null,
+							null,
+							null);
+
+					if (c != null) {			
+						if (c.moveToFirst()) {
+
+							cursor = new MatrixCursor(new String[] {
+									Browser.BookmarkColumns.TITLE,
+									Browser.BookmarkColumns.URL,
+									Browser.BookmarkColumns.VISITS,
+									Browser.BookmarkColumns.DATE,
+									Browser.BookmarkColumns.CREATED,
+									Browser.BookmarkColumns.BOOKMARK
+							});
+
+							int titleColumn = c.getColumnIndex("title");
+							int urlColumn = c.getColumnIndex("url");
+							int creationDateColumn = c.getColumnIndex("creation_date");
+							int countColumn = c.getColumnIndex("count");
+
+							while (!c.isAfterLast()) {
+
+								Date date = DateUtils.convertFromDatabase(mParent.mContext, c.getString(creationDateColumn));
+
+								Object[] data = new Object[6];
+								data[0] = c.getString(titleColumn);
+								data[1] = c.getString(urlColumn);
+								data[2] = c.getInt(countColumn);
+								data[3] = date.getTime();
+								data[4] = date.getTime();
+								data[5] = 1;
+
+								cursor.addRow(data);
+
+								c.moveToNext();
+							}
+						}
+
+						c.close();
+					}
+
+					if (cursor != null) {
+						Log.i("DbAdapter", "Export of old bookmarks: Writing file.");
+						new Thread(new XmlHistoryBookmarksExporter(null, "auto-export.xml", cursor, null)).start();
+					}
+				}
+			} catch (Exception e) {
+				Log.i("DbAdapter", "Export of old bookmarks failed: " + e.getMessage());
+			}
+			
+			Log.i("DbAdapter", "End of export of old bookmarks.");
 		}
     	
     }

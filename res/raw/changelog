@@ -1,7 +1,7 @@
 0.4.0:
-- Add "Share" context menu to bookmarks and history view.
-- Feature: Zirco can now retrieve your bookmarks from Firefox Sync. Go to preferences to start using it!
-- Bookmarks and history now use Android stock bookmarks and history database.
+- Feature: Bookmarks and history now use Android stock bookmarks and history database. Your old bookmarks have been saved to your SD card. Go to "Preferences/Manage bookmarks and history" and import file "auto-export.xml" if you want to retrieve them.
+- Feature: Zirco can now retrieve your bookmarks from Firefox Sync. Go to "Preferences/Firefox bookmarks" synchronization to start using it! 
+- Add "Share" context menu to bookmarks and history view. 
 - New design for start page.
 - Remove completed download from download list.
 - Notification for completed downloads are removed when clicking on it.
