@@ -25,6 +25,7 @@ import org.zirco.utils.UrlUtils;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
+import android.util.Log;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -119,6 +120,27 @@ public class CustomWebViewClient extends WebViewClient {
 					}
 		});
 	}		
+
+	@Override
+	public void onLoadResource(WebView view, String url) {
+		// Some dirty stuff for handling m.youtube.com. May break in the future ?
+		if (url.startsWith("http://s.youtube.com/s?ns=yt&ps=blazer&playback=1&el=detailpage&app=youtube_mobile")) {
+			
+			try {
+				int startIndex = url.indexOf("&docid=") + 7;
+				int endIndex = url.indexOf("&", startIndex);
+
+				String videoId = url.substring(startIndex, endIndex);
+
+				mMainActivity.onVndUrl("vnd.youtube:" + videoId);				
+			
+			} catch (Exception e) {
+				Log.e("onLoadResource", "Unable to parse YouTube url: " + url);
+			}					
+		}
+		
+		super.onLoadResource(view, url);
+	}
 
 	@Override
 	public boolean shouldOverrideUrlLoading(WebView view, String url) {

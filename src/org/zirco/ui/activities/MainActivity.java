@@ -1851,30 +1851,6 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 		public boolean onDoubleTap(MotionEvent e) {
 			mCurrentWebView.zoomIn();
 			return super.onDoubleTap(e);
-		}		
-
-		@Override
-		public boolean onSingleTapConfirmed(MotionEvent e) {
-			
-//			WebView.HitTestResult hr = mCurrentWebView.getHitTestResult();
-//			if (hr != null) {
-//				String str = hr.getExtra();				
-//				if (str != null) {
-//					Log.d("onTouch", str);
-//					if (str.startsWith("http://i.ytimg.com/vi/")) {
-//
-//						String videoId = str.split("\\/")[4];
-//						Log.d("onTouch", str + " --> " + videoId);
-//						
-//						//Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" +videoId));
-//						//v.getContext().startActivity(i);
-//						
-//						onVndUrl("vnd.youtube:" + videoId);
-//
-//					}
-//				}
-//			}
-			return super.onSingleTapConfirmed(e);
 		}
 
 		@Override
