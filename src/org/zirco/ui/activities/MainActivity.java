@@ -979,7 +979,8 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 		}
 	}
 	
-	private void showFindDialog() {	
+	private void showFindDialog() {
+		setFindBarVisibility(true);
 		mCurrentWebView.doSetFindIsUp(true);
 		CharSequence text = mFindText.getText();
 		if (text.length() > 0) {
@@ -989,8 +990,7 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 			mFindPreviousButton.setEnabled(false);
 			mFindNextButton.setEnabled(false);
 		}
-		
-		setFindBarVisibility(true);
+				
 		mFindText.requestFocus();
 		showKeyboardForFindDialog();		
 	}
@@ -1301,10 +1301,14 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 		
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_BACK:
-			if (mCurrentWebView.canGoBack()) {
-				mCurrentWebView.goBack();				
+			if (mFindDialogVisible) {
+				closeFindDialog();
 			} else {
-				this.moveTaskToBack(true);
+				if (mCurrentWebView.canGoBack()) {
+					mCurrentWebView.goBack();				
+				} else {
+					this.moveTaskToBack(true);
+				}
 			}
 			return true;
 		case KeyEvent.KEYCODE_SEARCH:
@@ -1741,6 +1745,10 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 	}
 	
 	public void onPageStarted(String url) {
+		if (mFindDialogVisible) {
+			closeFindDialog();
+		}
+		
 		mUrlEditText.removeTextChangedListener(mUrlTextWatcher);
 		mUrlEditText.setText(url);
 		mUrlEditText.addTextChangedListener(mUrlTextWatcher);
