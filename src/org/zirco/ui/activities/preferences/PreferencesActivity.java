@@ -15,7 +15,6 @@
 
 package org.zirco.ui.activities.preferences;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.zirco.R;
@@ -615,9 +614,8 @@ public class PreferencesActivity extends PreferenceActivity {
 			BookmarksProviderWrapper.clearHistoryAndOrBookmarks(getContentResolver(), true, false);
 			
 			// Clear WebViews history
-			Iterator<CustomWebView> iter = Controller.getInstance().getWebViewList().iterator();
-			while (iter.hasNext()) {
-				iter.next().clearHistory();
+			for (CustomWebView webView : Controller.getInstance().getWebViewList()) {
+				webView.clearHistory();
 			}
 			
 			handler.sendEmptyMessage(0);
@@ -642,9 +640,8 @@ public class PreferencesActivity extends PreferenceActivity {
 		}
 		@Override
 		public void run() {
-			Iterator<CustomWebView> iter = Controller.getInstance().getWebViewList().iterator();
-			while (iter.hasNext()) {
-				iter.next().clearFormData();
+			for (CustomWebView webView : Controller.getInstance().getWebViewList()) {
+				webView.clearFormData();
 			}
 
 			handler.sendEmptyMessage(0);

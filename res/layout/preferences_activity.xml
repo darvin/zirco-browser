@@ -79,7 +79,7 @@
 			android:summary="@string/PreferencesActivity.StartPageCustomizationPreferenceSummary">
 			<CheckBoxPreference
 				android:title="@string/PreferencesActivity.StartPageEnableSearchPreferenceTitle"
-				android:defaultValue="true"
+				android:defaultValue="false"
 				android:summary="@string/PreferencesActivity.StartPageEnableSearchPreferenceSummary"
 				android:key="StartPageEnableSearch" />
 			<CheckBoxPreference

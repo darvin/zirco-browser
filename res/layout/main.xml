@@ -90,6 +90,7 @@
 
 					<EditText android:id="@+id/find_value" android:layout_width="match_parent"
 						android:layout_height="wrap_content" android:scrollHorizontally="true"
+						android:singleLine="true" android:ellipsize="end"
 						android:inputType="text" android:hint="@string/SearchDialog.Hint" />
 
 			</LinearLayout>

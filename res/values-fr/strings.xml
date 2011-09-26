@@ -407,4 +407,86 @@
     
     <string name="AboutActivity.OtherLicenseText">Cette application inclue du code du projet GreenDroid (https://github.com/cyrilmottier/GreenDroid/), et du projet Shaman (https://github.com/emergentdotorg/shaman), tous les deux distribués sous license Apache, version 2.</string>
     
+    <!-- 0.4.0 -->
+    <string name="PreferencesActivity.WeavePreferenceTitle">Synchronisation des favoris Firefox</string>
+    <string name="PreferencesActivity.WeavePreferenceSummary">Gérer les paramètres de synchronisation de favoris avec Firefox Sync.</string>
+    <string name="PreferencesActivity.UseWeavePreferenceTitle">Utiliser Firefox Sync</string>
+    <string name="PreferencesActivity.UseWeavePreferenceSummary">Si coché, vous pourrez synchroniser vos favoris Firefox Sync.</string>
+    <string name="PreferencesActivity.WeaveServerPreferenceTitle">Serveur</string>
+    <string name="PreferencesActivity.WeaveServerPreferenceSummary">Définir le serveur Firefox Sync.</string>
+    <string name="PreferencesActivity.WeaveUsernameTitle">Nom d\'utilisateur</string>
+    <string name="PreferencesActivity.WeaveUsernameSummary">Entrez votre nom d\'utilisateur Firefox Sync.</string>
+    <string name="PreferencesActivity.WeavePasswordTitle">Mot de passe</string>
+    <string name="PreferencesActivity.WeavePasswordSummary">Entrez votre mot de passe Firefox Sync.</string>
+    <string name="PreferencesActivity.WeaveKeyTitle">Clé</string>
+    <string name="PreferencesActivity.WeaveKeySummary">Entrez votre clé de synchronisation.</string>
+    
+    <string name="WeaveBookmarksListActivity.Title">Favoris de Firefox</string>	
+    <string name="WeaveBookmarksListActivity.MenuSync">Synchroniser</string>
+    <string name="WeaveBookmarksListActivity.MenuClear">Effacer</string>
+    <string name="WeaveBookmarksListActivity.WeaveRootFolder">Places</string>
+    <string name="WeaveBookmarksListActivity.EmptyText">Les favoris de Firefox ne sont pas synchronisés. Renseignez les informations de votre compte et faites une synchronisation.</string>
+    <string name="WeaveBookmarksListActivity.EmptyFolderText">Pas de favoris dans ce dossier.</string>
+    <string name="WeaveBookmarksListActivity.SetupButton">Paramétrer</string>
+    <string name="WeaveBookmarksListActivity.SyncButton">Synchroniser</string>
+    
+    <string name="WeaveSync.SyncTitle">Synchronisation</string>
+    <string name="WeaveSync.Connecting">Connexion au serveur...</string>
+    <string name="WeaveSync.GettingData">Réception des données...</string>
+    <string name="WeaveSync.ReadingData">Lecture des données : %1$s / %2$s</string>
+    <string name="WeaveSync.WrittingData">Ecriture des données...</string>
+    
+    <string name="Errors.WeaveSyncFailedTitle">La synchronisation a échouée.</string>
+    <string name="Errors.WeaveSyncFailedMessage">La synchronisation a échouée : %s</string>
+    <string name="Errors.WeaveAuthFailedMessage">Token d\'identification invalide. Vérifiez vos paramètres.</string>
+    
+    <string name="WeaveServerPreferenceActivity.Prompt">Serveur</string>    
+    <string name="WeaveServerPreferenceActivity.Title">Serveur</string>    
+    <string name="WeaveServerPreferenceActivity.DefaultServer">Serveur Firefox Sync</string>
+    <string name="WeaveServerPreferenceActivity.CustomServer">Serveur personalisé</string>
+    
+    <string-array name="WeaveServerValues">
+        <item>@string/WeaveServerPreferenceActivity.DefaultServer</item>
+        <item>@string/WeaveServerPreferenceActivity.CustomServer</item>        
+    </string-array>
+    
+    <string name="Main.FileChooserPrompt">Choisissez le fichier à uploader</string>
+    
+    <string name="Commons.HistoryBookmarksExportSDCardConfirmation">Exporter l\'historique et les favoris</string>
+    <string name="Commons.HistoryBookmarksExportSDCardDoneTitle">Export terminé</string>
+    <string name="Commons.HistoryBookmarksExportSDCardDoneMessage">Votre historique et vos favoris ont été sauvés dans %s.</string>
+    <string name="Commons.HistoryBookmarksExportSDCardFailedTitle">L\'export a échoué</string>
+    <string name="Commons.HistoryBookmarksFailedMessage">Message d\'erreur : %s.</string>
+    <string name="Commons.HistoryBookmarksImportSDCardFailedTitle">L\'import a échoué</string>
+    
+    <string name="Commons.OperationCanBeLongMessage">Cette opération peut être longue. Souhaitez vous continuer ?</string>
+    
+    <string name="PreferencesActivity.ToolsCategoryTitle">Outils</string>
+    <string name="PreferencesActivity.ToolsHistoryBookmarksPreferenceTitle">Gérer les favoris et l\'historique</string>
+    <string name="PreferencesActivity.ToolsHistoryBookmarksPreferenceSummary">Importer, exporter, effacer l\'historique et les favoris.</string>
+    <string name="PreferencesActivity.ExportHistoryBookmarksPreferenceTitle">Exporter les favoris et l\'historique</string>
+    <string name="PreferencesActivity.ExportHistoryBookmarksPreferenceSummary">Exporter les favoris et l\'historique vers la carte SD.</string>
+    <string name="PreferencesActivity.ImportHistoryBookmarksPreferenceTitle">Importer les favoris et l\'historique</string>
+    <string name="PreferencesActivity.ImportHistoryBookmarksPreferenceSummary">Importer les favoris et l\'historique depuis la carte SD.</string>
+    <string name="PreferencesActivity.PrivacyClearHistoryBookmarksTitle">Effacer l\'historique et/ou les favoris</string>
+    <string name="PreferencesActivity.SummaryCannotBeUndone">Utiliser avec précaution, il n\'est pas possible de revenir en arrière.</string>
+    
+    <string name="Commons.ClearingHistoryBookmarks">Suppression de l\'historique et/ou des favoris...</string>
+    <string name="Commons.ClearHistoryBookmarks">Effacer l\'historique et/ou les favoris</string>
+    
+    <string name="Commons.Bookmarks">Favoris</string>
+    <string name="Commons.History">Historique</string>
+    <string name="Commons.All">Tous</string>
+    
+    <string name="Commons.ExportingHistoryBookmarks">Export de l\'historique et des favoris...</string>
+    <string name="Commons.ImportingHistoryBookmarks">Import de l\'historique et des favoris...</string>
+    <string name="Commons.ImportHistoryBookmarksSource">Choisissez le fichier à importer</string>
+    
+    <string name="Commons.ClearingBookmarks">Suppression des favoris...</string>
+    
+    <string name="DownloadListActivity.RemoveCompletedDownloads">Effacer les téléchargements terminés</string>
+    
+    <string name="QuickAction.Find">Rechercher sur la page</string>
+    <string name="SearchDialog.Hint">Rechercher sur la page</string>
+    
 </resources>

@@ -408,7 +408,7 @@
     
     <!-- 0.4.0 -->
     <string name="PreferencesActivity.WeavePreferenceTitle">Firefox bookmarks synchronization</string>
-    <string name="PreferencesActivity.WeavePreferenceSummary">Manage the settings of the bookmarks synchronization with Firefox.</string>
+    <string name="PreferencesActivity.WeavePreferenceSummary">Manage the settings of the bookmarks synchronization with Firefox Sync.</string>
     <string name="PreferencesActivity.UseWeavePreferenceTitle">Use Firefox Sync</string>
     <string name="PreferencesActivity.UseWeavePreferenceSummary">If checked, you can retrieve your bookmarks from Firefox Sync.</string>
     <string name="PreferencesActivity.WeaveServerPreferenceTitle">Server</string>
