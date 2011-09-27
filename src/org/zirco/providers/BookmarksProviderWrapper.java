@@ -39,6 +39,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.Browser;
+import android.util.Log;
 
 public class BookmarksProviderWrapper {	
 	
@@ -314,7 +315,7 @@ public class BookmarksProviderWrapper {
 	 * @param originalUrl The original url 
 	 */
 	public static void updateHistory(ContentResolver contentResolver, String title, String url, String originalUrl) {
-		String[] colums = new String[] { Browser.BookmarkColumns.URL, Browser.BookmarkColumns.BOOKMARK, Browser.BookmarkColumns.VISITS };
+		String[] colums = new String[] { Browser.BookmarkColumns._ID, Browser.BookmarkColumns.URL, Browser.BookmarkColumns.BOOKMARK, Browser.BookmarkColumns.VISITS };
 		String whereClause = Browser.BookmarkColumns.URL + " = \"" + url + "\" OR " + Browser.BookmarkColumns.URL + " = \"" + originalUrl + "\"";
 
 		Cursor cursor = contentResolver.query(Browser.BOOKMARKS_URI, colums, whereClause, null, null);
@@ -375,7 +376,12 @@ public class BookmarksProviderWrapper {
 
 		String whereClause = "(" + Browser.BookmarkColumns.BOOKMARK + " = 0 OR " + Browser.BookmarkColumns.BOOKMARK + " IS NULL) AND " + Browser.BookmarkColumns.DATE + " < " + c.getTimeInMillis();
 		
-		contentResolver.delete(Browser.BOOKMARKS_URI, whereClause, null);
+		try {
+			contentResolver.delete(Browser.BOOKMARKS_URI, whereClause, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.w("BookmarksProviderWrapper", "Unable to truncate history: " + e.getMessage());
+		}
 	}
     
 	/**
@@ -386,7 +392,13 @@ public class BookmarksProviderWrapper {
 	 * @param favicon The favicon.
 	 */
 	public static void updateFavicon(Activity currentActivity, String url, String originalUrl, Bitmap favicon) {
-		String whereClause = Browser.BookmarkColumns.URL + " = \"" + url + "\" OR " + Browser.BookmarkColumns.URL + " = \"" + originalUrl + "\"";
+		String whereClause;
+		
+		if (!url.equals(originalUrl)) {
+			whereClause = Browser.BookmarkColumns.URL + " = \"" + url + "\" OR " + Browser.BookmarkColumns.URL + " = \"" + originalUrl + "\"";
+		} else {
+			whereClause = Browser.BookmarkColumns.URL + " = \"" + url + "\"";
+		}
 
 		//BitmapDrawable icon = ApplicationUtils.getNormalizedFaviconForBookmarks(currentActivity, favicon);
 		BitmapDrawable icon = new BitmapDrawable(favicon);
@@ -397,7 +409,12 @@ public class BookmarksProviderWrapper {
 		ContentValues values = new ContentValues();
 		values.put(Browser.BookmarkColumns.FAVICON, os.toByteArray());
 
-		currentActivity.getContentResolver().update(android.provider.Browser.BOOKMARKS_URI, values, whereClause, null);
+		try {
+			currentActivity.getContentResolver().update(android.provider.Browser.BOOKMARKS_URI, values, whereClause, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.w("BookmarksProviderWrapper", "Unable to update favicon: " + e.getMessage());
+		}
 	}
 	
 	/**

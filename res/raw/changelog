@@ -1,3 +1,6 @@
+0.4.1:
+- Bugfixes for force close under Android >= 3.
+
 0.4.0:
 - Feature: Bookmarks and history now use Android stock bookmarks and history database. Your old bookmarks have been saved to your SD card. Go to "Preferences/Manage bookmarks and history" and import file "auto-export.xml" if you want to retrieve them.
 - Feature: Zirco can now retrieve your bookmarks from Firefox Sync. Go to "Preferences/Firefox bookmarks" synchronization to start using it!
