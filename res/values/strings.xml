@@ -461,7 +461,6 @@
     
     <string name="Commons.OperationCanBeLongMessage">This operation can take some times. Do you wish to proceed?</string>
     
-    <string name="PreferencesActivity.ToolsCategoryTitle">Tools</string>
     <string name="PreferencesActivity.ToolsHistoryBookmarksPreferenceTitle">Manage bookmarks and history</string>
     <string name="PreferencesActivity.ToolsHistoryBookmarksPreferenceSummary">Import, export, clear history and bookmarks.</string>
     <string name="PreferencesActivity.ExportHistoryBookmarksPreferenceTitle">Export bookmarks and history</string>
@@ -489,4 +488,21 @@
     <string name="QuickAction.Find">Find on page</string>
     <string name="SearchDialog.Hint">Find on page</string>
     
+    <!-- 0.4.2 -->
+    <string name="PreferencesActivity.AdvancedCategoryTitle">Advanced</string>
+    
+    <string name="PreferencesActivity.BookmarksDatabaseTitle">Bookmarks storage</string>
+    <string name="PreferencesActivity.BookmarksDatabaseSummary">Choose the bookmarks storage.</string>
+    
+    <string name="PreferencesActivity.BookmarksDatabaseStock">Android</string>
+    <string name="PreferencesActivity.BookmarksDatabaseInternal">Internal</string>
+        
+    <string-array name="BookmarksDatabaseEntries">
+		<item>@string/PreferencesActivity.BookmarksDatabaseStock</item>
+		<item>@string/PreferencesActivity.BookmarksDatabaseInternal</item>
+	</string-array>
+    <string-array name="BookmarksDatabaseValues">
+		<item>STOCK</item>
+		<item>INTERNAL</item>
+	</string-array>
 </resources>

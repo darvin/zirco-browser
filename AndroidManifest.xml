@@ -57,6 +57,7 @@
 		<activity android:name=".ui.activities.preferences.WeavePreferencesActivity"></activity>
 		<activity android:name=".ui.activities.preferences.WeaveServerPreferenceActivity" android:theme="@android:style/Theme.Dialog" android:label="@string/WeaveServerPreferenceActivity.Title"></activity>
 		
+		<provider android:name=".providers.ZircoBookmarksContentProvider" android:authorities="org.zirco.providers.zircobookmarkscontentprovider"></provider>
 		<provider android:name=".providers.WeaveContentProvider" android:authorities="org.zirco.providers.weavecontentprovider"></provider>
 	</application>
 

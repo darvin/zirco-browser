@@ -31,6 +31,7 @@ import org.zirco.events.IDownloadEventsListener;
 import org.zirco.model.adapters.UrlSuggestionCursorAdapter;
 import org.zirco.model.items.DownloadItem;
 import org.zirco.providers.BookmarksProviderWrapper;
+import org.zirco.providers.BookmarksProviderWrapper.BookmarksSource;
 import org.zirco.ui.activities.preferences.PreferencesActivity;
 import org.zirco.ui.components.CustomWebView;
 import org.zirco.ui.components.CustomWebViewClient;
@@ -50,7 +51,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -183,6 +186,8 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 	
 	private ValueCallback<Uri> mUploadMessage;
 	
+	private OnSharedPreferenceChangeListener mPreferenceChangeListener;
+	
 	private enum SwitchTabsMethod {
 		BUTTONS,
 		FLING,
@@ -224,6 +229,9 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
         mViewFlipper.removeAllViews();   
         
         updateSwitchTabsMethod();
+        updateBookmarksDatabaseSource();
+        
+        registerPreferenceChangeListener();
         
         Intent i = getIntent();
         if (i.getData() != null) {
@@ -274,6 +282,8 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 		}
 		
 		EventController.getInstance().removeDownloadListener(this);
+		
+		PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(mPreferenceChangeListener);
 
 		super.onDestroy();
 	}
@@ -292,7 +302,7 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 		setIntent(intent);
 		
 		super.onNewIntent(intent);
-	}
+	}        
     
     /**
      * Restart the application.
@@ -604,6 +614,19 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 
     }
     	
+	private void registerPreferenceChangeListener() {
+    	mPreferenceChangeListener = new OnSharedPreferenceChangeListener() {			
+			@Override
+			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+				if (key.equals(Constants.PREFERENCE_BOOKMARKS_DATABASE)) {
+					updateBookmarksDatabaseSource();
+				}
+			}
+		};
+		
+		PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(mPreferenceChangeListener);
+    }
+	
     /**
      * Apply preferences to the current UI objects.
      */
@@ -629,6 +652,16 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
     		mSwitchTabsMethod = SwitchTabsMethod.BOTH;
     	} else {
     		mSwitchTabsMethod = SwitchTabsMethod.BUTTONS;
+    	}
+    }
+    
+    private void updateBookmarksDatabaseSource() {
+    	String source = PreferenceManager.getDefaultSharedPreferences(this).getString(Constants.PREFERENCE_BOOKMARKS_DATABASE, "STOCK");
+    	
+    	if (source.equals("STOCK")) {
+    		BookmarksProviderWrapper.setBookmarksSource(BookmarksSource.STOCK);
+    	} else if (source.equals("INTERNAL")) {
+    		BookmarksProviderWrapper.setBookmarksSource(BookmarksSource.INTERNAL);
     	}
     }
     

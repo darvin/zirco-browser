@@ -41,7 +41,17 @@ import android.net.Uri;
 import android.provider.Browser;
 import android.util.Log;
 
-public class BookmarksProviderWrapper {	
+public class BookmarksProviderWrapper {
+	
+	public enum BookmarksSource {
+		STOCK,
+		INTERNAL
+	}
+	
+	private static final Uri INTERNAL_BOOKMARKS_URI = Uri.parse("content://" + ZircoBookmarksContentProvider.AUTHORITY + "/" + ZircoBookmarksContentProvider.BOOKMARKS_TABLE);
+	private static final Uri STOCK_BOOKMARKS_URI = Browser.BOOKMARKS_URI;
+	
+	private static Uri BOOKMARKS_URI = STOCK_BOOKMARKS_URI;
 	
 	private static String[] sHistoryBookmarksProjection = new String[] { Browser.BookmarkColumns._ID,
         Browser.BookmarkColumns.TITLE,
@@ -50,8 +60,23 @@ public class BookmarksProviderWrapper {
         Browser.BookmarkColumns.DATE,
         Browser.BookmarkColumns.CREATED,
         Browser.BookmarkColumns.BOOKMARK,
-        Browser.BookmarkColumns.FAVICON };
+        Browser.BookmarkColumns.FAVICON };		
 
+	public static void setBookmarksSource(BookmarksSource source) {
+		switch (source) {
+		case STOCK:
+			BOOKMARKS_URI = STOCK_BOOKMARKS_URI;
+			break;
+
+		case INTERNAL:
+			BOOKMARKS_URI = INTERNAL_BOOKMARKS_URI;
+			break;
+			
+		default:
+			break;
+		}
+	}
+	
 	/**
 	 * Stock History/Bookmarks management.
 	 */
@@ -62,7 +87,7 @@ public class BookmarksProviderWrapper {
 	 * @see Cursor
 	 */
 	public static Cursor getAllStockRecords(ContentResolver contentResolver) {
-		return contentResolver.query(Browser.BOOKMARKS_URI, sHistoryBookmarksProjection, null, null, null);
+		return contentResolver.query(BOOKMARKS_URI, sHistoryBookmarksProjection, null, null, null);
 	}
 	
 	public static Cursor getStockBookmarks(ContentResolver contentResolver, int sortMode) {
@@ -84,7 +109,7 @@ public class BookmarksProviderWrapper {
     		break;
     	}
 
-		return contentResolver.query(Browser.BOOKMARKS_URI, sHistoryBookmarksProjection, whereClause, null, orderClause);
+		return contentResolver.query(BOOKMARKS_URI, sHistoryBookmarksProjection, whereClause, null, orderClause);
 	}
 	
 	/**
@@ -100,7 +125,7 @@ public class BookmarksProviderWrapper {
 		String orderClause = Browser.BookmarkColumns.VISITS + " DESC";
 		String[] colums = new String[] { Browser.BookmarkColumns._ID, Browser.BookmarkColumns.TITLE, Browser.BookmarkColumns.URL, Browser.BookmarkColumns.FAVICON };
 				
-		Cursor cursor = contentResolver.query(android.provider.Browser.BOOKMARKS_URI, colums, whereClause, null, orderClause);
+		Cursor cursor = contentResolver.query(BOOKMARKS_URI, colums, whereClause, null, orderClause);
 		
 		if (cursor != null) {
 			if (cursor.moveToFirst()) {
@@ -141,7 +166,7 @@ public class BookmarksProviderWrapper {
 		String whereClause = Browser.BookmarkColumns.VISITS + " > 0";
 		String orderClause = Browser.BookmarkColumns.DATE + " DESC";
 		
-		Cursor cursor = contentResolver.query(android.provider.Browser.BOOKMARKS_URI, Browser.HISTORY_PROJECTION, whereClause, null, orderClause);
+		Cursor cursor = contentResolver.query(BOOKMARKS_URI, sHistoryBookmarksProjection, whereClause, null, orderClause);
 		
 		if (cursor != null) {
 			if (cursor.moveToFirst()) {
@@ -177,7 +202,7 @@ public class BookmarksProviderWrapper {
 		BookmarkItem result = null;
 		String whereClause = Browser.BookmarkColumns._ID + " = " + id;
 		
-		Cursor c = contentResolver.query(Browser.BOOKMARKS_URI, sHistoryBookmarksProjection, whereClause, null, null);
+		Cursor c = contentResolver.query(BOOKMARKS_URI, sHistoryBookmarksProjection, whereClause, null, null);
 		if (c != null) {
 			if (c.moveToFirst()) {
 				String title = c.getString(c.getColumnIndex(Browser.BookmarkColumns.TITLE));
@@ -194,7 +219,7 @@ public class BookmarksProviderWrapper {
 	public static void deleteStockBookmark(ContentResolver contentResolver, long id) {
 		String whereClause = Browser.BookmarkColumns._ID + " = " + id;
         
-		Cursor c = contentResolver.query(Browser.BOOKMARKS_URI, sHistoryBookmarksProjection, whereClause, null, null);
+		Cursor c = contentResolver.query(BOOKMARKS_URI, sHistoryBookmarksProjection, whereClause, null, null);
 		if (c != null) {
 			if (c.moveToFirst()) {
 				if (c.getInt(c.getColumnIndex(Browser.BookmarkColumns.BOOKMARK)) == 1) {
@@ -205,11 +230,11 @@ public class BookmarksProviderWrapper {
                         values.put(Browser.BookmarkColumns.BOOKMARK, 0);
                         values.putNull(Browser.BookmarkColumns.CREATED);
                         
-                        contentResolver.update(Browser.BOOKMARKS_URI, values, whereClause, null);
+                        contentResolver.update(BOOKMARKS_URI, values, whereClause, null);
 
 					} else {
 						// never visited, it can be deleted.
-						contentResolver.delete(Browser.BOOKMARKS_URI, whereClause, null);
+						contentResolver.delete(BOOKMARKS_URI, whereClause, null);
 					}
 				}
 			}
@@ -235,13 +260,13 @@ public class BookmarksProviderWrapper {
 			String[] colums = new String[] { Browser.BookmarkColumns._ID };
 			String whereClause = Browser.BookmarkColumns._ID + " = " + id;
 
-			Cursor cursor = contentResolver.query(android.provider.Browser.BOOKMARKS_URI, colums, whereClause, null, null);
+			Cursor cursor = contentResolver.query(BOOKMARKS_URI, colums, whereClause, null, null);
 			bookmarkExist = (cursor != null) && (cursor.moveToFirst());
 		} else {
 			String[] colums = new String[] { Browser.BookmarkColumns._ID };
 			String whereClause = Browser.BookmarkColumns.URL + " = \"" + url + "\"";
 
-			Cursor cursor = contentResolver.query(android.provider.Browser.BOOKMARKS_URI, colums, whereClause, null, null);
+			Cursor cursor = contentResolver.query(BOOKMARKS_URI, colums, whereClause, null, null);
 			bookmarkExist = (cursor != null) && (cursor.moveToFirst());
 			if (bookmarkExist) {
 				id = cursor.getLong(cursor.getColumnIndex(Browser.BookmarkColumns._ID));
@@ -265,9 +290,9 @@ public class BookmarksProviderWrapper {
 		}
 
 		if (bookmarkExist) {                                    
-			contentResolver.update(android.provider.Browser.BOOKMARKS_URI, values, Browser.BookmarkColumns._ID + " = " + id, null);
+			contentResolver.update(BOOKMARKS_URI, values, Browser.BookmarkColumns._ID + " = " + id, null);
 		} else {                        
-			contentResolver.insert(android.provider.Browser.BOOKMARKS_URI, values);
+			contentResolver.insert(BOOKMARKS_URI, values);
 		}
 	}
 	
@@ -275,7 +300,7 @@ public class BookmarksProviderWrapper {
 		String whereClause = Browser.BookmarkColumns.VISITS + " > 0";
         String orderClause = Browser.BookmarkColumns.DATE + " DESC";
 
-        return contentResolver.query(Browser.BOOKMARKS_URI, Browser.HISTORY_PROJECTION, whereClause, null, orderClause);
+        return contentResolver.query(BOOKMARKS_URI, sHistoryBookmarksProjection, whereClause, null, orderClause);
 	}
 	
 	/**
@@ -286,7 +311,7 @@ public class BookmarksProviderWrapper {
 	public static void deleteHistoryRecord(ContentResolver contentResolver, long id) {		
 		String whereClause = Browser.BookmarkColumns._ID + " = " + id;
 
-		Cursor cursor = contentResolver.query(android.provider.Browser.BOOKMARKS_URI, sHistoryBookmarksProjection, whereClause, null, null);
+		Cursor cursor = contentResolver.query(BOOKMARKS_URI, sHistoryBookmarksProjection, whereClause, null, null);
 		if (cursor != null) {
 			if (cursor.moveToFirst()) {
 				if (cursor.getInt(cursor.getColumnIndex(Browser.BookmarkColumns.BOOKMARK)) == 1) {
@@ -295,10 +320,10 @@ public class BookmarksProviderWrapper {
 					values.put(Browser.BookmarkColumns.VISITS, 0);
 					values.putNull(Browser.BookmarkColumns.DATE);
 
-					contentResolver.update(Browser.BOOKMARKS_URI, values, whereClause, null);
+					contentResolver.update(BOOKMARKS_URI, values, whereClause, null);
 				} else {
 					// The record is not a bookmark, we can delete it.
-					contentResolver.delete(Browser.BOOKMARKS_URI, whereClause, null);
+					contentResolver.delete(BOOKMARKS_URI, whereClause, null);
 				}
 			}
 
@@ -318,7 +343,7 @@ public class BookmarksProviderWrapper {
 		String[] colums = new String[] { Browser.BookmarkColumns._ID, Browser.BookmarkColumns.URL, Browser.BookmarkColumns.BOOKMARK, Browser.BookmarkColumns.VISITS };
 		String whereClause = Browser.BookmarkColumns.URL + " = \"" + url + "\" OR " + Browser.BookmarkColumns.URL + " = \"" + originalUrl + "\"";
 
-		Cursor cursor = contentResolver.query(Browser.BOOKMARKS_URI, colums, whereClause, null, null);
+		Cursor cursor = contentResolver.query(BOOKMARKS_URI, colums, whereClause, null, null);
 
 		if (cursor != null) {
 			if (cursor.moveToFirst()) {
@@ -336,7 +361,7 @@ public class BookmarksProviderWrapper {
 				values.put(Browser.BookmarkColumns.DATE, new Date().getTime());
 				values.put(Browser.BookmarkColumns.VISITS, visits);
 
-				contentResolver.update(android.provider.Browser.BOOKMARKS_URI, values, Browser.BookmarkColumns._ID + " = " + id, null);
+				contentResolver.update(BOOKMARKS_URI, values, Browser.BookmarkColumns._ID + " = " + id, null);
 
 			} else {
 				ContentValues values = new ContentValues();
@@ -346,7 +371,7 @@ public class BookmarksProviderWrapper {
 				values.put(Browser.BookmarkColumns.VISITS, 1);
 				values.put(Browser.BookmarkColumns.BOOKMARK, 0);
 
-				contentResolver.insert(android.provider.Browser.BOOKMARKS_URI, values);
+				contentResolver.insert(BOOKMARKS_URI, values);
 			}               
 
 			cursor.close();
@@ -377,7 +402,7 @@ public class BookmarksProviderWrapper {
 		String whereClause = "(" + Browser.BookmarkColumns.BOOKMARK + " = 0 OR " + Browser.BookmarkColumns.BOOKMARK + " IS NULL) AND " + Browser.BookmarkColumns.DATE + " < " + c.getTimeInMillis();
 		
 		try {
-			contentResolver.delete(Browser.BOOKMARKS_URI, whereClause, null);
+			contentResolver.delete(BOOKMARKS_URI, whereClause, null);
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.w("BookmarksProviderWrapper", "Unable to truncate history: " + e.getMessage());
@@ -410,7 +435,7 @@ public class BookmarksProviderWrapper {
 		values.put(Browser.BookmarkColumns.FAVICON, os.toByteArray());
 
 		try {
-			currentActivity.getContentResolver().update(android.provider.Browser.BOOKMARKS_URI, values, whereClause, null);
+			currentActivity.getContentResolver().update(BOOKMARKS_URI, values, whereClause, null);
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.w("BookmarksProviderWrapper", "Unable to update favicon: " + e.getMessage());
@@ -438,7 +463,7 @@ public class BookmarksProviderWrapper {
 			whereClause = Browser.BookmarkColumns.BOOKMARK + " = 1";
 		}
 		
-		contentResolver.delete(Browser.BOOKMARKS_URI, whereClause, null);		
+		contentResolver.delete(BOOKMARKS_URI, whereClause, null);		
 	}
 	
 	/**
@@ -475,7 +500,7 @@ public class BookmarksProviderWrapper {
 			values.put(Browser.BookmarkColumns.BOOKMARK, 0);
 		}
 		
-		contentResolver.insert(Browser.BOOKMARKS_URI, values);
+		contentResolver.insert(BOOKMARKS_URI, values);
 	}
 
 	
@@ -573,7 +598,7 @@ public class BookmarksProviderWrapper {
     		
     		List<UrlSuggestionItem> results = new ArrayList<UrlSuggestionItem>();
     		
-    		Cursor stockCursor = contentResolver.query(Browser.BOOKMARKS_URI,
+    		Cursor stockCursor = contentResolver.query(BOOKMARKS_URI,
     				sHistoryBookmarksProjection,
     				Browser.BookmarkColumns.TITLE + " LIKE '" + sqlPattern + "' OR " + Browser.BookmarkColumns.URL  + " LIKE '" + sqlPattern + "'",
     				null,

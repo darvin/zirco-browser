@@ -108,6 +108,8 @@ public class Constants {
 	
 	public static final String WEAVE_DEFAULT_SERVER = "https://auth.services.mozilla.com/";
 	
+	public static final String PREFERENCE_BOOKMARKS_DATABASE = "PREFERENCE_BOOKMARKS_DATABASE";
+	
 	/**
 	 * Methods.
 	 */

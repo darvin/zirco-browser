@@ -461,7 +461,6 @@
     
     <string name="Commons.OperationCanBeLongMessage">Cette opération peut être longue. Souhaitez vous continuer ?</string>
     
-    <string name="PreferencesActivity.ToolsCategoryTitle">Outils</string>
     <string name="PreferencesActivity.ToolsHistoryBookmarksPreferenceTitle">Gérer les favoris et l\'historique</string>
     <string name="PreferencesActivity.ToolsHistoryBookmarksPreferenceSummary">Importer, exporter, effacer l\'historique et les favoris.</string>
     <string name="PreferencesActivity.ExportHistoryBookmarksPreferenceTitle">Exporter les favoris et l\'historique</string>

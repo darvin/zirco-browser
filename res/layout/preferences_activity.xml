@@ -222,7 +222,24 @@
 				android:key="PrivacyClearCookies" />
 		</PreferenceScreen>		
 	</PreferenceCategory>
-	<PreferenceCategory android:title="@string/PreferencesActivity.ToolsCategoryTitle">
+	<PreferenceCategory android:title="@string/PreferencesActivity.AdBlockerSettingsCategoryTitle">
+		<CheckBoxPreference
+			android:title="@string/PreferencesActivity.EnableAdBlockerPreferenceTitle"
+			android:defaultValue="true"
+			android:summary="@string/PreferencesActivity.EnableAdBlockerPreferenceSummary"
+			android:key="AdBlockerEnable" />
+		<Preference
+			android:title="@string/PreferencesActivity.AdBlockerWhiteListPreferenceTitle"
+			android:summary="@string/PreferencesActivity.AdBlockerWhiteListPreferenceSummary"
+			android:key="AdBlockerWhiteList" />
+	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/PreferencesActivity.MobileViewCategoryTitle">
+		<Preference
+			android:title="@string/PreferencesActivity.MobileViewListPreferenceTitle"
+			android:summary="@string/PreferencesActivity.MobileViewListPreferenceSummary"
+			android:key="MobileViewList" />
+	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/PreferencesActivity.AdvancedCategoryTitle">
     	<PreferenceScreen
             android:key="ToolsHistoryBookmarksPreferencesScreen"
             android:title="@string/PreferencesActivity.ToolsHistoryBookmarksPreferenceTitle"
@@ -240,24 +257,14 @@
                 android:summary="@string/PreferencesActivity.SummaryCannotBeUndone"
                 android:key="ClearHistoryBookmarks" />
         </PreferenceScreen>
+        <ListPreference
+			android:title="@string/PreferencesActivity.BookmarksDatabaseTitle"
+			android:summary="@string/PreferencesActivity.BookmarksDatabaseSummary"
+			android:key="PREFERENCE_BOOKMARKS_DATABASE"
+			android:defaultValue="STOCK"
+			android:entries="@array/BookmarksDatabaseEntries"
+			android:entryValues="@array/BookmarksDatabaseValues" />
     </PreferenceCategory>
-	<PreferenceCategory android:title="@string/PreferencesActivity.MobileViewCategoryTitle">
-		<Preference
-			android:title="@string/PreferencesActivity.MobileViewListPreferenceTitle"
-			android:summary="@string/PreferencesActivity.MobileViewListPreferenceSummary"
-			android:key="MobileViewList" />
-	</PreferenceCategory>
-	<PreferenceCategory android:title="@string/PreferencesActivity.AdBlockerSettingsCategoryTitle">
-		<CheckBoxPreference
-			android:title="@string/PreferencesActivity.EnableAdBlockerPreferenceTitle"
-			android:defaultValue="true"
-			android:summary="@string/PreferencesActivity.EnableAdBlockerPreferenceSummary"
-			android:key="AdBlockerEnable" />
-		<Preference
-			android:title="@string/PreferencesActivity.AdBlockerWhiteListPreferenceTitle"
-			android:summary="@string/PreferencesActivity.AdBlockerWhiteListPreferenceSummary"
-			android:key="AdBlockerWhiteList" />
-	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/PreferencesActivity.AboutCategoryTitle">
 		<Preference
 			android:title="@string/PreferencesActivity.AboutPreferenceTitle"

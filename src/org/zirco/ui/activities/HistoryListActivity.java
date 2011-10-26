@@ -77,7 +77,7 @@ public class HistoryListActivity extends ExpandableListActivity {
 
 		mAdapter = new HistoryExpandableListAdapter(this,
 				c,
-				Browser.HISTORY_PROJECTION_DATE_INDEX,
+				c.getColumnIndex(Browser.BookmarkColumns.DATE),
 				ApplicationUtils.getFaviconSizeForBookmarks(this));
 		
         setListAdapter(mAdapter);

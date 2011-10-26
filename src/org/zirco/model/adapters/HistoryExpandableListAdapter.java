@@ -201,10 +201,16 @@ public class HistoryExpandableListAdapter extends BaseExpandableListAdapter {
 	public Object getChild(int groupPosition, int childPosition) {
 		moveCursorToChildPosition(groupPosition, childPosition);
 
+		/*
 		return new HistoryItem(mCursor.getLong(Browser.HISTORY_PROJECTION_ID_INDEX),
 				mCursor.getString(Browser.HISTORY_PROJECTION_TITLE_INDEX),
 				mCursor.getString(Browser.HISTORY_PROJECTION_URL_INDEX),
 				mCursor.getBlob(Browser.HISTORY_PROJECTION_FAVICON_INDEX));
+		*/
+		return new HistoryItem(mCursor.getLong(mCursor.getColumnIndex(Browser.BookmarkColumns._ID)),
+				mCursor.getString(mCursor.getColumnIndex(Browser.BookmarkColumns.TITLE)),
+				mCursor.getString(mCursor.getColumnIndex(Browser.BookmarkColumns.URL)),
+				mCursor.getBlob(mCursor.getColumnIndex(Browser.BookmarkColumns.FAVICON)));
 	}
 
 	@Override

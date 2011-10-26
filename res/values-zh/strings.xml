@@ -460,7 +460,6 @@
     
     <string name="Commons.OperationCanBeLongMessage">This operation can take some times. Do you wish to proceed?</string>
     
-    <string name="PreferencesActivity.ToolsCategoryTitle">Tools</string>
     <string name="PreferencesActivity.ToolsHistoryBookmarksPreferenceTitle">Manage bookmarks and history</string>
     <string name="PreferencesActivity.ToolsHistoryBookmarksPreferenceSummary">Import, export, clear history and bookmarks.</string>
     <string name="PreferencesActivity.ExportHistoryBookmarksPreferenceTitle">Export bookmarks and history</string>
