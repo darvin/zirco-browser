@@ -138,11 +138,11 @@ class WeaveCryptoUtil {
       throw new GeneralSecurityException("mac failed");
   }
 
-@SuppressWarnings("unchecked")
 protected static boolean initProvider(String providerName, String className) {
     try {
       Provider provider = Security.getProvider(providerName);
       if (provider == null) {
+		@SuppressWarnings("rawtypes")
 		Class clazz = Class.forName(className);
         provider = (Provider)clazz.newInstance();
         Security.addProvider(provider);
