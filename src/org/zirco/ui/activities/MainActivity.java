@@ -1803,7 +1803,7 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 		startActivity(sendMail);
 	}
 	
-	public void onVndUrl(String url) {
+	public void onExternalApplicationUrl(String url) {
 		try {
 			
 			Intent i  = new Intent(Intent.ACTION_VIEW, Uri.parse(url));

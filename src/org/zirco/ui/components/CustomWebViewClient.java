@@ -132,7 +132,7 @@ public class CustomWebViewClient extends WebViewClient {
 
 				String videoId = url.substring(startIndex, endIndex);
 
-				mMainActivity.onVndUrl("vnd.youtube:" + videoId);				
+				mMainActivity.onExternalApplicationUrl("vnd.youtube:" + videoId);				
 			
 			} catch (Exception e) {
 				Log.e("onLoadResource", "Unable to parse YouTube url: " + url);
@@ -143,10 +143,10 @@ public class CustomWebViewClient extends WebViewClient {
 	}
 
 	@Override
-	public boolean shouldOverrideUrlLoading(WebView view, String url) {
+	public boolean shouldOverrideUrlLoading(WebView view, String url) {				
 		
-		if (url.startsWith("vnd.")) {
-			mMainActivity.onVndUrl(url);
+		if (isExternalApplicationUrl(url)) {
+			mMainActivity.onExternalApplicationUrl(url);
 			return true;
 			
 		} else if (url.startsWith(Constants.URL_ACTION_SEARCH)) {
@@ -178,6 +178,13 @@ public class CustomWebViewClient extends WebViewClient {
 				return false;
 			}
 		}
+	}
+	
+	private boolean isExternalApplicationUrl(String url) {
+		return url.startsWith("vnd.") ||
+				url.startsWith("rtsp://") ||
+				url.startsWith("itms://") ||
+				url.startsWith("itpc://");
 	}
 
 }
