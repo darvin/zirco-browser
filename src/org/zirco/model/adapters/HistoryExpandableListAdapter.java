@@ -33,7 +33,6 @@ import android.webkit.DateSorter;
 import android.widget.AbsListView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
@@ -192,7 +191,7 @@ public class HistoryExpandableListAdapter extends BaseExpandableListAdapter {
 	 * @return The created view.
 	 */
 	private View getCustomChildView() {
-		LinearLayout view = (LinearLayout) mInflater.inflate(R.layout.history_row, null, false);
+		View view = mInflater.inflate(R.layout.history_row, null, false);
 		
 		return view;
 	}
@@ -201,15 +200,10 @@ public class HistoryExpandableListAdapter extends BaseExpandableListAdapter {
 	public Object getChild(int groupPosition, int childPosition) {
 		moveCursorToChildPosition(groupPosition, childPosition);
 
-		/*
-		return new HistoryItem(mCursor.getLong(Browser.HISTORY_PROJECTION_ID_INDEX),
-				mCursor.getString(Browser.HISTORY_PROJECTION_TITLE_INDEX),
-				mCursor.getString(Browser.HISTORY_PROJECTION_URL_INDEX),
-				mCursor.getBlob(Browser.HISTORY_PROJECTION_FAVICON_INDEX));
-		*/
 		return new HistoryItem(mCursor.getLong(mCursor.getColumnIndex(Browser.BookmarkColumns._ID)),
 				mCursor.getString(mCursor.getColumnIndex(Browser.BookmarkColumns.TITLE)),
 				mCursor.getString(mCursor.getColumnIndex(Browser.BookmarkColumns.URL)),
+				mCursor.getInt(mCursor.getColumnIndex(Browser.BookmarkColumns.BOOKMARK)) >= 1 ? true : false,
 				mCursor.getBlob(mCursor.getColumnIndex(Browser.BookmarkColumns.FAVICON)));
 	}
 
@@ -232,6 +226,11 @@ public class HistoryExpandableListAdapter extends BaseExpandableListAdapter {
 		
 		TextView urlView = (TextView) view.findViewById(R.id.HistoryRow_Url);		 					
 		urlView.setText(item.getUrl());
+		
+		if (item.isBookmark()) {
+			ImageView bookmarkIcon = (ImageView) view.findViewById(R.id.HistoryRow_BookmarksIcon);
+			bookmarkIcon.setImageResource(android.R.drawable.btn_star_big_on);
+		}
 		
 		ImageView faviconView = (ImageView) view.findViewById(R.id.HistoryRow_Thumbnail);
 		Bitmap favicon = item.getFavicon();

@@ -26,6 +26,7 @@ public class HistoryItem {
 	private long mId;
 	private String mTitle;
 	private String mUrl;
+	private boolean mIsBookmark;
 	private Bitmap mFavicon;
 
 	/**
@@ -33,12 +34,14 @@ public class HistoryItem {
 	 * @param id The element id.
 	 * @param title The title.
 	 * @param url The url.
+	 * @param isBookmark True if this item is also a bookmark.
 	 * @param faviconData The favicon.
 	 */
-	public HistoryItem(long id, String title, String url, byte[] faviconData) {
+	public HistoryItem(long id, String title, String url, boolean isBookmark, byte[] faviconData) {
 		mId = id;
 		mTitle = title;
 		mUrl = url;
+		mIsBookmark = isBookmark;
 		if (faviconData != null) {
 			mFavicon = BitmapFactory.decodeByteArray(faviconData, 0, faviconData.length);
 		} else {
@@ -68,6 +71,10 @@ public class HistoryItem {
 	 */
 	public String getUrl() {
 		return mUrl;
+	}
+	
+	public boolean isBookmark() {
+		return mIsBookmark;
 	}
 	
 	/**

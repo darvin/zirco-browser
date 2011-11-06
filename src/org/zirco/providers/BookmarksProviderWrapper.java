@@ -174,6 +174,7 @@ public class BookmarksProviderWrapper {
 				int columnId = cursor.getColumnIndex(Browser.BookmarkColumns._ID);
 				int columnTitle = cursor.getColumnIndex(Browser.BookmarkColumns.TITLE);
 				int columnUrl = cursor.getColumnIndex(Browser.BookmarkColumns.URL);
+				int columnBookmark = cursor.getColumnIndex(Browser.BookmarkColumns.BOOKMARK);
 				
 				int count = 0;
 				while (!cursor.isAfterLast() &&
@@ -183,6 +184,7 @@ public class BookmarksProviderWrapper {
 							cursor.getLong(columnId),
 							cursor.getString(columnTitle),
 							cursor.getString(columnUrl),
+							cursor.getInt(columnBookmark) >= 1 ? true : false,
 							null);
 					
 					result.add(item);
