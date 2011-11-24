@@ -18,6 +18,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:descendantFocusability="blocksDescendants"
     android:paddingBottom="5dip"
     android:paddingLeft="25dip"
     android:paddingTop="5dip" >
@@ -37,7 +38,7 @@
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:layout_toRightOf="@+id/HistoryRow.Thumbnail"
-		android:layout_toLeftOf="@+id/HistoryRow.BookmarksIcon"
+		android:layout_toLeftOf="@+id/HistoryRow.BookmarkStar"
 		android:orientation="vertical" android:layout_gravity="center_vertical">
 		<TextView android:layout_gravity="center_vertical"
 			android:ellipsize="end"
@@ -54,6 +55,7 @@
 
 	</LinearLayout>
 	
+	<!--  
 	<ImageView
 		android:id="@+id/HistoryRow.BookmarksIcon"
 	    android:layout_width="wrap_content"
@@ -65,5 +67,14 @@
 	    android:layout_marginRight="5dip"
 	    android:layout_marginLeft="5dip"
 	    android:padding="2dip" ></ImageView>
+	-->
+	
+	<CheckBox
+        android:id="@+id/HistoryRow.BookmarkStar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_alignParentRight="true"
+        android:button="@android:drawable/btn_star" />
 
 </RelativeLayout>

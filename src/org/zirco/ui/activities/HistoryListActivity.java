@@ -74,8 +74,9 @@ public class HistoryListActivity extends ExpandableListActivity {
 	 */
 	private void fillData() {
 		Cursor c = BookmarksProviderWrapper.getStockHistory(getContentResolver());
-
-		mAdapter = new HistoryExpandableListAdapter(this,
+		
+		mAdapter = new HistoryExpandableListAdapter(
+				this,
 				c,
 				c.getColumnIndex(Browser.BookmarkColumns.DATE),
 				ApplicationUtils.getFaviconSizeForBookmarks(this));
