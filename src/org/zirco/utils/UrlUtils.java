@@ -61,6 +61,7 @@ public class UrlUtils {
     	
     		if ((!url.startsWith("http://")) &&
     				(!url.startsWith("https://")) &&
+    				(!url.startsWith("file://")) &&
     				(!url.startsWith(Constants.URL_ABOUT_BLANK)) &&
     				(!url.startsWith(Constants.URL_ABOUT_START))) {
     			
