@@ -38,6 +38,7 @@ import android.database.MatrixCursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.Browser;
 import android.util.Log;
 
@@ -456,6 +457,11 @@ public class BookmarksProviderWrapper {
 
 		ContentValues values = new ContentValues();
 		values.put(Browser.BookmarkColumns.FAVICON, os.toByteArray());
+		
+		// Hack: Starting from Honeycomb, simple update of the favicon through an error, it need another field to update correctly...
+		if (Build.VERSION.SDK_INT >= 11) {
+			values.put(Browser.BookmarkColumns.URL, url);
+		}
 
 		try {
 			currentActivity.getContentResolver().update(BOOKMARKS_URI, values, whereClause, null);
