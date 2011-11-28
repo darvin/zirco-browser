@@ -33,11 +33,9 @@ import android.webkit.DateSorter;
 import android.widget.AbsListView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Custom adapter for displaying history, splitted in bins.
@@ -68,8 +66,9 @@ public class HistoryExpandableListAdapter extends BaseExpandableListAdapter {
 	 * @param cursor The data cursor.
 	 * @param dateIndex The date index ?
 	 */
-	public HistoryExpandableListAdapter(Context context, Cursor cursor, int dateIndex, int faviconSize) {
+	public HistoryExpandableListAdapter(Context context, OnCheckedChangeListener bookmarksChangeListener, Cursor cursor, int dateIndex, int faviconSize) {
 		mContext = context;
+		mBookmarkStarChangeListener = bookmarksChangeListener;
 		mCursor = cursor;
 		mDateIndex = dateIndex;
 		mFaviconSize = faviconSize;
@@ -77,15 +76,7 @@ public class HistoryExpandableListAdapter extends BaseExpandableListAdapter {
 		mDateSorter = new DateSorter(mContext);
 		mIdIndex = cursor.getColumnIndexOrThrow(BaseColumns._ID);
 		
-		mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		
-		mBookmarkStarChangeListener = new OnCheckedChangeListener() {			
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {								
-				long index = (Long) buttonView.getTag();
-				Toast.makeText(mContext, String.format("Test: %s - %s", index, isChecked), Toast.LENGTH_SHORT).show();
-			}
-		};
+		mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);		
 		
 		buildMap();
 	}

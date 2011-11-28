@@ -492,7 +492,7 @@
     <string name="PreferencesActivity.AdvancedCategoryTitle">Advanced</string>
     
     <string name="PreferencesActivity.BookmarksDatabaseTitle">Bookmarks storage</string>
-    <string name="PreferencesActivity.BookmarksDatabaseSummary">Choose the bookmarks storage.</string>
+    <string name="PreferencesActivity.BookmarksDatabaseSummary">Choose the bookmarks storage mode.</string>
     
     <string name="PreferencesActivity.BookmarksDatabaseStock">Android</string>
     <string name="PreferencesActivity.BookmarksDatabaseInternal">Internal</string>
@@ -505,4 +505,8 @@
 		<item>STOCK</item>
 		<item>INTERNAL</item>
 	</string-array>
+	
+    <string name="HistoryListActivity.BookmarkAdded">Added to bookmarks.</string>
+    <string name="HistoryListActivity.BookmarkRemoved">Removed from bookmarks.</string>
+    
 </resources>

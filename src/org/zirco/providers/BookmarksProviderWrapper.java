@@ -298,6 +298,27 @@ public class BookmarksProviderWrapper {
 		}
 	}
 	
+	public static void toggleBookmark(ContentResolver contentResolver, long id, boolean bookmark) {
+		String[] colums = new String[] { Browser.BookmarkColumns._ID };
+		String whereClause = Browser.BookmarkColumns._ID + " = " + id;
+
+		Cursor cursor = contentResolver.query(BOOKMARKS_URI, colums, whereClause, null, null);
+		boolean recordExists = (cursor != null) && (cursor.moveToFirst());
+		
+		if (recordExists) {
+			ContentValues values = new ContentValues();
+			
+			values.put(Browser.BookmarkColumns.BOOKMARK, bookmark);
+			if (bookmark) {
+				values.put(Browser.BookmarkColumns.CREATED, new Date().getTime());
+			} else {
+				values.putNull(Browser.BookmarkColumns.CREATED);
+			}
+			
+			contentResolver.update(BOOKMARKS_URI, values, whereClause, null);
+		}
+	}
+	
 	public static Cursor getStockHistory(ContentResolver contentResolver) {
 		String whereClause = Browser.BookmarkColumns.VISITS + " > 0";
         String orderClause = Browser.BookmarkColumns.DATE + " DESC";

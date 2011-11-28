@@ -38,8 +38,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.CompoundButton;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
 
 /**
@@ -58,6 +61,8 @@ public class HistoryListActivity extends ExpandableListActivity {
 	
 	private ProgressDialog mProgressDialog;
 	
+	private OnCheckedChangeListener mBookmarkStarChangeListener;
+	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +70,20 @@ public class HistoryListActivity extends ExpandableListActivity {
         setTitle(R.string.HistoryListActivity_Title);
         
         registerForContextMenu(getExpandableListView());
+        
+        mBookmarkStarChangeListener = new OnCheckedChangeListener() {			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {								
+				long id = (Long) buttonView.getTag();
+				BookmarksProviderWrapper.toggleBookmark(getContentResolver(), id, isChecked);
+				
+				if (isChecked) {
+					Toast.makeText(HistoryListActivity.this, R.string.HistoryListActivity_BookmarkAdded, Toast.LENGTH_SHORT).show();
+				} else {
+					Toast.makeText(HistoryListActivity.this, R.string.HistoryListActivity_BookmarkRemoved, Toast.LENGTH_SHORT).show();
+				}
+			}
+		};
         
         fillData();
 	}
@@ -77,6 +96,7 @@ public class HistoryListActivity extends ExpandableListActivity {
 		
 		mAdapter = new HistoryExpandableListAdapter(
 				this,
+				mBookmarkStarChangeListener,
 				c,
 				c.getColumnIndex(Browser.BookmarkColumns.DATE),
 				ApplicationUtils.getFaviconSizeForBookmarks(this));

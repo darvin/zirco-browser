@@ -488,4 +488,25 @@
     <string name="QuickAction.Find">Rechercher sur la page</string>
     <string name="SearchDialog.Hint">Rechercher sur la page</string>
     
+    <!-- 0.4.2 -->
+    <string name="PreferencesActivity.AdvancedCategoryTitle">Préférences avancées</string>
+    
+    <string name="PreferencesActivity.BookmarksDatabaseTitle">Stockage des favoris</string>
+    <string name="PreferencesActivity.BookmarksDatabaseSummary">Choisissez le mode de stockages des favoris.</string>
+    
+    <string name="PreferencesActivity.BookmarksDatabaseStock">Android</string>
+    <string name="PreferencesActivity.BookmarksDatabaseInternal">Internal</string>
+        
+    <string-array name="BookmarksDatabaseEntries">
+		<item>@string/PreferencesActivity.BookmarksDatabaseStock</item>
+		<item>@string/PreferencesActivity.BookmarksDatabaseInternal</item>
+	</string-array>
+    <string-array name="BookmarksDatabaseValues">
+		<item>STOCK</item>
+		<item>INTERNAL</item>
+	</string-array>
+	
+    <string name="HistoryListActivity.BookmarkAdded">Ajouté aux favoris.</string>
+    <string name="HistoryListActivity.BookmarkRemoved">Supprimé des favoris.</string>
+    
 </resources>
