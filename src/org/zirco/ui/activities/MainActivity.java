@@ -196,6 +196,7 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	//this.setTheme(R.style.Dark);
         super.onCreate(savedInstanceState);              
 
         INSTANCE = this;

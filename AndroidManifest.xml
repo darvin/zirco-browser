@@ -21,7 +21,9 @@
       android:versionName="0.4.2" android:versionCode="16">
     <application
     	android:icon="@drawable/icon"
-    	android:label="@string/ApplicationName" android:debuggable="true">
+    	android:label="@string/ApplicationName"
+    	android:theme="@style/Standard"
+    	android:debuggable="true">
     
         <activity android:name=".ui.activities.MainActivity"
                   android:label="@string/ApplicationName"

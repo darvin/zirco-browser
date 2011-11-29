@@ -26,9 +26,10 @@
 		</ViewFlipper>
 
 		<LinearLayout android:id="@+id/BarLayout"
+		    style="?attr/topBarBackground"
 			android:layout_toRightOf="@+id/GoBtn" android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:scaleType="fitXY"
-			android:background="@drawable/tb_background_top" android:weightSum="0.75"
+			android:weightSum="0.75"
 			android:layout_alignParentTop="true" android:orientation="vertical">														
 			
 			<ProgressBar android:id="@+id/WebViewProgress"
@@ -121,9 +122,11 @@
 			android:layout_height="wrap_content" android:layout_width="wrap_content"
 			android:layout_alignParentRight="true" android:layout_centerVertical="true"></ImageView>		
 
+		<!-- android:background="@drawable/tb_background_bottom" -->
 		<LinearLayout android:id="@+id/BottomBarLayout"
+		    style="?attr/bottomBarBackground"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:scaleType="fitXY" android:background="@drawable/tb_background_bottom"
+			android:scaleType="fitXY"
 			android:layout_alignParentBottom="true" android:weightSum="5">
 			
 			<ImageButton android:layout_height="wrap_content"
