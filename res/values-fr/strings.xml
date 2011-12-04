@@ -494,8 +494,8 @@
     <string name="PreferencesActivity.BookmarksDatabaseTitle">Stockage des favoris</string>
     <string name="PreferencesActivity.BookmarksDatabaseSummary">Choisissez le mode de stockages des favoris.</string>
     
-    <string name="PreferencesActivity.BookmarksDatabaseStock">Android</string>
-    <string name="PreferencesActivity.BookmarksDatabaseInternal">Internal</string>
+    <string name="PreferencesActivity.BookmarksDatabaseStock">Favoris Android</string>
+    <string name="PreferencesActivity.BookmarksDatabaseInternal">Interne</string>
         
     <string-array name="BookmarksDatabaseEntries">
 		<item>@string/PreferencesActivity.BookmarksDatabaseStock</item>
@@ -508,5 +508,11 @@
 	
     <string name="HistoryListActivity.BookmarkAdded">Ajouté aux favoris.</string>
     <string name="HistoryListActivity.BookmarkRemoved">Supprimé des favoris.</string>
+    
+    <string name="HttpAuthenticationDialog.DialogTitle">Se connecter à %1$s - %2$s</string>
+    <string name="HttpAuthenticationDialog.UserName">Nom</string>
+    <string name="HttpAuthenticationDialog.Password">Mot de passe</string>
+    
+    <string name="Commons.Proceed">Continuer</string>
     
 </resources>

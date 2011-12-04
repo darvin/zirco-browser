@@ -22,14 +22,20 @@ import org.zirco.utils.ApplicationUtils;
 import org.zirco.utils.Constants;
 import org.zirco.utils.UrlUtils;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.WindowManager;
+import android.webkit.HttpAuthHandler;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebView.HitTestResult;
+import android.widget.EditText;
 
 /**
  * Convenient extension of WebViewClient.
@@ -180,6 +186,70 @@ public class CustomWebViewClient extends WebViewClient {
 		}
 	}
 	
+	@Override
+	public void onReceivedHttpAuthRequest(WebView view, final HttpAuthHandler handler, final String host, final String realm) {
+		String username = null;
+        String password = null;
+        
+        boolean reuseHttpAuthUsernamePassword = handler.useHttpAuthUsernamePassword();
+        
+        if (reuseHttpAuthUsernamePassword && view != null) {
+            String[] credentials = view.getHttpAuthUsernamePassword(
+                    host, realm);
+            if (credentials != null && credentials.length == 2) {
+                username = credentials[0];
+                password = credentials[1];
+            }
+        }
+
+        if (username != null && password != null) {
+            handler.proceed(username, password);
+        } else {
+        	LayoutInflater factory = LayoutInflater.from(mMainActivity);
+            final View v = factory.inflate(R.layout.http_authentication_dialog, null);
+            
+            if (username != null) {
+                ((EditText) v.findViewById(R.id.username_edit)).setText(username);
+            }
+            if (password != null) {
+                ((EditText) v.findViewById(R.id.password_edit)).setText(password);
+            }
+            
+            AlertDialog dialog = new AlertDialog.Builder(mMainActivity)
+            .setTitle(String.format(mMainActivity.getString(R.string.HttpAuthenticationDialog_DialogTitle), host, realm))
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setView(v)
+            .setPositiveButton(R.string.Commons_Proceed,
+                    new DialogInterface.OnClickListener() {
+                         public void onClick(DialogInterface dialog,
+                                 int whichButton) {
+                            String nm = ((EditText) v
+                                    .findViewById(R.id.username_edit))
+                                    .getText().toString();
+                            String pw = ((EditText) v
+                                    .findViewById(R.id.password_edit))
+                                    .getText().toString();
+                            mMainActivity.setHttpAuthUsernamePassword(host, realm, nm, pw);
+                            handler.proceed(nm, pw);
+                        }})
+            .setNegativeButton(R.string.Commons_Cancel,
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            handler.cancel();
+                        }})
+            .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    public void onCancel(DialogInterface dialog) {
+                        handler.cancel();
+                    }})
+            .create();
+            
+            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+            dialog.show();
+                        
+            v.findViewById(R.id.username_edit).requestFocus();            
+        }
+	}
+
 	private boolean isExternalApplicationUrl(String url) {
 		return url.startsWith("vnd.") ||
 				url.startsWith("rtsp://") ||

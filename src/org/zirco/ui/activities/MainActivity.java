@@ -1827,6 +1827,10 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 		}
 	}
 	
+	public void setHttpAuthUsernamePassword(String host, String realm, String username, String password) {
+		mCurrentWebView.setHttpAuthUsernamePassword(host, realm, username, password);
+	}
+	
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		

@@ -507,5 +507,11 @@
 	
     <string name="HistoryListActivity.BookmarkAdded">Added to bookmarks.</string>
     <string name="HistoryListActivity.BookmarkRemoved">Removed from bookmarks.</string>
+    
+    <string name="HttpAuthenticationDialog.DialogTitle">Sign in to %1$s - %2$s</string>
+    <string name="HttpAuthenticationDialog.UserName">Name</string>
+    <string name="HttpAuthenticationDialog.Password">Password</string>
+    
+    <string name="Commons.Proceed">Proceed</string>
 	
 </resources>
