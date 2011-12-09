@@ -525,4 +525,7 @@
     
     <string name="AboutActivity.ContributorsText">Contributors:\n   • LeChuck (Proxy settings);</string>
     
+    <string name="PreferencesActivity.EnableRestoreLastPagePreferenceTitle">Restore last page</string>
+    <string name="PreferencesActivity.EnableRestoreLastPagePreferenceSummary">If checked, the last page will be restore if available.</string>
+    
 </resources>

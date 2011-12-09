@@ -31,6 +31,8 @@ public class Constants {
 	public static final String EXTRA_ID_BOOKMARK_URL = "EXTRA_ID_BOOKMARK_URL";
 	public static final String EXTRA_ID_BOOKMARK_TITLE = "EXTRA_ID_BOOKMARK_TITLE";
 	
+	public static final String EXTRA_SAVED_URL = "EXTRA_SAVED_URL";
+	
 	public static final int BOOKMARK_THUMBNAIL_WIDTH_FACTOR = 70;
 	public static final int BOOKMARK_THUMBNAIL_HEIGHT_FACTOR = 60;
 	
@@ -83,6 +85,7 @@ public class Constants {
 	public static final String PREFERENCES_BROWSER_ENABLE_PLUGINS_ECLAIR = "BrowserEnablePluginsEclair";
 	public static final String PREFERENCES_BROWSER_ENABLE_PROXY_SETTINGS = "BrowserEnableProxySettings";
 	public static final String PREFERENCES_BROWSER_ENABLE_PLUGINS = "BrowserEnablePlugins";
+	public static final String PREFERENCES_BROWSER_RESTORE_LAST_PAGE = "PREFERENCES_BROWSER_RESTORE_LAST_PAGE";
 	
 	public static final String PREFERENCES_PRIVACY_CLEAR_CACHE_ON_EXIT = "PrivacyClearCacheOnExit";
 	

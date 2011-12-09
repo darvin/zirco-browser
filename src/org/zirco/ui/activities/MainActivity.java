@@ -196,7 +196,6 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
-    	//this.setTheme(R.style.Dark);
         super.onCreate(savedInstanceState);              
 
         INSTANCE = this;
@@ -256,7 +255,21 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
         		startActivity(changelogIntent);
         	}
         	
-        	addTab(true);
+        	boolean lastPageRestored = false;
+        	if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.PREFERENCES_BROWSER_RESTORE_LAST_PAGE, false)) {
+        		if (savedInstanceState != null) {        		
+        			String savedUrl = savedInstanceState.getString(Constants.EXTRA_SAVED_URL);
+        			if (savedUrl != null) {
+        				addTab(false);
+        				navigateToUrl(savedUrl);
+        				lastPageRestored = true;
+        			}
+        		}
+        	}
+        	
+        	if (!lastPageRestored) {
+        		addTab(true);
+        	}
         }
         
         initializeWebIconDatabase();
@@ -287,6 +300,12 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 		PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(mPreferenceChangeListener);
 
 		super.onDestroy();
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putString(Constants.EXTRA_SAVED_URL, mCurrentWebView.getUrl());
+		super.onSaveInstanceState(outState);
 	}
 
 	/**
