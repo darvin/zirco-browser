@@ -486,7 +486,7 @@
     <string name="DownloadListActivity.RemoveCompletedDownloads">Effacer les téléchargements terminés</string>
     
     <string name="QuickAction.Find">Rechercher sur la page</string>
-    <string name="SearchDialog.Hint">Rechercher sur la page</string>
+    <string name="SearchDialog.Hint">Rechercher sur la page</string>    
     
     <!-- 0.4.2 -->
     <string name="PreferencesActivity.AdvancedCategoryTitle">Préférences avancées</string>
@@ -514,5 +514,13 @@
     <string name="HttpAuthenticationDialog.Password">Mot de passe</string>
     
     <string name="Commons.Proceed">Continuer</string>
+    
+    <string name="PreferencesActivity.EnableProxySettings">Activer le proxy du système</string>
+    <string name="PreferencesActivity.EnableProxySettingsSummary">Active ou désactive le proxy du système.</string>
+    <string name="ProxySettings.EnablingProxySettings">Activation du proxy...</string>
+    <string name="ProxySettings.ErrorProxySettingsNotValid">Paramètres du proxy invalides.</string>
+    <string name="ProxySettings.ErrorProxyServerNotReachable">Le serveur proxy n\'est pas accessible.</string>
+    <string name="ProxySettings.ErrorProxyInternetNotReachable">Impossible d\'acceder au Web avec le serveur proxy spécifié.</string>
+    <string name="ProxySettings.ProxySettingsEnabled">Proxy activé avec succès.</string>
     
 </resources>

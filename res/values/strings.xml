@@ -504,8 +504,8 @@
     <string-array name="BookmarksDatabaseValues">
 		<item>STOCK</item>
 		<item>INTERNAL</item>
-	</string-array>
-	
+	</string-array>    
+    
     <string name="HistoryListActivity.BookmarkAdded">Added to bookmarks.</string>
     <string name="HistoryListActivity.BookmarkRemoved">Removed from bookmarks.</string>
     
@@ -513,6 +513,14 @@
     <string name="HttpAuthenticationDialog.UserName">Name</string>
     <string name="HttpAuthenticationDialog.Password">Password</string>
     
-    <string name="Commons.Proceed">Proceed</string>    
+    <string name="Commons.Proceed">Proceed</string>
+    
+    <string name="PreferencesActivity.EnableProxySettings">Enable System Proxy</string>
+    <string name="PreferencesActivity.EnableProxySettingsSummary">Enable or disable the support to system proxy settings.</string>
+    <string name="ProxySettings.EnablingProxySettings">Enabling proxy settings...</string>
+    <string name="ProxySettings.ErrorProxySettingsNotValid">Invalid system proxy settings.</string>
+    <string name="ProxySettings.ErrorProxyServerNotReachable">Proxy server is not reachable.</string>
+    <string name="ProxySettings.ErrorProxyInternetNotReachable">Cannot access the Web through the specified proxy server.</string>
+    <string name="ProxySettings.ProxySettingsEnabled">Proxy settings succesfully enabled.</string>
     
 </resources>

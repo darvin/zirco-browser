@@ -21,6 +21,7 @@ import java.lang.reflect.Method;
 import org.zirco.controllers.Controller;
 import org.zirco.utils.ApplicationUtils;
 import org.zirco.utils.Constants;
+import org.zirco.utils.ProxySettings;
 
 import android.content.Context;
 import android.os.Build;
@@ -107,6 +108,12 @@ public class CustomWebView extends WebView {
 		
 		settings.setSupportZoom(true);
 		
+		if (Controller.getInstance().getPreferences().getBoolean(Constants.PREFERENCES_BROWSER_ENABLE_PROXY_SETTINGS, false)) {
+		    ProxySettings.setSystemProxy(mContext);
+		} else {
+			ProxySettings.resetSystemProxy(mContext);
+		}
+				
 		// Technical settings
 		settings.setSupportMultipleWindows(true);						
     	setLongClickable(true);

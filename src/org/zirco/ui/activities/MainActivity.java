@@ -326,7 +326,7 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 		mToolsActionGrid.addQuickAction(new QuickAction(this, R.drawable.ic_btn_find, R.string.QuickAction_Find));
 		mToolsActionGrid.addQuickAction(new QuickAction(this, R.drawable.ic_btn_select, R.string.QuickAction_SelectText));
 		mToolsActionGrid.addQuickAction(new QuickAction(this, R.drawable.ic_btn_mobile_view, R.string.QuickAction_MobileView));
-		
+				
 		mToolsActionGrid.setOnQuickActionClickListener(new OnQuickActionClickListener() {			
 			@Override
 			public void onQuickActionClicked(QuickActionWidget widget, int position) {
@@ -354,7 +354,7 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 		    			String url = String.format(Constants.URL_GOOGLE_MOBILE_VIEW, mUrlEditText.getText().toString());
 		    			navigateToUrl(url);
 		    		}
-		    		break;
+		    		break;				
 				}
 			}
 		});

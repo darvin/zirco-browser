@@ -60,6 +60,15 @@
 		
 		<provider android:name=".providers.ZircoBookmarksContentProvider" android:authorities="org.zirco.providers.zircobookmarkscontentprovider"></provider>
 		<provider android:name=".providers.WeaveContentProvider" android:authorities="org.zirco.providers.weavecontentprovider"></provider>
+		
+		    
+        <receiver
+            android:name="org.zirco.utils.ProxyChangeReceiver">
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.PROXY_CHANGE" />
+            </intent-filter>
+        </receiver>
 	</application>
 
 	<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="8" />
