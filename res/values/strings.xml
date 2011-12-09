@@ -523,4 +523,6 @@
     <string name="ProxySettings.ErrorProxyInternetNotReachable">Cannot access the Web through the specified proxy server.</string>
     <string name="ProxySettings.ProxySettingsEnabled">Proxy settings succesfully enabled.</string>
     
+    <string name="AboutActivity.ContributorsText">Contributors:\n   • LeChuck (Proxy settings);</string>
+    
 </resources>

@@ -131,7 +131,7 @@ public class ProxySettings
 		return false;
     }
     
-	public static boolean testSystemProxy(Context ctx)
+	private static boolean testSystemProxy(Context ctx)
 	{
 		String message = "";
 		
