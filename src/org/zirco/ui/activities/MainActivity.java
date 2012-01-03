@@ -1480,6 +1480,15 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 				showFindDialog();
 			}
 			return true;
+		case KeyEvent.KEYCODE_VOLUME_DOWN:
+		case KeyEvent.KEYCODE_VOLUME_UP:
+			String volumeKeysBehaviour = PreferenceManager.getDefaultSharedPreferences(this).getString(Constants.PREFERENCES_UI_VOLUME_KEYS_BEHAVIOUR, "DEFAULT");
+			
+			if (volumeKeysBehaviour.equals("DEFAULT")) {
+				return super.onKeyUp(keyCode, event);
+			} else {
+				return true;
+			}
 		default: return super.onKeyUp(keyCode, event);
 		}
 	}
@@ -1495,6 +1504,8 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 				
 				if (volumeKeysBehaviour.equals("SWITCH_TABS")) {
 					showPreviousTab(false);
+				} else if (volumeKeysBehaviour.equals("SCROLL")) {
+					mCurrentWebView.pageDown(false);
 				} else if (volumeKeysBehaviour.equals("HISTORY")) {
 					mCurrentWebView.goForward();
 				} else {
@@ -1506,6 +1517,8 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 				
 				if (volumeKeysBehaviour.equals("SWITCH_TABS")) {
 					showNextTab(false);
+				} else if (volumeKeysBehaviour.equals("SCROLL")) {
+					mCurrentWebView.pageUp(false);
 				} else if (volumeKeysBehaviour.equals("HISTORY")) {
 					mCurrentWebView.goBack();
 				} else {

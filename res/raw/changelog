@@ -1,5 +1,6 @@
 0.4.3:
 - Much better handling of Youtube videos.
+- Volume keys can now be set to scroll page up/down (thanks to Martin).
 
 0.4.2:
 - History records which also are bookmarks are now shown in history. Clicking on the star allow to set or unset an history record as bookmark.

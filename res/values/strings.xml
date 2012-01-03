@@ -342,12 +342,14 @@
     
     <string name="PreferencesActivity.VolumeKeysActionDefault">Default behaviour</string>
     <string name="PreferencesActivity.VolumeKeysActionZoom">Zoom</string>
+    <string name="PreferencesActivity.VolumeKeysActionScroll">Scroll up/down</string>
     <string name="PreferencesActivity.VolumeKeysActionSwitchTabs">Switch tabs</string>
     <string name="PreferencesActivity.VolumeKeysActionHistory">Back/Forward</string>
     
     <string-array name="VolumeKeysActionEntries">
 		<item>@string/PreferencesActivity.VolumeKeysActionDefault</item>
 		<item>@string/PreferencesActivity.VolumeKeysActionZoom</item>
+		<item>@string/PreferencesActivity.VolumeKeysActionScroll</item>
 		<item>@string/PreferencesActivity.VolumeKeysActionSwitchTabs</item>
 		<item>@string/PreferencesActivity.VolumeKeysActionHistory</item>
 	</string-array>
@@ -355,6 +357,7 @@
     <string-array name="VolumeKeysActionValues">
 		<item>DEFAULT</item>
 		<item>ZOOM</item>
+		<item>SCROLL</item>
 		<item>SWITCH_TABS</item>
 		<item>HISTORY</item>
 	</string-array>
@@ -523,7 +526,7 @@
     <string name="ProxySettings.ErrorProxyInternetNotReachable">Cannot access the Web through the specified proxy server.</string>
     <string name="ProxySettings.ProxySettingsEnabled">Proxy settings succesfully enabled.</string>
     
-    <string name="AboutActivity.ContributorsText">Contributors:\n   • LeChuck (Proxy settings);</string>
+    <string name="AboutActivity.ContributorsText">Contributors:\n   • LeChuck (Proxy settings);\n   • Martin (Scroll with volume keys, German translation);</string>
     
     <string name="PreferencesActivity.EnableRestoreLastPagePreferenceTitle">Restore last page</string>
     <string name="PreferencesActivity.EnableRestoreLastPagePreferenceSummary">If checked, the last page will be restore if available.</string>
