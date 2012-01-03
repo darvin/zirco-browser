@@ -22,7 +22,7 @@
     <application
     	android:icon="@drawable/icon"
     	android:label="@string/ApplicationName"    	
-    	android:debuggable="true">
+    	android:debuggable="false">
     
         <activity android:name=".ui.activities.MainActivity"
                   android:label="@string/ApplicationName"
