@@ -1,3 +1,6 @@
+0.4.3:
+- Much better handling of Youtube videos.
+
 0.4.2:
 - History records which also are bookmarks are now shown in history. Clicking on the star allow to set or unset an history record as bookmark.
 - Bookmarks/history storage can be set to an internal database through preferences, for people concerned about privacy or who wants to keep different bookmarks set. Default behaviour is to use Android bookmarks database.

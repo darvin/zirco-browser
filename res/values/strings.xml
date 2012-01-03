@@ -156,13 +156,13 @@
     <string name="Commons.NoUndoMessage">This operation cannot be undone. Do you wish to proceed?</string>
     <string name="Commons.JavaScriptDialog">JavaScript dialog</string>
     <string name="Commons.ClearHistory">Clear history</string>
-    <string name="Commons.ClearingHistory">Clearing history...</string>
+    <string name="Commons.ClearingHistory">Clearing history&#8230;</string>
     <string name="Commons.ClearFormData">Clear form data</string>
-    <string name="Commons.ClearingFormData">Clearing form data...</string>
+    <string name="Commons.ClearingFormData">Clearing form data&#8230;</string>
     <string name="Commons.ClearCache">Clear cache</string>
-    <string name="Commons.ClearingCache">Clearing cache...</string>
+    <string name="Commons.ClearingCache">Clearing cache&#8230;</string>
     <string name="Commons.ClearCookies">Clear cookies</string>
-    <string name="Commons.ClearingCookies">Clearing cookies...</string>
+    <string name="Commons.ClearingCookies">Clearing cookies&#8230;</string>
     <string name="Commons.SDCardErrorTitle">SD Card unavailable</string>
     <string name="Commons.SDCardErrorNoSDMsg">No SD Card found.</string>
     <string name="Commons.SDCardErrorSDUnavailable">SD Card is not available.</string>
@@ -431,10 +431,10 @@
     <string name="WeaveBookmarksListActivity.SyncButton">Synchronize</string>
     
     <string name="WeaveSync.SyncTitle">Synchronization</string>
-    <string name="WeaveSync.Connecting">Connecting to server...</string>
-    <string name="WeaveSync.GettingData">Getting data...</string>
+    <string name="WeaveSync.Connecting">Connecting to server&#8230;</string>
+    <string name="WeaveSync.GettingData">Getting data&#8230;</string>
     <string name="WeaveSync.ReadingData">Reading data: %1$s / %2$s</string>
-    <string name="WeaveSync.WrittingData">Writting data...</string>
+    <string name="WeaveSync.WrittingData">Writting data&#8230;</string>
     
     <string name="Errors.WeaveSyncFailedTitle">Synchronization failed.</string>
     <string name="Errors.WeaveSyncFailedMessage">Synchronization failed: %s</string>
@@ -470,18 +470,18 @@
     <string name="PreferencesActivity.PrivacyClearHistoryBookmarksTitle">Clear history and/or bookmarks</string>
     <string name="PreferencesActivity.SummaryCannotBeUndone">Use with caution, this operation cannot be undone.</string>
     
-    <string name="Commons.ClearingHistoryBookmarks">Clearing history and/or bookmarks...</string>
+    <string name="Commons.ClearingHistoryBookmarks">Clearing history and/or bookmarks&#8230;</string>
     <string name="Commons.ClearHistoryBookmarks">Clear history and/or bookmarks</string>
     
     <string name="Commons.Bookmarks">Bookmarks</string>
     <string name="Commons.History">History</string>
     <string name="Commons.All">All</string>
     
-    <string name="Commons.ExportingHistoryBookmarks">Exporting history and bookmarks...</string>
-    <string name="Commons.ImportingHistoryBookmarks">Importing history and bookmarks...</string>
+    <string name="Commons.ExportingHistoryBookmarks">Exporting history and bookmarks&#8230;</string>
+    <string name="Commons.ImportingHistoryBookmarks">Importing history and bookmarks&#8230;</string>
     <string name="Commons.ImportHistoryBookmarksSource">Choose the import source</string>
     
-    <string name="Commons.ClearingBookmarks">Clearing bookmarks...</string>
+    <string name="Commons.ClearingBookmarks">Clearing bookmarks&#8230;</string>
     
     <string name="DownloadListActivity.RemoveCompletedDownloads">Remove completed downloads</string>
     
@@ -517,7 +517,7 @@
     
     <string name="PreferencesActivity.EnableProxySettings">Enable System Proxy</string>
     <string name="PreferencesActivity.EnableProxySettingsSummary">Enable or disable the support to system proxy settings.</string>
-    <string name="ProxySettings.EnablingProxySettings">Enabling proxy settings...</string>
+    <string name="ProxySettings.EnablingProxySettings">Enabling proxy settings&#8230;</string>
     <string name="ProxySettings.ErrorProxySettingsNotValid">Invalid system proxy settings.</string>
     <string name="ProxySettings.ErrorProxyServerNotReachable">Proxy server is not reachable.</string>
     <string name="ProxySettings.ErrorProxyInternetNotReachable">Cannot access the Web through the specified proxy server.</string>
@@ -527,5 +527,8 @@
     
     <string name="PreferencesActivity.EnableRestoreLastPagePreferenceTitle">Restore last page</string>
     <string name="PreferencesActivity.EnableRestoreLastPagePreferenceSummary">If checked, the last page will be restore if available.</string>
+    
+    <!-- 0.4.3 -->
+    <string name="VideoLoading">Loading video\u2026</string>
     
 </resources>

@@ -156,13 +156,13 @@
     <string name="Commons.NoUndoMessage">Cette opération ne peut pas être annulée. Voulez vous continuer ?</string>
     <string name="Commons.JavaScriptDialog">Fenêtre JavaScript</string>
     <string name="Commons.ClearHistory">Purger l\'historique</string>
-    <string name="Commons.ClearingHistory">Suppression de l\'historique...</string>
+    <string name="Commons.ClearingHistory">Suppression de l\'historique&#8230;</string>
     <string name="Commons.ClearFormData">Purger les données des formulaires</string>
-    <string name="Commons.ClearingFormData">Suppression des données des formulaires...</string>
+    <string name="Commons.ClearingFormData">Suppression des données des formulaires&#8230;</string>
     <string name="Commons.ClearCache">Purger le cache</string>
-    <string name="Commons.ClearingCache">Suppression du cache...</string>
+    <string name="Commons.ClearingCache">Suppression du cache&#8230;</string>
     <string name="Commons.ClearCookies">Purger les cookies</string>
-    <string name="Commons.ClearingCookies">Suppression des cookies...</string>
+    <string name="Commons.ClearingCookies">Suppression des cookies&#8230;</string>
     <string name="Commons.SDCardErrorTitle">Erreur de carte SD</string>
     <string name="Commons.SDCardErrorNoSDMsg">Carte SD introuvable.</string>
     <string name="Commons.SDCardErrorSDUnavailable">Carte SD non disponible.</string>
@@ -431,10 +431,10 @@
     <string name="WeaveBookmarksListActivity.SyncButton">Synchroniser</string>
     
     <string name="WeaveSync.SyncTitle">Synchronisation</string>
-    <string name="WeaveSync.Connecting">Connexion au serveur...</string>
-    <string name="WeaveSync.GettingData">Réception des données...</string>
+    <string name="WeaveSync.Connecting">Connexion au serveur&#8230;</string>
+    <string name="WeaveSync.GettingData">Réception des données&#8230;</string>
     <string name="WeaveSync.ReadingData">Lecture des données : %1$s / %2$s</string>
-    <string name="WeaveSync.WrittingData">Ecriture des données...</string>
+    <string name="WeaveSync.WrittingData">Ecriture des données&#8230;</string>
     
     <string name="Errors.WeaveSyncFailedTitle">La synchronisation a échouée.</string>
     <string name="Errors.WeaveSyncFailedMessage">La synchronisation a échouée : %s</string>
@@ -470,18 +470,18 @@
     <string name="PreferencesActivity.PrivacyClearHistoryBookmarksTitle">Effacer l\'historique et/ou les favoris</string>
     <string name="PreferencesActivity.SummaryCannotBeUndone">Utiliser avec précaution, il n\'est pas possible de revenir en arrière.</string>
     
-    <string name="Commons.ClearingHistoryBookmarks">Suppression de l\'historique et/ou des favoris...</string>
+    <string name="Commons.ClearingHistoryBookmarks">Suppression de l\'historique et/ou des favoris&#8230;</string>
     <string name="Commons.ClearHistoryBookmarks">Effacer l\'historique et/ou les favoris</string>
     
     <string name="Commons.Bookmarks">Favoris</string>
     <string name="Commons.History">Historique</string>
     <string name="Commons.All">Tous</string>
     
-    <string name="Commons.ExportingHistoryBookmarks">Export de l\'historique et des favoris...</string>
-    <string name="Commons.ImportingHistoryBookmarks">Import de l\'historique et des favoris...</string>
+    <string name="Commons.ExportingHistoryBookmarks">Export de l\'historique et des favoris&#8230;</string>
+    <string name="Commons.ImportingHistoryBookmarks">Import de l\'historique et des favoris&#8230;</string>
     <string name="Commons.ImportHistoryBookmarksSource">Choisissez le fichier à importer</string>
     
-    <string name="Commons.ClearingBookmarks">Suppression des favoris...</string>
+    <string name="Commons.ClearingBookmarks">Suppression des favoris&#8230;</string>
     
     <string name="DownloadListActivity.RemoveCompletedDownloads">Effacer les téléchargements terminés</string>
     
@@ -517,7 +517,7 @@
     
     <string name="PreferencesActivity.EnableProxySettings">Activer le proxy du système</string>
     <string name="PreferencesActivity.EnableProxySettingsSummary">Active ou désactive le proxy du système.</string>
-    <string name="ProxySettings.EnablingProxySettings">Activation du proxy...</string>
+    <string name="ProxySettings.EnablingProxySettings">Activation du proxy&#8230;</string>
     <string name="ProxySettings.ErrorProxySettingsNotValid">Paramètres du proxy invalides.</string>
     <string name="ProxySettings.ErrorProxyServerNotReachable">Le serveur proxy n\'est pas accessible.</string>
     <string name="ProxySettings.ErrorProxyInternetNotReachable">Impossible d\'acceder au Web avec le serveur proxy spécifié.</string>
@@ -527,5 +527,8 @@
     
     <string name="PreferencesActivity.EnableRestoreLastPagePreferenceTitle">Restaurer la dernière page visitée</string>
     <string name="PreferencesActivity.EnableRestoreLastPagePreferenceSummary">Si coché, la dernière page visité sera restaurée.</string>
+    
+    <!-- 0.4.3 -->
+    <string name="VideoLoading">Loading video\u2026</string>
     
 </resources>

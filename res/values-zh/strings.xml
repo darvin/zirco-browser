@@ -21,6 +21,7 @@
     <string name="ApplicationDescription">使用Zirco Browser让你更好的使用互联网</string>
     
     <string name="AboutActivity.Title">关于</string>
+    <string name="AboutActivity.VersionText">Version:</string>
 	<string name="AboutActivity.LicenseText">版权:</string>
 	<string name="AboutActivity.UrlTextValue">http://code.google.com/p/zirco-browser/</string>
 	<string name="AboutActivity.LicenseTextValue">GPL v3</string>
@@ -155,13 +156,13 @@
     <string name="Commons.NoUndoMessage">操作没有完成，是否继续?</string>    
     <string name="Commons.JavaScriptDialog">JavaScript对话框</string>
     <string name="Commons.ClearHistory">清空历史记录</string>
-    <string name="Commons.ClearingHistory">正在清空历史记录...</string>
+    <string name="Commons.ClearingHistory">正在清空历史记录&#8230;</string>
     <string name="Commons.ClearFormData">清空表单数据</string>
-    <string name="Commons.ClearingFormData">正在清空表单数据...</string>
+    <string name="Commons.ClearingFormData">正在清空表单数据&#8230;</string>
     <string name="Commons.ClearCache">清空缓存</string>
-    <string name="Commons.ClearingCache">正在清空缓存...</string>
+    <string name="Commons.ClearingCache">正在清空缓存&#8230;</string>
     <string name="Commons.ClearCookies">清空Cookies</string>
-    <string name="Commons.ClearingCookies">正在清空缓存...</string>
+    <string name="Commons.ClearingCookies">正在清空缓存&#8230;</string>
     <string name="Commons.SDCardErrorTitle">SD卡不能使用</string>
     <string name="Commons.SDCardErrorNoSDMsg">找不到SD卡</string>
     <string name="Commons.SDCardErrorSDUnavailable">SD卡不能使用</string>
@@ -430,10 +431,10 @@
     <string name="WeaveBookmarksListActivity.SyncButton">Synchronize</string>
     
     <string name="WeaveSync.SyncTitle">Synchronization</string>
-    <string name="WeaveSync.Connecting">Connecting to server...</string>
-    <string name="WeaveSync.GettingData">Getting data...</string>
+    <string name="WeaveSync.Connecting">Connecting to server&#8230;</string>
+    <string name="WeaveSync.GettingData">Getting data&#8230;</string>
     <string name="WeaveSync.ReadingData">Reading data: %1$s / %2$s</string>
-    <string name="WeaveSync.WrittingData">Writting data...</string>
+    <string name="WeaveSync.WrittingData">Writting data&#8230;</string>
     
     <string name="Errors.WeaveSyncFailedTitle">Synchronization failed.</string>
     <string name="Errors.WeaveSyncFailedMessage">Synchronization failed: %s</string>
@@ -469,18 +470,18 @@
     <string name="PreferencesActivity.PrivacyClearHistoryBookmarksTitle">Clear history and/or bookmarks</string>
     <string name="PreferencesActivity.SummaryCannotBeUndone">Use with caution, this operation cannot be undone.</string>
     
-    <string name="Commons.ClearingHistoryBookmarks">Clearing history and/or bookmarks...</string>
+    <string name="Commons.ClearingHistoryBookmarks">Clearing history and/or bookmarks&#8230;</string>
     <string name="Commons.ClearHistoryBookmarks">Clear history and/or bookmarks</string>
     
     <string name="Commons.Bookmarks">Bookmarks</string>
     <string name="Commons.History">History</string>
     <string name="Commons.All">All</string>
     
-    <string name="Commons.ExportingHistoryBookmarks">Exporting history and bookmarks...</string>
-    <string name="Commons.ImportingHistoryBookmarks">Importing history and bookmarks...</string>
+    <string name="Commons.ExportingHistoryBookmarks">Exporting history and bookmarks&#8230;</string>
+    <string name="Commons.ImportingHistoryBookmarks">Importing history and bookmarks&#8230;</string>
     <string name="Commons.ImportHistoryBookmarksSource">Choose the import source</string>
     
-    <string name="Commons.ClearingBookmarks">正在清空书签中...</string>
+    <string name="Commons.ClearingBookmarks">正在清空书签中&#8230;</string>
     
     <string name="DownloadListActivity.RemoveCompletedDownloads">Remove completed downloads</string>
     
@@ -516,7 +517,7 @@
     
     <string name="PreferencesActivity.EnableProxySettings">Enable System Proxy</string>
     <string name="PreferencesActivity.EnableProxySettingsSummary">Enable or disable the support to system proxy settings.</string>
-    <string name="ProxySettings.EnablingProxySettings">Enabling proxy settings...</string>
+    <string name="ProxySettings.EnablingProxySettings">Enabling proxy settings&#8230;</string>
     <string name="ProxySettings.ErrorProxySettingsNotValid">Invalid system proxy settings.</string>
     <string name="ProxySettings.ErrorProxyServerNotReachable">Proxy server is not reachable.</string>
     <string name="ProxySettings.ErrorProxyInternetNotReachable">Cannot access the Web through the specified proxy server.</string>
@@ -526,5 +527,8 @@
     
     <string name="PreferencesActivity.EnableRestoreLastPagePreferenceTitle">Restore last page</string>
     <string name="PreferencesActivity.EnableRestoreLastPagePreferenceSummary">If checked, the last page will be restore if available.</string>
+    
+    <!-- 0.4.3 -->
+    <string name="VideoLoading">Loading video\u2026</string>
 
 </resources>

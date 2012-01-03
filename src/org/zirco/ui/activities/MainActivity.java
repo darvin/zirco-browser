@@ -1,7 +1,7 @@
 /*
  * Zirco Browser for Android
  * 
- * Copyright (C) 2010 J. Devauchelle and contributors.
+ * Copyright (C) 2010 - 2012 J. Devauchelle and contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,6 +57,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
@@ -76,6 +77,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -93,6 +95,7 @@ import android.webkit.WebView.HitTestResult;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.FilterQueryProvider;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -130,6 +133,11 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 	private static final int OPEN_BOOKMARKS_HISTORY_ACTIVITY = 0;
 	private static final int OPEN_DOWNLOADS_ACTIVITY = 1;
 	private static final int OPEN_FILE_CHOOSER_ACTIVITY = 2;
+	
+	protected static final FrameLayout.LayoutParams COVER_SCREEN_PARAMS =
+	        new FrameLayout.LayoutParams(
+	        ViewGroup.LayoutParams.MATCH_PARENT,
+	        ViewGroup.LayoutParams.MATCH_PARENT);
 	
 	protected LayoutInflater mInflater = null;
 	
@@ -187,6 +195,14 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 	private ValueCallback<Uri> mUploadMessage;
 	
 	private OnSharedPreferenceChangeListener mPreferenceChangeListener;
+	
+	private View mCustomView;
+	private Bitmap mDefaultVideoPoster = null;
+	private View mVideoProgressView = null;
+	
+	private FrameLayout mFullscreenContainer;	
+	
+    private WebChromeClient.CustomViewCallback mCustomViewCallback;
 	
 	private enum SwitchTabsMethod {
 		BUTTONS,
@@ -685,6 +701,11 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
     	}
     }
     
+    private void setStatusBarVisibility(boolean visible) {
+        int flag = visible ? 0 : WindowManager.LayoutParams.FLAG_FULLSCREEN;
+        getWindow().setFlags(flag, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
+    
     /**
      * Initialize a newly created WebView.
      */
@@ -792,6 +813,94 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 			}
 			
 			@Override
+			public Bitmap getDefaultVideoPoster() {
+				if (mDefaultVideoPoster == null) {
+		            mDefaultVideoPoster = BitmapFactory.decodeResource(MainActivity.this.getResources(), R.drawable.default_video_poster);
+		        }
+				
+		        return mDefaultVideoPoster;
+			}
+
+			@Override
+			public View getVideoLoadingProgressView() {
+				if (mVideoProgressView == null) {
+		            LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
+		            mVideoProgressView = inflater.inflate(R.layout.video_loading_progress, null);
+		        }
+				
+		        return mVideoProgressView;
+			}
+			
+			public void onShowCustomView(View view, WebChromeClient.CustomViewCallback callback) {
+				showCustomView(view, callback);
+		    }
+			
+			@Override
+			public void onHideCustomView() {
+				hideCustomView();
+			}
+			
+//			@Override
+//			public void onShowCustomView(View view, CustomViewCallback callback) {
+//				super.onShowCustomView(view, callback);
+//				
+//				if (view instanceof FrameLayout) {
+//					mCustomViewContainer = (FrameLayout) view;
+//		            mCustomViewCallback = callback;
+//		            
+//		            mContentView = (LinearLayout) findViewById(R.id.MainContainer);
+//		            
+//		            if (mCustomViewContainer.getFocusedChild() instanceof VideoView) {
+//		                mCustomVideoView = (VideoView) mCustomViewContainer.getFocusedChild();
+//		                // frame.removeView(video);
+//		                mContentView.setVisibility(View.GONE);
+//		                mCustomViewContainer.setVisibility(View.VISIBLE);
+//		                
+//		                setContentView(mCustomViewContainer);
+//		                //mCustomViewContainer.bringToFront();
+//
+//		                mCustomVideoView.setOnCompletionListener(new OnCompletionListener() {							
+//							@Override
+//							public void onCompletion(MediaPlayer mp) {
+//								mp.stop();
+//								onHideCustomView();
+//							}
+//						});
+//		                
+//		                mCustomVideoView.setOnErrorListener(new OnErrorListener() {						
+//							@Override
+//							public boolean onError(MediaPlayer mp, int what, int extra) {
+//								onHideCustomView();
+//								return true;
+//							}
+//						});
+//		                
+//		                mCustomVideoView.start();
+//		            }
+//
+//				}
+//			}
+//
+//			@Override
+//			public void onHideCustomView() {
+//				super.onHideCustomView();
+//				
+//				if (mCustomVideoView == null) {
+//					return;
+//				}
+//				
+//				mCustomVideoView.setVisibility(View.GONE);
+//				mCustomViewContainer.removeView(mCustomVideoView);
+//				mCustomVideoView = null;
+//				
+//				mCustomViewContainer.setVisibility(View.GONE);
+//		        mCustomViewCallback.onCustomViewHidden();
+//		        
+//		        mContentView.setVisibility(View.VISIBLE);
+//		        setContentView(mContentView);		        
+//			}
+
+			@Override
 			public void onProgressChanged(WebView view, int newProgress) {
 				((CustomWebView) view).setProgress(newProgress);				
 				mProgressBar.setProgress(mCurrentWebView.getProgress());
@@ -815,7 +924,7 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 				transport.setWebView(mCurrentWebView);
 				resultMsg.sendToTarget();
 				
-				return false;
+				return true;
 			}
 			
 			@Override
@@ -1354,7 +1463,9 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 		
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_BACK:
-			if (mFindDialogVisible) {
+			if (mCustomView != null) {
+				hideCustomView();
+			} else if (mFindDialogVisible) {
 				closeFindDialog();
 			} else {
 				if (mCurrentWebView.canGoBack()) {
@@ -1718,6 +1829,36 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 		}
 	}
 	
+	private void showCustomView(View view, WebChromeClient.CustomViewCallback callback) {
+        // if a view already exists then immediately terminate the new one
+        if (mCustomView != null) {
+            callback.onCustomViewHidden();
+            return;
+        }
+
+        MainActivity.this.getWindow().getDecorView();
+        
+        FrameLayout decor = (FrameLayout) getWindow().getDecorView();
+        mFullscreenContainer = new FullscreenHolder(MainActivity.this);
+        mFullscreenContainer.addView(view, COVER_SCREEN_PARAMS);
+        decor.addView(mFullscreenContainer, COVER_SCREEN_PARAMS);
+        mCustomView = view;
+        setStatusBarVisibility(false);
+        mCustomViewCallback = callback;
+    }
+	
+	private void hideCustomView() {
+		if (mCustomView == null)
+            return;
+		
+		setStatusBarVisibility(true);
+        FrameLayout decor = (FrameLayout) getWindow().getDecorView();
+        decor.removeView(mFullscreenContainer);
+        mFullscreenContainer = null;
+        mCustomView = null;
+        mCustomViewCallback.onCustomViewHidden();
+	}
+	
 	/**
 	 * Show the next tab, if any.
 	 */
@@ -1941,5 +2082,19 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 		}
 		
 	}
+	
+	static class FullscreenHolder extends FrameLayout {
+
+        public FullscreenHolder(Context ctx) {
+            super(ctx);
+            setBackgroundColor(ctx.getResources().getColor(android.R.color.black));
+        }
+
+        @Override
+        public boolean onTouchEvent(MotionEvent evt) {
+            return true;
+        }
+
+    }
 	
 }

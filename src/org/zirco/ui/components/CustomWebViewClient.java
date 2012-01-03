@@ -1,7 +1,7 @@
 /*
  * Zirco Browser for Android
  * 
- * Copyright (C) 2010 J. Devauchelle and contributors.
+ * Copyright (C) 2010 - 2012 J. Devauchelle and contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -125,27 +124,6 @@ public class CustomWebViewClient extends WebViewClient {
 						handler.cancel();
 					}
 		});
-	}		
-
-	@Override
-	public void onLoadResource(WebView view, String url) {
-		// Some dirty stuff for handling m.youtube.com. May break in the future ?
-		if (url.startsWith("http://s.youtube.com/s?ns=yt&ps=blazer&playback=1&el=detailpage&app=youtube_mobile")) {
-			
-			try {
-				int startIndex = url.indexOf("&docid=") + 7;
-				int endIndex = url.indexOf("&", startIndex);
-
-				String videoId = url.substring(startIndex, endIndex);
-
-				mMainActivity.onExternalApplicationUrl("vnd.youtube:" + videoId);				
-			
-			} catch (Exception e) {
-				Log.e("onLoadResource", "Unable to parse YouTube url: " + url);
-			}					
-		}
-		
-		super.onLoadResource(view, url);
 	}
 
 	@Override
