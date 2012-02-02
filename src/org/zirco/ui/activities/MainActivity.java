@@ -593,7 +593,13 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 		mRemoveTabButton = (ImageButton) findViewById(R.id.RemoveTabBtn);
 		mRemoveTabButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-            	removeCurrentTab();
+            	if (mViewFlipper.getChildCount() == 1 && !mCurrentWebView.getUrl().equals(Constants.URL_ABOUT_START)) {
+            		navigateToHome();
+                	updateUI();
+                	updatePreviousNextTabViewsVisibility();
+            	}
+            	else
+            		removeCurrentTab();
             }          
         });
 		
@@ -1622,7 +1628,10 @@ public class MainActivity extends Activity implements IToolbarsContainer, OnTouc
 		mPreviousButton.setEnabled(mCurrentWebView.canGoBack());
 		mNextButton.setEnabled(mCurrentWebView.canGoForward());
 		
-		mRemoveTabButton.setEnabled(mViewFlipper.getChildCount() > 1);
+		if (mCurrentWebView.getUrl() != null)
+			mRemoveTabButton.setEnabled((mViewFlipper.getChildCount() > 1 || !mCurrentWebView.getUrl().equals(Constants.URL_ABOUT_START)));
+		else
+			mRemoveTabButton.setEnabled(mViewFlipper.getChildCount() > 1);
 		
 		mProgressBar.setProgress(mCurrentWebView.getProgress());
 		
