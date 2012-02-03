@@ -526,7 +526,7 @@
     <string name="ProxySettings.ErrorProxyInternetNotReachable">Kein Internetzugriff mit dem eingestellen Proxy Server.</string>
     <string name="ProxySettings.ProxySettingsEnabled">Proxy Einstellungen erfolgreich aktiviert.</string>
     
-    <string name="AboutActivity.ContributorsText">Contributors:\n   • LeChuck (Proxy settings);\n   • Martin (Scroll with volume keys, German translation);</string>
+    <string name="AboutActivity.ContributorsText">Contributors:\n   • LeChuck (Proxy settings);\n   • Martin (Scroll with volume keys, German translation);\n   • Isaac L. (Spanish translation);</string>
     
     <string name="PreferencesActivity.EnableRestoreLastPagePreferenceTitle">Letzte Seite wiederherst.</string>
     <string name="PreferencesActivity.EnableRestoreLastPagePreferenceSummary">Wenn aktiv, wird die letzte, geöffnete Seite (wenn möglich) wieder hergestellt.</string>
